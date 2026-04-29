@@ -1,8 +1,8 @@
-# 📦 Sistema de Inventario de Multiservicios "Emma"
+# 📦 Sistema de Inventario y Ventas iVenti
 
 ### 📱 Aplicación móvil para la gestión eficiente de inventarios y ventas
 
-El **Sistema de Inventario de Multiservicios "Emma"** es una aplicación móvil diseñada para optimizar la administración de una tienda de multiservicios, permitiendo a nuestra usuaria gestionar su negocio de manera más ágil y efectiva.
+iVenti es una aplicación móvil diseñada para optimizar la administración de una tienda de multiservicios, permitiendo la gestión de su negocio de manera más ágil y efectiva.
 
 ### ✨ Características principales
 
@@ -18,5 +18,5 @@ Con esta herramienta, podrá **optimizar su tiempo, reducir errores y mejorar la
 ## 🛠️ Tecnologías utilizadas
 
 - **Lenguaje:** Flutter
-- **Base de datos:** SQLite
+- **Base de datos:** SQLite (cambiando a Postgresql en la nube)
 - **Plataforma:** Android
