@@ -1,0 +1,1 @@
+enum TipoNotificacion { STOCK_BAJO, STOCK_AGOTADO, PROXIMO_VENCER, VENCIDO }
