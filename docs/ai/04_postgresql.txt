@@ -1,0 +1,212 @@
+BASE DE DATOS POSTGRESQL - iVenti
+===================================
+
+ARCHIVOS CREADOS
+================
+
+1. iventi_schema.sql
+   Ubicación: C:\Users\PC\Desktop\iVenti\
+   Propósito: Crear estructura completa de tablas, enums, índices
+
+2. iventi_triggers.sql
+   Ubicación: C:\Users\PC\Desktop\iVenti\
+   Propósito: Función y triggers de auditoría automática
+
+3. iventi_seed_data.sql
+   Ubicación: C:\Users\PC\Desktop\iVenti\
+   Propósito: Datos iniciales de configuración (OPCIONAL)
+
+
+TABLAS PRINCIPALES
+==================
+
+UNIDADES DE MEDIDA
+- unidades: Catálogo de unidades (und, kg, g, l, ml, m, cm, doc)
+- Campos: id_unidad, nombre, abreviatura, es_activo, creado_en
+
+USUARIOS
+- usuarios: Usuarios del sistema con roles
+- Campos: id_usuario, id_rol (ENUM), nombre, email, pin, es_activo, creado_en, actualizado_en
+- ENUM tipo_rol: 'ADMINISTRADOR', 'OPERATIVO'
+
+PRODUCTOS E INVENTARIO
+- productos: Catálogo de productos
+- Campos: id_producto, id_unidad, codigo, nombre, precio, stock_actual, stock_minimo, ruta_imagen, es_activo, creado_en, actualizado_en
+
+- lotes: Control de lotes con vencimiento
+- Campos: id_lote, id_producto, fecha_compra, fecha_vencimiento, cantidad_actual, cantidad_comprada, cantidad_perdida, precio_compra, es_activo, creado_en, actualizado_en
+
+- categorias: Categorías de productos
+- Campos: id_categoria, nombre, es_activo, creado_en, actualizado_en
+
+- categorias_productos: Relación M:N productos-categorías
+- Campos: id_categoria, id_producto
+
+CLIENTES
+- clientes: Clientes del negocio
+- Campos: id_cliente, dni, nombres, apellidos, email, telefono, es_deudor, es_activo, creado_en, actualizado_en
+
+VENTAS
+- ventas: Registro de ventas
+- Campos: id_venta, id_cliente, id_usuario, vendido_en, monto_total, monto_cancelado, estado (ENUM), es_credito, creado_en, actualizado_en
+- ENUM estado_venta: 'PENDIENTE', 'COMPLETADA', 'ANULADA'
+
+- detalle_ventas: Detalle de items por venta
+- Campos: id_detalle_venta, id_venta, id_lote, cantidad, precio_unitario, subtotal, descuento, creado_en
+
+PAGOS
+- recibos: Pagos parciales o totales de ventas
+- Campos: id_recibo, id_venta, id_usuario, monto_cancelado, pagado_en, creado_en
+
+NOTIFICACIONES
+- notificaciones: Alertas del sistema
+- Campos: id_notificacion, id_usuario, id_producto, id_lote, tipo (ENUM), titulo, contenido, leida, creado_en
+- ENUM tipo_notificacion: 'STOCK_BAJO', 'STOCK_AGOTADO', 'PROXIMO_VENCER', 'VENCIDO'
+
+CONFIGURACIONES
+- configuraciones: Configuraciones por usuario
+- Campos: id_configuracion, id_usuario, clave, valor, creado_en, actualizado_en
+
+AUDITORÍA
+- auditoria: Trazabilidad de cambios
+- Campos: id_auditoria, id_usuario, tabla, registro_id, operacion (ENUM), fecha_auditoria, ip_origen, dispositivo
+- ENUM operacion_auditoria: 'INSERT', 'UPDATE', 'DELETE'
+
+
+ENUMS DEFINIDOS
+===============
+
+1. tipo_rol
+   - 'ADMINISTRADOR'
+   - 'OPERATIVO'
+
+2. estado_venta
+   - 'PENDIENTE'
+   - 'COMPLETADA'
+   - 'ANULADA'
+
+3. tipo_notificacion
+   - 'STOCK_BAJO'
+   - 'STOCK_AGOTADO'
+   - 'PROXIMO_VENCER'
+   - 'VENCIDO'
+
+4. operacion_auditoria
+   - 'INSERT'
+   - 'UPDATE'
+   - 'DELETE'
+
+
+TRIGGERS DE AUDITORÍA
+=====================
+
+FUNCIÓN: auditar_cambios()
+- Registra automáticamente INSERT, UPDATE, DELETE
+- Tablas monitoreadas: productos, lotes, ventas, clientes, usuarios
+- Campos registrados: tabla, registro_id, operacion, id_usuario, fecha_auditoria
+
+TRIGGERS ACTIVOS:
+- trg_auditoria_productos: AFTER INSERT OR UPDATE OR DELETE ON productos
+- trg_auditoria_lotes: AFTER INSERT OR UPDATE OR DELETE ON lotes
+- trg_auditoria_ventas: AFTER INSERT OR UPDATE OR DELETE ON ventas
+- trg_auditoria_clientes: AFTER INSERT OR UPDATE OR DELETE ON clientes
+- trg_auditoria_usuarios: AFTER INSERT OR UPDATE OR DELETE ON usuarios
+
+
+DATOS INICIALES
+===============
+
+UNIDADES (8 registros):
+- Unidad (und)
+- Kilogramo (kg)
+- Gramo (g)
+- Litro (l)
+- Mililitro (ml)
+- Metro (m)
+- Centímetro (cm)
+- Docena (doc)
+
+CONFIGURACIONES POR DEFECTO:
+- dias_vencimiento: '8' (días para alerta de vencimiento)
+- stock_minimo_alerta: '5' (stock mínimo para alerta)
+
+
+CAMPOS DE AUDITORÍA POR TABLA
+==============================
+
+TODAS LAS TABLAS DEBEN TENER:
+- creado_en TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+- actualizado_en TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+- es_activo BOOLEAN DEFAULT TRUE (soft delete)
+- eliminado_en TIMESTAMP NULL (opcional, para soft delete)
+
+
+RESTRICCIONES IMPORTANTES
+=========================
+
+1. NO ELIMINAR REGISTROS
+   - Usar es_activo = FALSE en lugar de DELETE
+   - Mantener histórico de datos
+
+2. FECHAS
+   - Todas en formato TIMESTAMP con timezone
+   - created_at, updated_at automáticos
+
+3. ÍNDICES
+   - PK en todas las tablas
+   - FK con índice para joins rápidos
+   - Índices en campos de búsqueda frecuente
+
+4. INTEGRIDAD
+   - FK con ON DELETE RESTRICT (no eliminar si hay referencias)
+   - UK en campos únicos (email, codigo, etc.)
+   - CHECK constraints para validación
+
+
+CONEXIÓN DESDE FLUTTER
+======================
+
+Configuración en shared/config/database_config.dart:
+
+Variables de entorno (.env):
+- POSTGRES_HOST: 'tu-host.render.com'
+- POSTGRES_PORT: '5432'
+- POSTGRES_DB: 'iventi_db'
+- POSTGRES_USER: 'usuario'
+- POSTGRES_PASSWORD: 'contraseña'
+
+Requisitos:
+- SSL requerido (requireSsl: true)
+- Connection pooling
+- Prepared statements (evita SQL injection)
+
+
+BACKUP Y RECUPERACIÓN
+=====================
+
+Backups automáticos:
+- Render hace backups diarios
+- Punto de recuperación: 7 días
+
+Recomendación:
+- Backup manual antes de migraciones
+- Script de backup en scripts/backup_db.sh
+
+
+COMANDOS ÚTILES
+===============
+
+Ver todas las tablas:
+SELECT tablename FROM pg_tables WHERE schemaname = 'public';
+
+Ver triggers:
+SELECT tgname, tgrelid::regclass FROM pg_trigger WHERE NOT tgisinternal;
+
+Ver tamaño de tablas:
+SELECT tablename, pg_size_pretty(pg_total_relation_size(schemaname||'.'||tablename)) AS size
+FROM pg_tables
+WHERE schemaname = 'public'
+ORDER BY pg_total_relation_size(schemaname||'.'||tablename) DESC;
+
+Vaciar tablas (cuidado):
+TRUNCate TABLE auditoria RESTART IDENTITY;

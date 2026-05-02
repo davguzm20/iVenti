@@ -1,0 +1,218 @@
+RESTRICCIONES DE REFACTORIZACIÓN - iVENTI
+==========================================
+
+1. REESTRUCTURACIÓN DE ARCHIVOS
+================================
+
+NUNCA ELIMINAR ARCHIVOS ANTIGUOS
+---------------------------------
+- NO borrar archivos directamente
+- MOVER a la carpeta temp/ con un nombre descriptivo
+- Ejemplo: producto.dart → temp/producto_old.dart
+
+REGLA DE ORO:
+  "Si un archivo tiene lógica de DB, muévelo a temp/ y crea uno nuevo puro"
+
+CASOS ESPECÍFICOS:
+-----------------
+
+A. ENTITIES CON LÓGICA DE DB
+   Problema: Entities que tienen métodos static Future, consultas SQL
+   Solución:
+   1. Mover entity antigua a temp/[entity]_old.dart
+   2. Crear nueva entity pura (solo datos)
+   3. Mover lógica a repositories
+
+   Ejemplo:
+   - features/inventory/entities/producto.dart (tenía SQL)
+   → Movido a: temp/producto_old.dart
+   → Nuevo: features/inventory/entities/producto.dart (puro)
+
+B. CONTROLLERS OBSOLETOS
+   Problema: db_controller.dart, report_controller.dart
+   Solución:
+   1. Mover a temp/
+   2. Extraer lógica y mover a repositories correspondientes
+   3. Eliminar después de migrar
+
+C. IMPORTS ROTOS
+   Problema: Imports que referencian paths viejos
+   Solución:
+   - package:multiinventario/models/ → package:multiinventario/features/[feature]/entities/
+   - package:multiinventario/widgets/ → package:multiinventario/shared/widgets/
+   - package:multiinventario/services/ → package:multiinventario/shared/services/
+
+2. UI/PANTALLAS - NO TOCAR
+============================
+
+REGLA ESTRICTA:
+- NO modificar diseño visual de pantallas
+- NO cambiar estructura de widgets
+- SOLO actualizar imports si es necesario
+
+EXCEPCIONES PERMITIDAS:
+- Actualizar imports de entities
+- Actualizar imports de widgets (a shared/)
+- Corregir errores de compilación por imports
+
+EJEMPLO DE LO QUE SÍ SE PUEDE HACER:
+------------------------------------
+// ANTES
+import 'package:multiinventario/models/producto.dart';
+import 'package:multiinventario/widgets/error_dialog.dart';
+
+// DESPUÉS (CORRECTO)
+import 'package:multiinventario/features/inventory/entities/producto.dart';
+import 'package:multiinventario/shared/widgets/error_dialog.dart';
+
+EJEMPLO DE LO QUE NO SE PUEDE HACER:
+------------------------------------
+// ❌ INCORRECTO - Cambiar estructura visual
+Column( children: [ ... ]) // Cambiar a Row
+
+// ❌ INCORRECTO - Eliminar widgets
+Text('Título') // Eliminar este widget
+
+3. ENTITIES - RESTRICCIONES ESTRICTAS
+======================================
+
+UNA ENTITY NUNCA DEBE TENER:
+- Métodos static Future (asincrónicos)
+- Imports de database (sqflite, postgres, etc.)
+- Consultas SQL
+- Llamadas a DatabaseController
+- Lógica de negocio
+
+UNA ENTITY DEBE TENER:
+- Solo propiedades (final)
+- Constructor
+- toMap() y fromMap() para mapeo
+- copyWith() para inmutabilidad
+- toString(), ==, hashCode override
+
+EJEMPLO DE ENTITY PURA (BIEN):
+class Producto {
+  final int? idProducto;
+  final String nombreProducto;
+  final double precioProducto;
+  
+  Producto({...});
+  
+  Map<String, dynamic> toMap() => {...};
+  factory Producto.fromMap(Map map) => {...};
+}
+
+EJEMPLO DE ENTITY CON DB (MAL - MOVER A TEMP):
+class Producto {
+  static Future<bool> crearProducto() async {
+    final db = await DatabaseController().database;
+    await db.rawInsert('INSERT INTO...'); // ❌ ESTO NO VA AQUÍ
+  }
+}
+
+4. POSTGRESQL - ÚNICA FUENTE DE VERDAD
+=======================================
+
+RESTRICCIONES:
+- TODO va a PostgreSQL (no SQLite local)
+- NO modo offline
+- NO sincronización (es directo a PostgreSQL)
+- Conexión segura con SSL
+
+VARIABLES DE ENTORNO OBLIGATORIAS:
+- POSTGRES_HOST
+- POSTGRES_PORT
+- POSTGRES_DB
+- POSTGRES_USER
+- POSTGRES_PASSWORD
+
+5. AUDITORÍA - RESTRICCIONES
+=============================
+
+TODO CAMBIO DEBE AUDITARSE:
+- INSERT, UPDATE, DELETE en tablas críticas
+- Tabla: auditoria
+- Campos: tabla, registro_id, operacion, id_usuario, fecha_auditoria
+
+TRIGGERS AUTOMÁTICOS:
+- Usar triggers de PostgreSQL para auditoría automática
+- No depender de código Flutter para auditoría
+
+6. MÚLTIPLES USUARIOS
+=====================
+
+RESTRICCIÓN:
+- Cada usuario tiene sus propias configuraciones
+- Notificaciones son por usuario (id_usuario NOT NULL)
+- Configuraciones son por usuario (id_usuario + clave UNIQUE)
+
+7. CATÁLOGOS INICIALES
+======================
+
+DATOS QUE DEBEN EXISTIR DESDE EL INICIO:
+- Unidades de medida (Unidad, Kg, G, L, etc.)
+- Roles (ADMINISTRADOR, OPERATIVO)
+- Estados de venta (PENDIENTE, COMPLETADA, ANULADA)
+- Tipos de notificación (STOCK_BAJO, VENCIMIENTO_PROXIMO, etc.)
+
+8. VALIDACIONES - JERARQUÍA
+============================
+
+NIVEL 1 - DTOs (Requests):
+  - Validaciones de formato (email, teléfono)
+  - Validaciones básicas (campos requeridos)
+
+NIVEL 2 - Repositories:
+  - Validaciones de integridad (FK existen)
+  - Validaciones de unicidad (UK constraints)
+
+NIVEL 3 - Services:
+  - Reglas de negocio complejas
+  - Validaciones que requieren múltiples tablas
+
+9. EXCEPCIONES - CUÁNDO USAR CADA UNA
+=====================================
+
+ValidationException:    Datos inválidos de usuario
+DatabaseException:      Error de base de datos
+AuthenticationException: Error de autenticación
+NotFoundException:      Recurso no encontrado
+BusinessException:      Regla de negocio violada
+NetworkException:       Error de red/conexión
+
+10. PASO DE LISTA DE VERIFICACIÓN
+==================================
+
+ANTES DE MOVER UN ARCHIVO A TEMP:
+[ ] ¿Tiene lógica de DB? → Mover a temp/
+[ ] ¿Tiene imports de database? → Mover a temp/
+[ ] ¿Tiene métodos static Future? → Mover a temp/
+[ ] ¿Es una entity con SQL? → Mover a temp/
+
+DESPUÉS DE MOVER:
+[ ] ¿Creaste la nueva entity pura?
+[ ] ¿Moviste la lógica a repository?
+[ ] ¿Actualizaste todos los imports?
+[ ] ¿Compila sin errores?
+
+REGLA FINAL:
+"Ante la duda, mueve a temp/ y crea uno nuevo puro"
+
+11. RESTRICCIONES GENERALES DE OPERACIÓN
+=========================================
+
+11.1 NO MODIFICAR CÓDIGO FUERA DE /LIB
+---------------------------------------
+- No tocar, editar o modificar ningún archivo de código fuera del directorio lib/
+- Cualquier cambio en el código fuente debe limitarse exclusivamente a lib/
+- Excepción: Solo si el usuario lo solicita explícitamente
+
+11.2 NO CREAR ARCHIVOS .MD O .TXT DE CAMBIOS
+-------------------------------------------
+- No crear nuevos archivos .md o .txt para documentar los cambios realizados
+- Toda documentación sobre cambios debe añadirse a archivos existentes
+
+11.3 ACTUALIZACIÓN DE ARCHIVOS EN /DOCS/IA
+-------------------------------------------
+- Si se solicita actualizar archivos, únicamente modificar los existentes en /docs/ia
+- No crear nuevos archivos en el directorio /docs/ia bajo ningún motivo

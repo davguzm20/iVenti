@@ -1,0 +1,168 @@
+ 
+Sistema de Gestión de Inventario y Ventas​
+Documento de 
+Planificación del Proyecto 
+de Software 
+ 
+ 
+ 
+ 
+ 
+ 
+Jeanmarco Rosales Trinidad 
+Manuel David Guzman Chavez 
+Iris Marisol Hanampa Bellido 
+Nikol Arlet Medrano Ayma 
+ 
+ 
+ 
+​
+Versión: 1.0                                                       27 de abril del 2026
+ 
+ 
+Índice 
+Índice​
+2 
+1. Introducción​
+3 
+1.1 Propósito​
+3 
+1.2 Alcance​
+3 
+2. Equipo de Trabajo​
+3 
+2.1 Roles​
+3 
+2.2 Responsabilidades​
+3 
+3. Product Backlog​
+3 
+3.1 Estructura del backlog​
+3 
+3.2 Historias de Usuario​
+4 
+4. Planificación de Sprints​
+4 
+4.1 Definición de Sprints​
+4 
+4.2 Sprint Backlog​
+4 
+5. Cronograma​
+5 
+6. Definición de Hecho​
+5 
+7. Gestión del Progreso​
+5 
+7.1 Seguimiento de tareas​
+5 
+7.2 Reuniones SCRUM​
+5 
+ 
+ 
+ 
+1. Introducción 
+1.1 Propósito 
+El propósito de este documento es definir la organización, la metodología de trabajo (Scrum) 
+y la planificación detallada que seguirá el equipo para el desarrollo del proyecto iVenti. Sirve 
+como guía administrativa para asegurar la correcta ejecución de los procesos y el 
+cumplimiento de los hitos establecidos. 
+1.2 Alcance 
+Este documento abarca la conformación del equipo de trabajo con sus respectivos roles, la 
+estructura y priorización del Product Backlog, la organización de los ciclos de desarrollo 
+(Sprints), el cronograma de entregas y los criterios de aceptación para las tareas finalizadas. 
+2. Equipo de Trabajo 
+2.1 Roles 
+●​ Product Owner: Jeanmarco Rosales Trinidad. 
+●​ Scrum Master: Iris Marisol Hanampa Bellido. 
+●​ Equipo de Desarrollo: Manuel David Guzman Chavez y Nikol Arlet Medrano Ayma. 
+2.2 Responsabilidades 
+●​ Product Owner: Encargada de priorizar las necesidades de Multiservicios Golden S.A. 
+en el backlog. 
+●​ Scrum Master: Facilitador del proceso ágil, encargado de eliminar obstáculos y 
+asegurar el cumplimiento del cronograma. 
+●​ Equipo de Desarrollo: Responsables de la construcción técnica de la aplicación móvil, 
+el diseño de la interfaz y la lógica local del sistema. 
+3. Product Backlog 
+3.1 Estructura del backlog 
+ID 
+Historia de Usuario 
+Prioridad 
+HU-01  
+Gestión y control del inventario de productos.  
+Alta 
+HU-02 
+Registro de ventas y cálculo de precios.  
+Alta 
+ 
+ 
+HU-03  
+Alertas y notificaciones de stock y vencimiento.  
+Alta 
+HU-04  
+Generación de reportes básicos de ventas e inventario.  
+Media 
+3.2 Historias de Usuario 
+●​ HU-01: Como propietaria, quiero registrar y ver la cantidad de productos disponibles 
+(abarrotes, ferretería, etc.) para tener visibilidad clara del stock y evitar pérdidas por 
+desabastecimiento. 
+●​ HU-02: Como propietaria, quiero registrar mis ventas de forma continua y rápida 
+durante la jornada laboral para reducir errores en el cálculo de precios y tener 
+información real. 
+●​ HU-03: Como propietaria, quiero recibir alertas cuando un producto presente baja 
+disponibilidad o esté próximo a vencer para gestionar su reposición o uso antes de la 
+caducidad. 
+●​ HU-04: Como propietaria, quiero generar reportes básicos y claros de la información 
+del negocio para facilitar la toma de decisiones. 
+4. Planificación de Sprints 
+4.1 Definición de Sprints 
+Sprint 
+Duración 
+Objetivo 
+1 
+1 semana 
+Implementación del módulo base de inventario local.  
+2 
+1 semana 
+Desarrollo del flujo de registro de ventas. 
+3 
+1 semana 
+Incorporar el motor de Notificaciones y Alertas críticas.  
+4 
+1 semana 
+Programar los Reportes Básicos y cierre del proyecto.  
+ 
+4.2 Sprint Backlog 
+●​ Sprint 1: HU-01 (Registro de productos y visibilidad del stock). 
+●​ Sprint 2: HU-02 (Registro de ventas y precios).  
+●​ Sprint 3: HU-03 (Lógica de alertas por caducidad y stock mínimo). 
+●​ Sprint 4: HU-04 (Vistas de reportes y exportación básica de datos). 
+ 
+ 
+5. Cronograma 
+5.1 Línea de tiempo del proyecto 
+ 
+Etapa 
+Historia de Usuario 
+Semana 1 
+Creación del catálogo de productos (Abarrotes, útiles, etc.) operativo a nivel 
+local. 
+Semana 2 Módulo de ventas integrado con el inventario para deducir el stock al vender. 
+Semana 3 
+Sistema de alertas por baja disponibilidad y caducidad funcional. 
+Semana 4 
+Módulo de reportes implementado, validación final con el cliente y despliegue. 
+6. Definición de Hecho 
+●​ Código implementado: Lógica funcional probada en entorno local. 
+●​ Probado: Verificación de que la funcionalidad no presenta errores críticos. 
+●​ Documentado: Registro de los cambios realizados en el manual correspondiente. 
+7. Gestión del Progreso 
+7.1 Seguimiento de tareas 
+El equipo utilizará un tablero Kanban (Jira) para mover las tareas del Sprint actual (HU-01 a 
+HU-04) a través de los estados: "Por hacer", "En progreso", “En revisión” y "Terminado".  
+7.2 Reuniones SCRUM 
+●​ Daily: Sincronización diaria del equipo de 4 integrantes para revisar el avance del día 
+anterior. 
+●​ Sprint Planning: Definición del trabajo a realizar al inicio de cada semana de 
+desarrollo. 
+●​ Review: Demostración de las funcionalidades terminadas al finalizar cada sprint. 
+ 

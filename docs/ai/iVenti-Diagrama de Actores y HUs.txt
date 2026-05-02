@@ -1,0 +1,501 @@
+ 
+Sistema de Gestión de Inventario y Ventas​
+Documento de 
+Especificación de 
+Requisitos de Stakeholders 
+ 
+ 
+ 
+ 
+ 
+ 
+Jeanmarco Rosales Trinidad 
+Manuel David Guzman Chavez 
+Iris Marisol Hanampa Bellido 
+Nikol Arlet Medrano Ayma 
+ 
+ 
+ 
+​
+Versión: 1.0                                                       27 de abril del 2026
+ 
+ 
+Índice 
+Índice​
+2 
+1. Introducción​
+3 
+1.1 Propósito​
+3 
+1.2 Alcance​
+3 
+1.3 Definiciones, siglas y abreviaturas​
+3 
+2. Descripción General del Sistema​
+3 
+2.1 Perspectiva del sistema​
+3 
+2.2 Tipos de usuarios​
+4 
+2.3 Entorno de uso​
+4 
+3. Stakeholders y Usuarios​
+5 
+3.1 Identificación de stakeholders​
+5 
+3.2 Perfiles de usuario​
+5 
+Usuario principal​
+5 
+3.3 Necesidades de los stakeholders​
+5 
+4. Escenarios de Uso​
+6 
+4.1 Escenarios principales​
+6 
+Escenario 1: Registrar una venta​
+6 
+Escenario 2: Registrar producto​
+6 
+Escenario 3: Actualizar producto​
+6 
+Escenario 4: Desactivar producto​
+7 
+Escenario 5: Consultar inventario​
+7 
+Escenario 6: Gestión de deudas​
+7 
+Escenario 8: Generar reportes​
+8 
+4.2 Flujos de interacción​
+8 
+Flujo: Registrar venta​
+8 
+Flujo: Registrar producto​
+9 
+Flujo: Actualizar producto​
+9 
+Flujo: Desactivar producto​
+9 
+Flujo: Consultar inventario​
+9 
+Flujo: Gestión de deudas​
+10 
+Flujo: Registrar pago de deuda​
+10 
+Flujo: Generar reportes​
+10 
+5. Requisitos de Usuario​
+11 
+5.1 Requisitos funcionales de alto nivel​
+11 
+5.2 Requisitos no funcionales de usuario​
+11 
+6. Modelado de Interacción​
+12 
+6.1 Diagrama de Actores​
+12 
+6.2 Historias de Usuario​
+12 
+ 
+ 
+ 
+1. Introducción 
+1.1 Propósito 
+El presente documento tiene como propósito describir los requisitos de usuario del sistema 
+iVenti, el cual será implementado para el negocio Multiservicios Golden. Este documento 
+define de manera clara las necesidades del usuario final, sirviendo como base para el diseño 
+y desarrollo del sistema. Asimismo, se detallan los requisitos desde la perspectiva del usuario 
+final, sin entrar aún en especificaciones técnicas. 
+1.2 Alcance 
+El sistema iVenti cubrirá las siguientes funcionalidades a nivel de usuario: 
+●​ Gestión de inventario (registro, actualización, eliminación y consulta de productos) 
+●​ Registro y control de ventas 
+●​ Gestión de clientes con deudas 
+●​ Generación de reportes 
+●​ Escaneo de códigos de barras 
+●​ Notificaciones de stock bajo y productos próximos a vencer 
+●​ Respaldo de información en la nube 
+El sistema será utilizado principalmente por la propietaria del negocio. 
+1.3 Definiciones, siglas y abreviaturas 
+●​ BRS - Business Requirements Specification 
+●​ CRUD - Crear, Leer, Actualizar y Eliminar 
+●​ RF - Requisito Funcional 
+●​ RNF - Requisito No Funcional 
+●​ Stock - Cantidad disponible de un producto 
+●​ Nube - Servicio remoto para almacenamiento de datos 
+●​ Escáner - Dispositivo o funcionalidad para leer códigos de barras 
+​
+2. Descripción General del Sistema 
+2.1 Perspectiva del sistema 
+El sistema iVenti forma parte del proceso de digitalización del negocio Multiservicios Golden, 
+permitiendo reemplazar el control manual por un sistema automatizado de inventario y 
+ventas. 
+ 
+ 
+El sistema se integra con servicios externos de almacenamiento en la nube para el respaldo y 
+recuperación de datos, garantizando la disponibilidad y seguridad de la información. 
+2.2 Tipos de usuarios 
+Usuario principal (Propietaria)​
+Encargada de gestionar todas las operaciones del sistema, como gestionar el inventario, 
+registrar ventas, administrar deudas y generar reportes. 
+Sistema externo (Servicios en la nube)​
+Responsable del almacenamiento y recuperación de la información respaldada. 
+Dispositivo de escaneo​
+Permite registrar productos mediante la lectura de códigos de barras. 
+2.3 Entorno de uso 
+Dispositivo: Tablet o dispositivo móvil 
+Conectividad: 
+●​ Funciona offline para operaciones principales 
+●​ Requiere internet para respaldo en la nube 
+Lugar: Tienda física Multiservicios Golden 
+Nivel de experiencia: Usuario con conocimientos básicos de tecnología 
+ 
+ 
+ 
+3. Stakeholders y Usuarios 
+3.1 Identificación de stakeholders 
+●​ Propietaria del negocio (usuario principal) 
+●​ Clientes del negocio (son afectados indirectamente) 
+●​ Equipo de desarrollo 
+●​ Servicios de almacenamiento en la nube 
+3.2 Perfiles de usuario 
+Usuario principal 
+●​ Edad: Adulto 
+●​ Experiencia tecnológica: Básica 
+●​ Necesidad principal: Simplicidad y rapidez 
+●​ Frecuencia de uso: Alta (uso diario) 
+ 
+3.3 Necesidades de los stakeholders 
+●​ Tener control claro del inventario 
+●​ Registrar ventas ya sea al contado o al crédito 
+●​ Reducir errores en las transacciones 
+●​ Acceder rápidamente a información 
+●​ Evitar pérdidas por productos vencidos 
+●​ Mantener respaldo seguro de los datos 
+●​ Obtener reportes para toma de decisiones 
+ 
+ 
+ 
+4. Escenarios de Uso 
+4.1 Escenarios principales 
+Escenario 1: Registrar una venta 
+El usuario registra una venta seleccionando productos, indicando cantidades y el tipo de 
+pago (contado o crédito). El sistema calcula el total, valida el stock disponible, actualiza el 
+inventario, genera la boleta si corresponde y registra la operación. 
+●​ Actor Principal: Propietaria 
+●​ Precondiciones: 
+○​ El usuario ha iniciado sesión en el sistema 
+○​ Existen productos registrados en el inventario 
+○​ Los productos cuentan con stock disponible 
+●​ Postcondiciones 
+○​ La venta queda registrada en el sistema 
+○​ El inventario se actualiza automáticamente 
+○​ Se genera una boleta si el monto es mayor a 5 soles 
+○​ Si la venta es a crédito, se registra la deuda del cliente 
+Escenario 2: Registrar producto 
+El usuario registra un nuevo producto ingresando sus datos manualmente o mediante el 
+escaneo de código de barras. El sistema valida la información y guarda el producto en el 
+inventario. 
+●​ Actor Principal: Propietaria 
+●​ Precondiciones: 
+○​ El usuario ha iniciado sesión 
+●​ Postcondiciones: 
+○​ El producto queda registrado en el inventario 
+○​ El producto está disponible para ser utilizado en ventas 
+Escenario 3: Actualizar producto 
+El usuario selecciona un producto existente y modifica su información. El sistema valida los 
+datos y guarda los cambios en el inventario. 
+●​ Actor Principal: Propietaria 
+●​ Precondiciones: 
+○​ El usuario ha iniciado sesión en el sistema 
+○​ Existen productos registrados en el inventario 
+ 
+ 
+●​ Postcondiciones: 
+○​ La información del producto se actualiza correctamente 
+○​ Los cambios se reflejan en el inventario 
+Escenario 4: Desactivar producto 
+El usuario selecciona un producto y cambia su estado a inactivo para evitar su uso en nuevas 
+ventas, manteniendo su información en el sistema. 
+●​ Actor Principal: Propietaria 
+●​ Precondiciones: 
+○​ El usuario ha iniciado sesión en el sistema 
+○​ Existen productos registrados en el inventario 
+○​ El producto se encuentra activo 
+●​ Postcondiciones: 
+○​ El producto queda marcado como inactivo 
+○​ El producto no está disponible para nuevas ventas 
+○​ El historial del producto se mantiene en el sistema 
+Escenario 5: Consultar inventario 
+El usuario accede al inventario para visualizar los productos registrados, pudiendo buscar, 
+filtrar y revisar su estado y disponibilidad. 
+●​ Actor Principal: Propietaria 
+●​ Precondiciones: 
+○​ El usuario ha iniciado sesión en el sistema 
+○​ Existen productos registrados en el inventario 
+●​ Postcondiciones: 
+○​ Se muestra la información actualizada del inventario 
+○​ El usuario puede identificar productos disponibles, inactivos, con bajo stock o 
+próximos a vencer 
+Escenario 6: Gestión de deudas 
+El usuario accede al módulo de deudas para visualizar y controlar las deudas de los clientes, 
+consultando su estado, monto pendiente y detalle de ventas asociadas. 
+●​ Actor Principal: Propietaria 
+●​ Precondiciones: 
+○​ El usuario ha iniciado sesión en el sistema 
+○​ Existen ventas registradas a crédito 
+●​ Postcondiciones: 
+ 
+ 
+○​ Se muestra la información actualizada de las deudas 
+○​ El usuario puede identificar deudas pendientes y pagadas 
+○​ Se mantiene el historial de deudas en el sistema 
+Escenario 7: Registrar pago de deuda 
+El usuario registra el pago de una deuda de un cliente, ya sea de forma total o parcial. El 
+sistema valida el monto ingresado y actualiza el estado de la deuda. 
+●​ Actor Principal: Propietaria 
+●​ Precondiciones: 
+○​ El usuario ha iniciado sesión en el sistema 
+○​ Existe al menos una deuda pendiente registrada 
+●​ Postcondiciones: 
+○​ La deuda se actualiza con el nuevo monto pagado 
+○​ Se reduce el saldo pendiente o se marca como pagada 
+○​ Se registra el pago en el sistema con su fecha 
+Escenario 8: Generar reportes 
+El usuario genera reportes de ventas o inventario seleccionando el tipo de reporte y, si aplica, 
+un rango de fechas. El sistema procesa la información y presenta el reporte en formato 
+digital. 
+●​ Actor Principal: Propietaria 
+●​ Precondiciones: 
+○​ El usuario ha iniciado sesión en el sistema 
+○​ Existen datos registrados en el sistema (ventas y/o inventario) 
+●​ Postcondiciones: 
+○​ El reporte se genera correctamente 
+○​ El usuario puede visualizar el reporte 
+○​ El usuario puede exportar el reporte en formato PDF 
+4.2 Flujos de interacción 
+Flujo: Registrar venta 
+Flujo: Registrar venta 
+1.​ El usuario inicia una nueva venta 
+2.​ Selecciona productos o los escanea 
+3.​ Ingresa cantidades 
+4.​ El sistema valida el stock 
+5.​ El sistema calcula el total 
+ 
+ 
+6.​ El usuario selecciona tipo de pago 
+7.​ El usuario confirma la venta 
+8.​ El sistema registra la venta 
+9.​ El sistema actualiza el inventario 
+10.​ El sistema genera boleta (si aplica) 
+11.​ El sistema muestra confirmación 
+Flujo: Registrar producto 
+1.​ El usuario inicia el registro de producto 
+2.​ El usuario ingresa los datos del producto o escanea el código de barras 
+3.​ El sistema valida que los datos sean correctos 
+4.​ El usuario confirma el registro 
+5.​ El sistema guarda el producto en el inventario 
+6.​ El sistema muestra un mensaje de confirmación 
+Flujo: Actualizar producto 
+1.​ El usuario accede al inventario 
+2.​ El usuario selecciona un producto 
+3.​ El sistema muestra la información actual del producto 
+4.​ El usuario modifica uno o más datos 
+5.​ El sistema valida la información ingresada 
+6.​ El usuario confirma la actualización 
+7.​ El sistema guarda los cambios 
+8.​ El sistema muestra un mensaje de confirmación 
+Flujo: Desactivar producto 
+1.​ El usuario accede al inventario 
+2.​ El usuario selecciona un producto activo 
+3.​ El usuario elige la opción de desactivar 
+4.​ El sistema cambia el estado del producto a inactivo 
+5.​ El sistema actualiza el inventario 
+6.​ El sistema muestra un mensaje de confirmación 
+Flujo: Consultar inventario 
+1.​ El usuario accede al módulo de inventario 
+2.​ El sistema muestra la lista de productos 
+3.​ El usuario puede buscar productos por nombre 
+4.​ El usuario puede aplicar filtros (categoría, estado, stock) 
+5.​ El sistema actualiza la vista según los filtros aplicados 
+ 
+ 
+6.​ El usuario visualiza la información detallada de los productos 
+Flujo: Gestión de deudas 
+1.​ El usuario accede al módulo de deudas 
+2.​ El sistema muestra la lista de clientes con deudas 
+3.​ El sistema muestra el monto total adeudado por cada cliente 
+4.​ El usuario selecciona un cliente 
+5.​ El sistema muestra el detalle de las deudas (ventas asociadas, montos, estado) 
+6.​ El usuario revisa la información 
+Flujo: Registrar pago de deuda 
+1.​ El usuario accede al módulo de deudas 
+2.​ El usuario selecciona un cliente con deuda 
+3.​ El sistema muestra el monto pendiente 
+4.​ El usuario ingresa el monto a pagar 
+5.​ El sistema valida que el monto sea válido 
+6.​ El usuario confirma el pago 
+7.​ El sistema actualiza la deuda 
+8.​ El sistema muestra un mensaje de confirmación 
+Flujo: Generar reportes 
+1.​ El usuario accede al módulo de reportes 
+2.​ El usuario selecciona el tipo de reporte (ventas o inventario) 
+3.​ El usuario define un rango de fechas (para reportes de ventas) 
+4.​ El sistema procesa la información 
+5.​ El sistema genera el reporte 
+6.​ El sistema muestra el reporte al usuario 
+7.​ El usuario puede exportar el reporte en PDF 
+ 
+ 
+ 
+5. Requisitos de Usuario 
+5.1 Requisitos funcionales de alto nivel 
+●​ El usuario puede registrar ventas 
+●​ El usuario puede registrar ventas al contado o crédito 
+●​ El sistema permite gestionar el inventario (CRUD: crear, consultar, actualizar, eliminar 
+productos) 
+●​ El sistema permite generar boletas de venta 
+●​ El sistema permite gestionar clientes con deudas 
+●​ El sistema permite generar reportes de ventas e inventario 
+●​ El sistema permite escanear productos mediante código de barras 
+●​ El sistema notifica productos con stock bajo o próximos a vencer 
+●​ El sistema permite respaldar y recuperar información en la nube 
+5.2 Requisitos no funcionales de usuario 
+●​ El sistema debe ser fácil de usar e intuitivo 
+●​ El sistema debe responder en menos de 3 segundos en operaciones comunes 
+●​ El sistema debe funcionar sin conexión a internet para operaciones principales 
+●​ El sistema debe garantizar la seguridad de la información 
+●​ El sistema debe ser compatible con dispositivos móviles 
+ 
+ 
+ 
+6. Modelado de Interacción 
+6.1 Diagrama de Actores 
+Actores identificados: 
+●​ Usuario (Propietaria) 
+●​ Servicio en la nube 
+●​ Dispositivo de escaneo 
+●​ Cliente (actor indirecto) 
+ 
+6.2 Historias de Usuario 
+ 
+HU: Registrar productos 
+YO 
+Como Usuario 
+QUIERO 
+Registrar productos en el inventario 
+PARA 
+Tener control de los productos disponibles 
+CRITERIOS DE ACEPTACIÓN 
+ 
+ 
+●​ El usuario puede ingresar los datos del producto (nombre, categoría, precio, 
+cantidad, fecha de vencimiento si aplica) 
+●​ El usuario puede registrar productos manualmente o mediante escaneo de código 
+de barras 
+●​ El sistema debe validar que los campos obligatorios estén completos antes de 
+guardar 
+●​ El sistema no debe permitir registrar productos con datos inválidos (precio 
+negativo, cantidad negativa, etc.) 
+●​ El sistema debe guardar el producto en el inventario correctamente 
+●​ El sistema debe permitir visualizar el producto registrado en la lista de inventario 
+●​ El sistema debe asignar un identificador único al producto 
+ 
+HU: Actualizar productos 
+YO 
+Como Usuario 
+QUIERO 
+Actualizar la información de un producto 
+PARA 
+Mantener los datos del inventario correctos y actualizados 
+CRITERIOS DE ACEPTACIÓN 
+●​ El usuario puede seleccionar un producto existente del inventario 
+●​ El sistema debe mostrar la información actual del producto seleccionado 
+●​ El usuario puede modificar uno o más campos (nombre, categoría, precio, cantidad, 
+fecha de vencimiento) 
+●​ El sistema debe validar que los datos ingresados sean correctos (no valores 
+negativos, campos obligatorios completos) 
+●​ El sistema debe guardar los cambios correctamente 
+●​ El sistema debe reflejar los cambios actualizados en el inventario 
+●​ El sistema debe mantener el mismo identificador del producto (no crear uno nuevo) 
+ 
+HU: Desactivar productos 
+YO 
+Como Usuario 
+QUIERO 
+Desactivar un producto del inventario 
+PARA 
+Evitar su uso en nuevas ventas sin perder su historial 
+CRITERIOS DE ACEPTACIÓN 
+●​ El usuario puede seleccionar un producto activo del inventario 
+●​ El sistema debe permitir cambiar el estado del producto a “inactivo” 
+●​ El producto inactivo no debe aparecer disponible para nuevas ventas 
+●​ El producto inactivo debe mantenerse registrado en el sistema 
+●​ El producto debe seguir apareciendo en reportes y ventas históricas 
+●​ El sistema debe permitir visualizar productos activos e inactivos 
+ 
+ 
+●​ El usuario puede volver a activar un producto si es necesario 
+ 
+HU: Consultar inventario 
+YO 
+Como Usuario 
+QUIERO 
+Consultar el inventario de productos 
+PARA 
+Conocer la disponibilidad y estado de los productos 
+CRITERIOS DE ACEPTACIÓN 
+●​ El sistema debe mostrar una lista de productos registrados en el inventario 
+●​ El usuario puede visualizar información de cada producto (nombre, categoría, 
+precio, cantidad, estado, fecha de vencimiento si aplica) 
+●​ El usuario puede buscar productos por nombre 
+●​ El usuario puede filtrar productos por categoría 
+●​ El usuario puede filtrar productos por estado (activos e inactivos) 
+●​ El sistema debe permitir identificar productos con bajo stock 
+●​ El sistema debe permitir identificar productos próximos a vencer 
+●​ El sistema debe mostrar la información de forma clara y organizada 
+ 
+HU: Gestión de deudas 
+YO 
+Como Usuario 
+QUIERO 
+Gestionar las deudas de mis clientes 
+PARA 
+Llevar un control claro de los pagos pendientes y su estado 
+CRITERIOS DE ACEPTACIÓN 
+●​ El sistema debe mostrar una lista de clientes con deudas registradas 
+●​ El usuario puede visualizar el monto total de deuda por cada cliente 
+●​ El usuario puede ver el detalle de las ventas asociadas a cada deuda 
+●​ El sistema debe indicar el estado de cada deuda (pendiente o pagada) 
+●​ El usuario puede seleccionar un cliente para ver información detallada 
+●​ El sistema debe permitir identificar fácilmente las deudas pendientes 
+●​ El sistema debe actualizar automáticamente la información cuando se registran 
+pagos 
+●​ El sistema debe mantener el historial de deudas, incluso si ya fueron pagadas 
+ 
+HU: Generar reportes 
+YO 
+Como Usuario 
+QUIERO 
+Generar reportes de ventas e inventario 
+ 
+ 
+PARA 
+Analizar el estado del negocio y tomar decisiones informadas 
+CRITERIOS DE ACEPTACIÓN 
+●​ El usuario puede seleccionar el tipo de reporte (ventas o inventario) 
+●​ El usuario puede definir un rango de fechas para los reportes de ventas 
+●​ El sistema debe generar un reporte de ventas con detalle de productos vendidos, 
+cantidades, fechas y montos 
+●​ El sistema debe generar un reporte de inventario con el estado actual de los 
+productos (stock, estado, vencimiento) 
+●​ El sistema debe permitir identificar productos con bajo stock en los reportes 
+●​ El sistema debe permitir identificar productos próximos a vencer 
+●​ El sistema debe mostrar un resumen de información (totales de ventas, productos 
+más vendidos, etc.) 
+●​ El sistema debe permitir exportar los reportes en formato PDF 
+●​ El sistema debe generar los reportes en un tiempo razonable 
+ 
+ 
+ 

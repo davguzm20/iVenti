@@ -1,0 +1,153 @@
+ESTRUCTURA DEL PROYECTO iVENTI
+===============================
+
+ESTRUCTURA GENERAL DE CARPETAS
+===============================
+
+lib/
+├── features/                    # MÓDULOS POR CARACTERÍSTICA DE NEGOCIO
+│   │
+│   ├── inventory/              # GESTIÓN DE INVENTARIO (RF-06 a RF-16)
+│   │   ├── entities/           # Entidades puras (Producto, Lote, Categoria, Unidad)
+│   │   ├── dtos/               # Data Transfer Objects
+│   │   │   ├── requests/       # Requests con validación (CrearProductoRequest)
+│   │   │   └── responses/      # Responses solo datos (ProductoResponse)
+│   │   ├── repositories/       # Lógica de acceso a datos + validaciones
+│   │   ├── services/           # Lógica de negocio + reglas + auditoría
+│   │   ├── controllers/        # Estado de UI con Provider
+│   │   └── pages/              # UI pura (sin lógica de negocio)
+│   │
+│   ├── sales/                  # GESTIÓN DE VENTAS (RF-17 a RF-24)
+│   │   ├── entities/           # Venta, DetalleVenta
+│   │   ├── dtos/
+│   │   ├── repositories/
+│   │   ├── services/
+│   │   ├── controllers/
+│   │   └── pages/
+│   │
+│   ├── clients/                # GESTIÓN DE CLIENTES (RF-25 a RF-29)
+│   │   ├── entities/           # Cliente
+│   │   ├── dtos/
+│   │   ├── repositories/
+│   │   ├── services/
+│   │   ├── controllers/
+│   │   └── pages/
+│   │
+│   ├── reports/                # REPORTES (RF-30 a RF-35)
+│   │   ├── entities/
+│   │   ├── dtos/
+│   │   ├── repositories/
+│   │   ├── services/
+│   │   ├── controllers/
+│   │   └── pages/
+│   │
+│   ├── auth/                   # AUTENTICACIÓN (RF-01 a RF-05)
+│   │   ├── entities/           # Credenciales, Usuario
+│   │   ├── dtos/
+│   │   ├── repositories/
+│   │   ├── services/
+│   │   ├── controllers/
+│   │   └── pages/
+│   │
+│   └── config/                 # CONFIGURACIÓN DE USUARIO (RF-39)
+│       ├── entities/
+│       ├── dtos/
+│       ├── repositories/
+│       ├── services/
+│       ├── controllers/
+│       └── pages/
+│
+├── shared/                     # CÓDIGO COMPARTIDO (SOLO LECTURA)
+│   ├── config/                 # Configuración global
+│   │   └── database_config.dart    # Conexión PostgreSQL
+│   ├── exceptions/             # Excepciones personalizadas
+│   │   └── app_exceptions.dart     # ValidationException, DatabaseException, etc.
+│   ├── services/               # Servicios compartidos
+│   │   └── notification_service.dart
+│   └── widgets/                # Widgets reutilizables
+│       ├── custom_text_field.dart
+│       ├── error_dialog.dart
+│       └── all_custom_widgets.dart
+│
+├── temp/                       # ARCHIVOS TEMPORALES (POR ELIMINAR)
+│   - Entities antiguos con lógica de DB
+│   - Controllers obsoletos
+│
+├── app_routes.dart             # Configuración de rutas (go_router)
+└── main.dart                   # Punto de entrada de la aplicación
+
+
+FUNCIONES DE CADA CAPA
+======================
+
+ENTITIES (features/[feature]/entities/)
+----------------------------------------
+Propósito: Representar objetos de negocio puros
+Reglas:
+  - NO imports de database (sqflite, postgres, etc.)
+  - NO métodos static Future (asincrónicos)
+  - SOLO propiedades, constructores, toMap(), fromMap(), copyWith()
+  - Inmutables (usar final en propiedades)
+Ejemplo: Producto, Cliente, Venta
+
+DTOS (features/[feature]/dtos/)
+-------------------------------
+Propósito: Transferir datos entre capas
+Tipos:
+  - requests/: Para entrada de datos (con validación)
+  - responses/: Para salida de datos (solo datos)
+Ejemplo: CrearProductoRequest, ProductoResponse
+
+REPOSITORIES (features/[feature]/repositories/)
+-----------------------------------------------
+Propósito: Acceso a datos + validaciones
+Responsabilidades:
+  - TODO el SQL (INSERT, UPDATE, DELETE, SELECT)
+  - Validaciones de formato e integridad
+  - Conexión a PostgreSQL via database_config
+Ejemplo: ProductoRepository.crearProducto()
+
+SERVICES (features/[feature]/services/)
+---------------------------------------
+Propósito: Lógica de negocio y reglas
+Responsabilidades:
+  - Reglas de negocio complejas
+  - Coordinar múltiples repositories
+  - Auditoría y trazabilidad
+  - Excepciones de negocio
+Ejemplo: ProductoService.validarYCrearProducto()
+
+CONTROLLERS (features/[feature]/controllers/)
+---------------------------------------------
+Propósito: Gestión de estado de UI
+Responsabilidades:
+  - Extender ChangeNotifier (Provider)
+  - Manejar loading, error, data states
+  - Conectar UI con Services
+  - Notificar cambios a UI
+Ejemplo: InventoryController.cargarProductos()
+
+PAGES (features/[feature]/pages/)
+---------------------------------
+Propósito: UI pura
+Reglas:
+  - NO lógica de negocio
+  - NO imports de repositories o services
+  - SOLO widgets y estado visual
+  - Usar controllers para estado
+Ejemplo: InventoryPage, CreateProductPage
+
+
+FLUJO DE TRABAJO TÍPICO
+=======================
+
+1. Usuario ingresa datos en Page
+2. Page llama a Controller
+3. Controller valida y llama a Service
+4. Service aplica reglas de negocio
+5. Service llama a Repository
+6. Repository valida y ejecuta SQL
+7. PostgreSQL guarda datos
+8. Response sube por las capas
+9. Controller actualiza estado
+10. Page muestra resultado

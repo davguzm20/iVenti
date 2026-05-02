@@ -1,0 +1,193 @@
+ 
+Sistema de Gestión de Inventario y Ventas​
+Documento de 
+Especificación de 
+Requisitos del Negocio 
+ 
+ 
+ 
+ 
+ 
+ 
+Jeanmarco Rosales Trinidad 
+Manuel David Guzman Chavez 
+Iris Marisol Hanampa Bellido 
+Nikol Arlet Medrano Ayma 
+ 
+ 
+ 
+​
+Versión: 1.0                                                       27 de abril del 2026
+ 
+ 
+Índice 
+Índice​
+2 
+1. Introducción​
+3 
+1.1 Propósito​
+3 
+1.2 Alcance​
+3 
+1.3 Definiciones, siglas y abreviaturas​
+3 
+2. Descripción del Negocio​
+3 
+2.1 Contexto del negocio​
+3 
+2.2 Problema actual​
+3 
+2.3 Objetivos del negocio​
+4 
+3. Stakeholders​
+4 
+3.1 Identificación de stakeholders​
+4 
+3.2 Intereses y necesidades​
+4 
+4. Procesos del Negocio​
+4 
+4.1 Descripción del proceso​
+4 
+4.2 Diagrama de Caso de Uso de Negocio​
+6 
+5. Reglas del Negocio​
+6 
+5.1 Reglas operativas​
+6 
+5.2 Restricciones del negocio​
+7 
+6. Alcance del Sistema​
+7 
+6.1 Qué incluirá el sistema​
+7 
+6.2 Qué no incluirá​
+7 
+ 
+ 
+ 
+1. Introducción 
+1.1 Propósito 
+Este documento define las necesidades del negocio de la empresa cliente Multiservicios 
+Golden S.A. y establece el contexto en el que se desarrollará la aplicación móvil iVenti. Su 
+finalidad es describir el proceso actual, los objetivos del negocio y el alcance general del 
+sistema desde una perspectiva no técnica. 
+1.2 Alcance 
+El documento cubre la operación actual del negocio, sus limitaciones y las mejoras esperadas 
+mediante el uso de un sistema de gestión de inventario y ventas. Se enfoca en un entorno de 
+negocio pequeño con operaciones presenciales, donde una sola persona administra 
+productos, ventas y control de stock. 
+1.3 Definiciones, siglas y abreviaturas 
+●​ iVenti - Aplicación móvil de gestión de inventario y ventas. 
+●​ Inventario - Conjunto de productos disponibles para la venta. 
+●​ Stock - Cantidad disponible de un producto. 
+●​ Venta - Transacción en la que se registran productos vendidos a un cliente. 
+●​ Stakeholder - Persona interesada en el sistema o afectada por su uso. 
+2. Descripción del Negocio 
+2.1 Contexto del negocio 
+Multiservicios Golden S.A. es un negocio minorista que comercializa diversos productos 
+como abarrotes, frutas, útiles escolares, artículos de limpieza y ferretería. La operación del 
+negocio es local y depende principalmente de la gestión manual realizada por el encargado. 
+Las actividades diarias incluyen el control de productos, registro de ventas y reposición de 
+stock. Actualmente, estas tareas se realizan sin apoyo de herramientas digitales, lo que limita 
+la eficiencia operativa. 
+2.2 Problema actual 
+El negocio presenta dificultades en el control y seguimiento de sus operaciones debido a la 
+ausencia de un sistema de gestión. No existe visibilidad clara del inventario disponible, lo que 
+genera pérdidas por desabastecimiento o acumulación innecesaria de productos. 
+ 
+ 
+El control de productos con fecha de vencimiento es limitado, aumentando el riesgo de 
+caducidad. Las ventas no se registran formalmente, lo que impide analizar ingresos o tomar 
+decisiones basadas en información real. Además, el proceso manual hace que las 
+operaciones sean lentas y propensas a errores. 
+2.3 Objetivos del negocio 
+El negocio busca mejorar el control de sus productos y ventas mediante una solución digital 
+que permita registrar información de manera ordenada y accesible. 
+Se espera contar con mayor visibilidad del inventario, reducir pérdidas por falta de control, 
+agilizar el proceso de ventas y disponer de información que facilite la toma de decisiones. 
+Asimismo, se busca que el sistema sea fácil de usar y adaptado a usuarios con conocimientos 
+básicos de tecnología. 
+3. Stakeholders 
+3.1 Identificación de stakeholders 
+El sistema involucra principalmente a la propietaria del negocio, quien cumple el rol de 
+usuaria principal y encargada de las operaciones. De manera indirecta, los clientes también 
+forman parte del entorno del sistema, ya que participan en las transacciones de venta. 
+3.2 Intereses y necesidades 
+La propietaria necesita conocer en todo momento la cantidad de productos disponibles, 
+registrar ventas de forma rápida y reducir errores en el cálculo de precios. También requiere 
+recibir alertas cuando un producto esté por agotarse o próximo a vencer. 
+Se espera que el sistema sea simple, intuitivo y funcional sin necesidad de conexión a 
+internet. Además, se valora la posibilidad de generar reportes claros y contar con apoyo para 
+el uso del sistema en caso de dudas. 
+4. Procesos del Negocio 
+4.1 Descripción del proceso 
+El proceso inicia cuando un cliente decide comprar algo. Para que se realice la venta 
+adecuadamente, primero se debe mirar directamente los estantes y confirmar que el 
+producto está físicamente ahí. No se puede completar la atención si no se verifica antes que 
+el artículo está disponible. Una vez que se entrega lo solicitado, se hace una nota manual del 
+ 
+ 
+dinero que entra y del objeto que sale, manteniendo así un orden básico de lo que sucede en 
+el día a día. 
+La entrega de productos no se completa con dinero al instante, sino que se permite llevar la 
+mercadería bajo un compromiso de pago posterior. Esto se conoce como dar fiado y es un 
+proceso que requiere un seguimiento muy atento. Se debe anotar con detalle quién debe y 
+cuánto, para que más adelante, cuando se reciba el dinero pendiente, se pueda marcar la 
+deuda como pagada y el capital regrese a la caja. 
+Después de la entrega, se hace una revisión constante de todo lo que hay guardado. Este 
+control no requiere sistemas complejos, sino que se basa en observar qué espacios se están 
+quedando libres. Este chequeo visual es lo que permite saber qué cosas prefiere la gente y 
+qué artículos se están terminando más rápido, lo que ayuda a planificar las siguientes 
+compras sin que falte lo más necesario. 
+Cuando se nota que queda poco de algo, se activa el paso de traer nueva mercadería. Esto 
+comienza con la tarea de pedir exactamente lo que hace falta para llenar los huecos 
+detectados anteriormente. Al recibir los bultos o productos nuevos, se revisa que todo 
+coincida con lo solicitado y se procede a acomodarlos de nuevo en su lugar, asegurando que 
+siempre haya variedad disponible para ofrecer. 
+Este modelo de trabajo se apoya totalmente en la precisión de los apuntes diarios. Al anotar 
+cada movimiento de forma manual en el momento exacto en que ocurre, se evita que se 
+pierda la cuenta de lo que se ha entregado o de lo que falta por cobrar. Este control escrito 
+sirve como una guía para entender qué artículos se mueven más y asegura que, aunque no 
+se usen sistemas complejos, siempre se tenga una idea clara de cuánto dinero ha entrado y 
+qué productos han salido. 
+Otro punto clave sucede justo cuando se descargan los pedidos nuevos. Es necesario 
+dedicar un tiempo a revisar que cada artículo que llega esté en buen estado y coincida 
+exactamente con lo que se pidió. Esta tarea de verificación es fundamental para que los 
+estantes vuelvan a estar llenos con mercadería de calidad, lo que permite que el proceso de 
+venta se reinicie sin problemas y con la seguridad de que se tiene lo necesario para atender 
+a los clientes. 
+Finalmente, el proceso de la gestión de los pagos a quienes traen la mercadería. Se reciben 
+los productos, se verifica el cobro por lo entregado y se entrega el dinero correspondiente. 
+Esto asegura que los proveedores sigan trayendo lo necesario para continuar con las ventas 
+diarias. 
+ 
+ 
+4.2 Diagrama de Caso de Uso de Negocio 
+ 
+5. Reglas del Negocio 
+5.1 Reglas operativas 
+Los productos deben mantenerse disponibles para la venta en función de la demanda. 
+Cuando un producto presenta baja disponibilidad, debe considerarse su reposición. 
+ 
+ 
+Los productos con fecha de vencimiento deben ser identificados y gestionados antes de su 
+caducidad. Las ventas deben realizarse de forma continua durante la jornada laboral, 
+registrando los productos vendidos y sus precios. 
+5.2 Restricciones del negocio 
+El negocio opera en un entorno local, sin integración con plataformas externas ni comercio 
+en línea. La gestión está a cargo de una sola persona, lo que limita la complejidad de los 
+procesos. 
+El uso de tecnología es básico, por lo que cualquier solución implementada debe ser sencilla 
+y accesible. No se consideran procesos contables avanzados ni múltiples usuarios. 
+6. Alcance del Sistema 
+6.1 Qué incluirá el sistema 
+El sistema permitirá registrar productos, controlar el inventario, registrar ventas y generar 
+reportes básicos. También incluirá funcionalidades de notificación para alertar sobre 
+productos en estado crítico y facilitará el acceso a la información del negocio. 
+6.2 Qué no incluirá 
+El sistema no contempla ventas en línea, integración con sistemas contables, facturación 
+electrónica ni gestión de múltiples sucursales. Tampoco incluirá funcionalidades avanzadas 
+de administración empresarial. 
+ 
+ 

@@ -1,0 +1,129 @@
+ARQUITECTURA iVENTI - REFACTORIZACIÓN
+======================================
+
+1. ARQUITECTURA EN CAPAS (LAYERED ARCHITECTURE)
+================================================
+
+El sistema iVenti utiliza una arquitectura en capas organizada de la siguiente manera:
+
+CAPAS PRINCIPALES (de abajo hacia arriba):
+-------------------------------------------
+
+1. ENTITIES (Entidades de Negocio)
+   - Clases de datos PURAS sin lógica de base de datos
+   - Solo propiedades, constructores, y métodos de mapeo (toMap, fromMap)
+   - Métodos adicionales: copyWith, toString, ==, hashCode
+   - Ubicación: features/[feature]/entities/
+   
+   Ejemplo:
+   - Producto, Cliente, Venta, Lote, Categoria, etc.
+
+2. REPOSITORIES (Repositorios)
+   - Contienen TODA la lógica de acceso a datos (SQL PostgreSQL)
+   - Validan formato e integridad de datos
+   - Usan datasources para conexiones directas
+   - Ubicación: features/[feature]/repositories/
+   
+   Ejemplo:
+   - ProductoRepository: crearProducto(), actualizarProducto(), eliminarProducto()
+
+3. DTOS (Data Transfer Objects)
+   - Requests: Objetos con validación para entrada de datos
+   - Responses: Objetos solo con datos para salida
+   - Ubicación: features/[feature]/dtos/requests/ y features/[feature]/dtos/responses/
+   
+   Ejemplo:
+   - CrearProductoRequest (con validación)
+   - ProductoResponse (solo datos)
+
+4. SERVICES (Servicios)
+   - Lógica de negocio compleja
+   - Reglas de negocio
+   - Coordinan múltiples repositories
+   - Auditoría y trazabilidad
+   - Ubicación: features/[feature]/services/
+   
+   Ejemplo:
+   - ProductoService: crearProductoConAuditoria(), validarStock()
+
+5. CONTROLLERS (Controladores de UI)
+   - Gestión de estado con Provider/ChangeNotifier
+   - Conectan UI con Services
+   - Manejan loading, errors, datos para UI
+   - Ubicación: features/[feature]/controllers/
+   
+   Ejemplo:
+   - InventoryController: cargarProductos(), crearProducto()
+
+6. PAGES (Páginas/UI)
+   - UI pura sin lógica de negocio
+   - Solo widgets y estado visual
+   - Imports de controllers
+   - Ubicación: features/[feature]/pages/
+   
+   Ejemplo:
+   - InventoryPage, CreateProductPage
+
+2. CONEXIÓN POSTGRESQL
+======================
+
+Ubicación: shared/config/database_config.dart
+
+Características:
+- Conexión singleton a PostgreSQL
+- Configuración desde variables de entorno (.env)
+- SSL requerido para producción
+- Connection pooling
+
+Variables de entorno requeridas:
+- POSTGRES_HOST
+- POSTGRES_PORT
+- POSTGRES_DB
+- POSTGRES_USER
+- POSTGRES_PASSWORD
+
+3. SHARED FOLDER
+================
+
+/shared/config
+- database_config.dart: Configuración de conexión PostgreSQL
+- Constants y configuraciones globales
+
+/shared/exceptions
+- app_exceptions.dart: Excepciones personalizadas
+- ValidationException, DatabaseException, AuthenticationException, etc.
+
+/shared/widgets
+- Widgets reutilizables en toda la app
+- custom_text_field.dart, error_dialog.dart, etc.
+
+/shared/services
+- Servicios compartidos entre features
+- notification_service.dart
+
+4. FLUJO DE DATOS TÍPICO
+========================
+
+Page (UI) 
+  ↓ (recibe input usuario)
+Controller (gestiona estado)
+  ↓ (llama a service)
+Service (lógica de negocio + reglas)
+  ↓ (coordina repositories)
+Repository (validaciones + integridad)
+  ↓ (usa datasource)
+Datasource (SQL directo)
+  ↓
+PostgreSQL (Render)
+
+5. PRINCIPIOS DE DISEÑO
+=======================
+
+- Entities NO tienen lógica de DB
+- Repositories contienen TODO el SQL
+- Services contienen lógica de negocio
+- Controllers solo estado de UI
+- Pages solo UI sin lógica
+- DTOs separan requests (con validación) de responses (solo datos)
+- Inmutabilidad: usar copyWith en entities
+- Excepciones personalizadas para cada caso de error

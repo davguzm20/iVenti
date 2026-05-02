@@ -1,0 +1,213 @@
+ 
+Sistema de Gestión de Inventario y Ventas​
+Documento de 
+Especificación de 
+Arquitectura 
+ 
+ 
+ 
+ 
+ 
+ 
+Jeanmarco Rosales Trinidad 
+Manuel David Guzman Chavez 
+Iris Marisol Hanampa Bellido 
+Nikol Arlet Medrano Ayma 
+ 
+ 
+ 
+​
+Versión: 1.0                                                       27 de abril del 2026 
+ 
+ 
+Índice 
+Índice​
+2 
+1. Introducción​
+3 
+1.1 Propósito​
+3 
+1.2 Alcance​
+3 
+1.3 Definiciones, siglas y abreviaturas​
+3 
+2. Visión General de la Arquitectura​
+3 
+2.1 Estilo arquitectónico​
+3 
+2.2 Objetivos de la arquitectura​
+3 
+3. Vista Lógica (Software)​
+4 
+3.1 Diagrama de paquetes​
+4 
+3.2 Descripción de módulos​
+4 
+4. Vista de Datos​
+5 
+4.1 Modelo de datos general​
+5 
+4.2 Gestión de persistencia​
+6 
+5. Vista de Despliegue​
+6 
+5.1 Diagrama de despliegue​
+6 
+5.2 Entorno de ejecución​
+6 
+6. Integraciones Externas​
+7 
+6.1 APIs externas​
+7 
+6.2 Servicios externos​
+7 
+7. Decisiones de Diseño​
+7 
+7.1 Tecnologías utilizadas​
+7 
+7.2 Justificación de decisiones​
+7 
+8. Restricciones Técnicas​
+8 
+ 
+ 
+ 
+1. Introducción 
+1.1 Propósito 
+El propósito de este documento es describir la arquitectura del Sistema iVenti, detallando su 
+estructura, componentes principales, relaciones e interacciones. Asimismo, establece las 
+decisiones de diseño adoptadas, las tecnologías utilizadas y los lineamientos que guiarán el 
+desarrollo e implementación del sistema, sirviendo como referencia para el equipo de 
+desarrollo y para las actividades de aseguramiento de la calidad. 
+1.2 Alcance 
+El alcance de este documento comprende la definición de la arquitectura del sistema. Incluye 
+la descripción de las vistas arquitectónicas relevantes (lógica, datos y despliegue), así como 
+los módulos principales y sus responsabilidades.  
+1.3 Definiciones, siglas y abreviaturas  
+●​ Offline - Funcionamiento sin necesidad de conexión a internet. 
+●​ SQLite - Motor de base de datos relacional ligero y local. 
+●​ Stock Mínimo - Cantidad límite de un producto antes de que se requiera su reposición. 
+●​ UI - Interfaz de Usuario. 
+2. Visión General de la Arquitectura 
+2.1 Estilo arquitectónico 
+Se adopta una arquitectura cliente–servidor, donde la aplicación móvil actúa como cliente y 
+se comunica con un servidor que gestiona la lógica de negocio y la persistencia de datos. 
+A nivel interno, la aplicación cliente implementa una arquitectura en capas, separando la 
+interfaz de usuario, la lógica de negocio y el acceso a datos. 
+2.2 Objetivos de la arquitectura 
+●​ Disponibilidad: El sistema debe permitir operaciones esenciales incluso ante fallos 
+temporales de conectividad. 
+●​ Mantenibilidad: Separar cliente y servidor para facilitar evolución independiente. 
+●​ Escalabilidad: Permitir crecimiento del volumen de datos mediante una base de datos 
+centralizada. 
+ 
+ 
+3. Vista Lógica (Software) 
+3.1 Diagrama de paquetes 
+ 
+3.2 Descripción de módulos 
+El sistema se estructura en módulos distribuidos entre el cliente y el servidor, cada uno con 
+responsabilidades específicas. 
+Módulos del Cliente (Aplicación móvil) 
+●​ Módulo de Interfaz de Usuario 
+Gestiona la interacción con el usuario, permitiendo visualizar información y ejecutar 
+acciones sobre el sistema. 
+●​ Módulo de Lógica de Presentación 
+Controla el flujo de la aplicación, valida datos de entrada y coordina la comunicación 
+con el servidor. 
+●​ Módulo de Comunicación 
+ 
+ 
+Gestiona las solicitudes hacia el servidor y el procesamiento de las respuestas 
+recibidas mediante interfaces definidas. 
+Módulos del Servidor 
+●​ Módulo de API 
+Expone los servicios del sistema a través de endpoints, permitiendo la comunicación 
+con el cliente. 
+●​ Módulo de Lógica de Negocio 
+Implementa las reglas del sistema, incluyendo la gestión de inventario, ventas, 
+clientes y reportes. 
+●​ Módulo de Acceso a Datos 
+Gestiona la interacción con la base de datos, realizando operaciones de 
+almacenamiento, consulta y actualización. 
+4. Vista de Datos 
+4.1 Modelo de datos general 
+ 
+ 
+ 
+4.2 Gestión de persistencia 
+La persistencia de datos se gestiona de manera centralizada en un servidor mediante un 
+sistema de base de datos relacional PostgreSQL. 
+El servidor es responsable de almacenar, procesar y asegurar la integridad de la información 
+del sistema. La aplicación cliente accede a los datos exclusivamente a través de los servicios 
+expuestos por la API, evitando el acceso directo a la base de datos. 
+Este enfoque permite mantener consistencia en los datos, facilitar la administración de la 
+información y mejorar la seguridad del sistema. 
+5. Vista de Despliegue 
+5.1 Diagrama de despliegue 
+El sistema se despliega bajo un modelo cliente–servidor compuesto por los siguientes nodos: 
+●​ Dispositivo móvil (Cliente): 
+Ejecuta la aplicación iVenti, permitiendo la interacción del usuario con el sistema. 
+●​ Servidor de aplicaciones: 
+Procesa las solicitudes del cliente, ejecuta la lógica de negocio y expone los servicios 
+del sistema. 
+●​ Servidor de base de datos: 
+Almacena la información del sistema utilizando un motor de base de datos relacional. 
+La comunicación entre el cliente y el servidor se realiza a través de una red, utilizando 
+protocolos de comunicación definidos. 
+5.2 Entorno de ejecución 
+●​ Cliente: Aplicación móvil desarrollada en un entorno multiplataforma (por ejemplo, 
+Flutter), ejecutándose en dispositivos Android. 
+●​ Servidor: Entorno de ejecución backend encargado de procesar la lógica del sistema 
+y gestionar las solicitudes del cliente. 
+●​ Base de datos: Sistema de gestión de base de datos relacional (PostgreSQL) 
+ejecutado en un entorno servidor. 
+●​ Sistema de archivos: Utilizado para la generación y almacenamiento temporal de 
+reportes en formato PDF. 
+ 
+ 
+6. Integraciones Externas 
+6.1 APIs externas 
+El sistema utiliza una API de tipo REST para la comunicación entre la aplicación cliente y el 
+servidor. 
+A través de esta API, el cliente puede realizar operaciones relacionadas con la gestión de 
+inventario, ventas, clientes y reportes. La API define los contratos de comunicación, 
+incluyendo los formatos de solicitud y respuesta. 
+6.2 Servicios externos 
+El sistema depende de los siguientes servicios externos: 
+●​ Servidor de aplicaciones: Responsable de procesar las solicitudes del cliente. 
+●​ Sistema de base de datos: Encargado de almacenar y gestionar la información del 
+sistema. 
+●​ Servicios del sistema operativo del dispositivo: Utilizados para funcionalidades como 
+acceso a la cámara y generación de archivos PDF. 
+7. Decisiones de Diseño 
+7.1 Tecnologías utilizadas 
+●​ Base de datos: PostgreSQL, seleccionado por su robustez, escalabilidad y soporte 
+para entornos concurrentes. 
+●​ Framework de desarrollo móvil: Flutter, utilizado para el desarrollo de la interfaz de 
+usuario multiplataforma. 
+●​ Arquitectura de comunicación: API REST para el intercambio de datos entre cliente y 
+servidor. 
+●​ Formato de reportes: PDF, por su portabilidad y compatibilidad con dispositivos 
+móviles. 
+7.2 Justificación de decisiones 
+La adopción de una arquitectura cliente–servidor permite centralizar la información del 
+sistema, facilitando su gestión, seguridad y disponibilidad. 
+El uso de PostgreSQL garantiza un manejo eficiente de los datos y permite escalar el sistema 
+conforme aumenten las necesidades del negocio. 
+ 
+ 
+La implementación de una API REST proporciona una interfaz clara y desacoplada entre 
+cliente y servidor, permitiendo la evolución independiente de ambos componentes. 
+8. Restricciones Técnicas 
+●​ Frameworks: El sistema requiere el uso de tecnologías compatibles con desarrollo 
+móvil y comunicación mediante servicios web. 
+●​ Infraestructura: Se requiere un servidor para alojar la lógica de negocio y la base de 
+datos. 
+●​ Conectividad: El funcionamiento del sistema depende de la disponibilidad de 
+conexión a red para la comunicación entre cliente y servidor. 
+●​ Almacenamiento: La capacidad del sistema está limitada por los recursos del servidor 
+y la base de datos. 
+●​ Compatibilidad: La aplicación debe ejecutarse en dispositivos móviles compatibles 
+con el entorno de desarrollo seleccionado. 
+ 

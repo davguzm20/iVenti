@@ -1,0 +1,1174 @@
+ 
+Sistema de Gestión de Inventario y Ventas​
+Documento de 
+Especificación de 
+Requisitos de Software 
+ 
+ 
+ 
+ 
+ 
+ 
+Jeanmarco Rosales Trinidad 
+Manuel David Guzman Chavez 
+Iris Marisol Hanampa Bellido 
+Nikol Arlet Medrano Ayma 
+ 
+ 
+ 
+​
+Versión: 1.0                                                       27 de abril del 2026 
+ 
+ 
+Índice 
+Índice​
+2 
+1. Introducción​
+3 
+1.1 Propósito​
+3 
+1.2 Alcance del sistema​
+3 
+1.3 Definiciones, siglas y abreviaturas​
+3 
+2. Descripción General​
+3 
+2.1 Perspectiva del sistema​
+3 
+2.2 Funciones generales del sistema​
+4 
+2.3 Tipos de usuarios​
+4 
+2.4 Suposiciones y dependencias​
+4 
+3. Requisitos del Sistema​
+5 
+3.1 Requisitos Funcionales​
+5 
+3.1.1 Acceso al sistema​
+5 
+3.1.2 Gestión de inventario​
+5 
+3.1.3 Gestión de ventas​
+7 
+3.1.4 Gestión de clientes​
+8 
+3.1.5 Generación de reportes​
+8 
+3.1.6 Gestión de notificaciones​
+9 
+3.2 Requisitos No Funcionales​
+10 
+3.2.1 Usabilidad​
+10 
+3.2.2 Rendimiento​
+10 
+3.2.3 Seguridad​
+11 
+3.2.4 Disponibilidad​
+11 
+4. Modelado del Sistema​
+12 
+4.1 Diagrama de Casos de Uso​
+12 
+4.2 Especificación de Casos de Uso​
+12 
+4.3 Modelo de Datos​
+19 
+5. Interfaces del Sistema​
+20 
+5.1 Interfaces de usuario​
+20 
+6. Restricciones del Sistema​
+20 
+6.1 Tecnológicas​
+20 
+6.2 Normativas​
+20 
+6.3 De diseño​
+20 
+ 
+ 
+ 
+1. Introducción 
+1.1 Propósito 
+Este documento tiene como propósito definir los requisitos funcionales y no funcionales del 
+sistema iVenti, una aplicación móvil orientada a la gestión de inventario y ventas para el 
+negocio Multiservicios Golden S.A. Se describe el comportamiento esperado del sistema, sus 
+principales funcionalidades, restricciones y características generales. 
+1.2 Alcance del sistema 
+El sistema permite registrar y controlar productos, gestionar ventas al contado y a crédito, 
+administrar clientes deudores, generar reportes y emitir alertas relacionadas al estado del 
+inventario. Todas las operaciones principales se ejecutan en modo offline, utilizando 
+almacenamiento local en el dispositivo. 
+1.3 Definiciones, siglas y abreviaturas 
+●​ Sistema iVenti - Aplicación móvil para la gestión de inventario y ventas. 
+●​ Inventario - Conjunto de productos registrados con su stock disponible. 
+●​ Stock - Cantidad disponible de un producto en el inventario. 
+●​ Lote - Registro de ingreso de productos con atributos como cantidad, precio de 
+compra y fecha de vencimiento. 
+●​ Venta al contado - Transacción pagada en su totalidad en el momento de la compra. 
+●​ Venta a crédito - Transacción en la que el cliente adquiere una deuda pendiente. 
+●​ Cliente deudor - Cliente con saldo pendiente por ventas a crédito. 
+●​ Boleta - Documento generado que detalla una venta realizada. 
+●​ PIN - Código numérico de 6 dígitos utilizado para autenticación del usuario. 
+2. Descripción General 
+2.1 Perspectiva del sistema 
+El sistema iVenti es una aplicación móvil independiente que implementa los requisitos 
+definidos a nivel de negocio y de usuario, proporcionando funcionalidades concretas para la 
+gestión de inventario y ventas. 
+Desde una perspectiva técnica, el sistema interactúa con los siguientes elementos: 
+●​ Usuario principal, quien opera directamente la aplicación 
+●​ Servicios de almacenamiento en la nube, utilizados para respaldo y recuperación de 
+datos 
+ 
+ 
+●​ Dispositivo de escaneo (cámara), empleado para la lectura de códigos de barras 
+El sistema gestiona la información de manera local y ejecuta sus operaciones principales sin 
+dependencia continua de servicios externos, limitando dichas integraciones a 
+funcionalidades específicas. 
+2.2 Funciones generales del sistema 
+●​ El sistema proporciona las siguientes funciones a nivel general: 
+●​ Gestionar productos y categorías del inventario 
+●​ Registrar y controlar lotes con fechas de vencimiento 
+●​ Procesar ventas al contado y a crédito 
+●​ Administrar clientes y sus deudas 
+●​ Generar boletas de venta y reportes 
+●​ Emitir notificaciones sobre eventos críticos del inventario 
+●​ Permitir búsqueda, filtrado y consulta de información 
+●​ Exportar información en formato PDF 
+2.3 Tipos de usuarios 
+El sistema contempla los siguientes tipos de actores: 
+●​ Usuario principal (Propietaria) 
+Actor humano responsable de ejecutar todas las funcionalidades del sistema, 
+incluyendo gestión de inventario, ventas, clientes y reportes. 
+●​ Sistema externo (Servicios en la nube) 
+Actor no humano que interviene en los procesos de respaldo y recuperación de 
+información. 
+●​ Dispositivo de escaneo 
+Componente del sistema que permite capturar códigos de barras mediante la cámara 
+del dispositivo. 
+2.4 Suposiciones y dependencias 
+●​ El usuario dispone de un dispositivo móvil compatible. 
+●​ El usuario tiene acceso a un correo electrónico válido para el registro. 
+●​ El sistema puede acceder a la cámara del dispositivo para el escaneo de códigos de 
+barras. 
+●​ El almacenamiento local del dispositivo es suficiente para operar el sistema. 
+ 
+ 
+●​ La conexión a internet es necesaria únicamente para procesos de verificación de 
+cuenta y respaldo de información. 
+3. Requisitos del Sistema 
+3.1 Requisitos Funcionales 
+3.1.1 Acceso al sistema 
+Código 
+Nombre 
+Descripción 
+Depende
+ncias 
+Criterios de aceptación 
+RF-01 
+Registrar usuario 
+El sistema debe 
+permitir registrar una 
+cuenta de usuario para 
+acceder al sistema 
+Ninguna 
+El usuario puede registrarse 
+ingresando su correo electrónico y el 
+sistema envía un código de 
+verificación para validar la cuenta 
+RF-02 
+Verificar cuenta 
+El sistema debe 
+permitir verificar la 
+cuenta mediante un 
+código enviado al 
+correo electrónico 
+RF-01 
+El usuario puede ingresar el código 
+recibido en su correo para activar su 
+cuenta 
+RF-03 
+Establecer PIN de 
+acceso 
+El sistema debe 
+permitir configurar un 
+PIN de acceso para 
+iniciar sesión 
+RF-02 
+El usuario puede crear un PIN de 6 
+dígitos que será utilizado para 
+acceder al sistema 
+RF-04 
+Iniciar sesión con 
+el PIN de usuario 
+El sistema debe 
+permitir el acceso 
+mediante el PIN de 
+usuario 
+RF-03 
+El usuario puede acceder al sistema 
+ingresando correctamente su PIN de 
+6 dígitos 
+RF-05 
+Solicitar PIN al 
+acceder 
+nuevamente 
+El sistema debe 
+solicitar nuevamente el 
+PIN cuando la 
+aplicación se cierre 
+completamente 
+RF-04 
+El sistema muestra la pantalla de 
+ingreso del PIN de usuario al volver a 
+acceder. 
+3.1.2 Gestión de inventario 
+Código 
+Nombre 
+Descripción 
+Depende
+ncias 
+Criterios de aceptación 
+RF-06 
+Registrar 
+producto 
+El sistema debe permitir 
+registrar nuevos productos 
+en el inventario 
+Ninguna 
+El usuario puede registrar 
+productos indicando nombre, 
+unidad de medida, precio, stock 
+mínimo y categorías. El sistema 
+valida los campos obligatorios 
+ 
+ 
+antes de guardar el producto 
+RF-07 
+Escanear 
+código de 
+barras 
+El sistema debe permitir 
+escanear códigos de barras 
+para identificar productos 
+Ninguna 
+El usuario puede escanear códigos 
+de barras utilizando la cámara del 
+dispositivo y el sistema reconoce 
+el producto asociado 
+RF-08 
+Registrar 
+imagen de 
+producto 
+El sistema debe permitir 
+asociar imágenes a los 
+productos registrados 
+Ninguna 
+El usuario puede seleccionar 
+imágenes desde la galería o tomar 
+fotografías con la cámara del 
+dispositivo 
+RF-09 
+Gestionar 
+categorías 
+El sistema debe permitir 
+registrar, editar y eliminar 
+categorías de productos 
+Ninguna 
+El usuario puede crear nuevas 
+categorías, modificar nombres 
+existentes y eliminar categorías 
+registradas 
+RF-10 
+Listar 
+productos 
+El sistema debe permitir 
+visualizar los productos 
+registrados en el inventario 
+RF-06 
+El sistema muestra la lista de 
+productos indicando nombre, 
+precio y stock 
+RF-11 
+Buscar y filtrar 
+productos 
+El sistema debe permitir 
+buscar productos y aplicar 
+filtros dentro del inventario 
+RF-10 
+El usuario puede buscar productos 
+por nombre y filtrar los resultados 
+por categorías y nivel de stock 
+(bajo o normal) 
+RF-12 
+Actualizar 
+producto 
+El sistema debe permitir 
+modificar la información de 
+productos registrados 
+RF-10 
+El usuario puede actualizar 
+información del producto y guardar 
+los cambios realizados 
+RF-13 
+Desactivar y 
+reactivar 
+producto 
+El sistema debe permitir 
+desactivar productos sin 
+eliminar su información y 
+reactivarlos posteriormente 
+RF-6 
+El usuario puede cambiar el estado 
+del producto a inactivo o activo. 
+Los productos inactivos no pueden 
+utilizarse en nuevas ventas 
+RF-14 
+Gestionar lotes 
+El sistema debe permitir 
+registrar, editar y eliminar 
+lotes de productos 
+RF-15 
+El usuario puede registrar lotes 
+indicando cantidad comprada, 
+cantidad perdida, precio de 
+compra, fecha de compra y fecha 
+de vencimiento. También puede 
+modificar o eliminar lotes 
+registrados 
+RF-15 
+Visualizar 
+detalle de 
+producto 
+El sistema debe permitir 
+visualizar la información 
+detallada de un producto 
+registrado 
+RF-10 
+El usuario puede visualizar 
+información detallada del producto 
+como categorías, stock, lotes y 
+fecha de vencimiento 
+RF-16 
+Visualizar 
+detalle de lote 
+El sistema debe permitir 
+visualizar la información 
+detallada de un lote 
+registrado 
+RF-14 
+El sistema muestra información del 
+lote como cantidad comprada, 
+cantidad perdida, precio de 
+compra y fecha de vencimiento 
+ 
+ 
+3.1.3 Gestión de ventas 
+Código 
+Nombre 
+Descripción 
+Depende
+ncias 
+Criterios de aceptación 
+RF-17 
+Gestionar 
+productos en 
+ventas 
+El sistema debe permitir 
+agregar, editar y eliminar 
+productos dentro de una 
+venta 
+RF-10 
+El usuario puede buscar o 
+escanear productos para 
+agregarlos a una venta, modificar 
+cantidades o eliminar productos 
+antes de confirmar la venta 
+RF-18 
+Registrar venta 
+al contado 
+El sistema debe permitir 
+registrar ventas con pago al 
+contado 
+RF-17 
+El usuario puede ingresar el monto 
+recibido y se calcula 
+automáticamente el vuelto antes 
+de registrar la venta 
+RF-19 
+Registrar venta 
+a crédito 
+El sistema debe permitir 
+registrar ventas a crédito 
+RF-17, 
+RF-25 
+El usuario puede registrar una 
+venta a crédito con o sin adelanto 
+de pago y se calcula 
+automáticamente la deuda 
+asociada al cliente. El sistema 
+exige seleccionar o registrar un 
+cliente antes de confirmar este tipo 
+de venta. 
+RF-20 
+Generar boleta 
+de venta 
+El sistema debe permitir 
+generar boletas de las 
+ventas registradas 
+RF-18, 
+RF-19 
+El sistema genera una boleta con 
+el detalle de la venta registrada 
+RF-21 
+Exportar boleta 
+de venta en 
+PDF 
+El sistema debe permitir 
+exportar boletas de venta 
+en formato PDF 
+RF-20 
+El usuario puede descargar, 
+compartir o imprimir la boleta de 
+venta generada en formato PDF. 
+RF-22 
+Listar ventas 
+El sistema debe permitir 
+visualizar las ventas 
+registradas 
+RF-18, 
+RF-19 
+El sistema muestra la lista de 
+ventas indicando cliente, fecha, 
+monto y tipo de pago 
+RF-23 
+Buscar y filtrar 
+ventas 
+El sistema debe permitir 
+buscar y filtrar ventas 
+registradas 
+RF-22 
+El usuario puede buscar ventas por 
+código y aplicar filtros por tipo de 
+pago (al contado o crédito) y rango 
+de fechas 
+RF-24 
+Visualizar 
+detalle de 
+venta 
+El sistema debe permitir 
+visualizar la información 
+detallada de una venta 
+registrada 
+RF-22 
+El sistema muestra el código de 
+venta, cliente, DNI, fecha, hora, 
+monto total, monto cancelado, tipo 
+de pago y el listado de productos 
+vendidos indicando cantidad, 
+unidad de medida, descripción, 
+precio y subtotal. El usuario puede 
+descargar, compartir o imprimir el 
+detalle de la venta 
+ 
+ 
+3.1.4 Gestión de clientes 
+Código 
+Nombre 
+Descripción 
+Depende
+ncias 
+Criterios de aceptación 
+RF-25 
+Registrar cliente 
+El sistema debe 
+permitir registrar 
+clientes asociados a 
+las ventas 
+Ninguna 
+El usuario puede registrar clientes 
+ingresando su información antes de 
+confirmar una venta 
+RF-26 
+Listar clientes 
+El sistema debe 
+permitir visualizar los 
+clientes registrados 
+RF-25 
+El sistema muestra la lista de clientes 
+indicando nombre, última compra, 
+monto adeudado y estado 
+RF-27 
+Buscar y filtrar 
+clientes 
+El sistema debe 
+permitir buscar y filtrar 
+clientes registrados 
+RF-25 
+El usuario puede buscar clientes por 
+nombre y filtrar los resultados por 
+estado de deuda (deudor o regular) 
+RF-28 
+Visualizar detalle 
+de cliente 
+El sistema debe 
+permitir visualizar la 
+información detallada 
+de un cliente 
+registrado 
+RF-26 
+El sistema muestra información del 
+cliente como nombre, DNI, correo 
+electrónico, monto total de compras 
+y el historial de ventas asociadas, 
+permitiendo acceder al detalle de 
+cada venta 
+RF-29 
+Registrar pago de 
+deuda 
+El sistema debe 
+permitir registrar pagos 
+parciales o totales de 
+deudas 
+RF-19, 
+RF-28 
+El usuario puede ingresar un monto 
+de pago y el sistema actualiza 
+automáticamente el saldo pendiente 
+y el estado de la deuda del cliente 
+3.1.5 Generación de reportes 
+Código 
+Nombre 
+Descripción 
+Depende
+ncias 
+Criterios de aceptación 
+RF-30 
+Generar reporte 
+detallado de 
+ventas 
+El sistema debe 
+permitir generar un 
+reporte detallado de 
+ventas en un rango de 
+fechas 
+RF-22, 
+RF-23 
+El sistema genera un reporte 
+detallado de ventas en un rango de 
+fechas, permitiendo seleccionar el 
+tipo de venta (general, al contado o 
+al crédito), mostrando información de 
+productos vendidos, cliente, fecha, 
+hora y monto total 
+RF-31 
+Generar reporte 
+de productos 
+vendidos 
+El sistema debe 
+permitir generar un 
+reporte de productos 
+vendidos 
+RF-22 
+El sistema genera un reporte de 
+productos vendidos ordenados de 
+mayor a menor cantidad en un rango 
+de fechas seleccionado 
+RF-32 
+Generar reporte 
+de inventario 
+El sistema debe 
+permitir generar un 
+reporte del inventario 
+RF-10 
+El sistema genera un reporte del 
+inventario actual o histórico según la 
+fecha seleccionada, mostrando los 
+ 
+ 
+productos registrados 
+RF-33 
+Generar reporte 
+de lotes 
+El sistema debe 
+permitir generar un 
+reporte de lotes de 
+productos 
+RF-14 
+El sistema genera un reporte de 
+lotes en el que el usuario puede 
+seleccionar el tipo de lote (general o 
+actuales), un rango de fechas y los 
+días restantes para productos 
+próximos a vencer 
+RF-34 
+Generar reporte 
+de vencimientos 
+El sistema debe 
+permitir generar un 
+reporte de productos 
+próximos a vencer 
+RF-14 
+El sistema genera un reporte de 
+productos próximos a vencer según 
+los días ingresados por el usuario 
+RF-35 
+Exportar reportes 
+en PDF 
+El sistema debe 
+permitir exportar los 
+reportes generados en 
+formato PDF 
+RF-30, 
+RF-31, 
+RF-32, 
+RF-33, 
+RF-34 
+El usuario puede descargar, 
+compartir o imprimir cualquier 
+reporte generado en formato PDF. 
+3.1.6 Gestión de notificaciones 
+Código 
+Nombre 
+Descripción 
+Depende
+ncias 
+Criterios de aceptación 
+RF-36 
+Generar 
+notificaciones 
+El sistema debe 
+generar notificaciones 
+automáticas por 
+eventos del inventario 
+RF-10, 
+RF-15 
+El sistema genera notificaciones 
+cuando un producto presenta stock 
+bajo o cuando un lote está próximo a 
+vencer. 
+RF-37 
+Visualizar 
+notificaciones 
+El sistema debe 
+permitir visualizar el 
+historial de 
+notificaciones  
+RF-36 
+El usuario puede visualizar el historial 
+de notificaciones generadas por el 
+sistema. 
+RF-38 
+Eliminar 
+notificaciones 
+El sistema debe 
+permitir eliminar 
+notificaciones 
+registradas 
+RF-37 
+El usuario puede eliminar 
+notificaciones registradas del 
+historial de forma individual o total. 
+RF-39 
+Configurar días 
+de notificación 
+El sistema debe 
+permitir configurar los 
+días previos para 
+generar alertas de 
+vencimiento de 
+productos 
+RF-36 
+El usuario puede definir los días 
+previos a la fecha de vencimiento 
+para generar notificaciones, siendo 8 
+días el valor predeterminado 
+ 
+ 
+ 
+ 
+3.2 Requisitos No Funcionales 
+3.2.1 Usabilidad 
+Código 
+Nombre 
+Descripción 
+Prioridad 
+Criterios de aceptación 
+RNF-01 
+Interfaz intuitiva 
+El sistema debe contar 
+con funcionalidades 
+simples, intuitivas y 
+fáciles de utilizar para 
+usuarios con 
+conocimientos básicos 
+de tecnología 
+Alta 
+El usuario puede realizar las 
+funcionalidades principales de 
+manera sencilla y en pocos pasos, 
+sin necesidad de capacitación 
+extensa 
+RNF-02 
+Diseño 
+simplificado 
+El sistema debe 
+presentar únicamente 
+las funcionalidades 
+necesarias para 
+facilitar el uso y evitar 
+confusión al usuario 
+Alta 
+La interfaz presenta una estructura 
+clara y organizada, permitiendo que 
+el usuario identifique fácilmente las 
+funcionalidades principales del 
+sistema 
+RNF-03 
+Adaptabilidad a 
+tablets 
+El sistema debe 
+funcionar 
+correctamente en 
+tablets Android 
+similares a la Samsung 
+Galaxy Tab S6 Lite 
+Media 
+El sistema puede ejecutarse 
+correctamente y mantener una 
+visualización adecuada en la 
+Samsung Galaxy Tab S6 Lite y 
+dispositivos similares 
+RNF-04 
+Material de apoyo 
+El sistema debe incluir 
+recursos de ayuda 
+para facilitar el 
+aprendizaje y uso de la 
+aplicación 
+Baja 
+El usuario puede acceder a videos 
+tutoriales o guías básicas de uso 
+proporcionadas para el sistema 
+3.2.2 Rendimiento 
+Código 
+Nombre 
+Descripción 
+Prioridad 
+Criterios de aceptación 
+RNF-05 
+Tiempo de 
+respuesta 
+El sistema debe 
+responder de manera 
+rápida durante el uso 
+de sus funcionalidades 
+Alta 
+Las funcionalidades principales 
+responden en pocos segundos bajo 
+condiciones normales de uso 
+RNF-06 
+Estabilidad del 
+sistema 
+El sistema debe 
+mantener un 
+funcionamiento 
+estable durante su uso 
+continuo 
+Alta 
+El sistema no presenta cierres 
+inesperados ni interrupciones 
+frecuentes durante su uso normal 
+ 
+ 
+3.2.3 Seguridad 
+Código 
+Nombre 
+Descripción 
+Prioridad 
+Criterios de aceptación 
+RNF-07 
+Acceso seguro al 
+sistema 
+El sistema debe 
+permitir el acceso 
+únicamente a usuarios 
+autorizados 
+Alta 
+El usuario debe autenticarse 
+correctamente antes de acceder a 
+las funcionalidades del sistema 
+RNF-08 
+Protección de 
+información 
+El sistema debe 
+proteger la información 
+almacenada y 
+transmitida entre la 
+aplicación y la base de 
+datos remota 
+Alta 
+La información registrada y 
+consultada no puede ser visualizada 
+ni modificada por terceros no 
+autorizados 
+RNF-09 
+Validación de 
+información 
+El sistema debe validar 
+la información 
+ingresada antes de 
+almacenarla 
+Media 
+El sistema impide registrar 
+información incompleta o inválida 
+RNF-10 
+Integridad de 
+datos 
+El sistema debe 
+mantener la 
+coherencia y 
+consistencia de la 
+información 
+almacenada 
+Media 
+La información registrada mantiene 
+coherencia y relaciones adecuadas 
+dentro del sistema 
+3.2.4 Disponibilidad 
+Código 
+Nombre 
+Descripción 
+Prioridad 
+Criterios de aceptación 
+RNF-11 
+Operatividad del 
+sistema 
+El sistema debe 
+mantenerse disponible 
+para su uso cuando el 
+usuario lo requiera 
+Alta 
+El usuario puede acceder y utilizar 
+las funcionalidades principales del 
+sistema de manera continua durante 
+su uso 
+RNF-12 
+Conectividad del 
+sistema 
+El sistema debe 
+mantener una 
+conexión estable con 
+la base de datos 
+remota durante su 
+funcionamiento 
+Alta 
+El sistema puede acceder a la 
+información correctamente mientras 
+exista conexión estable a internet 
+ 
+ 
+ 
+ 
+4. Modelado del Sistema 
+4.1 Diagrama de Casos de Uso 
+4.2 Especificación de Casos de Uso 
+ 
+CU-01 
+Agregar Productos 
+Descripción 
+Permite al usuario ingresar nuevos artículos al catálogo del sistema. 
+Actor 
+Usuario 
+Precondiciones 
+El usuario debe haber iniciado sesión y estar en la sección de Inventario. 
+ 
+ 
+Postcondiciones 
+El nuevo producto queda registrado en la base de datos. 
+Flujo principal 
+1. El usuario selecciona "Agregar Producto". 
+2. El sistema solicita datos (nombre, precio, stock inicial). 
+3. El usuario ingresa la información. 
+4. El sistema valida los datos y guarda el registro. 
+Excepciones 
+- El producto ya existe (el sistema notifica duplicidad). 
+- Datos incompletos o formato de precio incorrecto. 
+ 
+CU-02 
+Actualizar Stock 
+Descripción 
+Permite modificar la cantidad disponible de un producto existente. 
+Actor 
+Usuario 
+Precondiciones 
+El producto debe estar previamente registrado. 
+Postcondiciones 
+Se actualiza la cantidad de existencias en el sistema. 
+Flujo principal 
+1. El usuario busca el producto. 
+2. El sistema muestra los datos actuales. 
+3. El usuario ingresa la nueva cantidad o el monto a sumar. 
+4. El sistema actualiza el registro. 
+Excepciones 
+- Producto no encontrado. 
+- Cantidad ingresada negativa (no permitida). 
+ 
+CU-03 
+Eliminar Productos 
+Descripción 
+Permite retirar un producto del catálogo de forma definitiva. 
+Actor 
+Usuario 
+Precondiciones 
+El producto debe existir y no tener ventas pendientes relacionadas. 
+ 
+ 
+Postcondiciones 
+El registro del producto es eliminado o marcado como inactivo. 
+Flujo principal 
+1. El usuario selecciona un producto de la lista. 
+2. El usuario elige la opción "Eliminar Producto". 
+3. El sistema solicita una confirmación de seguridad. 
+4. El usuario confirma la acción. 
+5. El sistema elimina el registro y actualiza la lista. 
+Excepciones 
+- El usuario cancela la confirmación. 
+- El producto no puede eliminarse por tener historial de ventas (integridad 
+referencial). 
+ 
+ 
+CU-04 
+Ver Inventario de productos 
+Descripción 
+Visualización de la lista de productos 
+Actor 
+Usuario 
+Precondiciones 
+Existencia de productos en la base de datos. 
+Postcondiciones 
+El usuario visualiza la información y opcionalmente se genera un archivo de 
+reporte. 
+Flujo principal 
+1. El usuario accede a "Ver Inventario". 
+2. El sistema despliega la lista. 
+3. El usuario visualiza la lista de productos 
+Excepciones 
+- No hay productos para mostrar. 
+ 
+ 
+CU-05 
+Generar Reporte de Inventario 
+Descripción 
+Generación de un reporte detallado de Inventario 
+Actor 
+Usuario 
+ 
+ 
+Precondiciones 
+Existencia de productos en la base de datos. 
+Postcondiciones 
+El sistema genera un archivo de reporte. 
+Flujo principal 
+1. El usuario accede a "Ver Inventario". 
+2. El sistema despliega la lista. 
+3. El usuario solicita "Generar reporte de inventario". 
+4. El sistema exporta la lista. 
+Excepciones 
+- No hay productos para mostrar. 
+- Error al generar el archivo de reporte. 
+ 
+ 
+CU-06 
+Escanear productos 
+Descripción 
+Proceso de preparación de una venta mediante el escaneo de productos. 
+Actor 
+Usuario 
+Precondiciones 
+Los productos deben tener código de barras o estar en sistema. 
+Postcondiciones 
+Se genera una lista temporal de productos para la venta. 
+Flujo principal 
+1. El usuario selecciona "Gestionar Ventas". 
+2. El usuario escanea el producto. 
+3. El sistema añade el ítem a la lista de venta. 
+Excepciones 
+- Código de barras no reconocido. 
+- Producto sin stock suficiente. 
+ 
+CU-07 
+Eliminar productos de lista de una venta 
+Descripción 
+Proceso de eliminación de un producto de lista para una venta 
+Actor 
+Usuario 
+ 
+ 
+Precondiciones 
+Debe haber mínimo un producto en la lista de la venta actual 
+Postcondiciones 
+Se elimina el producto de la lista. 
+Flujo principal 
+1. El usuario selecciona el producto. 
+2. El usuario selecciona “eliminar el producto”. 
+2. El sistema elimina el producto de la lista 
+3. El sistema muestra la lista actualizada 
+Excepciones 
+- Error al eliminar el producto de la lista 
+ 
+CU-08 
+Ver Resumen de Venta 
+Descripción 
+Permite visualizar el detalle de los productos seleccionados y el cálculo del 
+monto total antes de finalizar. 
+Actor 
+Usuario 
+Precondiciones 
+Debe haber al menos un producto cargado en la lista de venta actual. 
+Postcondiciones 
+El sistema muestra el resumen detallado y los totales calculados. 
+Flujo principal 
+1. El usuario solicita ver el resumen de la venta. 
+2. El sistema recupera los productos de la lista temporal. 
+3. El sistema calcula impuestos y total general. 
+4. El sistema despliega el detalle en pantalla. 
+Excepciones 
+- Lista de venta vacía (el sistema impide el acceso al resumen). 
+ 
+ 
+CU-09 
+Generar Boleta 
+Descripción 
+Caso de uso que extiende al resumen para emitir el comprobante físico o 
+digital de la transacción. 
+Actor 
+Usuario 
+ 
+ 
+Precondiciones 
+El usuario debe estar visualizando el Resumen de Venta. 
+Postcondiciones 
+Se registra la venta de forma definitiva y se emite el comprobante. 
+Flujo principal 
+1. El usuario selecciona la opción "Generar boleta". 
+2. El sistema solicita confirmación del método de pago. 
+3. El sistema asigna un número de folio a la boleta. 
+4. El sistema envía la orden de impresión o genera el PDF. 
+Excepciones 
+- Error de conexión con el servicio de facturación. 
+- Falta de papel o error en la impresora. 
+ 
+ 
+CU-10 
+Ver lista de deudores 
+Descripción 
+Permite consultar el listado completo de clientes que mantienen saldos 
+pendientes. 
+Actor 
+Usuario 
+Precondiciones 
+El usuario debe tener permisos de acceso al módulo de deudores. 
+Postcondiciones 
+Se muestra la información actualizada de las cuentas por cobrar. 
+Flujo principal 
+1. El usuario selecciona la opción "Ver lista de deudores". 
+2. El sistema consulta la base de datos de créditos. 
+3. El sistema muestra una tabla con: Nombre del cliente, Monto adeudado y 
+Fecha de último pago. 
+Excepciones 
+- No existen registros de deudores en el sistema. 
+ 
+ 
+CU-11 
+Cancelar deuda 
+Descripción 
+Proceso para registrar el pago total o parcial de una deuda existente. 
+Actor 
+Usuario 
+ 
+ 
+Precondiciones 
+El cliente debe estar seleccionado previamente en la lista de deudores. 
+Postcondiciones 
+El saldo del deudor se actualiza o se elimina si la deuda llega a cero. 
+Flujo principal 
+1. El usuario selecciona un deudor específico. 
+2. El usuario elige la opción "Cancelar deuda". 
+3. El sistema solicita el monto del pago. 
+4. El usuario ingresa el monto y confirma. 
+5. El sistema actualiza el saldo y registra el movimiento. 
+Excepciones 
+- El monto ingresado es superior a la deuda total. 
+- Error al procesar el pago en la base de datos. 
+ 
+ 
+CU-12 
+Reporte semanal 
+Descripción 
+Genera un informe detallado con las transacciones y movimientos realizados 
+en los últimos 7 días. 
+Actor 
+Usuario 
+Precondiciones 
+El usuario debe estar en el módulo de reportes y debe haber datos 
+registrados en la última semana. 
+Postcondiciones 
+El sistema entrega un documento o vista con las estadísticas de la semana 
+actual. 
+Flujo principal 
+1. El usuario selecciona la opción "Reporte semanal". 
+2. El sistema filtra automáticamente las ventas e ingresos del rango de los 
+últimos 7 días. 
+3. El sistema calcula los totales, márgenes y volumen de ventas. 
+4. El sistema muestra el reporte en pantalla con opción de descarga. 
+Excepciones 
+- No existen transacciones registradas en el periodo de 7 días. 
+ 
+ 
+CU-13 
+Reporte mensual 
+Descripción 
+Genera un informe consolidado de los movimientos económicos y de 
+inventario correspondientes al mes en curso. 
+ 
+ 
+Actor 
+Usuario 
+Precondiciones 
+El usuario debe tener acceso al módulo de reportes y existir registros en el 
+mes actual. 
+Postcondiciones 
+Se genera un resumen ejecutivo mensual para la toma de decisiones. 
+Flujo principal 
+1. El usuario selecciona la opción "Reporte mensual". 
+2. El sistema recopila la información desde el primer día del mes hasta la 
+fecha actual. 
+3. El sistema agrupa los datos por categorías, productos más vendidos y 
+balance final. 
+4. El sistema genera el documento final para su visualización o impresión. 
+Excepciones 
+- No hay datos suficientes para generar el consolidado mensual. 
+- Error al procesar grandes volúmenes de datos históricos. 
+ 
+4.3 Modelo de Datos 
+ 
+ 
+ 
+ 
+5. Interfaces del Sistema 
+5.1 Interfaces de usuario 
+6. Restricciones del Sistema 
+6.1 Tecnológicas 
+●​ El sistema se desarrolla utilizando Flutter como framework principal. 
+●​ Se utilizará una base de datos en la nube Postgresql 
+●​ El sistema depende del acceso a la cámara para funcionalidades de escaneo. 
+●​ La persistencia de datos está limitada al almacenamiento del dispositivo. 
+6.2 Normativas 
+●​ La generación de boletas es de uso interno y no tiene validez tributaria. 
+6.3 De diseño 
+●​ La interfaz prioriza simplicidad sobre complejidad funcional. 
+●​ Se limita la personalización para mantener consistencia en la interacción. 
+ 

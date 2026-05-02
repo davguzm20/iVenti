@@ -1,0 +1,507 @@
+ 
+Grupo 01​
+Plan de 
+Aseguramiento de la  
+Calidad de Software 
+ 
+ 
+ 
+ 
+ 
+ 
+Guzman Chavez Manuel David 
+Hanampa Bellido Iris Marisol 
+Medrano Ayma Nikol Arlet 
+Rosales Trinidad Jeanmarco Miguel 
+​
+21 de abril del 2026 
+ 
+ 
+ 
+ÍNDICE 
+ÍNDICE​
+1 
+1. INTRODUCCIÓN​
+2 
+1.1. Aseguramiento del Producto​
+2 
+1.2. Aseguramiento del Proceso​
+2 
+2. OBJETIVO​
+3 
+3. ALCANCE​
+4 
+4. EVALUACIONES PARA EL ASEGURAMIENTO Y CONTROL DE CALIDAD DEL SOFTWARE 
+DEL PRODUCTO​
+5 
+5. EVALUACIONES DE ASEGURAMIENTO Y CONTROL DE CALIDAD - PROCESO​
+7 
+5.1. Evaluación objetiva de los entregables​
+7 
+5.2. Asegurar la solución de las no-conformidades​
+8 
+6. ACTIVIDADES DE VERIFICACIÓN Y VALIDACIÓN​
+9 
+7. HITOS y PUNTOS DE CONTROL​
+11 
+7.1. Fase de Incepción​
+11 
+7.2. Fase de Elaboración​
+11 
+7.3. Fase de Construcción​
+11 
+7.4. Fase de Transición​
+11 
+8. HERRAMIENTAS DE CONTROL Y TÉCNICAS A UTILIZARSE​
+12 
+9. RESPONSABLES​
+13 
+10. PROCEDIMIENTO DE ACCIONES PREVENTIVAS​
+14 
+10.1. Capacitación​
+14 
+10.2. Documentación​
+14 
+10.3. Gestión​
+14 
+10.4. Sugerencias​
+14 
+11. CRONOGRAMA DE ACTIVIDADES​
+15 
+ 
+ 
+1 
+ 
+ 
+1. INTRODUCCIÓN 
+Las revisiones realizadas por el Equipo de Aseguramiento y Control de la Calidad para la App 
+Móvil de Gestión de Inventario tendrán como herramientas principales los Checklists de Calidad, 
+implementados para las revisiones y auditorías de calidad de proceso, donde se verifica el 
+cumplimiento de los estándares de calidad, y del producto de software que involucra revisiones 
+en todos sus estados de evolución, es decir, especificaciones, diseño, codificación, entre otros. 
+Las actividades contenidas dentro del aseguramiento de la calidad son:  
+1.1. Aseguramiento del Producto 
+Las principales tareas del aseguramiento del producto son: 
+-​
+Se debe asegurar que la aplicación móvil y su documentación técnica (diagramas de 
+casos de uso, diccionario de datos y manuales) cumplan con las exigencias de los 
+contratos de Desarrollo y Mantenimiento y se adhieran a los planes de la organización. 
+-​
+Se debe asegurar, antes de la entrega del producto software, que se han satisfecho 
+completamente los requerimientos establecidos dentro del alcance del producto. 
+1.2. Aseguramiento del Proceso 
+Las principales tareas del aseguramiento del proceso son: 
+-​
+Se debe asegurar que el proceso del ciclo de vida del software se cumpla de acuerdo a 
+los procedimientos, procesos y contratos a los cuales están adheridos. 
+-​
+Se debe identificar la aplicación de buenas prácticas internas de ingeniería de software 
+(construcción, pruebas, nivel de reutilización, integración y desacoplamiento funcional). 
+-​
+Se debe asegurar que las mediciones del proceso, producto están de acuerdo a las 
+normas y procedimientos establecidos en la organización. 
+Se han establecido los hitos y buenas prácticas para el ciclo de vida del software y las 
+herramientas de control que considerará a los métodos de aseguramiento de la calidad que 
+aplicará en cada hito establecido. 
+ 
+2 
+ 
+ 
+2. OBJETIVO 
+Establecer las normas y procedimientos necesarios para lograr que la Aplicación Móvil de 
+Gestión de Inventario, implementada por la consultora "BestTech S.A.", satisfaga las necesidades 
+de la empresa "Multiservicios Golden S.A.", garantizando que el producto final sea robusto, 
+seguro y fácil de usar para los operarios de almacén.
+ 
+3 
+ 
+ 
+3. ALCANCE 
+El presente plan de aseguramiento y control de la calidad abarca todas las fases de desarrollo 
+del proyecto de gestión de inventario, desde la etapa de concepción hasta la entrega final del 
+producto software. 
+La metodología comprende: 
+-​
+Abarca los aspectos relacionados al Proceso de Aseguramiento de la Calidad, para 
+proporcionar la seguridad apropiada de que el producto y sus procesos de desarrollo 
+sean conformes con sus requerimientos específicos y se adhieren a los planes 
+establecidos. 
+-​
+Abarca los aspectos relacionados al Proceso de Control de Calidad que contiene las 
+actividades de verificación y validación tanto de los entregables de software elaborados 
+por los procesos de desarrollo del producto. 
+ 
+ 
+4 
+ 
+ 
+4. EVALUACIONES PARA EL ASEGURAMIENTO Y 
+CONTROL DE CALIDAD DEL SOFTWARE DEL PRODUCTO 
+Mediante las pruebas que se realicen en el control de calidad por parte del equipo a la App de 
+Gestión de Inventario, tales como: Revisión de código, pruebas funcionales y pruebas de 
+seguridad, se validarán los criterios principales para los Factores de Calidad. 
+ 
+Factores de  
+Calidad 
+Criterios  
+Pruebas de control de 
+calidad 
+Funcionalidad  
+-​
+Registro exacto de entradas y salidas 
+de productos. 
+-​
+Correcta lectura de códigos 
+(QR/Barras) o ingreso manual. 
+-​
+Interoperabilidad con la base de datos 
+centralizada. 
+-​
+Prueba funcional de 
+caja negra. 
+-​
+Prueba de seguridad 
+(Roles). 
+-​
+Prueba de integración 
+(App con BD). 
+Fiabilidad  
+-​
+Precisión: Los saldos de stock deben 
+ser exactos tras cada transacción. 
+-​
+Tolerancia a fallos: Manejo de errores 
+si el servidor no responde. 
+-​
+Recuperación: Persistencia de datos si 
+la app se cierra inesperadamente. 
+-​
+Prueba funcional de 
+cálculos. 
+-​
+Revisión de código 
+(Manejo de 
+excepciones). 
+-​
+Prueba de estrés de 
+conexión. 
+Usabilidad  
+-​
+Aprendizaje: Un operario nuevo debe 
+entender cómo registrar un ítem en 
+menos de 5 min. 
+-​
+Operatividad: Botones grandes y 
+legibles para entornos de almacén. 
+-​
+Atracción: Diseño limpio que facilite la 
+lectura de códigos SKU. 
+-​
+Revisión de Prototipo 
+(UI/UX). 
+-​
+Prueba funcional de 
+navegación. 
+-​
+Encuesta de usuario 
+final. 
+Eficiencia  
+-​
+Programación: Código optimizado 
+para evitar lentitud en la carga de 
+listas. 
+-​
+Recursos: Consumo moderado de 
+batería y datos móviles durante la 
+sincronización. 
+-​
+Revisión de código 
+fuente. 
+-​
+Prueba de 
+rendimiento (Tiempo 
+de respuesta de 
+consultas SQL). 
+5 
+ 
+ 
+Cuando realicemos las revisiones debemos tener en cuenta estos niveles de error  que se 
+definen a continuación. 
+Nivel de error 
+Descripción 
+Leve  
+Errores de forma y de bajo impacto en el software. 
+Grave  
+No se realizan transacciones válidas. 
+Muy Grave  
+Se realizan transacciones inválidas, afectando la integridad de la 
+información. 
+En el caso de ser error “Leve”, se tomarán acciones inmediatas, corrigiéndose dicho error. En 
+caso de ser “Grave” o “Muy grave” se rehace el trabajo, dejando constancia en los checklist 
+respectivos. 
+ 
+6 
+ 
+ 
+5. EVALUACIONES DE ASEGURAMIENTO Y CONTROL DE 
+CALIDAD - PROCESO 
+Para la evaluación objetiva de los procesos seleccionados se verificarán si se están llevando a 
+cabo el cumpliendo de los estándares, normas y procedimientos. Para los cual tendremos los 
+siguientes Mecanismos de Control:  
+-​
+Reporte de la revisión.  
+-​
+Reporte de no-conformidades.  
+-​
+Acciones correctivas.  
+Asimismo debemos de:  
+1.​ Promover un ambiente que fomente en los empleados identificar e informar problemas 
+de calidad. Ejemplos:  
+a.​ ¿Qué será revisado?  
+b.​ ¿Cuándo o con qué frecuencia será revisado un proceso?  
+c.​ ¿Cómo será el procedimiento de revisión?  
+d.​ ¿Quién deberá estar involucrado en la revisión?  
+2.​ Usar criterios documentados en las evaluaciones.  
+3.​ Identificar no-conformidades en las evaluaciones.  
+4.​ Identificar lecciones aprendidas para mejorar el proceso revisado 
+5.1. Evaluación objetiva de los entregables 
+Se evaluará objetivamente los entregables intermedios, productos generados y  servicios 
+seleccionados, verificando si se están produciendo de acuerdo a los  estándares, normas y 
+procedimientos. Para los cuales tendremos los siguientes  Mecanismos de Control: 
+-​
+Reporte de la revisión.  
+-​
+Reporte de no-conformidades.  
+-​
+Acciones correctivas.  
+Asimismo debemos de: 
+1.​ Seleccionar entregables intermedios y productos a ser revisados, basados en un criterio 
+establecido. 
+2.​ 2. Definir un criterio claro para la evaluación de los entregables intermedios y productos. 
+Mantener actualizado el criterio. Basarse en los objetivos de negocio.  Por ejemplo:  
+7 
+ 
+ 
+a.​ ¿Qué será revisado durante la evaluación de un entregable?   
+b.​ ¿Cuándo o con qué frecuencia será revisado un entregable?   
+c.​ ¿Cómo será el procedimiento de revisión?  
+d.​ ¿Quién deberá estar involucrado en la revisión?  
+3.​ Usar un criterio documentado en las evaluaciones.  
+4.​ Evaluar los entregables antes que sean entregados al usuario.  
+5.​ Evaluar entregables en hitos seleccionados durante su desarrollo.  
+6.​ Identificar el tipo de no-conformidad durante las evaluaciones.  
+7.​ Identificar lecciones aprendidas para mejorar el proceso y sus entregables. 
+5.2. Asegurar la solución de las no-conformidades 
+Se asegurará la solución de las no-conformidades e informar los problemas de calidad a la 
+gerencia. Para los cual tendremos los siguientes Mecanismos de Control: 
+-​
+Reporte de acciones correctivas.  
+-​
+Reporte de evaluación.  
+-​
+Informe de calidad (tendencias, causas de no-conformidad).  
+Asimismo debemos de:  
+1.​ Resolver las no-conformidades dentro del proyecto. Ejemplo:  
+a.​ Resolver la no-conformidad.  
+b.​ Cambiar el proceso, estándar o procedimiento infringido.  
+c.​ Autorizar la no-conformidad.  
+2.​ Documentar las no-conformidades cuando no pueden resolverse dentro del proyecto.  
+3.​ Escalar las no-conformidades cuando no pueden resolverse dentro del proyecto.  
+4.​ Analizar las no-conformidades para ver si hay patrones en los problemas de calidad. 
+5.​ Asegurarse que a las partes afectadas e involucradas se les informe de los resultados de 
+las evaluaciones oportunamente.  
+6.​ Revisar periódicamente las no-conformidades no resueltas con el gerente designado.  
+7.​ Hacer seguimiento a las no-conformidades hasta que sean resueltas.
+ 
+8 
+ 
+ 
+6. ACTIVIDADES DE VERIFICACIÓN Y VALIDACIÓN  
+Las principales tareas de la Verificación dentro del control de calidad establecidos para el 
+desarrollo de la App Móvil de Gestión de Inventario son las siguientes: 
+-​
+Verificación del proceso: Desde la planificación (identificación del entorno de desarrollo 
+móvil y servidor), ejecución, control, seguimiento y cierre de los procesos de desarrollo 
+del software de inventario. 
+-​
+Verificación de los requerimientos: Teniendo en cuenta los criterios de viabilidad 
+técnica, consistencia de los datos de stock, efectividad y seguridad de la información. 
+-​
+Verificación del diseño: Teniendo en cuenta la trazabilidad de los requerimientos y 
+cumplimiento de los estándares de diseño de interfaz móvil, considerando la ejecución 
+correcta de eventos de entrada (escaneo de códigos), salida (reportes de stock), 
+interfaces, acoplamiento y niveles de contención de errores. 
+-​
+Verificación del código: Teniendo en cuenta la trazabilidad hacia el diseño y los 
+requerimientos, cumplimiento de los estándares de programación definidos para el 
+proyecto, asegurando el control de accesos y la seguridad en la conexión a la base de 
+datos. 
+-​
+Verificación de la integración: Teniendo en cuenta que los componentes de la aplicación 
+móvil estén correctamente conectados con el servidor en la nube DBaaS con la base de 
+datos relacional, bajo un plan de integración técnica. 
+-​
+Verificación de la documentación: Asegurar que toda la documentación técnica 
+(Diagramas UML, Diccionario de Datos, MER) esté completa, preparada a tiempo para las 
+entregas y bajo procesos de Gestión de la Configuración 
+Actividades de Validación, las principales tareas de la validación dentro del control de  calidad, 
+sirven para determinar si los requerimientos y el producto final cumplen con el uso específico 
+previsto dentro del alcance definido. Estas actividades apoyan la aceptación final del producto y 
+se realizan durante todo el proceso.  
+Las principales actividades de validación son:   
+-​
+Determinación del esfuerzo de validación del producto: Definir cuántos recursos y 
+tiempo se dedicarán a probar la app en dispositivos reales. 
+-​
+Validación de los requerimientos de pruebas: Creación de casos de prueba específicos 
+y estimación de resultados posterior a la ejecución de las pruebas. 
+9 
+ 
+ 
+-​
+Validación de las especificaciones funcionales, técnicas y de seguridad: Confirmar que 
+el sistema restringe el acceso a usuarios no autorizados y que los cálculos de stock son 
+correctos. 
+-​
+Ejecución de las pruebas: Realización de pruebas unitarias, integrales y de aceptación 
+final enmarcadas en el proceso de desarrollo.
+ 
+10 
+ 
+ 
+7. HITOS y PUNTOS DE CONTROL  
+A continuación se detallan los Hitos (PCM) definidos, y los Puntos de Control (PCM)  por cada 
+fase:  
+7.1. Fase de Incepción  
+-​
+PCM0: Revisar y validar el levantamiento de Requerimientos Funcionales y No 
+Funcionales de la App Móvil de Gestión de Inventario. 
+7.2. Fase de Elaboración  
+-​
+PCM1: Revisar la Documentación Técnica integral: Diagramas de Casos de Uso, Modelo 
+Entidad-Relación (MER), Diccionario de Datos y Arquitectura de la solución. 
+7.3. Fase de Construcción  
+-​
+PCM2: Verificar la realización de las Pruebas Unitarias en los módulos críticos (registro de 
+stock y cálculos de saldos). 
+-​
+PCM3: Revisar el Acta de Pase a Pruebas (QA) y verificar que el aplicativo esté 
+correctamente desplegado en el servidor en la nube DBaaS 
+-​
+PCM4: Verificar la ejecución de las Pruebas Funcionales (Caja Negra) sobre el flujo de 
+inventario. 
+-​
+PCM5: Verificar las Pruebas de Sistemas y Seguridad (Control de accesos y concurrencia 
+en la BD). 
+-​
+PCM6: Revisar que la documentación técnica esté actualizada conforme a los cambios 
+realizados en el código. 
+7.4. Fase de Transición  
+-​
+PCM7: Revisar el Acta de Conformidad y Pase a Producción, validando que el producto 
+software cumple con el objetivo de negocio y está listo para la sustentación final.
+11 
+ 
+ 
+8. HERRAMIENTAS DE CONTROL Y TÉCNICAS A 
+UTILIZARSE  
+Con la finalidad de verificar el cumplimiento del Aseguramiento de la Calidad de la App de 
+Gestión de Inventario, se utilizarán las siguientes herramientas y técnicas: 
+-​
+Checklist o Lista de Control: Es nuestra herramienta principal de verificación. Se 
+utilizarán listas estructuradas con preguntas clave para cada componente. 
+-​
+Ejemplo aplicado: "¿Se validó que el campo 'Stock' no acepte valores negativos?", 
+"¿El diagrama MER incluye la relación entre 'Producto' y 'Categoría'?". Se usarán 
+tanto en la revisión de documentos técnicos como en el producto software final. 
+-​
+Auditorías de Calidad: Realizaremos revisiones estructuradas para determinar si el 
+desarrollo de la app cumple con los requisitos del curso y las necesidades del negocio. El 
+objetivo es detectar procesos ineficientes en la codificación o en el diseño de la base de 
+datos para reducir el costo de corrección y asegurar la aceptación del sistema por los 
+usuarios de almacén. 
+-​
+Análisis del Proceso: Examinaremos las restricciones experimentadas durante el 
+desarrollo (ej. problemas de conexión con el servidor en la nube DBaaS). Se aplicará el 
+Análisis Causal para determinar por qué ocurren ciertos defectos recurrentes en la 
+sincronización de datos y así crear acciones preventivas que eviten que el error se repita 
+en otros módulos. 
+-​
+Inspección: Consiste en el examen físico y lógico de los entregables para determinar si 
+cumplen con las normas. Realizaremos revisiones por pares (peer reviews), donde un 
+integrante del equipo revisa el código o diagrama de otro, midiendo la cantidad de 
+defectos encontrados antes de la entrega oficial. 
+-​
+Revisión de Reparación de Defectos: Una vez identificado un error en el inventario, el 
+encargado de calidad realizará una revisión adicional para asegurar que el defecto haya 
+sido reparado siguiendo las especificaciones. Todas estas revisiones serán registradas 
+obligatoriamente en el formato de Checklist de Producto. 
+-​
+Encuestas: Se aplicarán cuestionarios breves a los usuarios finales, o simulados, para 
+evaluar la satisfacción respecto a la usabilidad de la app móvil y la utilidad de los reportes 
+de inventario generados por el sistema.
+ 
+12 
+ 
+ 
+9. RESPONSABLES  
+A continuación se detalla la Organización que realizará el Aseguramiento de la Calidad en la App 
+de Gestión de Inventario. Para poder cumplir con lo establecido en la metodología de 
+aseguramiento y control de calidad, se ha organizado este equipo cuyo organigrama es la 
+siguiente: 
+ 
+ 
+ 
+13 
+ 
+ 
+10. PROCEDIMIENTO DE ACCIONES PREVENTIVAS 
+El objetivo es investigar, analizar e implementar controles para asegurar que se tomen acciones 
+preventivas en forma oportuna frente a cualquier no conformidad potencial, evitando fallos 
+críticos en el control de stock o pérdida de datos en la aplicación móvil. 
+Se han definido los siguientes tipos de acciones preventivas para el proyecto: 
+10.1. Capacitación 
+-​
+Realizar sesiones internas de revisión sobre el uso del motor de base de datos 
+PostgreSQL para evitar errores de concurrencia al actualizar el inventario. 
+-​
+Capacitar al equipo en estándares de diseño UI/UX móvil para evitar rechazos por 
+usabilidad. 
+10.2. Documentación 
+-​
+Mantener actualizado el Diccionario de Datos y el Manual de Instalación del servidor para 
+evitar retrasos en el despliegue final. 
+-​
+Documentar cada error encontrado en las pruebas unitarias para que no se repita en 
+módulos similares. 
+10.3. Gestión 
+-​
+Realizar reuniones de seguimiento semanales (Sprints) para identificar riesgos antes de 
+que se conviertan en errores "Graves". 
+-​
+Asegurar que las copias de seguridad del código fuente estén en un repositorio de 
+GitHub para prevenir pérdida de avance técnico. 
+10.4. Sugerencias 
+-​
+Habilitar un canal de comunicación rápida (WhatsApp) para que cualquier integrante del 
+equipo pueda sugerir mejoras inmediatas al detectar una vulnerabilidad en el proceso de 
+desarrollo.
+ 
+14 
+ 
+ 
+11. CRONOGRAMA DE ACTIVIDADES 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+15 
