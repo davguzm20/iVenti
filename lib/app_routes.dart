@@ -2,24 +2,24 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 // Models
-import 'package:multiinventario/models/detalle_venta.dart';
-import 'package:multiinventario/models/categoria.dart';
-import 'package:multiinventario/pages/config/notifications_page.dart';
+import 'package:iventi/models/detalle_venta.dart';
+import 'package:iventi/models/categoria.dart';
+import 'package:iventi/pages/config/notifications_page.dart';
 
 // Vistas del login
-import 'package:multiinventario/pages/login/all_login_pages.dart';
+import 'package:iventi/pages/login/all_login_pages.dart';
 
 // Vistas del HomePage
-import 'package:multiinventario/pages/home_page.dart';
-import 'package:multiinventario/pages/inventory/all_inventory_pages.dart';
-import 'package:multiinventario/pages/sales/all_sales_pages.dart';
-import 'package:multiinventario/pages/clients/all_clients_pages.dart';
-import 'package:multiinventario/pages/reports/all_report_page.dart';
-import 'package:multiinventario/pages/config/config_page.dart';
+import 'package:iventi/pages/home_page.dart';
+import 'package:iventi/pages/inventory/all_inventory_pages.dart';
+import 'package:iventi/pages/sales/all_sales_pages.dart';
+import 'package:iventi/pages/clients/all_clients_pages.dart';
+import 'package:iventi/pages/reports/all_report_page.dart';
+import 'package:iventi/pages/config/config_page.dart';
 
 // Modulos auxiales
-import 'package:multiinventario/controllers/barcode_scanner.dart';
-import 'package:multiinventario/controllers/image_picker.dart';
+import 'package:iventi/controllers/barcode_scanner.dart';
+import 'package:iventi/controllers/image_picker.dart';
 
 final GlobalKey<NavigatorState> _rootNavigatorKey = GlobalKey<NavigatorState>();
 

@@ -1,8 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:multiinventario/models/categoria.dart';
-import 'package:multiinventario/models/producto.dart';
-import 'package:multiinventario/controllers/db_controller.dart';
-import 'package:multiinventario/models/producto_categoria.dart';
+import 'package:iventi/models/categoria.dart';
+import 'package:iventi/models/producto.dart';
+import 'package:iventi/controllers/db_controller.dart';
+import 'package:iventi/models/producto_categoria.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 void main() {
