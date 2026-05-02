@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
-import 'package:multiinventario/models/producto.dart';
-import 'package:multiinventario/pages/inventory/inventory_page.dart';
+import 'package:iventi/models/producto.dart';
+import 'package:iventi/pages/inventory/inventory_page.dart';
 
 void main() {
   testWidgets('Muestra el título de la página', (WidgetTester tester) async {
