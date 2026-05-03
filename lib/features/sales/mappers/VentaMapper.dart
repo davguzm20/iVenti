@@ -1,3 +1,4 @@
+import 'package:iventi/shared/utils/pg_helpers.dart';
 import 'package:iventi/features/sales/entities/VentaEntity.dart';
 import 'package:iventi/features/sales/entities/DetalleVentaEntity.dart';
 import 'package:iventi/features/sales/dtos/responses/VentaResponse.dart';
@@ -13,7 +14,7 @@ class VentaMapper {
       vendidoEn: map['vendido_en'] as DateTime,
       montoTotal: (map['monto_total'] as num).toDouble(),
       montoCancelado: (map['monto_cancelado'] as num).toDouble(),
-      estado: _parseEstado(map['estado'] as String),
+      estado: _parseEstado(pgString(map['estado'])),
       esCredito: map['es_credito'] as bool,
       creadoEn: map['creado_en'] as DateTime,
       actualizadoEn: map['actualizado_en'] as DateTime?,

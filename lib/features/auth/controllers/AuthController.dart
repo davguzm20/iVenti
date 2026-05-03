@@ -15,8 +15,24 @@ class AuthController {
     return _authService.registrar(request);
   }
 
+  Future<UsuarioEntity> obtenerUsuarioPorEmail(String email) {
+    return _authService.obtenerUsuarioPorEmail(email);
+  }
+
+  Future<UsuarioEntity> obtenerUsuarioPorId(int idUsuario) {
+    return _authService.obtenerUsuarioPorId(idUsuario);
+  }
+
+  Future<UsuarioEntity> obtenerUsuarioRegistrado() {
+    return _authService.obtenerUsuarioRegistrado();
+  }
+
   Future<void> cambiarPin(int idUsuario, String pinActual, String pinNuevo) {
     return _authService.cambiarPin(idUsuario, pinActual, pinNuevo);
+  }
+
+  Future<void> recuperarPin(int idUsuario, String pinNuevo) {
+    return _authService.recuperarPin(idUsuario, pinNuevo);
   }
 
   Future<UsuarioEntity> actualizarPerfil(int idUsuario, {String? nombre, String? email}) {

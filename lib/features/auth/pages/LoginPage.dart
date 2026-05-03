@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:pinput/pinput.dart';
+import 'package:provider/provider.dart';
 
+import 'package:iventi/features/auth/controllers/AuthController.dart';
+import 'package:iventi/shared/exceptions/AppException.dart';
+import 'package:iventi/shared/widgets/PinInput.dart';
 import 'package:iventi/shared/widgets/ErrorDialog.dart';
 
 class LoginPage extends StatefulWidget {
@@ -12,175 +15,132 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final TextEditingController pinController = TextEditingController();
-  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  String userEmail = '';
+  String userPIN = '';
+  bool isLoading = false;
 
-  String userPIN = "";
-  String userEmail = "";
+  AuthController get _authController => context.read<AuthController>();
 
   @override
-  void dispose() {
-    pinController.dispose();
-
-    super.dispose();
+  void initState() {
+    super.initState();
+    _cargarEmail();
   }
 
-  Future<void> _validarPin() async {
-    context.go('/inventory');
+  Future<void> _cargarEmail() async {
+    try {
+      final extra = GoRouterState.of(context).extra;
+
+      if (extra is String && extra.isNotEmpty) {
+        userEmail = extra;
+        return;
+      }
+
+      final usuario = await _authController.obtenerUsuarioRegistrado();
+
+      if (mounted) setState(() => userEmail = usuario.email);
+
+    } catch (_) {
+      if (mounted) context.go('/welcome');
+    }
+  }
+
+  Future<void> _iniciarSesion() async {
+    FocusScope.of(context).unfocus();
+
+    if (userPIN.length < 6) {
+      ErrorDialog(context: context, errorMessage: 'Ingrese su PIN de 6 dígitos');
+      return;
+    }
+
+    setState(() => isLoading = true);
+
+    try {
+      await _authController.iniciarSesion(userEmail, userPIN);
+
+      if (mounted) context.go('/inventory');
+
+    } on AppException catch (e) {
+      if (mounted) {
+        ErrorDialog(context: context, errorMessage: e.mensaje);
+      }
+
+    } catch (e) {
+      if (mounted) {
+        ErrorDialog(context: context, errorMessage: 'Error al iniciar sesión');
+      }
+    }
+
+    if (mounted) setState(() => isLoading = false);
   }
 
   @override
   Widget build(BuildContext context) {
-    const focusedBorderColor = Color.fromRGBO(64, 34, 197, 1);
-    const borderColor = Color.fromRGBO(98, 72, 190, 0.4);
-
-    final defaultPinTheme = PinTheme(
-      width: 40,
-      height: 75,
-      textStyle:
-          const TextStyle(fontSize: 22, color: Color.fromRGBO(30, 60, 87, 1)),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(15),
-        border: Border.all(color: borderColor),
-      ),
-    );
-
     return Scaffold(
       body: Center(
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 40),
-          child: Form(
-            key: formKey,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const SizedBox(height: 50),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const SizedBox(height: 50),
 
-                Image.asset('lib/assets/imagenes/logoTienda.png', height: 200),
+              Image.asset('lib/assets/imagenes/logoTienda.png', height: 150),
 
-                const SizedBox(height: 50),
+              const SizedBox(height: 30),
 
-                const Text(
-                  "Ingrese su pin de acceso",
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: Color.fromRGBO(30, 60, 87, 1),
-                  ),
+              const Text(
+                'Iniciar sesión',
+                style: TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                  color: Color.fromRGBO(30, 60, 87, 1),
                 ),
+              ),
 
-                const SizedBox(height: 40),
+              const SizedBox(height: 10),
 
-                Pinput(
-                  controller: pinController,
-                  length: 6,
-                  defaultPinTheme: defaultPinTheme,
-                  separatorBuilder: (index) => const SizedBox(width: 13),
-                  onCompleted: (value) {
-                    userPIN = value;
-                  },
-                  onChanged: (value) {
-                    setState(() {
-                      userPIN = value;
-                    });
-                  },
-                  cursor: Column(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Container(
-                        margin: const EdgeInsets.only(bottom: 9),
-                        width: 22,
-                        height: 1,
-                        color: focusedBorderColor,
+              Text(
+                userEmail,
+                style: const TextStyle(fontSize: 16, color: Colors.black54),
+              ),
+
+              const SizedBox(height: 30),
+
+              PinInput(
+                length: 6,
+                onChanged: (value) => userPIN = value,
+                onCompleted: (value) => userPIN = value,
+              ),
+
+              const SizedBox(height: 30),
+
+              isLoading
+                  ? const CircularProgressIndicator()
+                  : ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.green,
+                        foregroundColor: Colors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          side: const BorderSide(color: Colors.green, width: 2),
+                        ),
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 12,
+                          horizontal: 35,
+                        ),
                       ),
-                    ],
-                  ),
-                  focusedPinTheme: defaultPinTheme.copyWith(
-                    decoration: defaultPinTheme.decoration!.copyWith(
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(color: focusedBorderColor),
+                      onPressed: _iniciarSesion,
+                      child: const Text('Ingresar'),
                     ),
-                  ),
-                  submittedPinTheme: defaultPinTheme.copyWith(
-                    decoration: defaultPinTheme.decoration!.copyWith(
-                      color: const Color.fromARGB(50, 76, 175, 80),
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(color: Colors.green, width: 2),
-                    ),
-                  ),
-                  errorPinTheme: defaultPinTheme.copyBorderWith(
-                    border: Border.all(color: Colors.redAccent),
-                  ),
-                ),
 
-                const SizedBox(height: 40),
+              const SizedBox(height: 15),
 
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.green,
-                    foregroundColor: Colors.white,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      side: const BorderSide(color: Colors.green, width: 2),
-                    ),
-                    padding: const EdgeInsets.symmetric(
-                      vertical: 12,
-                      horizontal: 35,
-                    ),
-                  ),
-                  onPressed: _validarPin,
-                  child: const Text('Confirmar'),
-                ),
-
-                const SizedBox(height: 10),
-
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.red,
-                    foregroundColor: Colors.white,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      side: const BorderSide(color: Colors.red, width: 2),
-                    ),
-                    padding: const EdgeInsets.symmetric(
-                      vertical: 12,
-                      horizontal: 25,
-                    ),
-                  ),
-                  onPressed: () {
-                    if (userEmail.isNotEmpty) {
-                      context.go('/login/recover-pin');
-
-                    } else {
-                      ErrorDialog(
-                        context: context,
-                        errorMessage:
-                            "Usted no cuenta con un correo electrónico registrado",
-                      );
-                    }
-                  },
-                  child: const Text('Olvide mi Pin'),
-                ),
-
-                const SizedBox(height: 20),
-
-                TextButton(
-                  onPressed: () {
-                    if (userEmail.isEmpty) {
-                      context.go('/login/input-email');
-
-                    } else {
-                      ErrorDialog(
-                        context: context,
-                        errorMessage:
-                            "Usted ya cuenta con un correo electrónico registrado: $userEmail",
-                      );
-                    }
-                  },
-                  child: const Text('¿Eres nuevo? ¡Regístrate aquí!'),
-                ),
-              ],
-            ),
+              TextButton(
+                onPressed: () => context.go('/login/recover-pin', extra: userEmail),
+                child: const Text('¿Olvidaste tu PIN?'),
+              ),
+            ],
           ),
         ),
       ),

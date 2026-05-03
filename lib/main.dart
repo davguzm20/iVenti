@@ -3,7 +3,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
 
 import 'package:iventi/shared/di/ServiceLocator.dart';
-import 'package:iventi/app_routes.dart';
+import 'package:iventi/AppRoutes.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();

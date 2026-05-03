@@ -1,8 +1,9 @@
-import 'dart:math';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:pinput/pinput.dart';
+
+import 'package:iventi/shared/services/MailerService.dart';
+import 'package:iventi/shared/widgets/PinInput.dart';
 
 class RecoverPinPage extends StatefulWidget {
   const RecoverPinPage({super.key});
@@ -12,26 +13,20 @@ class RecoverPinPage extends StatefulWidget {
 }
 
 class _RecoverPinPageState extends State<RecoverPinPage> {
-  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  final MailerService _mailerService = MailerService();
   String inputCode = "";
   String codigo = "";
 
   @override
   void initState() {
     super.initState();
+
     Future.delayed(Duration.zero, () {
-      if (mounted) enviarCodigoEmail();
+      if (mounted) _enviarCodigoEmail();
     });
   }
 
-  String generarCodigoVerificacion() {
-    Random random = Random();
-    return (random.nextInt(900000) + 100000).toString();
-  }
-
-  Future<void> enviarCodigoEmail() async {
-    if (!mounted) return;
-
+  Future<void> _enviarCodigoEmail() async {
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -47,7 +42,10 @@ class _RecoverPinPageState extends State<RecoverPinPage> {
             ),
             SizedBox(height: 20),
             Text("Enviando código...",
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: Color(0xFF1E3C57))),
+                style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                    color: Color(0xFF1E3C57))),
             SizedBox(height: 5),
             Text("Por favor, espere un momento",
                 style: TextStyle(fontSize: 14, color: Colors.black54)),
@@ -56,25 +54,34 @@ class _RecoverPinPageState extends State<RecoverPinPage> {
       ),
     );
 
-    codigo = generarCodigoVerificacion();
-    // NOTE: send email when mailer backend is ready
+    final resultado = await _mailerService.enviarCodigo("");
+
+    if (mounted) Navigator.pop(context);
+
+    if (resultado.enviado || !_mailerService.tieneCredenciales) {
+      codigo = resultado.codigo;
+    }
 
     if (mounted) {
-      Navigator.pop(context);
+      final credencialesOk = _mailerService.tieneCredenciales;
+
       AwesomeDialog(
         context: context,
-        dialogType: DialogType.success,
+        dialogType: credencialesOk ? DialogType.success : DialogType.error,
         animType: AnimType.topSlide,
-        title: "Correcto",
-        desc: "El código se ha enviado a su correo correctamente!",
+        title: credencialesOk ? "Correcto" : "Aviso",
+        desc: resultado.error ?? "Código enviado correctamente!",
         btnOkOnPress: () => FocusScope.of(context).requestFocus(FocusNode()),
-        btnOkIcon: Icons.check_circle,
-        btnOkColor: Colors.green,
+        btnOkIcon:
+            credencialesOk ? Icons.check_circle : Icons.warning_amber,
+        btnOkColor: credencialesOk ? Colors.green : Colors.orange,
       ).show();
     }
   }
 
-  Future<void> validateCode() async {
+  Future<void> _validateCode() async {
+    FocusScope.of(context).unfocus();
+
     if (inputCode == codigo) {
       await AwesomeDialog(
         context: context,
@@ -86,6 +93,7 @@ class _RecoverPinPageState extends State<RecoverPinPage> {
         btnOkIcon: Icons.check_circle,
         btnOkColor: Colors.green,
       ).show();
+
     } else {
       await AwesomeDialog(
         context: context,
@@ -107,8 +115,14 @@ class _RecoverPinPageState extends State<RecoverPinPage> {
         backgroundColor: Colors.white,
         elevation: 0,
         centerTitle: true,
-        title: const Text("Confirmar Código",
-            style: TextStyle(fontSize: 22, fontWeight: FontWeight.w600, color: Color.fromRGBO(30, 60, 87, 1))),
+        title: const Text(
+          "Confirmar Código",
+          style: TextStyle(
+            fontSize: 22,
+            fontWeight: FontWeight.w600,
+            color: Color.fromRGBO(30, 60, 87, 1),
+          ),
+        ),
       ),
       body: Center(
         child: SingleChildScrollView(
@@ -116,50 +130,55 @@ class _RecoverPinPageState extends State<RecoverPinPage> {
             constraints: const BoxConstraints(maxWidth: 400),
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20.0),
-              child: Form(
-                key: formKey,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Image.asset('lib/assets/imagenes/logoTienda.png', height: 150, width: 150),
-                    const SizedBox(height: 30),
-                    const Text("Se le ha enviado un código a su correo",
-                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Color.fromRGBO(30, 60, 87, 1)),
-                        textAlign: TextAlign.center),
-                    const SizedBox(height: 30),
-                    SizedBox(
-                      width: 280,
-                      child: Pinput(
-                        length: 6,
-                        defaultPinTheme: PinTheme(
-                          width: 50, height: 70,
-                          textStyle: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.black),
-                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), border: Border.all(color: const Color.fromARGB(255, 76, 16, 187))),
-                        ),
-                        focusedPinTheme: PinTheme(
-                          width: 50, height: 70,
-                          textStyle: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.black),
-                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), border: Border.all(color: const Color.fromARGB(255, 121, 100, 180))),
-                        ),
-                        onChanged: (value) => inputCode = value,
-                        validator: (value) => (value == null || value.length < 6) ? 'Debe ingresar los 6 dígitos del código' : null,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Image.asset('lib/assets/imagenes/logoTienda.png',
+                      height: 150, width: 150),
+
+                  const SizedBox(height: 30),
+
+                  const Text(
+                    "Se le ha enviado un código a su correo",
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Color.fromRGBO(30, 60, 87, 1),
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+
+                  const SizedBox(height: 30),
+
+                  SizedBox(
+                    width: 280,
+                    child: PinInput(
+                      length: 6,
+                      onChanged: (value) => inputCode = value,
+                    ),
+                  ),
+
+                  const SizedBox(height: 30),
+
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.green,
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 12,
+                        horizontal: 35,
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
                       ),
                     ),
-                    const SizedBox(height: 30),
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.green,
-                        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 35),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                      ),
-                      onPressed: () {
-                        if (formKey.currentState!.validate()) validateCode();
-                      },
-                      child: const Text("Confirmar", style: TextStyle(color: Colors.white)),
+                    onPressed: _validateCode,
+                    child: const Text(
+                      "Confirmar",
+                      style: TextStyle(color: Colors.white),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           ),

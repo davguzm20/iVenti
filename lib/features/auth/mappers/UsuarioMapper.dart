@@ -1,3 +1,4 @@
+import 'package:iventi/shared/utils/pg_helpers.dart';
 import 'package:iventi/features/auth/entities/UsuarioEntity.dart';
 import 'package:iventi/features/auth/dtos/responses/UsuarioResponse.dart';
 import 'package:iventi/features/auth/enums/TipoRol.dart';
@@ -6,7 +7,7 @@ class UsuarioMapper {
   static UsuarioEntity fromMap(Map<String, dynamic> map) {
     return UsuarioEntity(
       idUsuario: map['id_usuario'] as int,
-      idRol: _parseRol(map['id_rol'] as String),
+      idRol: _parseRol(pgString(map['id_rol'])),
       nombre: map['nombre'] as String,
       email: map['email'] as String,
       pin: map['pin'] as String,

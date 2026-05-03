@@ -85,6 +85,23 @@ class AuthService {
     }
   }
 
+  Future<UsuarioEntity> obtenerUsuarioRegistrado() async {
+    return await _usuarioRepository.obtenerUsuarioRegistrado();
+  }
+
+  Future<void> recuperarPin(int idUsuario, String pinNuevo) async {
+    if (pinNuevo.length != 6) {
+      throw ValidationException('El PIN debe tener 6 digitos');
+    }
+
+    try {
+      await _usuarioRepository.actualizarPIN(idUsuario, pinNuevo);
+
+    } on DatabaseException catch (e) {
+      throw BusinessException('Error al recuperar PIN: ${e.mensaje}');
+    }
+  }
+
   Future<UsuarioEntity> actualizarPerfil(int idUsuario, {String? nombre, String? email}) async {
     try {
       return await _usuarioRepository.actualizarUsuario(idUsuario, nombre: nombre, email: email);

@@ -1,16 +1,19 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:pinput/pinput.dart';
+
+import 'package:iventi/shared/widgets/PinInput.dart';
 
 class CodeEmailPage extends StatefulWidget {
   final String correctCode;
   final String emailUser;
+  final String flujo;
 
   const CodeEmailPage({
     super.key,
     required this.correctCode,
     required this.emailUser,
+    required this.flujo,
   });
 
   @override
@@ -18,10 +21,11 @@ class CodeEmailPage extends StatefulWidget {
 }
 
 class _CodeEmailPageState extends State<CodeEmailPage> {
-  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   String inputCode = "";
 
   Future<void> validateCode() async {
+    FocusScope.of(context).unfocus();
+
     if (inputCode == widget.correctCode) {
       AwesomeDialog(
         context: context,
@@ -30,11 +34,16 @@ class _CodeEmailPageState extends State<CodeEmailPage> {
         title: "Correcto",
         desc: "¡El código es correcto!",
         btnOkOnPress: () {
-          context.go('/login/create-pin', extra: false);
+          if (widget.flujo == 'verify') {
+            context.go('/login', extra: widget.emailUser);
+          } else {
+            context.go('/login/create-pin', extra: widget.emailUser);
+          }
         },
         btnOkIcon: Icons.check_circle,
         btnOkColor: Colors.green,
       ).show();
+
     } else {
       AwesomeDialog(
         context: context,
@@ -71,93 +80,58 @@ class _CodeEmailPageState extends State<CodeEmailPage> {
             constraints: const BoxConstraints(maxWidth: 400),
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20.0),
-              child: Form(
-                key: formKey,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Image.asset(
-                      'lib/assets/imagenes/logoTienda.png',
-                      height: 150,
-                      width: 150,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Image.asset(
+                    'lib/assets/imagenes/logoTienda.png',
+                    height: 150,
+                    width: 150,
+                  ),
+
+                  const SizedBox(height: 30),
+
+                  const Text(
+                    "Se le ha enviado un código a su correo",
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Color.fromRGBO(30, 60, 87, 1),
                     ),
-                    const SizedBox(height: 30),
-                    const Text(
-                      "Se le ha enviado un código a su correo",
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Color.fromRGBO(30, 60, 87, 1),
+                    textAlign: TextAlign.center,
+                  ),
+
+                  const SizedBox(height: 30),
+
+                  SizedBox(
+                    width: 280,
+                    child: PinInput(
+                      length: 6,
+                      onChanged: (value) => inputCode = value,
+                    ),
+                  ),
+
+                  const SizedBox(height: 30),
+
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.green,
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 12,
+                        horizontal: 35,
                       ),
-                      textAlign: TextAlign.center,
-                    ),
-                    const SizedBox(height: 30),
-                    SizedBox(
-                      width: 280,
-                      child: Pinput(
-                        length: 6,
-                        defaultPinTheme: PinTheme(
-                          width: 50,
-                          height: 70,
-                          textStyle: const TextStyle(
-                            fontSize: 22,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black,
-                          ),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            border: Border.all(
-                                color: const Color.fromARGB(255, 76, 16, 187)),
-                          ),
-                        ),
-                        focusedPinTheme: PinTheme(
-                          width: 50,
-                          height: 70,
-                          textStyle: const TextStyle(
-                            fontSize: 22,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black,
-                          ),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            border: Border.all(
-                                color: const Color.fromARGB(255, 121, 100, 180)),
-                          ),
-                        ),
-                        onChanged: (value) {
-                          inputCode = value;
-                        },
-                        validator: (value) {
-                          if (value == null || value.length < 6) {
-                            return 'Debe ingresar los 6 dígitos del código';
-                          }
-                          return null;
-                        },
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
                       ),
                     ),
-                    const SizedBox(height: 30),
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.green,
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 12, horizontal: 35),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                      ),
-                      onPressed: () {
-                        if (formKey.currentState!.validate()) {
-                          validateCode();
-                        }
-                      },
-                      child: const Text(
-                        "Confirmar",
-                        style: TextStyle(color: Colors.white),
-                      ),
+                    onPressed: validateCode,
+                    child: const Text(
+                      "Confirmar",
+                      style: TextStyle(color: Colors.white),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           ),

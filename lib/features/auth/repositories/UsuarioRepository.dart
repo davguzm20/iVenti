@@ -107,6 +107,27 @@ class UsuarioRepository {
     }
   }
 
+  Future<UsuarioEntity> obtenerUsuarioRegistrado() async {
+    final conexion = await _conexion;
+
+    try {
+      final usuariosEncontrados = await conexion.execute(
+        'SELECT * FROM usuarios WHERE es_activo = TRUE ORDER BY id_usuario ASC LIMIT 1',
+      );
+
+      if (usuariosEncontrados.isEmpty) {
+        throw NotFoundException('No hay usuarios registrados');
+      }
+
+      return UsuarioMapper.fromMap(usuariosEncontrados.first.toColumnMap());
+
+    } catch (e) {
+      if (e is NotFoundException) rethrow;
+
+      throw DatabaseException('Error al obtener usuario registrado: $e');
+    }
+  }
+
   Future<UsuarioEntity> actualizarUsuario(int idUsuario, {String? nombre, String? email}) async {
     final conexion = await _conexion;
 

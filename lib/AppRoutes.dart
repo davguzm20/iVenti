@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import 'package:iventi/shared/di/ServiceLocator.dart';
+
+import 'package:iventi/features/auth/pages/WelcomePage.dart';
 import 'package:iventi/features/auth/pages/LoginPage.dart';
 import 'package:iventi/features/auth/pages/InputEmailPage.dart';
 import 'package:iventi/features/auth/pages/CodeEmailPage.dart';
 import 'package:iventi/features/auth/pages/CreatePinPage.dart';
+import 'package:iventi/features/config/pages/SetupConfigPage.dart';
 import 'package:iventi/features/auth/pages/RecoverPinPage.dart';
+import 'package:iventi/features/auth/controllers/AuthController.dart';
+import 'package:iventi/features/config/controllers/ConfiguracionController.dart';
 import 'package:iventi/features/inventory/pages/InventoryPage.dart';
 import 'package:iventi/features/inventory/pages/CreateProductPage.dart';
 import 'package:iventi/features/inventory/pages/FilterProductsPage.dart';
@@ -26,13 +32,29 @@ final GlobalKey<NavigatorState> _rootNavigatorKey = GlobalKey<NavigatorState>();
 
 class AppRoutes {
   static final GoRouter router = GoRouter(
-    initialLocation: '/login',
+    initialLocation: '/welcome',
     debugLogDiagnostics: true,
     navigatorKey: _rootNavigatorKey,
+    redirect: (context, state) async {
+      if (state.matchedLocation == '/login' || state.matchedLocation == '/welcome') {
+        try {
+          await ServiceLocator.authController.obtenerUsuarioRegistrado();
+        } catch (_) {
+          if (state.matchedLocation != '/welcome') return '/welcome';
+          return null;
+        }
+        if (state.matchedLocation == '/welcome') return '/login';
+      }
+      return null;
+    },
     routes: <RouteBase>[
       GoRoute(
+        path: '/welcome',
+        builder: (context, state) => const WelcomePage(),
+      ),
+      GoRoute(
         path: '/login',
-        builder: (context, state) => const LoginPage(),
+        builder: (context, state) => LoginPage(key: ValueKey(state.extra)),
         routes: [
           GoRoute(
             path: 'input-email',
@@ -45,18 +67,35 @@ class AppRoutes {
               return CodeEmailPage(
                 correctCode: extra['codigo'] as String,
                 emailUser: extra['email'] as String,
+                flujo: extra['flujo'] as String? ?? 'register',
               );
             },
           ),
           GoRoute(
             path: 'create-pin',
             builder: (context, state) {
-              return CreatePinPage(isRecovery: state.extra as bool);
+              final extra = state.extra;
+              final isRecovery = extra is bool && extra;
+
+              return CreatePinPage(isRecovery: isRecovery);
             },
           ),
           GoRoute(
             path: 'recover-pin',
             builder: (context, state) => const RecoverPinPage(),
+          ),
+          GoRoute(
+            path: 'setup',
+            builder: (context, state) {
+              final extra = state.extra as Map<String, dynamic>? ?? {};
+
+              return SetupConfigPage(
+                email: extra['email'] as String? ?? '',
+                pin: extra['pin'] as String? ?? '',
+                authController: ServiceLocator.authController,
+                configController: ServiceLocator.configuracionController,
+              );
+            },
           ),
         ],
       ),

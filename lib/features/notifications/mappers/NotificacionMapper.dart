@@ -1,3 +1,4 @@
+import 'package:iventi/shared/utils/pg_helpers.dart';
 import 'package:iventi/features/notifications/entities/NotificacionEntity.dart';
 import 'package:iventi/features/notifications/dtos/responses/NotificacionResponse.dart';
 import 'package:iventi/features/notifications/enums/TipoNotificacion.dart';
@@ -9,7 +10,7 @@ class NotificacionMapper {
       idUsuario: map['id_usuario'] as int,
       idProducto: map['id_producto'] as int?,
       idLote: map['id_lote'] as int?,
-      tipo: _parseTipo(map['tipo'] as String),
+      tipo: _parseTipo(pgString(map['tipo'])),
       titulo: map['titulo'] as String,
       contenido: map['contenido'] as String,
       leida: map['leida'] as bool,
