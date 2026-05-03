@@ -1,25 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-// Models
-import 'package:iventi/models/detalle_venta.dart';
-import 'package:iventi/models/categoria.dart';
-import 'package:iventi/pages/config/notifications_page.dart';
-
-// Vistas del login
-import 'package:iventi/pages/login/all_login_pages.dart';
-
-// Vistas del HomePage
-import 'package:iventi/pages/home_page.dart';
-import 'package:iventi/pages/inventory/all_inventory_pages.dart';
-import 'package:iventi/pages/sales/all_sales_pages.dart';
-import 'package:iventi/pages/clients/all_clients_pages.dart';
-import 'package:iventi/pages/reports/all_report_page.dart';
-import 'package:iventi/pages/config/config_page.dart';
-
-// Modulos auxiales
-import 'package:iventi/controllers/barcode_scanner.dart';
-import 'package:iventi/controllers/image_picker.dart';
+import 'package:iventi/features/auth/pages/LoginPage.dart';
+import 'package:iventi/features/auth/pages/InputEmailPage.dart';
+import 'package:iventi/features/auth/pages/CodeEmailPage.dart';
+import 'package:iventi/features/auth/pages/CreatePinPage.dart';
+import 'package:iventi/features/auth/pages/RecoverPinPage.dart';
+import 'package:iventi/features/inventory/pages/InventoryPage.dart';
+import 'package:iventi/features/inventory/pages/CreateProductPage.dart';
+import 'package:iventi/features/inventory/pages/FilterProductsPage.dart';
+import 'package:iventi/features/inventory/pages/ProductPage.dart';
+import 'package:iventi/features/sales/pages/SalesPage.dart';
+import 'package:iventi/features/sales/pages/CreateSalePage.dart';
+import 'package:iventi/features/sales/pages/FilterSalesPage.dart';
+import 'package:iventi/features/sales/pages/DetailsSalePage.dart';
+import 'package:iventi/features/sales/pages/PaymentPage.dart';
+import 'package:iventi/features/clients/pages/ClientsPage.dart';
+import 'package:iventi/features/clients/pages/FilterClientsPage.dart';
+import 'package:iventi/features/clients/pages/DetailsClientPage.dart';
+import 'package:iventi/features/notifications/pages/NotificationsPage.dart';
+import 'package:iventi/features/config/pages/ConfigPage.dart';
+import 'package:iventi/shared/pages/HomePage.dart';
 
 final GlobalKey<NavigatorState> _rootNavigatorKey = GlobalKey<NavigatorState>();
 
@@ -31,11 +32,11 @@ class AppRoutes {
     routes: <RouteBase>[
       GoRoute(
         path: '/login',
-        builder: (context, state) => LoginPage(),
+        builder: (context, state) => const LoginPage(),
         routes: [
           GoRoute(
             path: 'input-email',
-            builder: (context, state) => InputEmailPage(),
+            builder: (context, state) => const InputEmailPage(),
           ),
           GoRoute(
             path: 'code-email',
@@ -50,13 +51,13 @@ class AppRoutes {
           GoRoute(
             path: 'create-pin',
             builder: (context, state) {
-              final extra = state.extra as bool;
-              return CreatePinPage(isRecovery: extra);
+              return CreatePinPage(isRecovery: state.extra as bool);
             },
           ),
           GoRoute(
-              path: 'recover-pin',
-              builder: (context, state) => RecoverPinPage())
+            path: 'recover-pin',
+            builder: (context, state) => const RecoverPinPage(),
+          ),
         ],
       ),
       StatefulShellRoute(
@@ -65,8 +66,9 @@ class AppRoutes {
         },
         builder: (context, state, navigationShell) {
           return HomePage(
-              key: ValueKey(navigationShell.currentIndex),
-              navigationShell: navigationShell);
+            key: ValueKey(navigationShell.currentIndex),
+            navigationShell: navigationShell,
+          );
         },
         branches: [
           StatefulShellBranch(
@@ -83,29 +85,15 @@ class AppRoutes {
                   GoRoute(
                     path: 'filter-products',
                     parentNavigatorKey: _rootNavigatorKey,
-                    builder: (context, state) {
-                      final extra = state.extra as Map<String, dynamic>;
-                      final categoriasSeleccionadas =
-                          (extra['categoriasSeleccionadas'] as List)
-                              .map((map) => Categoria(
-                                    idCategoria: map['idCategoria'],
-                                    nombreCategoria: map['nombreCategoria'],
-                                  ))
-                              .toList();
-                      final stockBajo = extra['stockBajo'] as bool?;
-
-                      return FilterProductPage(
-                        categoriasSeleccionadas: categoriasSeleccionadas,
-                        stockBajo: stockBajo,
-                      );
-                    },
+                    builder: (context, state) => FilterProductsPage(
+                      filtrosIniciales: state.extra as Map<String, dynamic>?,
+                    ),
                   ),
                   GoRoute(
                     path: 'product/:idProducto',
                     builder: (context, state) {
-                      final idProducto =
-                          int.parse(state.pathParameters['idProducto']!);
-                      return ProductPage(idProducto: idProducto);
+                      final id = int.parse(state.pathParameters['idProducto']!);
+                      return ProductPage(idProducto: id);
                     },
                   ),
                 ],
@@ -123,30 +111,12 @@ class AppRoutes {
                     builder: (context, state) => const CreateSalePage(),
                     routes: [
                       GoRoute(
-                        path: '/payment-page',
+                        path: 'payment',
                         builder: (context, state) {
-                          final List<dynamic> extraList =
-                              state.extra as List<dynamic>;
-
-                          final detallesVenta = extraList
-                              .map((map) => DetalleVenta(
-                                    idProducto: map['idProducto'] as int,
-                                    idLote: map['idLote'] as int,
-                                    idVenta: map['idVenta'] as int?,
-                                    cantidadProducto:
-                                        map['cantidadProducto'] as int,
-                                    precioUnidadProducto:
-                                        map['precioUnidadProducto'] as double,
-                                    subtotalProducto:
-                                        map['subtotalProducto'] as double,
-                                    gananciaProducto:
-                                        map['gananciaProducto'] as double,
-                                    descuentoProducto:
-                                        map['descuentoProducto'] as double,
-                                  ))
-                              .toList();
-
-                          return PaymentPage(detallesVenta: detallesVenta);
+                          final detalles = (state.extra as List<dynamic>?)
+                                  ?.cast<Map<String, dynamic>>() ??
+                              [];
+                          return PaymentPage(detallesVenta: detalles);
                         },
                       ),
                     ],
@@ -155,21 +125,19 @@ class AppRoutes {
                     path: 'filter-sales',
                     parentNavigatorKey: _rootNavigatorKey,
                     builder: (context, state) {
-                      final filtros = state.extra as Map<String, dynamic>?;
-
+                      final f = state.extra as Map<String, dynamic>?;
                       return FilterSalesPage(
-                        esAlContado: filtros?['esAlContado'],
-                        fechaInicio: filtros?['fechaInicio'],
-                        fechaFinal: filtros?['fechaFinal'],
+                        esAlContado: f?['esAlContado'] as bool?,
+                        fechaInicio: f?['fechaInicio'] as DateTime?,
+                        fechaFinal: f?['fechaFinal'] as DateTime?,
                       );
                     },
                   ),
                   GoRoute(
                     path: 'details-sale/:idVenta',
                     builder: (context, state) {
-                      final idVenta =
-                          int.parse(state.pathParameters['idVenta']!);
-                      return DetailsSalePage(idVenta: idVenta);
+                      final id = int.parse(state.pathParameters['idVenta']!);
+                      return DetailsSalePage(idVenta: id);
                     },
                   ),
                 ],
@@ -186,17 +154,16 @@ class AppRoutes {
                     path: 'filter-clients',
                     parentNavigatorKey: _rootNavigatorKey,
                     builder: (context, state) {
-                      final esDeudor = state.extra as bool?;
-
-                      return FilterClientsPage(esDeudor: esDeudor);
+                      return FilterClientsPage(
+                        esDeudorInicial: state.extra as bool?,
+                      );
                     },
                   ),
                   GoRoute(
                     path: 'details-client/:idCliente',
                     builder: (context, state) {
-                      final idCliente =
-                          int.parse(state.pathParameters['idCliente']!);
-                      return DetailsClientPage(idCliente: idCliente);
+                      final id = int.parse(state.pathParameters['idCliente']!);
+                      return DetailsClientPage(idCliente: id);
                     },
                   ),
                 ],
@@ -206,56 +173,18 @@ class AppRoutes {
           StatefulShellBranch(
             routes: [
               GoRoute(
-                  path: '/reports',
-                  builder: (context, state) => const ReportsPage(),
-                  routes: [
-                    GoRoute(
-                      path: 'report-details-page',
-                      builder: (context, state) => const ReportDetailsPage(),
-                    ),
-                    GoRoute(
-                      path: 'report-sales-page',
-                      builder: (context, state) => const ReportSalesPage(),
-                    ),
-                    GoRoute(
-                      path: 'report-general-inventario',
-                      builder: (context, state) =>
-                          const ReportGeneralInventario(),
-                    ),
-                    GoRoute(
-                      path: 'report-productos-vendidos',
-                      builder: (context, state) =>
-                          const ReportProductosVendidos(),
-                    ),
-                    GoRoute(
-                      path: 'report-fecha-vencimiento',
-                      builder: (context, state) =>
-                          const ReportFechaVencimiento(),
-                    ),
-                  ]),
+                path: '/config',
+                builder: (context, state) => const ConfigPage(),
+                routes: [
+                  GoRoute(
+                    path: 'notifications',
+                    builder: (context, state) => const NotificationsPage(),
+                  ),
+                ],
+              ),
             ],
           ),
-          StatefulShellBranch(routes: [
-            GoRoute(
-              path: '/config',
-              builder: (context, state) => const ConfigPage(),
-              routes: [
-                GoRoute(
-                  path: 'notifications-page',
-                  builder: (context, state) => const NotificationsPage(),
-                )
-              ],
-            ),
-          ])
         ],
-      ),
-      GoRoute(
-        path: '/barcode-scanner',
-        builder: (context, state) => BarcodeScanner(),
-      ),
-      GoRoute(
-        path: '/image-picker',
-        builder: (context, state) => ImagePickerHelper(),
       ),
     ],
   );
