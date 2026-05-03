@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:iventi/shared/datasource/PostgresDatasource.dart';
+import 'package:iventi/shared/datasources/PostgresDatasource.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
