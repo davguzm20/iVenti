@@ -10,8 +10,8 @@ import 'package:iventi/features/clients/controllers/ClienteController.dart';
 import 'package:iventi/features/clients/entities/ClienteEntity.dart';
 import 'package:iventi/features/sales/dtos/requests/CrearVentaRequest.dart';
 import 'package:iventi/features/clients/dtos/requests/CrearClienteRequest.dart';
-import 'package:iventi/shared/config/AppColors.dart';
-import 'package:iventi/shared/config/ButtonStyles.dart';
+import 'package:iventi/shared/theme/AppColors.dart';
+import 'package:iventi/shared/theme/ButtonStyles.dart';
 import 'package:iventi/shared/utils/DialogMessages.dart';
 
 class PaymentPage extends StatefulWidget {

@@ -4,8 +4,8 @@ import 'package:go_router/go_router.dart';
 import 'package:iventi/shared/exceptions/AppException.dart';
 import 'package:iventi/shared/widgets/PinInput.dart';
 import 'package:iventi/shared/widgets/ErrorDialog.dart';
-import 'package:iventi/shared/config/AppColors.dart';
-import 'package:iventi/shared/config/ButtonStyles.dart';
+import 'package:iventi/shared/theme/AppColors.dart';
+import 'package:iventi/shared/theme/ButtonStyles.dart';
 import 'package:iventi/features/auth/controllers/AuthController.dart';
 import 'package:iventi/shared/di/ServiceLocator.dart';
 

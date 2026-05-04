@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pinput/pinput.dart';
-import 'package:iventi/shared/config/AppColors.dart';
+import 'package:iventi/shared/theme/AppColors.dart';
 
 class PinInput extends StatelessWidget {
   final TextEditingController? controller;

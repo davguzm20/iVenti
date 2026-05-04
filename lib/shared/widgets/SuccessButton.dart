@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:iventi/shared/config/ButtonStyles.dart';
+import 'package:iventi/shared/theme/ButtonStyles.dart';
 
 class SuccessButton extends StatelessWidget {
   final String text;

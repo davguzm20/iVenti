@@ -4,8 +4,8 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iventi/shared/widgets/CustomTextField.dart';
 import 'package:iventi/shared/widgets/ErrorDialog.dart';
-import 'package:iventi/shared/config/AppColors.dart';
-import 'package:iventi/shared/config/ButtonStyles.dart';
+import 'package:iventi/shared/theme/AppColors.dart';
+import 'package:iventi/shared/theme/ButtonStyles.dart';
 import 'package:iventi/shared/utils/DialogMessages.dart';
 
 class CreateSalePage extends StatefulWidget {

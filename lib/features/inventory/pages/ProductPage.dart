@@ -11,8 +11,8 @@ import 'package:iventi/features/inventory/controllers/LoteController.dart';
 import 'package:iventi/features/inventory/controllers/CategoriaController.dart';
 import 'package:iventi/features/inventory/controllers/UnidadController.dart';
 import 'package:iventi/shared/widgets/ErrorDialog.dart';
-import 'package:iventi/shared/config/AppColors.dart';
-import 'package:iventi/shared/config/ButtonStyles.dart';
+import 'package:iventi/shared/theme/AppColors.dart';
+import 'package:iventi/shared/theme/ButtonStyles.dart';
 import 'package:iventi/shared/utils/DialogMessages.dart';
 
 class ProductPage extends StatefulWidget {

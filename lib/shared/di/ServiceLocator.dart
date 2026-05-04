@@ -1,6 +1,6 @@
 import 'package:provider/provider.dart';
 
-import 'package:iventi/shared/datasources/PostgresDatasource.dart';
+import 'package:iventi/shared/utils/PostgresDatasource.dart';
 
 // Auth
 import 'package:iventi/features/auth/repositories/UsuarioRepository.dart';
