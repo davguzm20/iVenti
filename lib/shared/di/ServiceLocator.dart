@@ -161,6 +161,13 @@ class ServiceLocator {
     notificacionController = NotificacionController(notificacionService);
   }
 
+  static int? usuarioActualId;
+
+  static Future<void> setUsuarioActual(int idUsuario) async {
+    usuarioActualId = idUsuario;
+    await datasource.connection;
+  }
+
   static List<Provider> get providers => [
     Provider.value(value: authController),
     Provider.value(value: clienteController),

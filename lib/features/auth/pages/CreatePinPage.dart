@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:provider/provider.dart';
-
 import 'package:iventi/shared/exceptions/AppException.dart';
+import 'package:iventi/shared/di/ServiceLocator.dart';
 import 'package:iventi/features/auth/controllers/AuthController.dart';
 import 'package:iventi/shared/widgets/PinInput.dart';
 import 'package:iventi/shared/widgets/ErrorDialog.dart';
+import 'package:iventi/shared/config/ButtonStyles.dart';
+import 'package:iventi/shared/config/AppColors.dart';
+import 'package:iventi/shared/widgets/BackButton.dart';
+import 'package:iventi/shared/utils/DialogMessages.dart';
 
 class CreatePinPage extends StatefulWidget {
   final bool isRecovery;
@@ -21,7 +24,7 @@ class _CreatePinPageState extends State<CreatePinPage> {
   String confirmPin = "";
   String email = "";
 
-  AuthController get _authController => context.read<AuthController>();
+  AuthController get _authController => ServiceLocator.authController;
 
   @override
   void didChangeDependencies() {
@@ -53,19 +56,29 @@ class _CreatePinPageState extends State<CreatePinPage> {
   void _siguiente() {
     FocusScope.of(context).unfocus();
 
-    if (pin != confirmPin || pin.length != 6) {
+    if (pin.length != 6) {
+      final (title, desc) = DialogMessages.auth.pinInvalido;
       ErrorDialog(
         context: context,
-        errorMessage: 'Los PIN ingresados no coinciden o no tienen 6 dígitos.',
+        title: title,
+        description: desc,
+      );
+      return;
+    }
+
+    if (pin != confirmPin) {
+      final (title, desc) = DialogMessages.auth.pinNoCoincide;
+      ErrorDialog(
+        context: context,
+        title: title,
+        description: desc,
       );
       return;
     }
 
     if (email.isEmpty) {
-      ErrorDialog(
-        context: context,
-        errorMessage: 'No se encontro el correo del usuario.',
-      );
+      final (titulo, desc) = DialogMessages.auth.correoNoDisponible;
+      ErrorDialog(context: context, title: titulo, description: desc);
       return;
     }
 
@@ -74,7 +87,7 @@ class _CreatePinPageState extends State<CreatePinPage> {
       _recuperarPin();
     } else {
       // New user: go to setup page
-      GoRouter.of(context).go('/login/setup', extra: {'email': email, 'pin': pin});
+      context.push('/login/setup', extra: {'email': email, 'pin': pin});
     }
   }
 
@@ -88,13 +101,18 @@ class _CreatePinPageState extends State<CreatePinPage> {
 
     } on AppException catch (e) {
       if (mounted) {
-        ErrorDialog(context: context, errorMessage: e.mensaje);
+        ErrorDialog(
+          context: context,
+          title: e.mensaje,
+          description: e.descripcion ?? 'No pudimos recuperar tu PIN, intenta de nuevo',
+        );
       }
     } catch (e) {
       if (mounted) {
         ErrorDialog(
           context: context,
-          errorMessage: 'Error al recuperar PIN: $e',
+          title: 'Error inesperado',
+          description: 'Ocurrió un error inesperado, intenta de nuevo',
         );
       }
     }
@@ -103,7 +121,9 @@ class _CreatePinPageState extends State<CreatePinPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
+      body: Stack(
+        children: [
+          Center(
         child: ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 400),
           child: Padding(
@@ -129,7 +149,7 @@ class _CreatePinPageState extends State<CreatePinPage> {
                     style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
-                      color: Color(0xFF493D9E),
+                      color: AppColors.primary,
                     ),
                     textAlign: TextAlign.center,
                   ),
@@ -175,21 +195,9 @@ class _CreatePinPageState extends State<CreatePinPage> {
                   const SizedBox(height: 30),
 
                   ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.green,
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 12,
-                        horizontal: 35,
-                      ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                    ),
+                    style: ButtonStyles.success(),
                     onPressed: _siguiente,
-                    child: const Text(
-                      "Siguiente",
-                      style: TextStyle(color: Colors.white),
-                    ),
+                    child: const Text("Siguiente"),
                   ),
 
                   const SizedBox(height: 30),
@@ -197,7 +205,10 @@ class _CreatePinPageState extends State<CreatePinPage> {
               ),
             ),
           ),
-        ),
+          ),
+          ),
+          BackButtonWidget(),
+        ],
       ),
     );
   }

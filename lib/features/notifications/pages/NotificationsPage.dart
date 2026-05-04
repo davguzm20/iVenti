@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-
 import 'package:iventi/features/notifications/entities/NotificacionEntity.dart';
+import 'package:iventi/shared/di/ServiceLocator.dart';
 import 'package:iventi/features/notifications/controllers/NotificacionController.dart';
+import 'package:iventi/shared/config/AppColors.dart';
+import 'package:iventi/shared/config/ButtonStyles.dart';
 
 class NotificationsPage extends StatefulWidget {
   const NotificationsPage({super.key});
@@ -16,7 +17,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
   bool isLoading = false;
 
   NotificacionController get _controller =>
-      context.read<NotificacionController>();
+      ServiceLocator.notificacionController;
 
   @override
   void initState() {
@@ -69,7 +70,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
                             : Icons.notifications_active,
                         color: notif.leida
                             ? Colors.grey
-                            : const Color(0xFF493D9E),
+                            : AppColors.primary,
                       ),
                       title: Text(
                         notif.titulo,

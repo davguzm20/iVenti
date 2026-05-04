@@ -1,9 +1,8 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:provider/provider.dart';
-
 import 'package:iventi/shared/widgets/CustomTextField.dart';
+import 'package:iventi/shared/di/ServiceLocator.dart';
 import 'package:iventi/shared/widgets/ErrorDialog.dart';
 import 'package:iventi/shared/widgets/SuccessDialog.dart';
 import 'package:iventi/features/sales/controllers/VentaController.dart';
@@ -11,6 +10,9 @@ import 'package:iventi/features/clients/controllers/ClienteController.dart';
 import 'package:iventi/features/clients/entities/ClienteEntity.dart';
 import 'package:iventi/features/sales/dtos/requests/CrearVentaRequest.dart';
 import 'package:iventi/features/clients/dtos/requests/CrearClienteRequest.dart';
+import 'package:iventi/shared/config/AppColors.dart';
+import 'package:iventi/shared/config/ButtonStyles.dart';
+import 'package:iventi/shared/utils/DialogMessages.dart';
 
 class PaymentPage extends StatefulWidget {
   final List<Map<String, dynamic>> detallesVenta;
@@ -35,9 +37,9 @@ class _PaymentPageState extends State<PaymentPage> {
   ClienteEntity? clienteSeleccionado;
   double cantidadRecibida = 0.0;
 
-  VentaController get _ventaController => context.read<VentaController>();
+  VentaController get _ventaController => ServiceLocator.ventaController;
   ClienteController get _clienteController =>
-      context.read<ClienteController>();
+      ServiceLocator.clienteController;
 
   double _calcularTotalVenta() =>
       widget.detallesVenta.fold(0.0, (total, d) => total + (d['subtotalProducto'] as double));
@@ -71,7 +73,7 @@ class _PaymentPageState extends State<PaymentPage> {
               const Text(
                 "Cliente:",
                 style: TextStyle(
-                    fontWeight: FontWeight.bold, color: Color(0xFF493D9E)),
+                    fontWeight: FontWeight.bold, color: AppColors.primary),
               ),
 
               const SizedBox(height: 8),
@@ -141,7 +143,7 @@ class _PaymentPageState extends State<PaymentPage> {
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(5),
                             borderSide:
-                                const BorderSide(color: Color(0xFF493D9e)),
+                                const BorderSide(color: AppColors.primary),
                           ),
                         ),
                         onChanged: (value) => _buscarClientesPorNombre(value),
@@ -216,28 +218,21 @@ class _PaymentPageState extends State<PaymentPage> {
                 style: const TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
-                  color: Color(0xFF493D9E),
+                  color: AppColors.primary,
                 ),
               ),
-
-              _buildTipoPago(),
             ],
           ),
         ),
       ),
     );
+
   }
 
   Widget _buildToggleButton(
       String text, bool isSelected, VoidCallback onPressed) {
     return OutlinedButton(
-      style: OutlinedButton.styleFrom(
-        backgroundColor:
-            isSelected ? const Color(0xFF493D9E) : Colors.white,
-        foregroundColor:
-            isSelected ? Colors.white : const Color(0xFF493D9E),
-        side: const BorderSide(color: Color(0xFF493D9E)),
-      ),
+      style: ButtonStyles.outlinedToggle(isSelected),
       onPressed: onPressed,
       child: FittedBox(
         fit: BoxFit.scaleDown,
@@ -277,7 +272,7 @@ class _PaymentPageState extends State<PaymentPage> {
           style: const TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.bold,
-            color: Color(0xFF493D9E),
+            color: AppColors.primary,
           ),
         ),
 
@@ -286,19 +281,17 @@ class _PaymentPageState extends State<PaymentPage> {
         SizedBox(
           width: double.infinity,
           child: ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.green,
-              padding: const EdgeInsets.symmetric(vertical: 12),
-            ),
+            style: ButtonStyles.success(),
             onPressed: () async {
               FocusScope.of(context).unfocus();
 
               if (esAlContado &&
                   cantidadRecibida < _calcularTotalVenta()) {
+                final (title, desc) = DialogMessages.ventas.montoInsuficiente;
                 ErrorDialog(
                   context: context,
-                  errorMessage:
-                      "Monto insuficiente. Considere cambiarlo a crédito.",
+                  title: title,
+                  description: desc,
                 );
                 return;
               }
@@ -306,9 +299,11 @@ class _PaymentPageState extends State<PaymentPage> {
               if (!esAlContado &&
                   !crearCliente &&
                   clienteSeleccionado == null) {
+                final (title, desc) = DialogMessages.ventas.clienteRequerido;
                 ErrorDialog(
                   context: context,
-                  errorMessage: "Debe seleccionar un cliente.",
+                  title: title,
+                  description: desc,
                 );
                 return;
               }
@@ -317,9 +312,11 @@ class _PaymentPageState extends State<PaymentPage> {
 
               if (crearCliente) {
                 if (_nombreController.text.isEmpty) {
+                  final (title, desc) = DialogMessages.ventas.camposIncompletos;
                   ErrorDialog(
                     context: context,
-                    errorMessage: "Complete los campos obligatorios.",
+                    title: title,
+                    description: desc,
                   );
                   return;
                 }
@@ -337,9 +334,11 @@ class _PaymentPageState extends State<PaymentPage> {
                   idCliente = nuevo.idCliente;
 
                 } catch (e) {
+                  final (title, desc) = DialogMessages.ventas.noSePudoRegistrarCliente;
                   ErrorDialog(
                     context: context,
-                    errorMessage: "Error al crear cliente.",
+                    title: title,
+                    description: desc,
                   );
                   return;
                 }
@@ -349,9 +348,11 @@ class _PaymentPageState extends State<PaymentPage> {
               }
 
               if (idCliente == null) {
+                final (title, desc) = DialogMessages.ventas.clienteNoEncontrado;
                 ErrorDialog(
                   context: context,
-                  errorMessage: "No se pudo obtener el ID del cliente.",
+                  title: title,
+                  description: desc,
                 );
                 return;
               }
@@ -380,18 +381,21 @@ class _PaymentPageState extends State<PaymentPage> {
                 );
 
                 if (mounted) {
+                  final (title, desc) = DialogMessages.ventas.ventaRegistrada;
                   SuccessDialog(
                     context: context,
-                    successMessage:
-                        "¡La venta se ha realizado exitosamente!",
+                    title: title,
+                    description: desc,
                     btnOkOnPress: () => context.replace('/sales'),
                   );
                 }
 
               } catch (e) {
+                final (title, desc) = DialogMessages.ventas.noSePudoRegistrarVenta;
                 ErrorDialog(
                   context: context,
-                  errorMessage: "Error al crear la venta.",
+                  title: title,
+                  description: desc,
                 );
               }
             },

@@ -2,12 +2,14 @@ import 'dart:io';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:provider/provider.dart';
-
 import 'package:iventi/shared/widgets/CustomTextField.dart';
+import 'package:iventi/shared/di/ServiceLocator.dart';
 import 'package:iventi/shared/widgets/ErrorDialog.dart';
 import 'package:iventi/shared/widgets/SuccessDialog.dart';
+import 'package:iventi/shared/utils/DialogMessages.dart';
 import 'package:iventi/features/inventory/dtos/requests/CrearProductoRequest.dart';
+import 'package:iventi/shared/config/AppColors.dart';
+import 'package:iventi/shared/config/ButtonStyles.dart';
 import 'package:iventi/features/inventory/controllers/ProductoController.dart';
 import 'package:iventi/features/inventory/controllers/CategoriaController.dart';
 import 'package:iventi/features/inventory/controllers/UnidadController.dart';
@@ -34,11 +36,11 @@ class _CreateProductPageState extends State<CreateProductPage> {
   String? rutaImagen;
 
   ProductoController get _productoController =>
-      context.read<ProductoController>();
+      ServiceLocator.productoController;
   CategoriaController get _categoriaController =>
-      context.read<CategoriaController>();
+      ServiceLocator.categoriaController;
   UnidadController get _unidadController =>
-      context.read<UnidadController>();
+      ServiceLocator.unidadController;
 
   @override
   void initState() {
@@ -78,7 +80,7 @@ class _CreateProductPageState extends State<CreateProductPage> {
           style: TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.bold,
-            color: Color(0xFF493D9E),
+            color: AppColors.primary,
           ),
         ),
 
@@ -94,11 +96,11 @@ class _CreateProductPageState extends State<CreateProductPage> {
             return FilterChip(
               label: Text(categoria.nombre),
               selected: seleccionada,
-              selectedColor: const Color(0xFF493D9E),
+              selectedColor: AppColors.primary,
               backgroundColor: Colors.grey[200],
               labelStyle: TextStyle(
                 fontWeight: FontWeight.bold,
-                color: seleccionada ? Colors.white : const Color(0xFF493D9E),
+                color: seleccionada ? Colors.white : AppColors.primary,
               ),
               onSelected: (selected) {
                 setState(() {
@@ -249,7 +251,7 @@ class _CreateProductPageState extends State<CreateProductPage> {
                 children: [
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.red,
+                      backgroundColor: AppColors.danger,
                       foregroundColor: Colors.white,
                     ),
                     onPressed: () => context.pop(),
@@ -257,10 +259,7 @@ class _CreateProductPageState extends State<CreateProductPage> {
                   ),
 
                   ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.green,
-                      foregroundColor: Colors.white,
-                    ),
+                    style: ButtonStyles.success(),
                     onPressed: _confirmarProducto,
                     child: const Text('Confirmar'),
                   ),
@@ -278,9 +277,11 @@ class _CreateProductPageState extends State<CreateProductPage> {
         minStockController.text.isEmpty ||
         priceController.text.isEmpty ||
         unidadSeleccionada == null) {
+      final (title, desc) = DialogMessages.inventario.camposIncompletos;
       ErrorDialog(
         context: context,
-        errorMessage: 'Por favor, complete todos los campos obligatorios.',
+        title: title,
+        description: desc,
       );
 
       return;
@@ -289,10 +290,23 @@ class _CreateProductPageState extends State<CreateProductPage> {
     final precio = double.tryParse(priceController.text) ?? 0.0;
     final stockMin = double.tryParse(minStockController.text) ?? 0.0;
 
-    if (stockMin < 0 || precio < 0) {
+    if (stockMin <= 0) {
+      final (title, desc) = DialogMessages.inventario.stockMinimoInvalido;
       ErrorDialog(
         context: context,
-        errorMessage: 'Ingrese valores numéricos válidos.',
+        title: title,
+        description: desc,
+      );
+
+      return;
+    }
+
+    if (precio <= 0) {
+      final (title, desc) = DialogMessages.inventario.precioInvalido;
+      ErrorDialog(
+        context: context,
+        title: title,
+        description: desc,
       );
 
       return;
@@ -327,17 +341,21 @@ class _CreateProductPageState extends State<CreateProductPage> {
           );
 
           if (mounted) {
+            final (title, desc) = DialogMessages.inventario.productoregistrado;
             SuccessDialog(
               context: context,
-              successMessage: 'Producto creado con éxito.',
+              title: title,
+              description: desc,
               btnOkOnPress: () => context.pop(),
             );
           }
 
         } catch (e) {
+          final (title, desc) = DialogMessages.inventario.noSePudoRegistrarProducto;
           ErrorDialog(
             context: context,
-            errorMessage: 'Hubo un problema al crear el producto.',
+            title: title,
+            description: desc,
           );
         }
       },

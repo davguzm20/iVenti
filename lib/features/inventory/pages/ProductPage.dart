@@ -1,9 +1,8 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:provider/provider.dart';
-
 import 'package:iventi/features/inventory/entities/ProductoEntity.dart';
+import 'package:iventi/shared/di/ServiceLocator.dart';
 import 'package:iventi/features/inventory/entities/LoteEntity.dart';
 import 'package:iventi/features/inventory/entities/CategoriaEntity.dart';
 import 'package:iventi/features/inventory/entities/UnidadEntity.dart';
@@ -12,6 +11,9 @@ import 'package:iventi/features/inventory/controllers/LoteController.dart';
 import 'package:iventi/features/inventory/controllers/CategoriaController.dart';
 import 'package:iventi/features/inventory/controllers/UnidadController.dart';
 import 'package:iventi/shared/widgets/ErrorDialog.dart';
+import 'package:iventi/shared/config/AppColors.dart';
+import 'package:iventi/shared/config/ButtonStyles.dart';
+import 'package:iventi/shared/utils/DialogMessages.dart';
 
 class ProductPage extends StatefulWidget {
   final int idProducto;
@@ -29,12 +31,12 @@ class _ProductPageState extends State<ProductPage> {
   UnidadEntity? unidadProducto;
 
   ProductoController get _productoController =>
-      context.read<ProductoController>();
-  LoteController get _loteController => context.read<LoteController>();
+      ServiceLocator.productoController;
+  LoteController get _loteController => ServiceLocator.loteController;
   CategoriaController get _categoriaController =>
-      context.read<CategoriaController>();
+      ServiceLocator.categoriaController;
   UnidadController get _unidadController =>
-      context.read<UnidadController>();
+      ServiceLocator.unidadController;
 
   @override
   void initState() {
@@ -47,7 +49,12 @@ class _ProductPageState extends State<ProductPage> {
     final p = await _productoController.obtenerProductoPorId(widget.idProducto);
 
     if (p == null) {
-      ErrorDialog(context: context, errorMessage: "Producto no encontrado.");
+      final (title, desc) = DialogMessages.inventario.productoNoEncontrado;
+      ErrorDialog(
+        context: context,
+        title: title,
+        description: desc,
+      );
       return;
     }
 
@@ -77,7 +84,7 @@ class _ProductPageState extends State<ProductPage> {
           producto?.nombre ?? "Cargando...",
           style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
         ),
-        backgroundColor: Colors.white,
+        backgroundColor: AppColors.background,
         elevation: 0,
         iconTheme: const IconThemeData(color: Colors.black),
       ),
@@ -146,7 +153,7 @@ class _ProductPageState extends State<ProductPage> {
                           Text(
                             "Stock actual: ${producto!.stockActual} ${unidadProducto?.abreviatura ?? ''}",
                             style: const TextStyle(
-                              color: Color(0xFF493d9e),
+                              color: AppColors.primary,
                               fontWeight: FontWeight.bold,
                               fontSize: 18,
                             ),
@@ -155,7 +162,7 @@ class _ProductPageState extends State<ProductPage> {
                           Text(
                             "Stock mínimo: ${producto!.stockMinimo} ${unidadProducto?.abreviatura ?? ''}",
                             style: const TextStyle(
-                              color: Color(0xFF493d9e),
+                              color: AppColors.primary,
                               fontWeight: FontWeight.bold,
                               fontSize: 18,
                             ),
@@ -213,7 +220,7 @@ class _ProductPageState extends State<ProductPage> {
                       (lote) => Card(
                         child: ListTile(
                           leading: CircleAvatar(
-                            backgroundColor: const Color(0xFF493d9e),
+                            backgroundColor: AppColors.primary,
                             foregroundColor: Colors.white,
                             child: Text('${lote.idLote}'),
                           ),
@@ -250,7 +257,7 @@ class _ProductPageState extends State<ProductPage> {
           style: TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.bold,
-            color: Color(0xFF493D9E),
+            color: AppColors.primary,
           ),
         ),
 
@@ -264,7 +271,7 @@ class _ProductPageState extends State<ProductPage> {
                 (c) => FilterChip(
                   label: Text(c.nombre),
                   selected: true,
-                  selectedColor: const Color(0xFF493D9E),
+                  selectedColor: AppColors.primary,
                   backgroundColor: Colors.grey[200],
                   labelStyle: const TextStyle(
                     fontWeight: FontWeight.bold,

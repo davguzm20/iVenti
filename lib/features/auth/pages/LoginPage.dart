@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:provider/provider.dart';
 
-import 'package:iventi/features/auth/controllers/AuthController.dart';
 import 'package:iventi/shared/exceptions/AppException.dart';
 import 'package:iventi/shared/widgets/PinInput.dart';
 import 'package:iventi/shared/widgets/ErrorDialog.dart';
+import 'package:iventi/shared/config/AppColors.dart';
+import 'package:iventi/shared/config/ButtonStyles.dart';
+import 'package:iventi/features/auth/controllers/AuthController.dart';
+import 'package:iventi/shared/di/ServiceLocator.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -19,15 +21,24 @@ class _LoginPageState extends State<LoginPage> {
   String userPIN = '';
   bool isLoading = false;
 
-  AuthController get _authController => context.read<AuthController>();
+  AuthController get _authController => ServiceLocator.authController;
+
+  bool _emailCargado = false;
 
   @override
   void initState() {
     super.initState();
-    _cargarEmail();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (!_emailCargado) _cargarEmail();
   }
 
   Future<void> _cargarEmail() async {
+    _emailCargado = true;
+
     try {
       final extra = GoRouterState.of(context).extra;
 
@@ -41,7 +52,7 @@ class _LoginPageState extends State<LoginPage> {
       if (mounted) setState(() => userEmail = usuario.email);
 
     } catch (_) {
-      if (mounted) context.go('/welcome');
+      // No hay usuario registrado, se queda en login sin email
     }
   }
 
@@ -49,29 +60,36 @@ class _LoginPageState extends State<LoginPage> {
     FocusScope.of(context).unfocus();
 
     if (userPIN.length < 6) {
-      ErrorDialog(context: context, errorMessage: 'Ingrese su PIN de 6 dígitos');
+      _mostrarError('PIN incompleto', 'Ingresa tu PIN de 6 dígitos para continuar.');
       return;
     }
 
     setState(() => isLoading = true);
 
     try {
-      await _authController.iniciarSesion(userEmail, userPIN);
+      final usuario = await _authController.iniciarSesion(userEmail, userPIN);
+      await ServiceLocator.setUsuarioActual(usuario.idUsuario!);
 
       if (mounted) context.go('/inventory');
 
     } on AppException catch (e) {
       if (mounted) {
-        ErrorDialog(context: context, errorMessage: e.mensaje);
+        ErrorDialog(
+          context: context,
+          title: e.mensaje,
+          description: e.descripcion ?? 'Ocurrió un error inesperado, intenta de nuevo',
+        );
       }
 
     } catch (e) {
-      if (mounted) {
-        ErrorDialog(context: context, errorMessage: 'Error al iniciar sesión');
-      }
+      if (mounted) _mostrarError('Error inesperado', e.toString());
     }
 
     if (mounted) setState(() => isLoading = false);
+  }
+
+  void _mostrarError(String titulo, String descripcion) {
+    if (mounted) ErrorDialog(context: context, title: titulo, description: descripcion);
   }
 
   @override
@@ -94,7 +112,7 @@ class _LoginPageState extends State<LoginPage> {
                 style: TextStyle(
                   fontSize: 22,
                   fontWeight: FontWeight.bold,
-                  color: Color.fromRGBO(30, 60, 87, 1),
+                  color: AppColors.textDark,
                 ),
               ),
 
@@ -102,7 +120,7 @@ class _LoginPageState extends State<LoginPage> {
 
               Text(
                 userEmail,
-                style: const TextStyle(fontSize: 16, color: Colors.black54),
+                style: const TextStyle(fontSize: 16, color: AppColors.textLight),
               ),
 
               const SizedBox(height: 30),
@@ -118,18 +136,7 @@ class _LoginPageState extends State<LoginPage> {
               isLoading
                   ? const CircularProgressIndicator()
                   : ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.green,
-                        foregroundColor: Colors.white,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          side: const BorderSide(color: Colors.green, width: 2),
-                        ),
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 12,
-                          horizontal: 35,
-                        ),
-                      ),
+                      style: ButtonStyles.success(),
                       onPressed: _iniciarSesion,
                       child: const Text('Ingresar'),
                     ),
@@ -137,6 +144,7 @@ class _LoginPageState extends State<LoginPage> {
               const SizedBox(height: 15),
 
               TextButton(
+                style: ButtonStyles.text(),
                 onPressed: () => context.go('/login/recover-pin', extra: userEmail),
                 child: const Text('¿Olvidaste tu PIN?'),
               ),

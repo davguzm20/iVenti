@@ -2,10 +2,11 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:provider/provider.dart';
-
 import 'package:iventi/features/inventory/entities/ProductoEntity.dart';
+import 'package:iventi/shared/di/ServiceLocator.dart';
 import 'package:iventi/features/inventory/controllers/ProductoController.dart';
+import 'package:iventi/shared/config/AppColors.dart';
+import 'package:iventi/shared/config/ButtonStyles.dart';
 
 class InventoryPage extends StatefulWidget {
   const InventoryPage({super.key});
@@ -35,7 +36,7 @@ class _InventoryPageState extends State<InventoryPage> {
   }
 
   ProductoController get _productoController =>
-      context.read<ProductoController>();
+      ServiceLocator.productoController;
 
   Future<void> _cargarProductos({bool reiniciar = false}) async {
     if (isLoading) return;
@@ -231,7 +232,7 @@ class _InventoryPageState extends State<InventoryPage> {
                             ),
                           ],
                           border: Border.all(
-                            color: const Color(0xFF493D9E),
+                            color: AppColors.primary,
                             width: 2,
                           ),
                         ),
@@ -256,7 +257,7 @@ class _InventoryPageState extends State<InventoryPage> {
                               style: const TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 14,
-                                color: Color(0xFF493D9E),
+                                color: AppColors.primary,
                               ),
                               textAlign: TextAlign.center,
                               overflow: TextOverflow.ellipsis,
@@ -283,8 +284,7 @@ class _InventoryPageState extends State<InventoryPage> {
                               decoration: BoxDecoration(
                                 color: esStockBajo
                                     ? Colors.red.withOpacity(0.15)
-                                    : const Color(0xFF2BBF55)
-                                        .withOpacity(0.15),
+                                    : AppColors.success.withOpacity(0.15),
                                 borderRadius: BorderRadius.circular(6),
                               ),
                               child: Text(
@@ -292,7 +292,7 @@ class _InventoryPageState extends State<InventoryPage> {
                                 style: TextStyle(
                                   color: esStockBajo
                                       ? Colors.red
-                                      : const Color(0xFF2BBF55),
+                                      : AppColors.success,
                                   fontWeight: FontWeight.bold,
                                   fontSize: 12,
                                 ),

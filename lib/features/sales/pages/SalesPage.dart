@@ -1,10 +1,11 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:provider/provider.dart';
-
 import 'package:iventi/features/sales/entities/VentaEntity.dart';
+import 'package:iventi/shared/di/ServiceLocator.dart';
 import 'package:iventi/features/sales/controllers/VentaController.dart';
+import 'package:iventi/shared/config/AppColors.dart';
+import 'package:iventi/shared/config/ButtonStyles.dart';
 
 class SalesPage extends StatefulWidget {
   const SalesPage({super.key});
@@ -26,7 +27,7 @@ class _SalesPageState extends State<SalesPage> {
   bool isSearching = false;
   bool isLoading = false;
 
-  VentaController get _ventaController => context.read<VentaController>();
+  VentaController get _ventaController => ServiceLocator.ventaController;
 
   @override
   void initState() {
@@ -188,7 +189,7 @@ class _SalesPageState extends State<SalesPage> {
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(12),
                           border: Border.all(
-                              color: const Color(0xFF493D9E), width: 2),
+                              color: AppColors.primary, width: 2),
                           boxShadow: [
                             BoxShadow(
                               color: Colors.black.withOpacity(0.2),
@@ -218,7 +219,7 @@ class _SalesPageState extends State<SalesPage> {
                                       style: const TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 20,
-                                        color: Color(0xFF493D9E),
+                                        color: AppColors.primary,
                                       ),
                                     ),
 
@@ -244,7 +245,7 @@ class _SalesPageState extends State<SalesPage> {
                                                     venta.montoTotal
                                             ? Colors.red
                                             : venta.esCredito
-                                                ? const Color(0xFF2BBF55)
+                                                ? AppColors.success
                                                 : Colors.black,
                                         fontWeight: FontWeight.bold,
                                       ),
@@ -257,13 +258,7 @@ class _SalesPageState extends State<SalesPage> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   ElevatedButton(
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: const Color(0xFF2BBF55),
-                                      foregroundColor: Colors.white,
-                                      elevation: 6,
-                                      shadowColor:
-                                          Colors.black.withOpacity(0.3),
-                                    ),
+                                    style: ButtonStyles.success(),
                                     onPressed: () {
                                       context.push(
                                           '/sales/details-sale/${venta.idVenta}');

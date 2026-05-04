@@ -1,10 +1,11 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:provider/provider.dart';
-
 import 'package:iventi/features/clients/entities/ClienteEntity.dart';
+import 'package:iventi/shared/di/ServiceLocator.dart';
 import 'package:iventi/features/clients/controllers/ClienteController.dart';
+import 'package:iventi/shared/config/AppColors.dart';
+import 'package:iventi/shared/config/ButtonStyles.dart';
 
 class ClientsPage extends StatefulWidget {
   const ClientsPage({super.key});
@@ -25,7 +26,7 @@ class _ClientsPageState extends State<ClientsPage> {
   bool isSearching = false;
   bool isLoading = false;
 
-  ClienteController get _clienteController => context.read<ClienteController>();
+  ClienteController get _clienteController => ServiceLocator.clienteController;
 
   @override
   void initState() {
@@ -183,7 +184,7 @@ class _ClientsPageState extends State<ClientsPage> {
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(12),
                           border: Border.all(
-                              color: const Color(0xFF493D9E), width: 2),
+                              color: AppColors.primary, width: 2),
                           boxShadow: [
                             BoxShadow(
                               color: Colors.black.withOpacity(0.2),
@@ -213,7 +214,7 @@ class _ClientsPageState extends State<ClientsPage> {
                                       style: const TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 20,
-                                        color: Color(0xFF493D9E),
+                                        color: AppColors.primary,
                                       ),
                                     ),
 
@@ -248,13 +249,7 @@ class _ClientsPageState extends State<ClientsPage> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   ElevatedButton(
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: const Color(0xFF2BBF55),
-                                      foregroundColor: Colors.white,
-                                      elevation: 6,
-                                      shadowColor:
-                                          Colors.black.withOpacity(0.3),
-                                    ),
+                                    style: ButtonStyles.success(),
                                     onPressed: () async {
                                       await context.push(
                                           '/clients/details-client/${cliente.idCliente}');

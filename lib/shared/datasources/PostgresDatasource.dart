@@ -1,5 +1,6 @@
 import 'package:postgres/postgres.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:iventi/shared/di/ServiceLocator.dart';
 
 class PostgresDatasource {
   static final PostgresDatasource _instance = PostgresDatasource._internal();
@@ -7,10 +8,16 @@ class PostgresDatasource {
   PostgresDatasource._internal();
 
   Connection? _connection;
+  int? _ultimoIdUsuario;
 
   Future<Connection> get connection async {
     if (_connection == null) {
       await _initConnection();
+    }
+    final idUsuario = ServiceLocator.usuarioActualId;
+    if (idUsuario != null && idUsuario != _ultimoIdUsuario) {
+      await _connection!.execute('SET app.id_usuario = $idUsuario');
+      _ultimoIdUsuario = idUsuario;
     }
     return _connection!;
   }

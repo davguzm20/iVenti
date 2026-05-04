@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:provider/provider.dart';
-
 import 'package:iventi/features/sales/entities/VentaEntity.dart';
+import 'package:iventi/shared/di/ServiceLocator.dart';
 import 'package:iventi/features/sales/entities/DetalleVentaEntity.dart';
 import 'package:iventi/features/sales/controllers/VentaController.dart';
 import 'package:iventi/shared/widgets/ErrorDialog.dart';
 import 'package:iventi/shared/widgets/SuccessDialog.dart';
 import 'package:iventi/shared/widgets/CustomTextField.dart';
+import 'package:iventi/shared/config/AppColors.dart';
+import 'package:iventi/shared/config/ButtonStyles.dart';
+import 'package:iventi/shared/utils/DialogMessages.dart';
 
 class DetailsSalePage extends StatefulWidget {
   final int idVenta;
@@ -22,7 +24,7 @@ class _DetailsSalePageState extends State<DetailsSalePage> {
   VentaEntity? venta;
   List<DetalleVentaEntity> detalles = [];
 
-  VentaController get _ventaController => context.read<VentaController>();
+  VentaController get _ventaController => ServiceLocator.ventaController;
 
   @override
   void initState() {
@@ -45,9 +47,11 @@ class _DetailsSalePageState extends State<DetailsSalePage> {
       }
 
     } else {
+      final (title, desc) = DialogMessages.ventas.ventaNoEncontrada;
       ErrorDialog(
         context: context,
-        errorMessage: "No se pudo encontrar la venta.",
+        title: title,
+        description: desc,
       );
     }
   }
@@ -70,7 +74,7 @@ class _DetailsSalePageState extends State<DetailsSalePage> {
           return AlertDialog(
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(15),
-              side: const BorderSide(color: Color(0xFF493D9E), width: 2),
+              side: const BorderSide(color: AppColors.primary, width: 2),
             ),
             title: const Text(
               'Cancelar deuda',
@@ -78,7 +82,7 @@ class _DetailsSalePageState extends State<DetailsSalePage> {
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 20,
-                color: Color(0xFF493D9E),
+                color: AppColors.primary,
               ),
             ),
             content: Column(
@@ -118,32 +122,34 @@ class _DetailsSalePageState extends State<DetailsSalePage> {
                 _buildInfoRow(
                   'Monto faltante:',
                   'S/ ${montoFaltante.toStringAsFixed(2)}',
-                  color: const Color(0xFFE63946),
+                  color: AppColors.danger,
                 ),
               ],
             ),
             actions: [
               Center(
                 child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF2BBF55),
-                    foregroundColor: Colors.white,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 30,
-                      vertical: 12,
-                    ),
-                  ),
+                  style: ButtonStyles.success(),
                   onPressed: () async {
                     final monto =
                         double.tryParse(montoACancelarController.text) ?? 0.0;
 
-                    if (monto <= 0 || monto > montoPendiente) {
+                    if (monto <= 0) {
+                      final (title, desc) = DialogMessages.ventas.montoInvalido;
                       ErrorDialog(
                         context: context,
-                        errorMessage: 'Monto inválido',
+                        title: title,
+                        description: desc,
+                      );
+                      return;
+                    }
+
+                    if (monto > montoPendiente) {
+                      final (title, desc) = DialogMessages.ventas.montoExcedido;
+                      ErrorDialog(
+                        context: context,
+                        title: title,
+                        description: desc,
                       );
                       return;
                     }
@@ -156,9 +162,11 @@ class _DetailsSalePageState extends State<DetailsSalePage> {
                       );
 
                       if (mounted) {
+                        final (title, desc) = DialogMessages.ventas.pagoRegistrado;
                         SuccessDialog(
                           context: context,
-                          successMessage: 'Monto actualizado correctamente!',
+                          title: title,
+                          description: desc,
                           btnOkOnPress: () {
                             _obtenerDatos();
                             context.pop();
@@ -167,9 +175,11 @@ class _DetailsSalePageState extends State<DetailsSalePage> {
                       }
 
                     } catch (e) {
+                      final (title, desc) = DialogMessages.ventas.noSePudoRegistrarPago;
                       ErrorDialog(
                         context: context,
-                        errorMessage: 'Error al actualizar el monto',
+                        title: title,
+                        description: desc,
                       );
                     }
                   },
@@ -194,7 +204,7 @@ class _DetailsSalePageState extends State<DetailsSalePage> {
             style: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 16,
-              color: color ?? const Color(0xFF493D9E),
+              color: color ?? AppColors.primary,
             ),
           ),
           Text(value, style: TextStyle(fontSize: 16, color: color)),
@@ -251,7 +261,7 @@ class _DetailsSalePageState extends State<DetailsSalePage> {
                             'Fecha: ${venta!.creadoEn.toIso8601String().split('T')[0]}',
                             style: const TextStyle(
                               fontWeight: FontWeight.bold,
-                              color: Color(0xFF493D9E),
+                              color: AppColors.primary,
                               fontSize: 18,
                             ),
                           ),
@@ -260,7 +270,7 @@ class _DetailsSalePageState extends State<DetailsSalePage> {
                             'Hora: ${venta!.creadoEn.toIso8601String().split('T')[1].split('.')[0]}',
                             style: const TextStyle(
                               fontWeight: FontWeight.bold,
-                              color: Color(0xFF493D9E),
+                              color: AppColors.primary,
                               fontSize: 18,
                             ),
                           ),
@@ -269,7 +279,7 @@ class _DetailsSalePageState extends State<DetailsSalePage> {
                             'Monto total: ${venta!.montoTotal.toStringAsFixed(2)}',
                             style: const TextStyle(
                               fontWeight: FontWeight.bold,
-                              color: Color(0xFF493D9E),
+                              color: AppColors.primary,
                               fontSize: 18,
                             ),
                           ),
@@ -278,7 +288,7 @@ class _DetailsSalePageState extends State<DetailsSalePage> {
                             'Monto cancelado: ${venta!.montoCancelado.toStringAsFixed(2)}',
                             style: const TextStyle(
                               fontWeight: FontWeight.bold,
-                              color: Color(0xFF493D9E),
+                              color: AppColors.primary,
                               fontSize: 18,
                             ),
                           ),
@@ -287,7 +297,7 @@ class _DetailsSalePageState extends State<DetailsSalePage> {
                             'Tipo: ${venta!.esCredito ? "Crédito" : "Al contado"}',
                             style: const TextStyle(
                               fontWeight: FontWeight.bold,
-                              color: Color(0xFF493D9E),
+                              color: AppColors.primary,
                               fontSize: 18,
                             ),
                           ),
@@ -304,7 +314,7 @@ class _DetailsSalePageState extends State<DetailsSalePage> {
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
                           border: Border.all(
-                            color: const Color(0xFF493D9E),
+                            color: AppColors.primary,
                             width: 1.5,
                           ),
                         ),
@@ -312,7 +322,7 @@ class _DetailsSalePageState extends State<DetailsSalePage> {
                           border: TableBorder(
                             horizontalInside: BorderSide(
                               width: 1.5,
-                              color: Color(0xFF493D9E),
+                              color: AppColors.primary,
                             ),
                           ),
                           columnWidths: {
@@ -361,7 +371,7 @@ class _DetailsSalePageState extends State<DetailsSalePage> {
         textAlign: TextAlign.center,
         style: const TextStyle(
           fontWeight: FontWeight.bold,
-          color: Color(0xFF493D9E),
+          color: AppColors.primary,
           fontSize: 13,
         ),
       ),

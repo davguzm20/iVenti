@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:provider/provider.dart';
-
 import 'package:iventi/features/clients/entities/ClienteEntity.dart';
+import 'package:iventi/shared/di/ServiceLocator.dart';
 import 'package:iventi/features/clients/controllers/ClienteController.dart';
 import 'package:iventi/features/sales/entities/VentaEntity.dart';
 import 'package:iventi/features/sales/controllers/VentaController.dart';
 import 'package:iventi/shared/widgets/ErrorDialog.dart';
 import 'package:iventi/shared/widgets/SuccessDialog.dart';
 import 'package:iventi/shared/widgets/CustomTextField.dart';
+import 'package:iventi/shared/config/AppColors.dart';
+import 'package:iventi/shared/config/ButtonStyles.dart';
+import 'package:iventi/shared/utils/DialogMessages.dart';
 
 class DetailsClientPage extends StatefulWidget {
   final int idCliente;
@@ -24,8 +26,8 @@ class _DetailsClientPageState extends State<DetailsClientPage> {
   List<VentaEntity> ventasCliente = [];
 
   ClienteController get _clienteController =>
-      context.read<ClienteController>();
-  VentaController get _ventaController => context.read<VentaController>();
+      ServiceLocator.clienteController;
+  VentaController get _ventaController => ServiceLocator.ventaController;
 
   @override
   void initState() {
@@ -52,7 +54,12 @@ class _DetailsClientPageState extends State<DetailsClientPage> {
         ventasCliente.where((v) => v.montoCancelado < v.montoTotal).toList();
 
     if (ventasPendientes.isEmpty) {
-      ErrorDialog(context: context, errorMessage: 'No hay ventas pendientes.');
+      final (title, desc) = DialogMessages.clientes.sinPagosPendientes;
+      ErrorDialog(
+        context: context,
+        title: title,
+        description: desc,
+      );
       return;
     }
 
@@ -70,7 +77,7 @@ class _DetailsClientPageState extends State<DetailsClientPage> {
           return AlertDialog(
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(15),
-              side: const BorderSide(color: Color(0xFF493D9E), width: 2),
+              side: const BorderSide(color: AppColors.primary, width: 2),
             ),
             title: const Text(
               'Cancelar deuda',
@@ -78,7 +85,7 @@ class _DetailsClientPageState extends State<DetailsClientPage> {
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 20,
-                color: Color(0xFF493D9E),
+                color: AppColors.primary,
               ),
             ),
             content: Column(
@@ -93,7 +100,7 @@ class _DetailsClientPageState extends State<DetailsClientPage> {
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 16,
-                        color: Color(0xFF493D9E),
+                        color: AppColors.primary,
                       ),
                     ),
                     Text('S/ ${montoPendiente.toStringAsFixed(2)}'),
@@ -127,12 +134,12 @@ class _DetailsClientPageState extends State<DetailsClientPage> {
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 16,
-                        color: Color(0xFFE63946),
+                        color: AppColors.danger,
                       ),
                     ),
                     Text(
                       'S/ ${montoFaltante.toStringAsFixed(2)}',
-                      style: const TextStyle(fontSize: 16, color: Color(0xFFE63946)),
+                      style: const TextStyle(fontSize: 16, color: AppColors.danger),
                     ),
                   ],
                 ),
@@ -141,25 +148,27 @@ class _DetailsClientPageState extends State<DetailsClientPage> {
             actions: [
               Center(
                 child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF2BBF55),
-                    foregroundColor: Colors.white,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 30,
-                      vertical: 12,
-                    ),
-                  ),
+                  style: ButtonStyles.success(),
                   onPressed: () async {
                     final monto =
                         double.tryParse(montoACancelarController.text) ?? 0.0;
 
-                    if (monto <= 0 || monto > montoPendiente) {
+                    if (monto <= 0) {
+                      final (title, desc) = DialogMessages.clientes.montoInvalido;
                       ErrorDialog(
                         context: context,
-                        errorMessage: 'Monto inválido',
+                        title: title,
+                        description: desc,
+                      );
+                      return;
+                    }
+
+                    if (monto > montoPendiente) {
+                      final (title, desc) = DialogMessages.clientes.montoExcedido;
+                      ErrorDialog(
+                        context: context,
+                        title: title,
+                        description: desc,
                       );
                       return;
                     }
@@ -172,9 +181,11 @@ class _DetailsClientPageState extends State<DetailsClientPage> {
                       );
 
                       if (mounted) {
+                        final (title, desc) = DialogMessages.clientes.pagoRegistrado;
                         SuccessDialog(
                           context: context,
-                          successMessage: 'Monto actualizado correctamente!',
+                          title: title,
+                          description: desc,
                           btnOkOnPress: () {
                             _cargarDatos();
                             context.pop();
@@ -183,9 +194,11 @@ class _DetailsClientPageState extends State<DetailsClientPage> {
                       }
 
                     } catch (e) {
+                      final (title, desc) = DialogMessages.clientes.noSePudoRegistrarPago;
                       ErrorDialog(
                         context: context,
-                        errorMessage: 'Error al actualizar el monto',
+                        title: title,
+                        description: desc,
                       );
                     }
                   },
@@ -207,7 +220,7 @@ class _DetailsClientPageState extends State<DetailsClientPage> {
           cliente?.nombres ?? "---",
           style: const TextStyle(color: Colors.black),
         ),
-        backgroundColor: Colors.white,
+        backgroundColor: AppColors.background,
         elevation: 0,
         iconTheme: const IconThemeData(color: Colors.black),
         actions: [
@@ -243,7 +256,7 @@ class _DetailsClientPageState extends State<DetailsClientPage> {
                       'ID Cliente: ${cliente?.idCliente ?? '---'}',
                       style: const TextStyle(
                         fontWeight: FontWeight.bold,
-                        color: Color(0xFF493D9E),
+                        color: AppColors.primary,
                         fontSize: 18,
                       ),
                     ),
@@ -255,7 +268,7 @@ class _DetailsClientPageState extends State<DetailsClientPage> {
                     Text(
                       "Estado: ${cliente?.esDeudor == true ? "Deudor" : "Regular"}",
                       style: TextStyle(
-                        color: cliente?.esDeudor == true ? Colors.red : Colors.green,
+                        color: cliente?.esDeudor == true ? AppColors.danger : AppColors.success,
                       ),
                     ),
                   ],
@@ -287,7 +300,7 @@ class _DetailsClientPageState extends State<DetailsClientPage> {
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(12),
                             border: Border.all(
-                              color: const Color(0xFF493D9E),
+                              color: AppColors.primary,
                               width: 2,
                             ),
                             boxShadow: [
@@ -313,7 +326,7 @@ class _DetailsClientPageState extends State<DetailsClientPage> {
                                         style: const TextStyle(
                                           fontWeight: FontWeight.bold,
                                           fontSize: 20,
-                                          color: Color(0xFF493D9E),
+                                          color: AppColors.primary,
                                         ),
                                       ),
 
@@ -332,7 +345,7 @@ class _DetailsClientPageState extends State<DetailsClientPage> {
                                                   venta.montoCancelado <
                                                       venta.montoTotal
                                               ? Colors.red
-                                              : const Color(0xFF2BBF55),
+                                              : AppColors.success,
                                           fontWeight: FontWeight.bold,
                                         ),
                                       ),
@@ -341,11 +354,7 @@ class _DetailsClientPageState extends State<DetailsClientPage> {
                                 ),
 
                                 ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: const Color(0xFF2BBF55),
-                                    foregroundColor: Colors.white,
-                                    elevation: 6,
-                                  ),
+                  style: ButtonStyles.success(),
                                   onPressed: () => context.push(
                                     '/sales/details-sale/${venta.idVenta}',
                                   ),
