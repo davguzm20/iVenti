@@ -4,14 +4,15 @@ import 'package:flutter/material.dart';
 class ErrorDialog extends AwesomeDialog {
   ErrorDialog({
     required super.context,
-    required String errorMessage,
-    dynamic Function()? okOnPress,
+    required String title,
+    required String description,
+    dynamic Function()? btnOkOnPress,
   }) : super(
           dialogType: DialogType.error,
           animType: AnimType.topSlide,
-          title: "Error",
-          desc: errorMessage,
-          btnOkOnPress: okOnPress ?? () {},
+          title: title,
+          desc: description,
+          btnOkOnPress: btnOkOnPress ?? () {},
           btnOkIcon: Icons.cancel,
           btnOkColor: Colors.red,
         ) {

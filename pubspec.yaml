@@ -47,3 +47,4 @@ flutter:
     - "lib/.env"
     - "lib/assets/imagenes/"
     - "lib/assets/iconos/"
+    - "lib/shared/utils/messages.arb"

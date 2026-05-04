@@ -1,0 +1,106 @@
+{
+  "@@locale": "es",
+  "@@info": "Mensajes de diálogo del sistema iVenti. Editar aquí cambia los mensajes en toda la app.",
+
+  "authPinInvalidoTitulo": "PIN inválido",
+  "authPinInvalidoDescripcion": "El PIN debe tener exactamente 6 dígitos",
+
+  "authPinNoCoincideTitulo": "PIN no coincide",
+  "authPinNoCoincideDescripcion": "Los PIN ingresados no coinciden",
+
+  "authNoSePudoCrearPINTitulo": "No se pudo crear el PIN",
+  "authNoSePudoCrearPINDescripcion": "No pudimos crear tu PIN, inténtalo nuevamente",
+
+  "authCodigoEnviadoTitulo": "Código enviado",
+  "authCodigoEnviadoDescripcion": "Enviamos un código de verificación al correo {email}",
+
+  "authNombreRequeridoTitulo": "Nombre requerido",
+  "authNombreRequeridoDescripcion": "Ingresa tu nombre para continuar",
+
+  "authConfiguracionCompletadaTitulo": "Configuración completada",
+  "authConfiguracionCompletadaDescripcion": "Tu cuenta se creó correctamente, ya puedes iniciar sesión con tu PIN",
+
+  "authCuentaNoEncontradaTitulo": "Cuenta no encontrada",
+  "authCuentaNoEncontradaDescripcion": "No encontramos una cuenta con este correo, crearemos una cuenta nueva para ti",
+
+  "authCorreoNoDisponibleTitulo": "Correo no disponible",
+  "authCorreoNoDisponibleDescripcion": "No pudimos recuperar el correo de tu registro, intenta registrarte de nuevo desde el inicio",
+
+  "authDiasVencimientoRequeridoTitulo": "Campo incompleto",
+  "authDiasVencimientoRequeridoDescripcion": "Ingresa los días antes del vencimiento para recibir alertas",
+
+  "authStockMinimoRequeridoTitulo": "Campo incompleto",
+  "authStockMinimoRequeridoDescripcion": "Ingresa el stock mínimo para recibir alertas de inventario",
+
+  "ventasMontoInsuficienteTitulo": "Monto insuficiente",
+  "ventasMontoInsuficienteDescripcion": "El monto recibido no cubre el total de la venta",
+
+  "ventasClienteRequeridoTitulo": "Cliente requerido",
+  "ventasClienteRequeridoDescripcion": "Selecciona o registra un cliente para continuar",
+
+  "ventasCamposIncompletosTitulo": "Campos incompletos",
+  "ventasCamposIncompletosDescripcion": "Completa los campos obligatorios",
+
+  "ventasNoSePudoRegistrarClienteTitulo": "No se pudo registrar el cliente",
+  "ventasNoSePudoRegistrarClienteDescripcion": "No pudimos guardar la información del cliente",
+
+  "ventasClienteNoEncontradoTitulo": "Cliente no encontrado",
+  "ventasClienteNoEncontradoDescripcion": "No pudimos identificar al cliente seleccionado",
+
+  "ventasVentaRegistradaTitulo": "Venta registrada",
+  "ventasVentaRegistradaDescripcion": "La venta se registró correctamente",
+
+  "ventasNoSePudoRegistrarVentaTitulo": "No se pudo registrar la venta",
+  "ventasNoSePudoRegistrarVentaDescripcion": "No pudimos registrar la venta",
+
+  "ventasSinProductosTitulo": "Sin productos",
+  "ventasSinProductosDescripcion": "Agrega al menos un producto",
+
+  "ventasVentaNoEncontradaTitulo": "Venta no encontrada",
+  "ventasVentaNoEncontradaDescripcion": "No encontramos la venta solicitada",
+
+  "ventasMontoInvalidoTitulo": "Monto inválido",
+  "ventasMontoInvalidoDescripcion": "Ingresa un monto mayor a cero",
+
+  "ventasMontoExcedidoTitulo": "Monto excedido",
+  "ventasMontoExcedidoDescripcion": "El monto supera el saldo pendiente",
+
+  "ventasPagoRegistradoTitulo": "Pago registrado",
+  "ventasPagoRegistradoDescripcion": "El pago se registró correctamente",
+
+  "ventasNoSePudoRegistrarPagoTitulo": "No se pudo registrar el pago",
+  "ventasNoSePudoRegistrarPagoDescripcion": "No pudimos registrar el pago",
+
+  "inventarioCamposIncompletosTitulo": "Campos incompletos",
+  "inventarioCamposIncompletosDescripcion": "Completa los campos obligatorios",
+
+  "inventarioStockMinimoInvalidoTitulo": "Stock mínimo inválido",
+  "inventarioStockMinimoInvalidoDescripcion": "El stock mínimo debe ser mayor a cero",
+
+  "inventarioPrecioInvalidoTitulo": "Precio inválido",
+  "inventarioPrecioInvalidoDescripcion": "El precio debe ser mayor a cero",
+
+  "inventarioProductoRegistradoTitulo": "Producto registrado",
+  "inventarioProductoRegistradoDescripcion": "El producto se registró correctamente",
+
+  "inventarioNoSePudoRegistrarProductoTitulo": "No se pudo registrar el producto",
+  "inventarioNoSePudoRegistrarProductoDescripcion": "No pudimos guardar el producto",
+
+  "inventarioProductoNoEncontradoTitulo": "Producto no encontrado",
+  "inventarioProductoNoEncontradoDescripcion": "No encontramos el producto solicitado",
+
+  "clientesSinPagosPendientesTitulo": "Sin pagos pendientes",
+  "clientesSinPagosPendientesDescripcion": "El cliente no tiene pagos pendientes",
+
+  "clientesMontoInvalidoTitulo": "Monto inválido",
+  "clientesMontoInvalidoDescripcion": "Ingresa un monto mayor a cero",
+
+  "clientesMontoExcedidoTitulo": "Monto excedido",
+  "clientesMontoExcedidoDescripcion": "El monto supera el saldo pendiente",
+
+  "clientesPagoRegistradoTitulo": "Pago registrado",
+  "clientesPagoRegistradoDescripcion": "El pago se registró correctamente",
+
+  "clientesNoSePudoRegistrarPagoTitulo": "No se pudo registrar el pago",
+  "clientesNoSePudoRegistrarPagoDescripcion": "No pudimos registrar el pago"
+}

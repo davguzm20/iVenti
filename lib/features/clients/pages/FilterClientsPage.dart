@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:iventi/shared/config/AppColors.dart';
+import 'package:iventi/shared/config/ButtonStyles.dart';
 
 class FilterClientsPage extends StatefulWidget {
   final bool? esDeudorInicial;
@@ -43,11 +45,7 @@ class _FilterClientsPageState extends State<FilterClientsPage> {
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF2BBF55),
-                  foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(vertical: 14),
-                ),
+                style: ButtonStyles.success(),
                 onPressed: () => context.pop(esDeudor),
                 child: const Text("Aplicar filtros", style: TextStyle(fontSize: 16)),
               ),
@@ -62,11 +60,11 @@ class _FilterClientsPageState extends State<FilterClientsPage> {
     return FilterChip(
       label: Text(label),
       selected: selected,
-      selectedColor: const Color(0xFF493D9E),
+      selectedColor: AppColors.primary,
       backgroundColor: Colors.grey[200],
       labelStyle: TextStyle(
         fontWeight: FontWeight.bold,
-        color: selected ? Colors.white : const Color(0xFF493D9E),
+        color: selected ? Colors.white : AppColors.primary,
       ),
       onSelected: (_) => onTap(),
     );

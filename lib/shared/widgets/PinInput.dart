@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pinput/pinput.dart';
+import 'package:iventi/shared/config/AppColors.dart';
 
 class PinInput extends StatelessWidget {
   final TextEditingController? controller;
@@ -19,8 +20,8 @@ class PinInput extends StatelessWidget {
     this.validator,
   });
 
-  static const Color _focusedBorderColor = Color.fromRGBO(64, 34, 197, 1);
-  static const Color _borderColor = Color.fromRGBO(98, 72, 190, 0.4);
+  static const Color _focusedBorderColor = AppColors.primary;
+  static const Color _borderColor = AppColors.border;
 
   PinTheme _defaultTheme() {
     return PinTheme(
@@ -28,7 +29,7 @@ class PinInput extends StatelessWidget {
       height: 75,
       textStyle: const TextStyle(
         fontSize: 22,
-        color: Color.fromRGBO(30, 60, 87, 1),
+        color: AppColors.textDark,
       ),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(15),
@@ -45,6 +46,7 @@ class PinInput extends StatelessWidget {
       controller: controller,
       length: length,
       obscureText: obscureText,
+      autofocus: false,
       defaultPinTheme: defaultPinTheme,
       separatorBuilder: (index) => const SizedBox(width: 13),
       onCompleted: onCompleted,
@@ -69,13 +71,13 @@ class PinInput extends StatelessWidget {
       ),
       submittedPinTheme: defaultPinTheme.copyWith(
         decoration: defaultPinTheme.decoration!.copyWith(
-          color: const Color.fromARGB(50, 76, 175, 80),
+          color: AppColors.success.withOpacity(0.2),
           borderRadius: BorderRadius.circular(10),
-          border: Border.all(color: Colors.green, width: 2),
+          border: Border.all(color: AppColors.success, width: 2),
         ),
       ),
       errorPinTheme: defaultPinTheme.copyBorderWith(
-        border: Border.all(color: Colors.redAccent),
+        border: Border.all(color: AppColors.danger),
       ),
     );
   }

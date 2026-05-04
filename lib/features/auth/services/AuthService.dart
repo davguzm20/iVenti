@@ -16,8 +16,11 @@ class AuthService {
       final request = LoginRequest(email: email, pin: pin);
       return await _usuarioRepository.validarCredenciales(request);
 
-    } on DatabaseException catch (e) {
-      throw BusinessException('Error al iniciar sesion: ${e.mensaje}');
+    } on DatabaseException {
+      throw BusinessException(
+        'Error de conexión',
+        descripcion: 'No pudimos conectar con la base de datos. Verifica tu conexión a internet y vuelve a intentarlo. Si el problema persiste, contacta al soporte técnico.',
+      );
     }
   }
 
@@ -25,14 +28,20 @@ class AuthService {
     final usuarioExistente = await _usuarioRepository.obtenerUsuarioPorEmail(request.email);
 
     if (usuarioExistente != null) {
-      throw BusinessException('El email ya esta registrado');
+      throw BusinessException(
+        'Correo ya registrado',
+        descripcion: 'Este correo ya tiene una cuenta. Si olvidaste tu PIN, toca "¿Olvidaste tu PIN?" en la pantalla de inicio de sesión.',
+      );
     }
 
     try {
       return await _usuarioRepository.crearUsuario(request);
 
-    } on DatabaseException catch (e) {
-      throw BusinessException('Error al registrar usuario: ${e.mensaje}');
+    } on DatabaseException {
+      throw BusinessException(
+        'Error de conexión',
+        descripcion: 'No pudimos completar el registro. Verifica tu conexión a internet y vuelve a intentarlo.',
+      );
     }
   }
 
@@ -41,13 +50,19 @@ class AuthService {
       final usuario = await _usuarioRepository.obtenerUsuarioPorId(idUsuario);
 
       if (usuario == null) {
-        throw BusinessException('Usuario no encontrado');
+        throw BusinessException(
+          'Cuenta no encontrada',
+          descripcion: 'Es posible que la cuenta haya sido desactivada. Contacta al administrador si crees que esto es un error.',
+        );
       }
 
       return usuario;
 
-    } on DatabaseException catch (e) {
-      throw BusinessException('Error al obtener usuario: ${e.mensaje}');
+    } on DatabaseException {
+      throw BusinessException(
+        'Error de conexión',
+        descripcion: 'No pudimos verificar tu información. Revisa tu conexión a internet y vuelve a intentarlo.',
+      );
     }
   }
 
@@ -56,32 +71,47 @@ class AuthService {
       final usuario = await _usuarioRepository.obtenerUsuarioPorEmail(email);
 
       if (usuario == null) {
-        throw BusinessException('Usuario no encontrado');
+        throw BusinessException(
+          'Correo no registrado',
+          descripcion: 'No encontramos una cuenta con este correo. Si aún no te registras, toca "¿Eres nuevo?" en la pantalla de bienvenida.',
+        );
       }
 
       return usuario;
 
-    } on DatabaseException catch (e) {
-      throw BusinessException('Error al obtener usuario: ${e.mensaje}');
+    } on DatabaseException {
+      throw BusinessException(
+        'Error de conexión',
+        descripcion: 'No pudimos verificar tu información. Revisa tu conexión a internet y vuelve a intentarlo.',
+      );
     }
   }
 
   Future<void> cambiarPin(int idUsuario, String pinActual, String pinNuevo) async {
     if (pinNuevo.length != 6) {
-      throw ValidationException('El nuevo PIN debe tener 6 digitos');
+      throw ValidationException(
+        'PIN inválido',
+        descripcion: 'El PIN debe tener exactamente 6 dígitos numéricos.',
+      );
     }
 
     final usuario = await obtenerUsuarioPorId(idUsuario);
 
     if (usuario.pin != pinActual) {
-      throw BusinessException('El PIN actual es incorrecto');
+      throw BusinessException(
+        'PIN incorrecto',
+        descripcion: 'El PIN actual que ingresaste no coincide. Verifica e intenta de nuevo.',
+      );
     }
 
     try {
       await _usuarioRepository.actualizarPIN(idUsuario, pinNuevo);
 
-    } on DatabaseException catch (e) {
-      throw BusinessException('Error al cambiar PIN: ${e.mensaje}');
+    } on DatabaseException {
+      throw BusinessException(
+        'Error de conexión',
+        descripcion: 'No pudimos actualizar tu PIN. Verifica tu conexión a internet y vuelve a intentarlo.',
+      );
     }
   }
 
@@ -91,14 +121,20 @@ class AuthService {
 
   Future<void> recuperarPin(int idUsuario, String pinNuevo) async {
     if (pinNuevo.length != 6) {
-      throw ValidationException('El PIN debe tener 6 digitos');
+      throw ValidationException(
+        'PIN inválido',
+        descripcion: 'El PIN debe tener exactamente 6 dígitos numéricos.',
+      );
     }
 
     try {
       await _usuarioRepository.actualizarPIN(idUsuario, pinNuevo);
 
-    } on DatabaseException catch (e) {
-      throw BusinessException('Error al recuperar PIN: ${e.mensaje}');
+    } on DatabaseException {
+      throw BusinessException(
+        'Error de conexión',
+        descripcion: 'No pudimos recuperar tu PIN. Verifica tu conexión a internet y vuelve a intentarlo.',
+      );
     }
   }
 
@@ -106,8 +142,11 @@ class AuthService {
     try {
       return await _usuarioRepository.actualizarUsuario(idUsuario, nombre: nombre, email: email);
 
-    } on DatabaseException catch (e) {
-      throw BusinessException('Error al actualizar perfil: ${e.mensaje}');
+    } on DatabaseException {
+      throw BusinessException(
+        'Error de conexión',
+        descripcion: 'No pudimos guardar los cambios. Verifica tu conexión a internet y vuelve a intentarlo.',
+      );
     }
   }
 
@@ -115,8 +154,11 @@ class AuthService {
     try {
       await _usuarioRepository.desactivarUsuario(idUsuario);
 
-    } on DatabaseException catch (e) {
-      throw BusinessException('Error al desactivar usuario: ${e.mensaje}');
+    } on DatabaseException {
+      throw BusinessException(
+        'Error de conexión',
+        descripcion: 'No pudimos desactivar la cuenta. Verifica tu conexión a internet y vuelve a intentarlo.',
+      );
     }
   }
 }

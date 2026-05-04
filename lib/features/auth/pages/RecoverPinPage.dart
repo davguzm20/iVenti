@@ -3,7 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:iventi/shared/services/MailerService.dart';
+import 'package:iventi/shared/config/AppColors.dart';
+import 'package:iventi/shared/config/ButtonStyles.dart';
 import 'package:iventi/shared/widgets/PinInput.dart';
+import 'package:iventi/shared/widgets/BackButton.dart';
 
 class RecoverPinPage extends StatefulWidget {
   const RecoverPinPage({super.key});
@@ -37,7 +40,7 @@ class _RecoverPinPageState extends State<RecoverPinPage> {
           mainAxisSize: MainAxisSize.min,
           children: const [
             CircularProgressIndicator(
-              valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF4C10BB)),
+              valueColor: AlwaysStoppedAnimation<Color>(AppColors.primary),
               strokeWidth: 3.5,
             ),
             SizedBox(height: 20),
@@ -45,7 +48,7 @@ class _RecoverPinPageState extends State<RecoverPinPage> {
                 style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
-                    color: Color(0xFF1E3C57))),
+                    color: AppColors.textDark)),
             SizedBox(height: 5),
             Text("Por favor, espere un momento",
                 style: TextStyle(fontSize: 14, color: Colors.black54)),
@@ -111,20 +114,9 @@ class _RecoverPinPageState extends State<RecoverPinPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        centerTitle: true,
-        title: const Text(
-          "Confirmar Código",
-          style: TextStyle(
-            fontSize: 22,
-            fontWeight: FontWeight.w600,
-            color: Color.fromRGBO(30, 60, 87, 1),
-          ),
-        ),
-      ),
-      body: Center(
+      body: Stack(
+        children: [
+          Center(
         child: SingleChildScrollView(
           child: ConstrainedBox(
             constraints: const BoxConstraints(maxWidth: 400),
@@ -144,7 +136,7 @@ class _RecoverPinPageState extends State<RecoverPinPage> {
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
-                      color: Color.fromRGBO(30, 60, 87, 1),
+            color: AppColors.textDark,
                     ),
                     textAlign: TextAlign.center,
                   ),
@@ -162,27 +154,18 @@ class _RecoverPinPageState extends State<RecoverPinPage> {
                   const SizedBox(height: 30),
 
                   ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.green,
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 12,
-                        horizontal: 35,
-                      ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                    ),
+                    style: ButtonStyles.success(),
                     onPressed: _validateCode,
-                    child: const Text(
-                      "Confirmar",
-                      style: TextStyle(color: Colors.white),
-                    ),
+                    child: const Text("Confirmar"),
                   ),
                 ],
               ),
             ),
           ),
         ),
+        ),
+        BackButtonWidget(),
+        ],
       ),
     );
   }

@@ -36,15 +36,26 @@ class AppRoutes {
     debugLogDiagnostics: true,
     navigatorKey: _rootNavigatorKey,
     redirect: (context, state) async {
-      if (state.matchedLocation == '/login' || state.matchedLocation == '/welcome') {
+      final path = state.matchedLocation;
+
+      if (path == '/welcome') {
         try {
           await ServiceLocator.authController.obtenerUsuarioRegistrado();
+          return '/login';
         } catch (_) {
-          if (state.matchedLocation != '/welcome') return '/welcome';
           return null;
         }
-        if (state.matchedLocation == '/welcome') return '/login';
       }
+
+      if (path == '/login') {
+        try {
+          await ServiceLocator.authController.obtenerUsuarioRegistrado();
+          return null;
+        } catch (_) {
+          return '/welcome';
+        }
+      }
+
       return null;
     },
     routes: <RouteBase>[

@@ -2,7 +2,7 @@ import '../enums/TipoRol.dart';
 
 class UsuarioEntity {
   final int? idUsuario;
-  final TipoRol idRol;
+  final TipoRol rol;
   final String nombre;
   final String email;
   final String pin;
@@ -12,7 +12,7 @@ class UsuarioEntity {
 
   UsuarioEntity({
     this.idUsuario,
-    required this.idRol,
+    required this.rol,
     required this.nombre,
     required this.email,
     required this.pin,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:iventi/shared/config/AppColors.dart';
 
 class HomePage extends StatelessWidget {
   final StatefulNavigationShell navigationShell;
@@ -27,7 +28,7 @@ class HomePage extends StatelessWidget {
           padding: EdgeInsets.zero,
           children: [
             DrawerHeader(
-              decoration: const BoxDecoration(color: Color(0xFF493D9E)),
+              decoration: const BoxDecoration(color: AppColors.primary),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.end,
@@ -38,7 +39,7 @@ class HomePage extends StatelessWidget {
                     child: Icon(
                       Icons.person,
                       size: 40,
-                      color: Color(0xFF493D9E),
+                      color: AppColors.primary,
                     ),
                   ),
                   SizedBox(height: 10),

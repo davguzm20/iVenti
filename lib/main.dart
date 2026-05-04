@@ -3,6 +3,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
 
 import 'package:iventi/shared/di/ServiceLocator.dart';
+import 'package:iventi/shared/utils/DialogMessages.dart';
 import 'package:iventi/AppRoutes.dart';
 
 Future<void> main() async {
@@ -10,6 +11,7 @@ Future<void> main() async {
   await dotenv.load(fileName: "lib/.env");
 
   await ServiceLocator.initialize();
+  await DialogMessages.init();
 
   runApp(
     MultiProvider(

@@ -4,8 +4,14 @@ import 'package:go_router/go_router.dart';
 import 'package:iventi/shared/exceptions/AppException.dart';
 import 'package:iventi/shared/widgets/ErrorDialog.dart';
 import 'package:iventi/shared/widgets/SuccessDialog.dart';
+import 'package:iventi/shared/config/AppColors.dart';
+import 'package:iventi/shared/config/ButtonStyles.dart';
+import 'package:iventi/shared/di/ServiceLocator.dart';
+import 'package:go_router/go_router.dart';
+import 'package:iventi/shared/widgets/BackButton.dart';
+import 'package:iventi/shared/utils/DialogMessages.dart';
 import 'package:iventi/features/auth/dtos/requests/CrearUsuarioRequest.dart';
-import 'package:iventi/features/auth/enums/TipoRol.dart';
+
 import 'package:iventi/features/auth/controllers/AuthController.dart';
 import 'package:iventi/features/config/controllers/ConfiguracionController.dart';
 import 'package:iventi/features/config/dtos/requests/CrearConfiguracionRequest.dart';
@@ -55,7 +61,20 @@ class _SetupConfigPageState extends State<SetupConfigPage> {
     FocusScope.of(context).unfocus();
 
     if (nombreController.text.trim().isEmpty) {
-      ErrorDialog(context: context, errorMessage: 'Ingrese su nombre');
+      final (title, desc) = DialogMessages.auth.nombreRequerido;
+      ErrorDialog(context: context, title: title, description: desc);
+      return;
+    }
+
+    if (diasVencimientoController.text.trim().isEmpty) {
+      final (title, desc) = DialogMessages.auth.diasVencimientoRequerido;
+      ErrorDialog(context: context, title: title, description: desc);
+      return;
+    }
+
+    if (stockMinimoController.text.trim().isEmpty) {
+      final (title, desc) = DialogMessages.auth.stockMinimoRequerido;
+      ErrorDialog(context: context, title: title, description: desc);
       return;
     }
 
@@ -64,7 +83,6 @@ class _SetupConfigPageState extends State<SetupConfigPage> {
     try {
       final usuario = await widget.authController.registrar(
         CrearUsuarioRequest(
-          idRol: TipoRol.OPERATIVO,
           nombre: nombreController.text.trim(),
           email: widget.email,
           pin: widget.pin,
@@ -94,23 +112,30 @@ class _SetupConfigPageState extends State<SetupConfigPage> {
       if (mounted) {
         final timestamp = DateTime.now().millisecondsSinceEpoch;
 
+        final (title, desc) = DialogMessages.auth.configuracionCompletada;
         SuccessDialog(
           context: context,
-          successMessage: 'Usuario y configuración inicial creados correctamente',
+          title: title,
+          description: desc,
           btnOkOnPress: () => context.go('/login', extra: timestamp),
         );
       }
 
     } on AppException catch (e) {
       if (mounted) {
-        ErrorDialog(context: context, errorMessage: e.mensaje);
+        ErrorDialog(
+          context: context,
+          title: e.mensaje,
+          description: e.descripcion ?? 'No pudimos completar la configuración, verifica tus datos e intenta de nuevo',
+        );
       }
 
     } catch (e) {
       if (mounted) {
         ErrorDialog(
           context: context,
-          errorMessage: 'Error al guardar configuración: $e',
+          title: 'Error inesperado',
+          description: 'Ocurrió un error al guardar la configuración, intenta de nuevo',
         );
       }
     }
@@ -121,7 +146,9 @@ class _SetupConfigPageState extends State<SetupConfigPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
+      body: Stack(
+        children: [
+          Center(
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 40),
           child: Column(
@@ -142,15 +169,8 @@ class _SetupConfigPageState extends State<SetupConfigPage> {
                 style: TextStyle(
                   fontSize: 22,
                   fontWeight: FontWeight.bold,
-                  color: Color.fromRGBO(30, 60, 87, 1),
+                  color: AppColors.textDark,
                 ),
-              ),
-
-              const SizedBox(height: 8),
-
-              const Text(
-                'Estos datos podrás modificarlos después.',
-                style: TextStyle(fontSize: 14, color: Colors.black54),
               ),
 
               const SizedBox(height: 30),
@@ -159,14 +179,9 @@ class _SetupConfigPageState extends State<SetupConfigPage> {
                 controller: nombreController,
                 decoration: InputDecoration(
                   labelText: 'Nombre del usuario *',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(15),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(15),
-                    borderSide: const BorderSide(
-                      color: Color.fromRGBO(64, 34, 197, 1),
-                    ),
+                  border: const OutlineInputBorder(),
+                  focusedBorder: const OutlineInputBorder(
+                    borderSide: BorderSide(color: AppColors.primary),
                   ),
                 ),
               ),
@@ -177,15 +192,10 @@ class _SetupConfigPageState extends State<SetupConfigPage> {
                 controller: diasVencimientoController,
                 keyboardType: TextInputType.number,
                 decoration: InputDecoration(
-                  labelText: 'Días antes del vencimiento',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(15),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(15),
-                    borderSide: const BorderSide(
-                      color: Color.fromRGBO(64, 34, 197, 1),
-                    ),
+                  labelText: 'Días antes del vencimiento *',
+                  border: const OutlineInputBorder(),
+                  focusedBorder: const OutlineInputBorder(
+                    borderSide: BorderSide(color: AppColors.primary),
                   ),
                 ),
               ),
@@ -196,15 +206,10 @@ class _SetupConfigPageState extends State<SetupConfigPage> {
                 controller: stockMinimoController,
                 keyboardType: TextInputType.number,
                 decoration: InputDecoration(
-                  labelText: 'Stock mínimo para alerta',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(15),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(15),
-                    borderSide: const BorderSide(
-                      color: Color.fromRGBO(64, 34, 197, 1),
-                    ),
+                  labelText: 'Stock mínimo para alerta *',
+                  border: const OutlineInputBorder(),
+                  focusedBorder: const OutlineInputBorder(
+                    borderSide: BorderSide(color: AppColors.primary),
                   ),
                 ),
               ),
@@ -214,19 +219,7 @@ class _SetupConfigPageState extends State<SetupConfigPage> {
               isLoading
                   ? const CircularProgressIndicator()
                   : ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.green,
-                        foregroundColor: Colors.white,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          side: const BorderSide(
-                              color: Colors.green, width: 2),
-                        ),
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 12,
-                          horizontal: 35,
-                        ),
-                      ),
+                      style: ButtonStyles.success(),
                       onPressed: _completarSetup,
                       child: const Text('Finalizar'),
                     ),
@@ -235,6 +228,9 @@ class _SetupConfigPageState extends State<SetupConfigPage> {
             ],
           ),
         ),
+        ),
+        BackButtonWidget(),
+        ],
       ),
     );
   }

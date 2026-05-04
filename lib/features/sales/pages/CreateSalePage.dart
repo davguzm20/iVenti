@@ -4,6 +4,9 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iventi/shared/widgets/CustomTextField.dart';
 import 'package:iventi/shared/widgets/ErrorDialog.dart';
+import 'package:iventi/shared/config/AppColors.dart';
+import 'package:iventi/shared/config/ButtonStyles.dart';
+import 'package:iventi/shared/utils/DialogMessages.dart';
 
 class CreateSalePage extends StatefulWidget {
   const CreateSalePage({super.key});
@@ -48,7 +51,7 @@ class _CreateSalePageState extends State<CreateSalePage> {
                           children: [
                             SlidableAction(
                               onPressed: (_) => setState(() => productosVenta.removeAt(index)),
-                              backgroundColor: Colors.red, foregroundColor: Colors.white,
+                              backgroundColor: AppColors.danger, foregroundColor: Colors.white,
                               icon: Icons.delete, label: 'Eliminar',
                             ),
                           ],
@@ -58,7 +61,7 @@ class _CreateSalePageState extends State<CreateSalePage> {
                           padding: const EdgeInsets.all(10),
                           decoration: BoxDecoration(
                             color: Colors.white, borderRadius: BorderRadius.circular(12),
-                            border: Border.all(color: const Color.fromARGB(255, 124, 33, 243), width: 2),
+                            border: Border.all(color: AppColors.primary, width: 2),
                           ),
                           child: Row(
                             children: [
@@ -95,9 +98,9 @@ class _CreateSalePageState extends State<CreateSalePage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    const Text("Total: ", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Color.fromARGB(255, 124, 33, 243))),
+                    const Text("Total: ", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: AppColors.primary)),
                     Container(
-                      decoration: BoxDecoration(color: const Color.fromARGB(255, 124, 33, 243), borderRadius: BorderRadius.circular(10)),
+                      decoration: BoxDecoration(color: AppColors.primary, borderRadius: BorderRadius.circular(10)),
                       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                       child: Text(_calcularTotalVenta().toStringAsFixed(2), style: const TextStyle(fontSize: 16, color: Colors.white)),
                     ),
@@ -107,15 +110,18 @@ class _CreateSalePageState extends State<CreateSalePage> {
                 ElevatedButton(
                   onPressed: () async {
                     if (productosVenta.isEmpty) {
-                      ErrorDialog(context: context, errorMessage: "No se ha seleccionado ningun producto");
+                      final (title, desc) = DialogMessages.ventas.sinProductos;
+                      ErrorDialog(
+                        context: context,
+                        title: title,
+                        description: desc,
+                      );
                       return;
                     }
                     await context.push('/sales/create-sale/payment', extra: productosVenta);
                   },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.green,
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-                    padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
+                  style: ButtonStyles.success(borderRadius: 30).copyWith(
+                    padding: WidgetStateProperty.all(const EdgeInsets.symmetric(horizontal: 40, vertical: 15)),
                   ),
                   child: const Text("Confirmar", style: TextStyle(color: Colors.white, fontSize: 16)),
                 ),

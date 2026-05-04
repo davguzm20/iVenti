@@ -4,13 +4,14 @@ import 'package:flutter/material.dart';
 class SuccessDialog extends AwesomeDialog {
   SuccessDialog({
     required super.context,
-    required String successMessage,
+    required String title,
+    required String description,
     void Function()? btnOkOnPress,
   }) : super(
           dialogType: DialogType.success,
           animType: AnimType.topSlide,
-          title: "Éxito",
-          desc: successMessage,
+          title: title,
+          desc: description,
           btnOkOnPress: btnOkOnPress ?? () {},
           btnOkIcon: Icons.check_circle,
           btnOkColor: Colors.green,

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:iventi/shared/config/AppColors.dart';
+import 'package:iventi/shared/config/ButtonStyles.dart';
 
 class FilterSalesPage extends StatefulWidget {
   final bool? esAlContado;
@@ -71,14 +73,14 @@ class _FilterSalesState extends State<FilterSalesPage> {
                     SwitchListTile(
                       title: const Text("Filtrar por Tipo de Pago", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
                       subtitle: const Text("Activa esta opción para filtrar por tipo de pago."),
-                      value: habilitarFiltroPago, activeColor: const Color(0xFF2BBF55),
+                      value: habilitarFiltroPago, activeColor: AppColors.success,
                       onChanged: (value) => setState(() { habilitarFiltroPago = value; esAlContado = value ? esAlContado : null; }),
                     ),
                     if (habilitarFiltroPago) ...[
                       const Divider(),
-                      RadioListTile<bool>(title: const Text("Al contado"), value: true, groupValue: esAlContado, activeColor: const Color(0xFF2BBF55),
+                      RadioListTile<bool>(title: const Text("Al contado"), value: true, groupValue: esAlContado, activeColor: AppColors.success,
                           onChanged: (value) => setState(() => esAlContado = value)),
-                      RadioListTile<bool>(title: const Text("Crédito"), value: false, groupValue: esAlContado, activeColor: const Color(0xFF2BBF55),
+                      RadioListTile<bool>(title: const Text("Crédito"), value: false, groupValue: esAlContado, activeColor: AppColors.success,
                           onChanged: (value) => setState(() => esAlContado = value)),
                     ],
                   ],
@@ -96,7 +98,7 @@ class _FilterSalesState extends State<FilterSalesPage> {
                     SwitchListTile(
                       title: const Text("Filtrar por Rango de Fechas", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
                       subtitle: const Text("Activa esta opción para filtrar por rango de fechas."),
-                      value: habilitarFiltroFecha, activeColor: const Color(0xFF2BBF55),
+                      value: habilitarFiltroFecha, activeColor: AppColors.success,
                       onChanged: (value) => setState(() {
                         habilitarFiltroFecha = value;
                         if (!value) { fechaInicioController.clear(); fechaFinalController.clear(); fechaInicio = null; fechaFinal = null; }
@@ -110,7 +112,7 @@ class _FilterSalesState extends State<FilterSalesPage> {
                           labelText: 'Fecha Inicio',
                           suffixIcon: fechaInicio != null
                               ? IconButton(icon: const Icon(Icons.clear, color: Colors.red), onPressed: () => setState(() { fechaInicio = null; fechaInicioController.clear(); }))
-                              : const Icon(Icons.calendar_today, color: Color(0xFF493D9E)),
+                              : const Icon(Icons.calendar_today, color: AppColors.primary),
                           border: OutlineInputBorder(borderRadius: BorderRadius.circular(5)),
                         ),
                         readOnly: true, onTap: () => seleccionarFecha(true),
@@ -122,7 +124,7 @@ class _FilterSalesState extends State<FilterSalesPage> {
                           labelText: 'Fecha Final',
                           suffixIcon: fechaFinal != null
                               ? IconButton(icon: const Icon(Icons.clear, color: Colors.red), onPressed: () => setState(() { fechaFinal = null; fechaFinalController.clear(); }))
-                              : const Icon(Icons.calendar_today, color: Color(0xFF493D9E)),
+                              : const Icon(Icons.calendar_today, color: AppColors.primary),
                           border: OutlineInputBorder(borderRadius: BorderRadius.circular(5)),
                         ),
                         readOnly: true, onTap: () => seleccionarFecha(false),
@@ -136,13 +138,9 @@ class _FilterSalesState extends State<FilterSalesPage> {
             SizedBox(
               width: double.infinity,
               child: ElevatedButton.icon(
-                style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(vertical: 14),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                  backgroundColor: const Color(0xFF493D9E),
-                ),
-                icon: const Icon(Icons.filter_alt, color: Colors.white),
-                label: const Text("Aplicar Filtros", style: TextStyle(fontSize: 18, color: Colors.white)),
+                  style: ButtonStyles.primary(),
+                icon: const Icon(Icons.filter_alt),
+                label: const Text("Aplicar Filtros", style: TextStyle(fontSize: 18)),
                 onPressed: aplicarFiltros,
               ),
             ),

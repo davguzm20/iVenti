@@ -21,9 +21,9 @@ class UsuarioRepository {
 
     try {
       final usuarioCreado = await conexion.execute(
-        Sql.named('INSERT INTO usuarios (id_rol, nombre, email, pin, creado_en, actualizado_en) VALUES (@id_rol, @nombre, @email, @pin, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP) RETURNING *'),
+        Sql.named('INSERT INTO usuarios (rol, nombre, email, pin, creado_en, actualizado_en) VALUES (@rol, @nombre, @email, @pin, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP) RETURNING *'),
         parameters: {
-          'id_rol': request.idRol.name,
+          'rol': request.rol.name,
           'nombre': request.nombre.trim(),
           'email': request.email.trim(),
           'pin': request.pin,
@@ -49,7 +49,7 @@ class UsuarioRepository {
 
       return UsuarioMapper.fromMap(usuariosEncontrados.first.toColumnMap());
     } catch (e) {
-      throw DatabaseException('Error al obtener usuario: $e');
+      throw DatabaseException('No se pudo consultar el usuario: $e');
     }
   }
 
@@ -66,7 +66,7 @@ class UsuarioRepository {
 
       return UsuarioMapper.fromMap(usuariosEncontrados.first.toColumnMap());
     } catch (e) {
-      throw DatabaseException('Error al obtener usuario: $e');
+      throw DatabaseException('No se pudo consultar el usuario: $e');
     }
   }
 
@@ -74,11 +74,11 @@ class UsuarioRepository {
     final usuarioEncontrado = await obtenerUsuarioPorEmail(request.email);
 
     if (usuarioEncontrado == null) {
-      throw AuthenticationException('Usuario no encontrado');
+      throw AuthenticationException('No encontramos una cuenta con este correo.');
     }
 
     if (usuarioEncontrado.pin != request.pin) {
-      throw AuthenticationException('PIN incorrecto');
+      throw AuthenticationException('El PIN que ingresaste no es correcto.');
     }
 
     return usuarioEncontrado;
@@ -89,7 +89,7 @@ class UsuarioRepository {
 
     try {
       if (nuevoPIN.length != 6) {
-        throw ValidationException('El PIN debe tener 6 digitos');
+        throw ValidationException('El PIN debe tener 6 dígitos.');
       }
 
       final pinActualizado = await conexion.execute(
@@ -98,12 +98,12 @@ class UsuarioRepository {
       );
 
       if (pinActualizado.affectedRows == 0) {
-        throw NotFoundException('Usuario no encontrado');
+        throw NotFoundException('No encontramos tu cuenta.');
       }
     } catch (e) {
       if (e is NotFoundException || e is ValidationException) rethrow;
 
-      throw DatabaseException('Error al actualizar PIN: $e');
+      throw DatabaseException('No se pudo actualizar el PIN: $e');
     }
   }
 
@@ -116,7 +116,7 @@ class UsuarioRepository {
       );
 
       if (usuariosEncontrados.isEmpty) {
-        throw NotFoundException('No hay usuarios registrados');
+        throw NotFoundException('Aún no hay usuarios registrados.');
       }
 
       return UsuarioMapper.fromMap(usuariosEncontrados.first.toColumnMap());
@@ -124,7 +124,7 @@ class UsuarioRepository {
     } catch (e) {
       if (e is NotFoundException) rethrow;
 
-      throw DatabaseException('Error al obtener usuario registrado: $e');
+      throw DatabaseException('No se pudo consultar los usuarios registrados: $e');
     }
   }
 
@@ -138,14 +138,14 @@ class UsuarioRepository {
       );
 
       if (usuarioActualizado.isEmpty) {
-        throw NotFoundException('Usuario no encontrado');
+        throw NotFoundException('No encontramos tu cuenta.');
       }
 
       return UsuarioMapper.fromMap(usuarioActualizado.first.toColumnMap());
     } catch (e) {
       if (e is NotFoundException) rethrow;
 
-      throw DatabaseException('Error al actualizar usuario: $e');
+      throw DatabaseException('No se pudo actualizar tus datos: $e');
     }
   }
 
@@ -159,12 +159,12 @@ class UsuarioRepository {
       );
 
       if (usuarioDesactivado.affectedRows == 0) {
-        throw NotFoundException('Usuario no encontrado');
+        throw NotFoundException('No encontramos tu cuenta.');
       }
     } catch (e) {
       if (e is NotFoundException) rethrow;
 
-      throw DatabaseException('Error al desactivar usuario: $e');
+      throw DatabaseException('No se pudo desactivar la cuenta: $e');
     }
   }
 }

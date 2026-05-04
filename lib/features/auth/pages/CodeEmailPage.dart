@@ -1,8 +1,14 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-
 import 'package:iventi/shared/widgets/PinInput.dart';
+import 'package:iventi/shared/config/AppColors.dart';
+import 'package:iventi/shared/config/ButtonStyles.dart';
+import 'package:iventi/shared/di/ServiceLocator.dart';
+import 'package:iventi/shared/utils/DialogMessages.dart';
+import 'package:iventi/shared/widgets/SuccessDialog.dart';
+import 'package:iventi/shared/widgets/ErrorDialog.dart';
+import 'package:iventi/shared/widgets/BackButton.dart';
 
 class CodeEmailPage extends StatefulWidget {
   final String correctCode;
@@ -23,10 +29,35 @@ class CodeEmailPage extends StatefulWidget {
 class _CodeEmailPageState extends State<CodeEmailPage> {
   String inputCode = "";
 
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      FocusManager.instance.primaryFocus?.unfocus();
+    });
+  }
+
   Future<void> validateCode() async {
     FocusScope.of(context).unfocus();
 
     if (inputCode == widget.correctCode) {
+      if (widget.flujo == 'verify') {
+        final authController = ServiceLocator.authController;
+
+        try {
+          await authController.obtenerUsuarioPorEmail(widget.emailUser);
+        } catch (_) {
+          final (titulo, desc) = DialogMessages.auth.cuentaNoEncontrada;
+        ErrorDialog(
+            context: context,
+            title: titulo,
+            description: desc,
+            btnOkOnPress: () => context.push('/login/create-pin', extra: widget.emailUser),
+          );
+          return;
+        }
+      }
+
       AwesomeDialog(
         context: context,
         dialogType: DialogType.success,
@@ -37,7 +68,7 @@ class _CodeEmailPageState extends State<CodeEmailPage> {
           if (widget.flujo == 'verify') {
             context.go('/login', extra: widget.emailUser);
           } else {
-            context.go('/login/create-pin', extra: widget.emailUser);
+            context.push('/login/create-pin', extra: widget.emailUser);
           }
         },
         btnOkIcon: Icons.check_circle,
@@ -61,20 +92,9 @@ class _CodeEmailPageState extends State<CodeEmailPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        centerTitle: true,
-        title: const Text(
-          "Confirmar Código",
-          style: TextStyle(
-            fontSize: 22,
-            fontWeight: FontWeight.w600,
-            color: Color.fromRGBO(30, 60, 87, 1),
-          ),
-        ),
-      ),
-      body: Center(
+      body: Stack(
+        children: [
+          Center(
         child: SingleChildScrollView(
           child: ConstrainedBox(
             constraints: const BoxConstraints(maxWidth: 400),
@@ -93,11 +113,11 @@ class _CodeEmailPageState extends State<CodeEmailPage> {
                   const SizedBox(height: 30),
 
                   const Text(
-                    "Se le ha enviado un código a su correo",
+                    "Ingresa el código que enviamos a tu correo",
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
-                      color: Color.fromRGBO(30, 60, 87, 1),
+                      color: AppColors.textDark,
                     ),
                     textAlign: TextAlign.center,
                   ),
@@ -115,27 +135,18 @@ class _CodeEmailPageState extends State<CodeEmailPage> {
                   const SizedBox(height: 30),
 
                   ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.green,
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 12,
-                        horizontal: 35,
-                      ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                    ),
+                    style: ButtonStyles.success(),
                     onPressed: validateCode,
-                    child: const Text(
-                      "Confirmar",
-                      style: TextStyle(color: Colors.white),
-                    ),
+                    child: const Text("Confirmar"),
                   ),
                 ],
               ),
             ),
           ),
-        ),
+          ),
+          ),
+          BackButtonWidget(),
+        ],
       ),
     );
   }

@@ -1,8 +1,14 @@
-import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:iventi/shared/services/MailerService.dart';
+import 'package:iventi/shared/config/AppColors.dart';
+import 'package:iventi/shared/config/ButtonStyles.dart';
+import 'package:iventi/shared/widgets/SuccessDialog.dart';
+import 'package:iventi/shared/widgets/ErrorDialog.dart';
+import 'package:iventi/shared/widgets/CustomTextField.dart';
+import 'package:iventi/shared/widgets/BackButton.dart';
+import 'package:iventi/shared/utils/DialogMessages.dart';
 
 class InputEmailPage extends StatelessWidget {
   const InputEmailPage({super.key});
@@ -10,7 +16,12 @@ class InputEmailPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: const InputEmailBody(),
+      body: Stack(
+        children: [
+          const InputEmailBody(),
+          const BackButtonWidget(),
+        ],
+      ),
     );
   }
 }
@@ -35,6 +46,14 @@ class _InputEmailBodyState extends State<InputEmailBody> {
     super.initState();
     formKey = GlobalKey<FormState>();
     emailController = TextEditingController();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      FocusScope.of(context).requestFocus(FocusNode());
+    });
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
     flujo = GoRouterState.of(context).extra as String? ?? 'register';
   }
 
@@ -45,7 +64,7 @@ class _InputEmailBodyState extends State<InputEmailBody> {
   }
 
   void _irACodigo(String codigo) {
-    context.go('/login/code-email', extra: {
+    context.push('/login/code-email', extra: {
       'codigo': codigo,
       'email': emailController.text.trim(),
       'flujo': flujo,
@@ -67,63 +86,57 @@ class _InputEmailBodyState extends State<InputEmailBody> {
 
     if (resultado.enviado) {
       if (mounted) {
-        AwesomeDialog(
+        final (title, desc) = DialogMessages.auth.codigoEnviado(emailController.text.trim());
+        SuccessDialog(
           context: context,
-          dialogType: DialogType.success,
-          animType: AnimType.topSlide,
-          title: "Correcto",
-          desc:
-              "El código se ha enviado a su correo ${emailController.text} correctamente!",
+          title: title,
+          description: desc,
           btnOkOnPress: () => _irACodigo(resultado.codigo),
-          btnOkIcon: Icons.check_circle,
-          btnOkColor: Colors.green,
-        ).show();
+        );
       }
-
-      } else {
+    } else {
       if (mounted) {
         final tieneCredenciales = _mailerService.tieneCredenciales;
 
-        AwesomeDialog(
-          context: context,
-          dialogType: DialogType.error,
-          animType: AnimType.topSlide,
-          title: tieneCredenciales ? "Error" : "Configuración",
-          desc: resultado.error!,
-          btnOkOnPress: tieneCredenciales
-              ? () {}
-              : () => _irACodigo(resultado.codigo),
-          btnOkIcon: Icons.cancel,
-          btnOkColor: tieneCredenciales ? Colors.red : Colors.orange,
-        ).show();
+        if (tieneCredenciales) {
+          ErrorDialog(
+            context: context,
+            title: 'Error al enviar',
+            description: resultado.error!,
+          );
+        } else {
+          ErrorDialog(
+            context: context,
+            title: 'Modo desarrollo',
+            description: resultado.error!,
+            btnOkOnPress: () => _irACodigo(resultado.codigo),
+          );
+        }
       }
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    const focusedBorderColor = Color.fromRGBO(64, 34, 197, 1);
-    const borderColor = Color.fromRGBO(98, 72, 190, 0.4);
-
     return Form(
       key: formKey,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Image.asset('lib/assets/imagenes/logoTienda.png', height: 200),
+          Image.asset('lib/assets/imagenes/logoTienda.png', height: 130),
 
-          const SizedBox(height: 50),
+          const SizedBox(height: 20),
 
           const Text(
             "Ingrese su correo electrónico",
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,
-              color: Color.fromRGBO(30, 60, 87, 1),
+              color: AppColors.textDark,
             ),
           ),
 
-          const SizedBox(height: 30),
+          const SizedBox(height: 20),
 
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 40.0),
@@ -134,17 +147,17 @@ class _InputEmailBodyState extends State<InputEmailBody> {
                 hintText: 'Ingrese su correo',
                 hintStyle: const TextStyle(color: Colors.grey),
                 filled: true,
-                fillColor: Colors.white,
+                fillColor: AppColors.background,
                 contentPadding: const EdgeInsets.symmetric(
                   vertical: 20,
                   horizontal: 20,
                 ),
                 enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: borderColor),
+                  borderSide: BorderSide(color: AppColors.border),
                   borderRadius: BorderRadius.circular(15),
                 ),
                 focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: focusedBorderColor),
+                  borderSide: BorderSide(color: AppColors.primary),
                   borderRadius: BorderRadius.circular(15),
                 ),
               ),
@@ -162,7 +175,7 @@ class _InputEmailBodyState extends State<InputEmailBody> {
             ),
           ),
 
-          const SizedBox(height: 30),
+          const SizedBox(height: 20),
 
           isSendEmail
               ? const SizedBox(
@@ -170,27 +183,7 @@ class _InputEmailBodyState extends State<InputEmailBody> {
                   child: LinearProgressIndicator(),
                 )
               : ElevatedButton(
-                  style: ButtonStyle(
-                    backgroundColor:
-                        WidgetStateProperty.resolveWith<Color>((states) {
-                      if (states.contains(WidgetState.pressed)) {
-                        return Colors.greenAccent;
-                      }
-                      return Colors.green;
-                    }),
-                    foregroundColor: WidgetStateProperty.all(Colors.white),
-                    shape: WidgetStateProperty.all(
-                      RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        side:
-                            const BorderSide(color: Colors.green, width: 2),
-                      ),
-                    ),
-                    padding: WidgetStateProperty.all(
-                      const EdgeInsets.symmetric(
-                          vertical: 12, horizontal: 35),
-                    ),
-                  ),
+                  style: ButtonStyles.success(),
                   onPressed: _enviarCodigo,
                   child: const Text('Confirmar'),
                 ),

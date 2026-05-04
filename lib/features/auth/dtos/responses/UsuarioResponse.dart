@@ -2,7 +2,7 @@ import 'package:iventi/features/auth/enums/TipoRol.dart';
 
 class UsuarioResponse {
   final int idUsuario;
-  final TipoRol idRol;
+  final TipoRol rol;
   final String nombre;
   final String email;
   final bool esActivo;
@@ -11,7 +11,7 @@ class UsuarioResponse {
 
   UsuarioResponse({
     required this.idUsuario,
-    required this.idRol,
+    required this.rol,
     required this.nombre,
     required this.email,
     required this.esActivo,
