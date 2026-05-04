@@ -224,6 +224,10 @@ class _DetailsSalePageState extends State<DetailsSalePage> {
         actions: [
           if (venta != null) ...[
             IconButton(
+              icon: const Icon(Icons.print, color: Colors.black),
+              onPressed: () {},
+            ),
+            IconButton(
               icon: Icon(
                 Icons.attach_money,
                 color: !venta!.esCredito &&
@@ -257,6 +261,9 @@ class _DetailsSalePageState extends State<DetailsSalePage> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
+                          if (venta!.codigoBoleta != null)
+                            Text('Boleta: ${venta!.codigoBoleta}', style: const TextStyle(fontWeight: FontWeight.bold, color: AppColors.primary, fontSize: 18)),
+
                           Text(
                             'Fecha: ${venta!.creadoEn.toIso8601String().split('T')[0]}',
                             style: const TextStyle(

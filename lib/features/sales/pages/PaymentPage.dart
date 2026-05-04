@@ -221,6 +221,10 @@ class _PaymentPageState extends State<PaymentPage> {
                   color: AppColors.primary,
                 ),
               ),
+
+              const SizedBox(height: 16),
+
+              _buildTipoPago(),
             ],
           ),
         ),

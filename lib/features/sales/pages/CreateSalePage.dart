@@ -1,12 +1,14 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:go_router/go_router.dart';
+import 'package:iventi/shared/di/ServiceLocator.dart';
 import 'package:iventi/shared/widgets/CustomTextField.dart';
 import 'package:iventi/shared/widgets/ErrorDialog.dart';
 import 'package:iventi/shared/theme/AppColors.dart';
 import 'package:iventi/shared/theme/ButtonStyles.dart';
 import 'package:iventi/shared/utils/DialogMessages.dart';
+import 'package:iventi/features/inventory/entities/ProductoEntity.dart';
+import 'package:iventi/features/inventory/entities/LoteEntity.dart';
 
 class CreateSalePage extends StatefulWidget {
   const CreateSalePage({super.key});
@@ -17,15 +19,123 @@ class CreateSalePage extends StatefulWidget {
 
 class _CreateSalePageState extends State<CreateSalePage> {
   List<Map<String, dynamic>> productosVenta = [];
-  List<Map<String, dynamic>> productosFiltrados = [];
+  List<ProductoEntity> productosFiltrados = [];
+  final TextEditingController _searchController = TextEditingController();
+  bool _showSearch = false;
 
   void _buscarProductosPorNombre(String nombre) async {
     if (nombre.isEmpty) { setState(() => productosFiltrados = []); return; }
-    // NOTE: search products via controller when integrated
-    setState(() => productosFiltrados = []);
+    final results = await ServiceLocator.productoController.buscarPorNombre(nombre);
+    if (mounted) setState(() => productosFiltrados = results);
   }
 
-  double _calcularTotalVenta() => productosVenta.fold(0.0, (total, p) => total + (p['subtotal'] as double));
+  void _showAddProductDialog() {
+    LoteEntity? loteSeleccionado;
+    int cantidadValue = 1;
+    double descuentoValue = 0;
+    String busqueda = '';
+
+    showDialog(
+      context: context,
+      builder: (ctx) => StatefulBuilder(
+        builder: (ctx, setDialogState) {
+          return AlertDialog(
+            title: const Text('Agregar producto'),
+            content: SizedBox(
+              width: double.maxFinite,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  TextField(
+                    decoration: const InputDecoration(
+                      hintText: 'Buscar producto...',
+                      prefixIcon: Icon(Icons.search),
+                      border: OutlineInputBorder(),
+                    ),
+                    onChanged: (v) async {
+                      busqueda = v;
+                      if (v.isEmpty) {
+                        setDialogState(() => productosFiltrados = []);
+                      } else {
+                        final r = await ServiceLocator.productoController.buscarPorNombre(v);
+                        setDialogState(() => productosFiltrados = r);
+                      }
+                    },
+                  ),
+                  const SizedBox(height: 10),
+                  SizedBox(
+                    height: 150,
+                    child: ListView(
+                      children: productosFiltrados.map((p) {
+                        return ListTile(
+                          dense: true,
+                          title: Text(p.nombre),
+                          subtitle: Text('S/ ${p.precio.toStringAsFixed(2)}'),
+                          onTap: () async {
+                            final lotes = await ServiceLocator.loteController.obtenerLotesDeProducto(p.idProducto!);
+                            setDialogState(() {
+                              loteSeleccionado = lotes.isNotEmpty ? lotes.first : null;
+                            });
+                          },
+                        );
+                      }).toList(),
+                    ),
+                  ),
+                  const Divider(),
+                  if (loteSeleccionado != null) ...[
+                    DropdownButtonFormField<int>(
+                      value: loteSeleccionado!.idLote,
+                      items: [loteSeleccionado!].map((l) => DropdownMenuItem(value: l.idLote, child: Text('Lote ${l.idLote} - Stock: ${l.cantidadActual}'))).toList(),
+                      onChanged: null,
+                      decoration: const InputDecoration(labelText: 'Lote', border: OutlineInputBorder()),
+                    ),
+                    const SizedBox(height: 10),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        IconButton(icon: const Icon(Icons.remove), onPressed: cantidadValue > 1 ? () => setDialogState(() => cantidadValue--) : null),
+                        Text(cantidadValue.toString(), style: const TextStyle(fontSize: 18)),
+                        IconButton(icon: const Icon(Icons.add), onPressed: cantidadValue < (loteSeleccionado?.cantidadActual ?? 0) ? () => setDialogState(() => cantidadValue++) : null),
+                      ],
+                    ),
+                    const SizedBox(height: 10),
+                    Text('Subtotal: S/ ${(loteSeleccionado!.precioCompra * cantidadValue - descuentoValue).toStringAsFixed(2)}'),
+                  ],
+                ],
+              ),
+            ),
+            actions: [
+              TextButton(onPressed: () => context.pop(), child: const Text('Cancelar')),
+              TextButton(
+                onPressed: () {
+                  if (productosFiltrados.isNotEmpty && loteSeleccionado != null) {
+                    final p = productosFiltrados.first;
+                    setState(() {
+                      productosVenta.add({
+                        'idProducto': p.idProducto,
+                        'idLote': loteSeleccionado!.idLote,
+                        'nombre': p.nombre,
+                        'precio': p.precio,
+                        'cantidad': cantidadValue,
+                        'subtotalProducto': p.precio * cantidadValue - descuentoValue,
+                        'precioUnidadProducto': p.precio,
+                        'descuentoProducto': descuentoValue,
+                        'gananciaProducto': (p.precio * cantidadValue - descuentoValue) - (loteSeleccionado!.precioCompra * cantidadValue),
+                      });
+                    });
+                    context.pop();
+                  }
+                },
+                child: const Text('Agregar'),
+              ),
+            ],
+          );
+        },
+      ),
+    );
+  }
+
+  double _calcularTotalVenta() => productosVenta.fold(0.0, (total, p) => total + (p['subtotalProducto'] as double));
 
   @override
   Widget build(BuildContext context) {
@@ -33,6 +143,15 @@ class _CreateSalePageState extends State<CreateSalePage> {
       appBar: AppBar(title: const Text("Crear Venta")),
       body: Column(
         children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: ElevatedButton.icon(
+              icon: const Icon(Icons.add, color: Colors.white),
+              label: const Text('Agregar producto', style: TextStyle(color: Colors.white)),
+              style: ButtonStyles.success(),
+              onPressed: _showAddProductDialog,
+            ),
+          ),
           Expanded(
             child: Container(
               margin: const EdgeInsets.all(10),

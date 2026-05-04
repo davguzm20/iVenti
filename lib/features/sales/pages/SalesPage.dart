@@ -17,13 +17,14 @@ class SalesPage extends StatefulWidget {
 class _SalesPageState extends State<SalesPage> {
   final ScrollController _scrollController = ScrollController();
   final TextEditingController _searchController = TextEditingController();
-
   Timer? _searchTimer;
 
   List<VentaEntity> ventas = [];
   bool? esAlContado;
   DateTime? fechaInicio;
   DateTime? fechaFinal;
+  int cantidadCargas = 0;
+  bool hayMasCargas = true;
   bool isSearching = false;
   bool isLoading = false;
 
@@ -33,6 +34,49 @@ class _SalesPageState extends State<SalesPage> {
   void initState() {
     super.initState();
     _cargarVentas();
+    _scrollController.addListener(_detectarScrollFinal);
+  }
+
+  void _detectarScrollFinal() {
+    if (_scrollController.position.pixels >=
+            _scrollController.position.maxScrollExtent - 100 &&
+        hayMasCargas) {
+      _cargarVentas();
+    }
+  }
+
+  void _cargarVentas({bool reiniciar = false}) async {
+    if (!hayMasCargas && !reiniciar) return;
+    if (isLoading) return;
+
+    if (reiniciar) {
+      setState(() { ventas.clear(); cantidadCargas = 0; hayMasCargas = true; });
+    }
+
+    setState(() => isLoading = true);
+
+    final nuevas = await _ventaController.obtenerVentasFiltradas(
+      limite: 50,
+      offset: cantidadCargas * 50,
+      esAlContado: esAlContado,
+      fechaInicio: fechaInicio,
+      fechaFinal: fechaFinal,
+    );
+
+    if (mounted) {
+      setState(() {
+        if (reiniciar) ventas = nuevas; else ventas.addAll(nuevas);
+        if (nuevas.isNotEmpty) cantidadCargas++; else hayMasCargas = false;
+        isLoading = false;
+      });
+    }
+  }
+
+  void _buscarVentasPorCodigo(String codigo) {
+    if (_searchTimer?.isActive ?? false) _searchTimer!.cancel();
+    _searchTimer = Timer(const Duration(milliseconds: 300), () async {
+      if (codigo.isEmpty) { _cargarVentas(reiniciar: true); return; }
+    });
   }
 
   void _cargarVentas({bool reiniciar = false}) async {
@@ -174,6 +218,7 @@ class _SalesPageState extends State<SalesPage> {
                     ),
                   )
                 : ListView.builder(
+                    controller: _scrollController,
                     controller: _scrollController,
                     itemCount: ventas.length,
                     itemBuilder: (context, index) {
