@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
-import 'package:iventi/shared/utils/NavigationBar.dart';
-import 'package:iventi/shared/theme/AppColors.dart';
+import 'package:flutter/services.dart';
+import 'package:iventi/shared/config/AppColors.dart';
 
 class HomePage extends StatefulWidget {
   final StatefulNavigationShell navigationShell;
@@ -14,6 +13,11 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
   void _goBranch(int index) {
     widget.navigationShell.goBranch(index);
   }
@@ -29,9 +33,60 @@ class _HomePageState extends State<HomePage> {
       },
       child: Scaffold(
         body: widget.navigationShell,
-        bottomNavigationBar: NavigationBar(
-          currentIndex: widget.navigationShell.currentIndex,
-          onTap: _goBranch,
+        bottomNavigationBar: SizedBox(
+          height: 100,
+          child: BottomNavigationBar(
+            showUnselectedLabels: true,
+            selectedLabelStyle: const TextStyle(color: Colors.black),
+            unselectedLabelStyle: const TextStyle(color: Colors.black),
+            unselectedItemColor: Colors.black,
+            selectedItemColor: Colors.black,
+            backgroundColor: AppColors.primary,
+            currentIndex: widget.navigationShell.currentIndex,
+            onTap: _goBranch,
+            items: [
+              BottomNavigationBarItem(
+                icon: Image.asset(
+                  "lib/assets/iconos/iconoInventario.png",
+                  width: 30,
+                  height: 30,
+                ),
+                label: "Inventario",
+              ),
+              BottomNavigationBarItem(
+                icon: Image.asset(
+                  "lib/assets/iconos/iconoVentas.png",
+                  width: 30,
+                  height: 30,
+                ),
+                label: "Ventas",
+              ),
+              BottomNavigationBarItem(
+                icon: Image.asset(
+                  "lib/assets/iconos/iconoClientes.png",
+                  width: 30,
+                  height: 30,
+                ),
+                label: "Clientes",
+              ),
+              BottomNavigationBarItem(
+                icon: Image.asset(
+                  "lib/assets/iconos/iconoReportes.png",
+                  width: 30,
+                  height: 30,
+                ),
+                label: "Reportes",
+              ),
+              BottomNavigationBarItem(
+                icon: Image.asset(
+                  "lib/assets/iconos/iconoConfiguraciones.png",
+                  width: 30,
+                  height: 30,
+                ),
+                label: "Configuraciones",
+              ),
+            ],
+          ),
         ),
       ),
     );

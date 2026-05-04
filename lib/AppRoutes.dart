@@ -26,6 +26,12 @@ import 'package:iventi/features/clients/pages/FilterClientsPage.dart';
 import 'package:iventi/features/clients/pages/DetailsClientPage.dart';
 import 'package:iventi/features/notifications/pages/NotificationsPage.dart';
 import 'package:iventi/features/config/pages/ConfigPage.dart';
+import 'package:iventi/features/reports/pages/ReportsPage.dart';
+import 'package:iventi/features/reports/pages/ReportSalesPage.dart';
+import 'package:iventi/features/reports/pages/ReportProductosVendidosPage.dart';
+import 'package:iventi/features/reports/pages/ReportGeneralInventarioPage.dart';
+import 'package:iventi/features/reports/pages/ReportLotesPage.dart';
+import 'package:iventi/features/reports/pages/ReportFechaVencimientoPage.dart';
 import 'package:iventi/shared/pages/HomePage.dart';
 
 final GlobalKey<NavigatorState> _rootNavigatorKey = GlobalKey<NavigatorState>();
@@ -216,6 +222,21 @@ class AppRoutes {
                       return DetailsClientPage(idCliente: id);
                     },
                   ),
+                ],
+              ),
+            ],
+          ),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: '/reports',
+                builder: (context, state) => const ReportsPage(),
+                routes: [
+                  GoRoute(path: 'ventas', builder: (context, state) => const ReportSalesPage()),
+                  GoRoute(path: 'productos-vendidos', builder: (context, state) => const ReportProductosVendidosPage()),
+                  GoRoute(path: 'inventario', builder: (context, state) => const ReportGeneralInventarioPage()),
+                  GoRoute(path: 'lotes', builder: (context, state) => const ReportLotesPage()),
+                  GoRoute(path: 'vencimientos', builder: (context, state) => const ReportFechaVencimientoPage()),
                 ],
               ),
             ],
