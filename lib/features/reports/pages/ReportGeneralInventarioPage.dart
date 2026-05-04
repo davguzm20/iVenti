@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:iventi/shared/config/AppColors.dart';
 import 'package:iventi/shared/config/ButtonStyles.dart';
+import 'package:iventi/shared/di/ServiceLocator.dart';
+import 'package:iventi/features/reports/controllers/ReportController.dart';
 
 class ReportGeneralInventarioPage extends StatefulWidget {
   const ReportGeneralInventarioPage({super.key});
@@ -10,7 +12,33 @@ class ReportGeneralInventarioPage extends StatefulWidget {
 }
 
 class _ReportGeneralInventarioPageState extends State<ReportGeneralInventarioPage> {
+  late final ReportController _controller;
   DateTime fecha = DateTime.now();
+  bool _generando = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = ServiceLocator.reportController;
+  }
+
+  Future<void> _generar() async {
+    setState(() => _generando = true);
+    try {
+      final data = await _controller.generarInventarioGeneral(fecha);
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Reporte generado: ${data.length} lotes en inventario")),
+      );
+    } catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Error: $e"), backgroundColor: Colors.red),
+      );
+    } finally {
+      if (mounted) setState(() => _generando = false);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +62,16 @@ class _ReportGeneralInventarioPageState extends State<ReportGeneralInventarioPag
               ),
             ]),
             const Spacer(),
-            SizedBox(width: double.infinity, child: ElevatedButton(style: ButtonStyles.success(), onPressed: () {}, child: const Text("Generar"))),
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                style: ButtonStyles.success(),
+                onPressed: _generando ? null : _generar,
+                child: _generando
+                    ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2))
+                    : const Text("Generar"),
+              ),
+            ),
           ],
         ),
       ),

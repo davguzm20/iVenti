@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:iventi/shared/config/AppColors.dart';
 import 'package:iventi/shared/config/ButtonStyles.dart';
+import 'package:iventi/shared/di/ServiceLocator.dart';
+import 'package:iventi/features/reports/controllers/ReportController.dart';
 
 class ReportLotesPage extends StatefulWidget {
   const ReportLotesPage({super.key});
@@ -10,9 +12,40 @@ class ReportLotesPage extends StatefulWidget {
 }
 
 class _ReportLotesPageState extends State<ReportLotesPage> {
+  late final ReportController _controller;
   DateTime inicio = DateTime.now();
   DateTime fin = DateTime.now();
   String tipo = "General";
+  bool _generando = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = ServiceLocator.reportController;
+  }
+
+  Future<void> _generar() async {
+    setState(() => _generando = true);
+    try {
+      final tipoFiltro = tipo == "General" ? null : tipo;
+      final data = await _controller.generarLotes(
+        fechaInicio: inicio,
+        fechaFinal: fin,
+        tipo: tipoFiltro,
+      );
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Reporte generado: ${data.length} lotes encontrados")),
+      );
+    } catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Error: $e"), backgroundColor: Colors.red),
+      );
+    } finally {
+      if (mounted) setState(() => _generando = false);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +67,16 @@ class _ReportLotesPageState extends State<ReportLotesPage> {
             _buildDate("Inicio", inicio, (d) => inicio = d),
             _buildDate("Final", fin, (d) => fin = d),
             const Spacer(),
-            SizedBox(width: double.infinity, child: ElevatedButton(style: ButtonStyles.success(), onPressed: () {}, child: const Text("Generar"))),
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                style: ButtonStyles.success(),
+                onPressed: _generando ? null : _generar,
+                child: _generando
+                    ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2))
+                    : const Text("Generar"),
+              ),
+            ),
           ],
         ),
       ),
@@ -53,5 +95,4 @@ class _ReportLotesPageState extends State<ReportLotesPage> {
       ),
     ]);
   }
-}
 }

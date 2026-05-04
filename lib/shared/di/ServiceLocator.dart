@@ -42,6 +42,11 @@ import 'package:iventi/features/notifications/repositories/NotificacionRepositor
 import 'package:iventi/features/notifications/services/NotificacionService.dart';
 import 'package:iventi/features/notifications/controllers/NotificacionController.dart';
 
+// Reports
+import 'package:iventi/features/reports/repositories/ReportRepository.dart';
+import 'package:iventi/features/reports/services/ReportService.dart';
+import 'package:iventi/features/reports/controllers/ReportController.dart';
+
 class ServiceLocator {
   static late final PostgresDatasource datasource;
 
@@ -88,6 +93,11 @@ class ServiceLocator {
   static late final NotificacionRepository notificacionRepository;
   static late final NotificacionService notificacionService;
   static late final NotificacionController notificacionController;
+
+  // Reports
+  static late final ReportRepository reportRepository;
+  static late final ReportService reportService;
+  static late final ReportController reportController;
 
   static Future<void> initialize() async {
     datasource = PostgresDatasource();
@@ -159,6 +169,11 @@ class ServiceLocator {
 
     // === Notification Controller ===
     notificacionController = NotificacionController(notificacionService);
+
+    // === Reports ===
+    reportRepository = ReportRepository(datasource);
+    reportService = ReportService(reportRepository);
+    reportController = ReportController(reportService);
   }
 
   static int? usuarioActualId;
@@ -178,5 +193,6 @@ class ServiceLocator {
     Provider.value(value: ventaController),
     Provider.value(value: notificacionController),
     Provider.value(value: configuracionController),
+    Provider.value(value: reportController),
   ];
 }

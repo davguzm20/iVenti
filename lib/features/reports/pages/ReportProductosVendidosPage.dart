@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:iventi/shared/config/AppColors.dart';
 import 'package:iventi/shared/config/ButtonStyles.dart';
+import 'package:iventi/shared/di/ServiceLocator.dart';
+import 'package:iventi/features/reports/controllers/ReportController.dart';
 
 class ReportProductosVendidosPage extends StatefulWidget {
   const ReportProductosVendidosPage({super.key});
@@ -10,8 +12,37 @@ class ReportProductosVendidosPage extends StatefulWidget {
 }
 
 class _ReportProductosVendidosPageState extends State<ReportProductosVendidosPage> {
+  late final ReportController _controller;
   DateTime inicio = DateTime.now();
   DateTime fin = DateTime.now();
+  bool _generando = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = ServiceLocator.reportController;
+  }
+
+  Future<void> _generar() async {
+    setState(() => _generando = true);
+    try {
+      final data = await _controller.generarProductosVendidos(
+        fechaInicio: inicio,
+        fechaFinal: fin,
+      );
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Reporte generado: ${data.length} productos encontrados")),
+      );
+    } catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Error: $e"), backgroundColor: Colors.red),
+      );
+    } finally {
+      if (mounted) setState(() => _generando = false);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +58,16 @@ class _ReportProductosVendidosPageState extends State<ReportProductosVendidosPag
             _buildDateField("Inicio", inicio, (d) => setState(() => inicio = d)),
             _buildDateField("Final", fin, (d) => setState(() => fin = d)),
             const Spacer(),
-            SizedBox(width: double.infinity, child: ElevatedButton(style: ButtonStyles.success(), onPressed: () {}, child: const Text("Generar"))),
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                style: ButtonStyles.success(),
+                onPressed: _generando ? null : _generar,
+                child: _generando
+                    ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2))
+                    : const Text("Generar"),
+              ),
+            ),
           ],
         ),
       ),
