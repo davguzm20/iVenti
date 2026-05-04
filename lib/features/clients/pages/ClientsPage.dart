@@ -17,12 +17,13 @@ class ClientsPage extends StatefulWidget {
 class _ClientsPageState extends State<ClientsPage> {
   final ScrollController _scrollController = ScrollController();
   final TextEditingController _searchController = TextEditingController();
-
   Timer? _searchTimer;
 
   List<ClienteEntity> clientes = [];
   String nombreBuscado = "";
   bool? esDeudor;
+  int cantidadCargas = 0;
+  bool hayMasCargas = true;
   bool isSearching = false;
   bool isLoading = false;
 
@@ -32,50 +33,48 @@ class _ClientsPageState extends State<ClientsPage> {
   void initState() {
     super.initState();
     _cargarClientes();
+    _scrollController.addListener(_detectarScrollFinal);
+  }
+
+  void _detectarScrollFinal() {
+    if (_scrollController.position.pixels >=
+            _scrollController.position.maxScrollExtent - 100 &&
+        hayMasCargas &&
+        nombreBuscado.isEmpty) {
+      _cargarClientes();
+    }
   }
 
   Future<void> _cargarClientes({bool reiniciar = false}) async {
+    if (!hayMasCargas && !reiniciar) return;
     if (isLoading) return;
 
     if (reiniciar) {
-      setState(() => clientes.clear());
+      setState(() { clientes.clear(); cantidadCargas = 0; hayMasCargas = true; });
     }
 
     setState(() => isLoading = true);
 
     final nuevos = await _clienteController.obtenerFiltrados(
       limite: 50,
-      offset: 0,
+      offset: cantidadCargas * 50,
       esDeudor: esDeudor,
     );
 
     if (mounted) {
       setState(() {
-        if (reiniciar) {
-          clientes = nuevos;
-
-        } else {
-          clientes.addAll(nuevos);
-        }
-
+        if (reiniciar) clientes = nuevos; else clientes.addAll(nuevos);
+        if (nuevos.isNotEmpty) cantidadCargas++; else hayMasCargas = false;
         isLoading = false;
       });
     }
   }
 
   void _buscarClientesPorNombre(String nombre) {
-    if (_searchTimer?.isActive ?? false) {
-      _searchTimer!.cancel();
-    }
-
+    if (_searchTimer?.isActive ?? false) _searchTimer!.cancel();
     _searchTimer = Timer(const Duration(milliseconds: 300), () async {
-      if (nombre.isEmpty) {
-        _cargarClientes(reiniciar: true);
-        return;
-      }
-
+      if (nombre.isEmpty) { _cargarClientes(reiniciar: true); return; }
       final filtrados = await _clienteController.buscarPorNombre(nombre);
-
       setState(() => clientes = filtrados);
     });
   }
