@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -18,38 +19,50 @@ class InventoryPage extends StatefulWidget {
 class _InventoryPageState extends State<InventoryPage> {
   final ScrollController _scrollController = ScrollController();
   final TextEditingController _searchController = TextEditingController();
-
   Timer? _searchTimer;
 
   List<ProductoEntity> productos = [];
 
+  List<int>? categoriasSeleccionadas;
   bool? stockBajo;
   String nombreProductoBuscado = "";
+  int cantidadCargas = 0;
+  bool hayMasCargas = true;
   bool isSearching = false;
   bool isLoading = false;
 
   @override
   void initState() {
     super.initState();
-
     _cargarProductos();
+    _scrollController.addListener(_detectarScrollFinal);
   }
 
   ProductoController get _productoController =>
       ServiceLocator.productoController;
 
+  void _detectarScrollFinal() {
+    if (_scrollController.position.pixels >=
+            _scrollController.position.maxScrollExtent - 100 &&
+        hayMasCargas &&
+        nombreProductoBuscado.isEmpty) {
+      _cargarProductos();
+    }
+  }
+
   Future<void> _cargarProductos({bool reiniciar = false}) async {
+    if (!hayMasCargas && !reiniciar) return;
     if (isLoading) return;
 
     if (reiniciar) {
       setState(() {
         productos.clear();
+        cantidadCargas = 0;
+        hayMasCargas = true;
       });
     }
 
-    setState(() {
-      isLoading = true;
-    });
+    setState(() => isLoading = true);
 
     final nuevos = await _productoController.obtenerTodos();
 
@@ -57,11 +70,14 @@ class _InventoryPageState extends State<InventoryPage> {
       setState(() {
         if (reiniciar) {
           productos = nuevos;
-
         } else {
           productos.addAll(nuevos);
         }
-
+        if (nuevos.isNotEmpty) {
+          cantidadCargas++;
+        } else {
+          hayMasCargas = false;
+        }
         isLoading = false;
       });
     }
@@ -174,11 +190,18 @@ class _InventoryPageState extends State<InventoryPage> {
               onPressed: () async {
                 final filtros = await context.push<Map<String, dynamic>>(
                   '/inventory/filter-products',
-                  extra: {'stockBajo': stockBajo},
+                  extra: {
+                    'idCategorias': categoriasSeleccionadas,
+                    'stockBajo': stockBajo,
+                  },
                 );
 
                 if (filtros != null) {
                   setState(() {
+                    categoriasSeleccionadas =
+                        (filtros['idCategorias'] as List<dynamic>?)
+                                ?.cast<int>() ??
+                            [];
                     stockBajo = filtros['stockBajo'] as bool?;
                   });
                 }
@@ -240,13 +263,21 @@ class _InventoryPageState extends State<InventoryPage> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            const SizedBox(
+                            SizedBox(
                               width: 90,
                               height: 90,
-                              child: Image(
-                                image: AssetImage(
-                                    'lib/assets/iconos/iconoImagen.png'),
-                                fit: BoxFit.contain,
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(10),
+                                child: producto.rutaImagen == null
+                                    ? const Image(
+                                        image: AssetImage(
+                                            'lib/assets/iconos/iconoImagen.png'),
+                                        fit: BoxFit.contain,
+                                      )
+                                    : Image.file(
+                                        File(producto.rutaImagen!),
+                                        fit: BoxFit.cover,
+                                      ),
                               ),
                             ),
 

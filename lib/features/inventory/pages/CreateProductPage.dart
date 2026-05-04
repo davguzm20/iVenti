@@ -8,8 +8,10 @@ import 'package:iventi/shared/widgets/ErrorDialog.dart';
 import 'package:iventi/shared/widgets/SuccessDialog.dart';
 import 'package:iventi/shared/utils/DialogMessages.dart';
 import 'package:iventi/features/inventory/dtos/requests/CrearProductoRequest.dart';
-import 'package:iventi/shared/theme/AppColors.dart';
-import 'package:iventi/shared/theme/ButtonStyles.dart';
+import 'package:iventi/features/inventory/dtos/requests/CrearCategoriaRequest.dart';
+import 'package:iventi/features/inventory/dtos/requests/ActualizarCategoriaRequest.dart';
+import 'package:iventi/shared/config/AppColors.dart';
+import 'package:iventi/shared/config/ButtonStyles.dart';
 import 'package:iventi/features/inventory/controllers/ProductoController.dart';
 import 'package:iventi/features/inventory/controllers/CategoriaController.dart';
 import 'package:iventi/features/inventory/controllers/UnidadController.dart';
@@ -27,6 +29,7 @@ class _CreateProductPageState extends State<CreateProductPage> {
   final TextEditingController productCodeController = TextEditingController();
   final TextEditingController productNameController = TextEditingController();
   final TextEditingController minStockController = TextEditingController();
+  final TextEditingController maxStockController = TextEditingController();
   final TextEditingController priceController = TextEditingController();
 
   List<CategoriaEntity> categoriasDisponibles = [];
@@ -66,6 +69,7 @@ class _CreateProductPageState extends State<CreateProductPage> {
     productCodeController.dispose();
     productNameController.dispose();
     minStockController.dispose();
+    maxStockController.dispose();
     priceController.dispose();
 
     super.dispose();
@@ -115,6 +119,28 @@ class _CreateProductPageState extends State<CreateProductPage> {
               },
             );
           }).toList(),
+        ),
+        const SizedBox(height: 10),
+        Wrap(
+          spacing: 8,
+          runSpacing: 4,
+          children: [
+            TextButton(
+              onPressed: _showAddCategoryDialog,
+              style: TextButton.styleFrom(foregroundColor: AppColors.primary),
+              child: const Text('Agregar categoría'),
+            ),
+            TextButton(
+              onPressed: _showEditCategoryDialog,
+              style: TextButton.styleFrom(foregroundColor: AppColors.primary),
+              child: const Text('Editar categoría'),
+            ),
+            TextButton(
+              onPressed: _showRemoveCategoryDialog,
+              style: TextButton.styleFrom(foregroundColor: AppColors.danger),
+              child: const Text('Eliminar categoría'),
+            ),
+          ],
         ),
       ],
     );
@@ -236,6 +262,13 @@ class _CreateProductPageState extends State<CreateProductPage> {
               ),
 
               CustomTextField(
+                label: 'Stock máximo',
+                controller: maxStockController,
+                keyboardType: TextInputType.number,
+                suffixText: unidadSeleccionada?.abreviatura,
+              ),
+
+              CustomTextField(
                 label: 'Precio por medida',
                 controller: priceController,
                 keyboardType:
@@ -267,6 +300,154 @@ class _CreateProductPageState extends State<CreateProductPage> {
               ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+
+  void _showAddCategoryDialog() {
+    final controller = TextEditingController();
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('Agregar nueva categoría'),
+        content: TextField(
+          controller: controller,
+          decoration: const InputDecoration(
+            labelText: 'Nombre de la categoría',
+            border: OutlineInputBorder(),
+          ),
+        ),
+        actions: [
+          TextButton(onPressed: () => context.pop(), child: const Text('Cancelar')),
+          TextButton(
+            onPressed: () async {
+              final nombre = controller.text.trim();
+              if (nombre.isNotEmpty) {
+                await _categoriaController.crearCategoria(
+                  CrearCategoriaRequest(nombre: nombre),
+                );
+                final cats = await _categoriaController.obtenerTodas();
+                setState(() => categoriasDisponibles = cats);
+              }
+              context.pop();
+            },
+            child: const Text('Guardar'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showEditCategoryDialog() {
+    showDialog(
+      context: context,
+      builder: (ctx) {
+        CategoriaEntity? seleccionada;
+        return StatefulBuilder(
+          builder: (ctx, setDialogState) => AlertDialog(
+            title: const Text('Editar categoría'),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                DropdownButtonFormField<int>(
+                  value: seleccionada?.idCategoria,
+                  items: categoriasDisponibles
+                      .map((c) => DropdownMenuItem(
+                            value: c.idCategoria,
+                            child: Text(c.nombre),
+                          ))
+                      .toList(),
+                  onChanged: (v) => setDialogState(
+                    () => seleccionada = categoriasDisponibles.firstWhere((c) => c.idCategoria == v),
+                  ),
+                  decoration: const InputDecoration(
+                    labelText: 'Seleccionar categoría',
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+                if (seleccionada != null) ...[
+                  const SizedBox(height: 10),
+                  TextField(
+                    controller: TextEditingController(text: seleccionada!.nombre),
+                    decoration: const InputDecoration(
+                      labelText: 'Nuevo nombre',
+                      border: OutlineInputBorder(),
+                    ),
+                    onChanged: (v) => seleccionada = CategoriaEntity(
+                      idCategoria: seleccionada!.idCategoria,
+                      nombre: v,
+                      esActivo: seleccionada!.esActivo,
+                      creadoEn: seleccionada!.creadoEn,
+                      actualizadoEn: seleccionada!.actualizadoEn,
+                    ),
+                  ),
+                ],
+              ],
+            ),
+            actions: [
+              TextButton(onPressed: () => context.pop(), child: const Text('Cancelar')),
+              TextButton(
+                onPressed: () async {
+                  if (seleccionada != null) {
+                    await _categoriaController.actualizarCategoria(
+                      ActualizarCategoriaRequest(
+                        idCategoria: seleccionada!.idCategoria!,
+                        nombre: seleccionada!.nombre,
+                      ),
+                    );
+                    final cats = await _categoriaController.obtenerTodas();
+                    setState(() => categoriasDisponibles = cats);
+                  }
+                  context.pop();
+                },
+                child: const Text('Guardar'),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  void _showRemoveCategoryDialog() {
+    CategoriaEntity? seleccionada;
+    showDialog(
+      context: context,
+      builder: (ctx) => StatefulBuilder(
+        builder: (ctx, setDialogState) => AlertDialog(
+          title: const Text('Eliminar categoría'),
+          content: DropdownButtonFormField<int>(
+            value: seleccionada?.idCategoria,
+            items: categoriasDisponibles
+                .map((c) => DropdownMenuItem(
+                      value: c.idCategoria,
+                      child: Text(c.nombre),
+                    ))
+                .toList(),
+            onChanged: (v) => setDialogState(
+              () => seleccionada = categoriasDisponibles.firstWhere((c) => c.idCategoria == v),
+            ),
+            decoration: const InputDecoration(
+              labelText: 'Seleccionar categoría',
+              border: OutlineInputBorder(),
+            ),
+          ),
+          actions: [
+            TextButton(onPressed: () => context.pop(), child: const Text('Cancelar')),
+            TextButton(
+              onPressed: () async {
+                if (seleccionada != null) {
+                  await _categoriaController.eliminarCategoria(seleccionada!.idCategoria!);
+                  final cats = await _categoriaController.obtenerTodas();
+                  setState(() => categoriasDisponibles = cats);
+                }
+                context.pop();
+              },
+              style: TextButton.styleFrom(foregroundColor: AppColors.danger),
+              child: const Text('Eliminar'),
+            ),
+          ],
         ),
       ),
     );
