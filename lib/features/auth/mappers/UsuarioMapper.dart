@@ -1,4 +1,4 @@
-import 'package:iventi/shared/utils/pg_helpers.dart';
+import 'package:iventi/shared/utils/PgHelper.dart';
 import 'package:iventi/features/auth/entities/UsuarioEntity.dart';
 import 'package:iventi/features/auth/dtos/responses/UsuarioResponse.dart';
 import 'package:iventi/features/auth/enums/TipoRol.dart';
@@ -7,7 +7,7 @@ class UsuarioMapper {
   static UsuarioEntity fromMap(Map<String, dynamic> map) {
     return UsuarioEntity(
       idUsuario: map['id_usuario'] as int,
-      idRol: _parseRol(pgString(map['id_rol'])),
+      rol: _parseRol(PgHelper.string(map['rol'])),
       nombre: map['nombre'] as String,
       email: map['email'] as String,
       pin: map['pin'] as String,
@@ -19,7 +19,7 @@ class UsuarioMapper {
 
   static Map<String, dynamic> toMap(UsuarioEntity entity) {
     return {
-      'id_rol': entity.idRol.name,
+      'rol': entity.rol.name,
       'nombre': entity.nombre,
       'email': entity.email,
       'pin': entity.pin,
@@ -30,7 +30,7 @@ class UsuarioMapper {
   static UsuarioResponse toResponse(UsuarioEntity entity) {
     return UsuarioResponse(
       idUsuario: entity.idUsuario!,
-      idRol: entity.idRol,
+      rol: entity.rol,
       nombre: entity.nombre,
       email: entity.email,
       esActivo: entity.esActivo,
