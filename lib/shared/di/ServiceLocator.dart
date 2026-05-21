@@ -67,7 +67,7 @@ class ServiceLocator {
   static late final LoteRepository loteRepository;
 
   // Inventory - Services
-  static late final ProductoService productService;
+  static late final ProductoService productoService;
   static late final CategoriaService categoriaService;
   static late final UnidadService unidadService;
   static late final LoteService loteService;
@@ -127,7 +127,7 @@ class ServiceLocator {
     configuracionRepository = ConfiguracionRepository(datasource);
 
     // === Inventory Services ===
-    productService = ProductoService(productoRepository, categoriaRepository);
+    productoService = ProductoService(productoRepository, categoriaRepository);
     categoriaService = CategoriaService(categoriaRepository);
     unidadService = UnidadService(unidadRepository);
     // LoteService depends on ventaRepository
@@ -156,7 +156,7 @@ class ServiceLocator {
     );
 
     // === Inventory Controllers ===
-    productoController = ProductoController(productService);
+    productoController = ProductoController(productoService);
     loteController = LoteController(loteService);
     categoriaController = CategoriaController(categoriaService);
     unidadController = UnidadController(unidadService);

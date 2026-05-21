@@ -79,37 +79,6 @@ class _SalesPageState extends State<SalesPage> {
     });
   }
 
-  void _cargarVentas({bool reiniciar = false}) async {
-    if (isLoading) return;
-
-    if (reiniciar) {
-      setState(() => ventas.clear());
-    }
-
-    setState(() => isLoading = true);
-
-    final nuevas = await _ventaController.obtenerVentasFiltradas(
-      limite: 50,
-      offset: 0,
-      esAlContado: esAlContado,
-      fechaInicio: fechaInicio,
-      fechaFinal: fechaFinal,
-    );
-
-    if (mounted) {
-      setState(() {
-        if (reiniciar) {
-          ventas = nuevas;
-
-        } else {
-          ventas.addAll(nuevas);
-        }
-
-        isLoading = false;
-      });
-    }
-  }
-
   @override
   void dispose() {
     _scrollController.dispose();
@@ -218,7 +187,6 @@ class _SalesPageState extends State<SalesPage> {
                     ),
                   )
                 : ListView.builder(
-                    controller: _scrollController,
                     controller: _scrollController,
                     itemCount: ventas.length,
                     itemBuilder: (context, index) {
