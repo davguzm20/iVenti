@@ -54,7 +54,7 @@ class ProductoRepository {
     }
   }
 
-  Future<ProductoEntity?> obtenerProductoPorID(int idProducto) async {
+  Future<ProductoEntity?> obtenerProductoPorId(int idProducto) async {
     final conexion = await _conexion;
 
     try {
@@ -93,7 +93,11 @@ class ProductoRepository {
 
     try {
       final productosEncontrados = await conexion.execute(
-        Sql.named("SELECT * FROM productos WHERE nombre ILIKE '%' || @nombre || '%' AND es_activo = TRUE"),
+        Sql.named('''
+          SELECT * FROM productos
+          WHERE nombre ILIKE '%' || @nombre || '%'
+          AND es_activo = TRUE
+        '''),
         parameters: {'nombre': nombre},
       );
 

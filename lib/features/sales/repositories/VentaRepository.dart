@@ -104,7 +104,7 @@ class VentaRepository {
     }
   }
 
-  Future<VentaEntity?> obtenerVentaPorID(int idVenta) async {
+  Future<VentaEntity?> obtenerVentaPorId(int idVenta) async {
     final conexion = await _conexion;
 
     try {
@@ -205,7 +205,7 @@ class VentaRepository {
     final conexion = await _conexion;
 
     try {
-      final ventaExistente = await obtenerVentaPorID(idVenta);
+      final ventaExistente = await obtenerVentaPorId(idVenta);
 
       if (ventaExistente == null) {
         throw NotFoundException('Venta no encontrada');
@@ -250,8 +250,12 @@ class VentaRepository {
 
         if (montoRestante >= pendiente) {
           await conexion.execute(
-            Sql.named("UPDATE ventas SET monto_cancelado = monto_total, estado = '${EstadoVenta.COMPLETADA.name}', actualizado_en = CURRENT_TIMESTAMP WHERE id_venta = @id"),
-            parameters: {'id': venta.idVenta},
+            Sql.named('''
+              UPDATE ventas
+              SET monto_cancelado = monto_total, estado = @estado, actualizado_en = CURRENT_TIMESTAMP
+              WHERE id_venta = @id
+            '''),
+            parameters: {'id': venta.idVenta, 'estado': EstadoVenta.COMPLETADA.name},
           );
 
           montoRestante -= pendiente;
@@ -297,8 +301,12 @@ class VentaRepository {
 
     try {
       final ventaAnulada = await conexion.execute(
-        Sql.named("UPDATE ventas SET estado = '${EstadoVenta.ANULADA.name}', actualizado_en = CURRENT_TIMESTAMP WHERE id_venta = @id"),
-        parameters: {'id': idVenta},
+        Sql.named('''
+          UPDATE ventas
+          SET estado = @estado, actualizado_en = CURRENT_TIMESTAMP
+          WHERE id_venta = @id
+        '''),
+        parameters: {'id': idVenta, 'estado': EstadoVenta.ANULADA.name},
       );
 
       if (ventaAnulada.affectedRows == 0) {
@@ -316,8 +324,14 @@ class VentaRepository {
 
     try {
       final cantidadVendida = await conexion.execute(
-        Sql.named("SELECT COALESCE(SUM(dv.cantidad), 0) AS total FROM detalle_ventas dv INNER JOIN ventas v ON dv.id_venta = v.id_venta WHERE dv.id_lote = @id_lote AND v.estado != '${EstadoVenta.ANULADA.name}'"),
-        parameters: {'id_lote': idLote},
+        Sql.named('''
+          SELECT COALESCE(SUM(dv.cantidad), 0) AS total
+          FROM detalle_ventas dv
+          INNER JOIN ventas v ON dv.id_venta = v.id_venta
+          WHERE dv.id_lote = @id_lote
+          AND v.estado != @estado
+        '''),
+        parameters: {'id_lote': idLote, 'estado': EstadoVenta.ANULADA.name},
       );
 
       return cantidadVendida.first.toColumnMap()['total'] as int;

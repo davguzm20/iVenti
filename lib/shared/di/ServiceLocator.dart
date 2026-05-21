@@ -2,17 +2,17 @@ import 'package:provider/provider.dart';
 
 import 'package:iventi/shared/utils/PostgresDatasource.dart';
 
-// Auth
+// Autenticación
 import 'package:iventi/features/auth/repositories/UsuarioRepository.dart';
 import 'package:iventi/features/auth/services/AuthService.dart';
 import 'package:iventi/features/auth/controllers/AuthController.dart';
 
-// Clients
+// Clientes
 import 'package:iventi/features/clients/repositories/ClienteRepository.dart';
 import 'package:iventi/features/clients/services/ClienteService.dart';
 import 'package:iventi/features/clients/controllers/ClienteController.dart';
 
-// Inventory
+// Inventario
 import 'package:iventi/features/inventory/repositories/ProductoRepository.dart';
 import 'package:iventi/features/inventory/repositories/LoteRepository.dart';
 import 'package:iventi/features/inventory/repositories/CategoriaRepository.dart';
@@ -26,23 +26,23 @@ import 'package:iventi/features/inventory/controllers/LoteController.dart';
 import 'package:iventi/features/inventory/controllers/CategoriaController.dart';
 import 'package:iventi/features/inventory/controllers/UnidadController.dart';
 
-// Sales
+// Ventas
 import 'package:iventi/features/sales/repositories/VentaRepository.dart';
 import 'package:iventi/features/sales/repositories/ReciboRepository.dart';
 import 'package:iventi/features/sales/services/VentaService.dart';
 import 'package:iventi/features/sales/controllers/VentaController.dart';
 
-// Config
+// Configuración
 import 'package:iventi/features/config/repositories/ConfiguracionRepository.dart';
 import 'package:iventi/features/config/services/ConfiguracionService.dart';
 import 'package:iventi/features/config/controllers/ConfiguracionController.dart';
 
-// Notifications
+// Notificaciones
 import 'package:iventi/features/notifications/repositories/NotificacionRepository.dart';
 import 'package:iventi/features/notifications/services/NotificacionService.dart';
 import 'package:iventi/features/notifications/controllers/NotificacionController.dart';
 
-// Reports
+// Reportes
 import 'package:iventi/features/reports/repositories/ReportRepository.dart';
 import 'package:iventi/features/reports/services/ReportService.dart';
 import 'package:iventi/features/reports/controllers/ReportController.dart';
@@ -50,51 +50,51 @@ import 'package:iventi/features/reports/controllers/ReportController.dart';
 class ServiceLocator {
   static late final PostgresDatasource datasource;
 
-  // Auth
+  // Autenticación
   static late final UsuarioRepository usuarioRepository;
   static late final AuthService authService;
   static late final AuthController authController;
 
-  // Clients
+  // Clientes
   static late final ClienteRepository clienteRepository;
   static late final ClienteService clienteService;
   static late final ClienteController clienteController;
 
-  // Inventory - Repositories
+  // Inventario - Repositorios
   static late final ProductoRepository productoRepository;
   static late final CategoriaRepository categoriaRepository;
   static late final UnidadRepository unidadRepository;
   static late final LoteRepository loteRepository;
 
-  // Inventory - Services
+  // Inventario - Servicios
   static late final ProductoService productoService;
   static late final CategoriaService categoriaService;
   static late final UnidadService unidadService;
   static late final LoteService loteService;
 
-  // Inventory - Controllers
+  // Inventario - Controladores
   static late final ProductoController productoController;
   static late final CategoriaController categoriaController;
   static late final UnidadController unidadController;
   static late final LoteController loteController;
 
-  // Sales
+  // Ventas
   static late final VentaRepository ventaRepository;
   static late final ReciboRepository reciboRepository;
   static late final VentaService ventaService;
   static late final VentaController ventaController;
 
-  // Config
+  // Configuración
   static late final ConfiguracionRepository configuracionRepository;
   static late final ConfiguracionService configuracionService;
   static late final ConfiguracionController configuracionController;
 
-  // Notifications
+  // Notificaciones
   static late final NotificacionRepository notificacionRepository;
   static late final NotificacionService notificacionService;
   static late final NotificacionController notificacionController;
 
-  // Reports
+  // Reportes
   static late final ReportRepository reportRepository;
   static late final ReportService reportService;
   static late final ReportController reportController;
@@ -102,38 +102,38 @@ class ServiceLocator {
   static Future<void> initialize() async {
     datasource = PostgresDatasource();
 
-    // === Auth ===
+    // === Autenticación ===
     usuarioRepository = UsuarioRepository(datasource);
     authService = AuthService(usuarioRepository);
     authController = AuthController(authService);
 
-    // === Clients ===
+    // === Clientes ===
     clienteRepository = ClienteRepository(datasource);
     clienteService = ClienteService(clienteRepository);
     clienteController = ClienteController(clienteService);
 
-    // === Inventory Repositories ===
+    // === Repositorios de Inventario ===
     productoRepository = ProductoRepository(datasource);
     categoriaRepository = CategoriaRepository(datasource);
     unidadRepository = UnidadRepository(datasource);
     loteRepository = LoteRepository(datasource, productoRepository);
 
-    // === Sales Repositories ===
-    // VentaRepository depends on loteRepository y productoRepository
+    // === Repositorios de Ventas ===
+    // VentaRepository depende de loteRepository y productoRepository
     ventaRepository = VentaRepository(datasource, loteRepository, productoRepository);
     reciboRepository = ReciboRepository(datasource);
 
-    // === Config Repository ===
+    // === Repositorio de Configuración ===
     configuracionRepository = ConfiguracionRepository(datasource);
 
-    // === Inventory Services ===
+    // === Servicios de Inventario ===
     productoService = ProductoService(productoRepository, categoriaRepository);
     categoriaService = CategoriaService(categoriaRepository);
     unidadService = UnidadService(unidadRepository);
-    // LoteService depends on ventaRepository
+    // LoteService depende de ventaRepository
     loteService = LoteService(loteRepository, productoRepository, ventaRepository);
 
-    // === Sales Services ===
+    // === Servicios de Ventas ===
     ventaService = VentaService(
       datasource,
       ventaRepository,
@@ -143,10 +143,10 @@ class ServiceLocator {
       clienteRepository,
     );
 
-    // === Config Service ===
+    // === Servicio de Configuración ===
     configuracionService = ConfiguracionService(configuracionRepository);
 
-    // === Notification Service ===
+    // === Servicio de Notificaciones ===
     notificacionRepository = NotificacionRepository(datasource);
     notificacionService = NotificacionService(
       notificacionRepository,
@@ -155,22 +155,22 @@ class ServiceLocator {
       configuracionRepository,
     );
 
-    // === Inventory Controllers ===
+    // === Controladores de Inventario ===
     productoController = ProductoController(productoService);
     loteController = LoteController(loteService);
     categoriaController = CategoriaController(categoriaService);
     unidadController = UnidadController(unidadService);
 
-    // === Sales Controllers ===
+    // === Controladores de Ventas ===
     ventaController = VentaController(ventaService);
 
-    // === Config Controller ===
+    // === Controlador de Configuración ===
     configuracionController = ConfiguracionController(configuracionService);
 
-    // === Notification Controller ===
+    // === Controlador de Notificaciones ===
     notificacionController = NotificacionController(notificacionService);
 
-    // === Reports ===
+    // === Reportes ===
     reportRepository = ReportRepository(datasource);
     reportService = ReportService(reportRepository);
     reportController = ReportController(reportService);

@@ -15,7 +15,7 @@ class LoteService {
   LoteService(this._loteRepository, this._productoRepository, this._ventaRepository);
 
   Future<LoteEntity> crearLote(CrearLoteRequest request) async {
-    final productoExistente = await _productoRepository.obtenerProductoPorID(request.idProducto);
+    final productoExistente = await _productoRepository.obtenerProductoPorId(request.idProducto);
 
     if (productoExistente == null) {
       throw BusinessException('Producto no encontrado');

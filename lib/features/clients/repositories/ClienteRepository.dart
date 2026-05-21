@@ -58,7 +58,11 @@ class ClienteRepository {
 
     try {
       final clientesEncontrados = await conexion.execute(
-        Sql.named("SELECT * FROM clientes WHERE (nombres ILIKE '%' || @nombre || '%' OR apellidos ILIKE '%' || @nombre || '%') AND es_activo = TRUE"),
+        Sql.named('''
+          SELECT * FROM clientes
+          WHERE (nombres ILIKE '%' || @nombre || '%' OR apellidos ILIKE '%' || @nombre || '%')
+          AND es_activo = TRUE
+        '''),
         parameters: {'nombre': nombre},
       );
 
@@ -147,8 +151,14 @@ class ClienteRepository {
 
     try {
       final ventasPendientes = await conexion.execute(
-        Sql.named("SELECT COUNT(*) AS pendientes FROM ventas WHERE id_cliente = @id AND estado = '${EstadoVenta.PENDIENTE.name}' AND (monto_total - monto_cancelado) > 0"),
-        parameters: {'id': idCliente},
+        Sql.named('''
+          SELECT COUNT(*) AS pendientes
+          FROM ventas
+          WHERE id_cliente = @id
+          AND estado = @estado
+          AND (monto_total - monto_cancelado) > 0
+        '''),
+        parameters: {'id': idCliente, 'estado': EstadoVenta.PENDIENTE.name},
       );
 
       final totalPendientes = ventasPendientes.first.toColumnMap()['pendientes'] as int;

@@ -36,7 +36,7 @@ class ProductoService {
   }
 
   Future<ProductoEntity> actualizarProducto(ActualizarProductoRequest request, {List<int>? idCategorias}) async {
-    final productoExistente = await _productoRepository.obtenerProductoPorID(request.idProducto);
+    final productoExistente = await _productoRepository.obtenerProductoPorId(request.idProducto);
 
     if (productoExistente == null) {
       throw BusinessException('Producto no encontrado');
@@ -57,7 +57,7 @@ class ProductoService {
   }
 
   Future<void> eliminarProducto(int idProducto) async {
-    final productoExistente = await _productoRepository.obtenerProductoPorID(idProducto);
+    final productoExistente = await _productoRepository.obtenerProductoPorId(idProducto);
 
     if (productoExistente == null) {
       throw BusinessException('Producto no encontrado');
@@ -73,7 +73,7 @@ class ProductoService {
 
   Future<ProductoEntity?> obtenerProductoPorId(int idProducto) async {
     try {
-      return await _productoRepository.obtenerProductoPorID(idProducto);
+      return await _productoRepository.obtenerProductoPorId(idProducto);
 
     } on DatabaseException catch (e) {
       throw BusinessException('Error al obtener producto: ${e.mensaje}');

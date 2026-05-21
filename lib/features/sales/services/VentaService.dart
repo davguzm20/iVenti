@@ -63,7 +63,7 @@ class VentaService {
 
   Future<VentaEntity?> obtenerVentaPorId(int idVenta) async {
     try {
-      return await _ventaRepository.obtenerVentaPorID(idVenta);
+      return await _ventaRepository.obtenerVentaPorId(idVenta);
 
     } on DatabaseException catch (e) {
       throw BusinessException('Error al obtener venta: ${e.mensaje}');
@@ -120,7 +120,7 @@ class VentaService {
 
   Future<void> anularVenta(int idVenta) async {
     try {
-      final ventaExistente = await _ventaRepository.obtenerVentaPorID(idVenta);
+      final ventaExistente = await _ventaRepository.obtenerVentaPorId(idVenta);
 
       if (ventaExistente == null) {
         throw BusinessException('Venta no encontrada');
@@ -157,8 +157,7 @@ class VentaService {
 
         await conexion.execute(
           Sql.named(
-            "UPDATE ventas SET estado = @estado, actualizado_en = CURRENT_TIMESTAMP "
-            "WHERE id_venta = @id",
+            '''UPDATE ventas SET estado = @estado, actualizado_en = CURRENT_TIMESTAMP WHERE id_venta = @id''',
           ),
           parameters: {'estado': EstadoVenta.ANULADA.name, 'id': idVenta},
         );
@@ -189,7 +188,7 @@ class VentaService {
       throw BusinessException('El monto debe ser mayor a 0');
     }
 
-    final ventaExistente = await _ventaRepository.obtenerVentaPorID(idVenta);
+    final ventaExistente = await _ventaRepository.obtenerVentaPorId(idVenta);
 
     if (ventaExistente == null) {
       throw BusinessException('Venta no encontrada');
