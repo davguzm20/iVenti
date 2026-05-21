@@ -3,6 +3,7 @@ import 'package:iventi/shared/config/AppColors.dart';
 import 'package:iventi/shared/config/ButtonStyles.dart';
 import 'package:iventi/shared/di/ServiceLocator.dart';
 import 'package:iventi/features/reports/controllers/ReportController.dart';
+import 'package:iventi/features/reports/dtos/requests/ReporteProximosVencerRequest.dart';
 
 class ReportFechaVencimientoPage extends StatefulWidget {
   const ReportFechaVencimientoPage({super.key});
@@ -36,7 +37,8 @@ class _ReportFechaVencimientoPageState extends State<ReportFechaVencimientoPage>
 
     setState(() => _generando = true);
     try {
-      final data = await _controller.generarProximosVencer(dias);
+      final request = ReporteProximosVencerRequest(dias: dias);
+      final data = await _controller.generarProximosVencer(request);
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("Reporte generado: ${data.length} lotes próximos a vencer")),

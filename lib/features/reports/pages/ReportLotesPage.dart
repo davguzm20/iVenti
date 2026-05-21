@@ -3,6 +3,7 @@ import 'package:iventi/shared/config/AppColors.dart';
 import 'package:iventi/shared/config/ButtonStyles.dart';
 import 'package:iventi/shared/di/ServiceLocator.dart';
 import 'package:iventi/features/reports/controllers/ReportController.dart';
+import 'package:iventi/features/reports/dtos/requests/ReporteLotesRequest.dart';
 
 class ReportLotesPage extends StatefulWidget {
   const ReportLotesPage({super.key});
@@ -28,11 +29,12 @@ class _ReportLotesPageState extends State<ReportLotesPage> {
     setState(() => _generando = true);
     try {
       final tipoFiltro = tipo == "General" ? null : tipo;
-      final data = await _controller.generarLotes(
+      final request = ReporteLotesRequest(
         fechaInicio: inicio,
         fechaFinal: fin,
         tipo: tipoFiltro,
       );
+      final data = await _controller.generarLotes(request);
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("Reporte generado: ${data.length} lotes encontrados")),

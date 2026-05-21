@@ -3,6 +3,7 @@ import 'package:iventi/shared/config/AppColors.dart';
 import 'package:iventi/shared/config/ButtonStyles.dart';
 import 'package:iventi/shared/di/ServiceLocator.dart';
 import 'package:iventi/features/reports/controllers/ReportController.dart';
+import 'package:iventi/features/reports/dtos/requests/ReporteProductosVendidosRequest.dart';
 
 class ReportProductosVendidosPage extends StatefulWidget {
   const ReportProductosVendidosPage({super.key});
@@ -26,10 +27,11 @@ class _ReportProductosVendidosPageState extends State<ReportProductosVendidosPag
   Future<void> _generar() async {
     setState(() => _generando = true);
     try {
-      final data = await _controller.generarProductosVendidos(
+      final request = ReporteProductosVendidosRequest(
         fechaInicio: inicio,
         fechaFinal: fin,
       );
+      final data = await _controller.generarProductosVendidos(request);
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("Reporte generado: ${data.length} productos encontrados")),

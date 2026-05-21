@@ -3,6 +3,14 @@ import 'package:iventi/shared/exceptions/DatabaseException.dart';
 import 'package:iventi/features/reports/entities/VentaReportEntity.dart';
 import 'package:iventi/features/reports/entities/ProductoVendidoEntity.dart';
 import 'package:iventi/features/reports/entities/LoteReportEntity.dart';
+import 'package:iventi/features/reports/dtos/requests/ReporteVentasRequest.dart';
+import 'package:iventi/features/reports/dtos/requests/ReporteProductosVendidosRequest.dart';
+import 'package:iventi/features/reports/dtos/requests/ReporteLotesRequest.dart';
+import 'package:iventi/features/reports/dtos/requests/ReporteProximosVencerRequest.dart';
+import 'package:iventi/features/reports/dtos/requests/ReporteInventarioGeneralRequest.dart';
+import 'package:iventi/features/reports/mappers/VentaReportMapper.dart';
+import 'package:iventi/features/reports/mappers/ProductoVendidoMapper.dart';
+import 'package:iventi/features/reports/mappers/LoteReportMapper.dart';
 import 'package:iventi/features/reports/repositories/ReportRepository.dart';
 
 class ReportService {
@@ -10,81 +18,65 @@ class ReportService {
 
   ReportService(this._repository);
 
-  Future<List<VentaReportEntity>> generarReporteVentas({
-    required DateTime fechaInicio,
-    required DateTime fechaFinal,
-    String? tipo,
-  }) async {
-    _validarFechas(fechaInicio, fechaFinal);
-
+  Future<List<VentaReportEntity>> generarReporteVentas(ReporteVentasRequest request) async {
     try {
-      return await _repository.obtenerVentas(
-        fechaInicio: fechaInicio,
-        fechaFinal: fechaFinal,
-        tipo: tipo,
+      final responses = await _repository.obtenerVentas(
+        fechaInicio: request.fechaInicio,
+        fechaFinal: request.fechaFinal,
+        tipo: request.tipo,
       );
+      return responses.map(VentaReportMapper.fromResponse).toList();
     } on DatabaseException catch (e) {
       throw BusinessException('Error al generar reporte de ventas: ${e.mensaje}');
     }
   }
 
-  Future<List<ProductoVendidoEntity>> generarReporteProductosVendidos({
-    required DateTime fechaInicio,
-    required DateTime fechaFinal,
-  }) async {
-    _validarFechas(fechaInicio, fechaFinal);
-
+  Future<List<ProductoVendidoEntity>> generarReporteProductosVendidos(
+    ReporteProductosVendidosRequest request,
+  ) async {
     try {
-      return await _repository.obtenerProductosVendidos(
-        fechaInicio: fechaInicio,
-        fechaFinal: fechaFinal,
+      final responses = await _repository.obtenerProductosVendidos(
+        fechaInicio: request.fechaInicio,
+        fechaFinal: request.fechaFinal,
       );
+      return responses.map(ProductoVendidoMapper.fromResponse).toList();
     } on DatabaseException catch (e) {
       throw BusinessException('Error al generar reporte de productos vendidos: ${e.mensaje}');
     }
   }
 
-  Future<List<LoteReportEntity>> generarReporteLotes({
-    required DateTime fechaInicio,
-    required DateTime fechaFinal,
-    String? tipo,
-  }) async {
-    _validarFechas(fechaInicio, fechaFinal);
-
+  Future<List<LoteReportEntity>> generarReporteLotes(ReporteLotesRequest request) async {
     try {
-      return await _repository.obtenerLotes(
-        fechaInicio: fechaInicio,
-        fechaFinal: fechaFinal,
-        tipo: tipo,
+      final responses = await _repository.obtenerLotes(
+        fechaInicio: request.fechaInicio,
+        fechaFinal: request.fechaFinal,
+        tipo: request.tipo,
       );
+      return responses.map(LoteReportMapper.fromResponse).toList();
     } on DatabaseException catch (e) {
       throw BusinessException('Error al generar reporte de lotes: ${e.mensaje}');
     }
   }
 
-  Future<List<LoteReportEntity>> generarReporteProximosVencer(int dias) async {
-    if (dias <= 0) {
-      throw BusinessException('El número de días debe ser mayor a 0');
-    }
-
+  Future<List<LoteReportEntity>> generarReporteProximosVencer(
+    ReporteProximosVencerRequest request,
+  ) async {
     try {
-      return await _repository.obtenerProximosVencer(dias);
+      final responses = await _repository.obtenerProximosVencer(request.dias);
+      return responses.map(LoteReportMapper.fromResponse).toList();
     } on DatabaseException catch (e) {
       throw BusinessException('Error al generar reporte de próximos a vencer: ${e.mensaje}');
     }
   }
 
-  Future<List<LoteReportEntity>> generarReporteInventarioGeneral(DateTime fecha) async {
+  Future<List<LoteReportEntity>> generarReporteInventarioGeneral(
+    ReporteInventarioGeneralRequest request,
+  ) async {
     try {
-      return await _repository.obtenerInventarioGeneral(fecha);
+      final responses = await _repository.obtenerInventarioGeneral(request.fecha);
+      return responses.map(LoteReportMapper.fromResponse).toList();
     } on DatabaseException catch (e) {
       throw BusinessException('Error al generar reporte de inventario general: ${e.mensaje}');
-    }
-  }
-
-  void _validarFechas(DateTime inicio, DateTime fin) {
-    if (inicio.isAfter(fin)) {
-      throw BusinessException('La fecha de inicio no puede ser posterior a la fecha final');
     }
   }
 }

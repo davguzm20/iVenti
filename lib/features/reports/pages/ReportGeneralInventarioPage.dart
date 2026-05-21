@@ -3,6 +3,7 @@ import 'package:iventi/shared/config/AppColors.dart';
 import 'package:iventi/shared/config/ButtonStyles.dart';
 import 'package:iventi/shared/di/ServiceLocator.dart';
 import 'package:iventi/features/reports/controllers/ReportController.dart';
+import 'package:iventi/features/reports/dtos/requests/ReporteInventarioGeneralRequest.dart';
 
 class ReportGeneralInventarioPage extends StatefulWidget {
   const ReportGeneralInventarioPage({super.key});
@@ -25,7 +26,8 @@ class _ReportGeneralInventarioPageState extends State<ReportGeneralInventarioPag
   Future<void> _generar() async {
     setState(() => _generando = true);
     try {
-      final data = await _controller.generarInventarioGeneral(fecha);
+      final request = ReporteInventarioGeneralRequest(fecha: fecha);
+      final data = await _controller.generarInventarioGeneral(request);
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("Reporte generado: ${data.length} lotes en inventario")),

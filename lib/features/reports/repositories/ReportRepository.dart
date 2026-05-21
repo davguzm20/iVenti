@@ -1,9 +1,12 @@
 import 'package:postgres/postgres.dart';
 import 'package:iventi/shared/datasources/PostgresDatasource.dart';
 import 'package:iventi/shared/exceptions/DatabaseException.dart';
-import 'package:iventi/features/reports/entities/VentaReportEntity.dart';
-import 'package:iventi/features/reports/entities/ProductoVendidoEntity.dart';
-import 'package:iventi/features/reports/entities/LoteReportEntity.dart';
+import 'package:iventi/features/reports/dtos/responses/VentaReportResponse.dart';
+import 'package:iventi/features/reports/dtos/responses/ProductoVendidoResponse.dart';
+import 'package:iventi/features/reports/dtos/responses/LoteReportResponse.dart';
+import 'package:iventi/features/reports/mappers/VentaReportMapper.dart';
+import 'package:iventi/features/reports/mappers/ProductoVendidoMapper.dart';
+import 'package:iventi/features/reports/mappers/LoteReportMapper.dart';
 
 class ReportRepository {
   final PostgresDatasource _datasource;
@@ -12,7 +15,7 @@ class ReportRepository {
 
   Future<Connection> get _conexion => _datasource.connection;
 
-  Future<List<VentaReportEntity>> obtenerVentas({
+  Future<List<VentaReportResponse>> obtenerVentas({
     required DateTime fechaInicio,
     required DateTime fechaFinal,
     String? tipo,
@@ -51,24 +54,15 @@ class ReportRepository {
         },
       );
 
-      return resultado.map((fila) {
-        final mapa = fila.toColumnMap();
-        return VentaReportEntity(
-          idVenta: mapa['id_venta'] as int,
-          codigoBoleta: (mapa['codigo_boleta'] ?? '') as String,
-          cliente: mapa['cliente'] as String,
-          fecha: mapa['fecha'] as DateTime,
-          montoTotal: (mapa['monto_total'] as num).toDouble(),
-          montoCancelado: (mapa['monto_cancelado'] as num).toDouble(),
-          tipo: mapa['tipo'] as String,
-        );
-      }).toList();
+      return resultado
+          .map((fila) => VentaReportMapper.fromMap(fila.toColumnMap()))
+          .toList();
     } catch (e) {
       throw DatabaseException('Error al obtener reporte de ventas: $e');
     }
   }
 
-  Future<List<ProductoVendidoEntity>> obtenerProductosVendidos({
+  Future<List<ProductoVendidoResponse>> obtenerProductosVendidos({
     required DateTime fechaInicio,
     required DateTime fechaFinal,
   }) async {
@@ -101,21 +95,15 @@ class ReportRepository {
         },
       );
 
-      return resultado.map((fila) {
-        final mapa = fila.toColumnMap();
-        return ProductoVendidoEntity(
-          producto: mapa['producto'] as String,
-          cantidad: (mapa['cantidad'] as num).toInt(),
-          precioUnitario: (mapa['precio_unitario'] as num).toDouble(),
-          subtotal: (mapa['subtotal'] as num).toDouble(),
-        );
-      }).toList();
+      return resultado
+          .map((fila) => ProductoVendidoMapper.fromMap(fila.toColumnMap()))
+          .toList();
     } catch (e) {
       throw DatabaseException('Error al obtener productos vendidos: $e');
     }
   }
 
-  Future<List<LoteReportEntity>> obtenerLotes({
+  Future<List<LoteReportResponse>> obtenerLotes({
     required DateTime fechaInicio,
     required DateTime fechaFinal,
     String? tipo,
@@ -151,22 +139,15 @@ class ReportRepository {
         },
       );
 
-      return resultado.map((fila) {
-        final mapa = fila.toColumnMap();
-        return LoteReportEntity(
-          idLote: mapa['id_lote'] as int,
-          producto: mapa['producto'] as String,
-          cantidadActual: (mapa['cantidad_actual'] as num).toInt(),
-          cantidadComprada: (mapa['cantidad_comprada'] as num).toInt(),
-          fechaVencimiento: mapa['fecha_vencimiento'] as DateTime?,
-        );
-      }).toList();
+      return resultado
+          .map((fila) => LoteReportMapper.fromMap(fila.toColumnMap()))
+          .toList();
     } catch (e) {
       throw DatabaseException('Error al obtener reporte de lotes: $e');
     }
   }
 
-  Future<List<LoteReportEntity>> obtenerProximosVencer(int dias) async {
+  Future<List<LoteReportResponse>> obtenerProximosVencer(int dias) async {
     final conexion = await _conexion;
 
     try {
@@ -185,22 +166,15 @@ class ReportRepository {
         parameters: {'dias': dias},
       );
 
-      return resultado.map((fila) {
-        final mapa = fila.toColumnMap();
-        return LoteReportEntity(
-          idLote: mapa['id_lote'] as int,
-          producto: mapa['producto'] as String,
-          cantidadActual: (mapa['cantidad_actual'] as num).toInt(),
-          cantidadComprada: (mapa['cantidad_comprada'] as num).toInt(),
-          fechaVencimiento: mapa['fecha_vencimiento'] as DateTime?,
-        );
-      }).toList();
+      return resultado
+          .map((fila) => LoteReportMapper.fromMap(fila.toColumnMap()))
+          .toList();
     } catch (e) {
       throw DatabaseException('Error al obtener próximos a vencer: $e');
     }
   }
 
-  Future<List<LoteReportEntity>> obtenerInventarioGeneral(DateTime fecha) async {
+  Future<List<LoteReportResponse>> obtenerInventarioGeneral(DateTime fecha) async {
     final conexion = await _conexion;
 
     try {
@@ -220,16 +194,9 @@ class ReportRepository {
         },
       );
 
-      return resultado.map((fila) {
-        final mapa = fila.toColumnMap();
-        return LoteReportEntity(
-          idLote: mapa['id_lote'] as int,
-          producto: mapa['producto'] as String,
-          cantidadActual: (mapa['cantidad_actual'] as num).toInt(),
-          cantidadComprada: (mapa['cantidad_comprada'] as num).toInt(),
-          fechaVencimiento: mapa['fecha_vencimiento'] as DateTime?,
-        );
-      }).toList();
+      return resultado
+          .map((fila) => LoteReportMapper.fromMap(fila.toColumnMap()))
+          .toList();
     } catch (e) {
       throw DatabaseException('Error al obtener inventario general: $e');
     }
