@@ -1,5 +1,5 @@
 import 'package:postgres/postgres.dart';
-import 'package:iventi/shared/datasources/PostgresDatasource.dart';
+import 'package:iventi/shared/utils/PostgresDatasource.dart';
 import 'package:iventi/shared/exceptions/DatabaseException.dart';
 import 'package:iventi/features/sales/entities/ReciboEntity.dart';
 import 'package:iventi/features/sales/dtos/requests/CrearReciboRequest.dart';

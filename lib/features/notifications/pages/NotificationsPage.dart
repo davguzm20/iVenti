@@ -3,7 +3,7 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:iventi/features/notifications/entities/NotificacionEntity.dart';
 import 'package:iventi/shared/di/ServiceLocator.dart';
 import 'package:iventi/features/notifications/controllers/NotificacionController.dart';
-import 'package:iventi/shared/config/AppColors.dart';
+import 'package:iventi/shared/theme/AppColors.dart';
 
 class NotificationsPage extends StatefulWidget {
   const NotificationsPage({super.key});

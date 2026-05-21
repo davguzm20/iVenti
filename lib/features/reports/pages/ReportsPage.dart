@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:iventi/shared/config/AppColors.dart';
+import 'package:iventi/shared/theme/AppColors.dart';
 
 class ReportsPage extends StatelessWidget {
   const ReportsPage({super.key});

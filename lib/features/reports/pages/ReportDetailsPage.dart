@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:iventi/shared/config/AppColors.dart';
+import 'package:iventi/shared/theme/AppColors.dart';
 
 class ReportDetailsPage extends StatelessWidget {
   const ReportDetailsPage({super.key});

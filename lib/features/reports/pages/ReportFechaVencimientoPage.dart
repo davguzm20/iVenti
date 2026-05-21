@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:iventi/shared/config/AppColors.dart';
-import 'package:iventi/shared/config/ButtonStyles.dart';
+import 'package:iventi/shared/theme/AppColors.dart';
+import 'package:iventi/shared/theme/ButtonStyles.dart';
 import 'package:iventi/shared/di/ServiceLocator.dart';
 import 'package:iventi/features/reports/controllers/ReportController.dart';
 import 'package:iventi/features/reports/dtos/requests/ReporteProximosVencerRequest.dart';

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter/services.dart';
-import 'package:iventi/shared/config/AppColors.dart';
+import 'package:iventi/shared/theme/AppColors.dart';
 
 class HomePage extends StatefulWidget {
   final StatefulNavigationShell navigationShell;
