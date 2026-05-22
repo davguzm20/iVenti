@@ -5,8 +5,9 @@ import 'package:iventi/shared/exceptions/NotFoundException.dart';
 import 'package:iventi/features/notifications/entities/NotificacionEntity.dart';
 import 'package:iventi/features/notifications/dtos/requests/CrearNotificacionRequest.dart';
 import 'package:iventi/features/notifications/mappers/NotificacionMapper.dart';
+import 'package:iventi/features/notifications/repositories/INotificacionRepository.dart';
 
-class NotificacionRepository {
+class NotificacionRepository implements INotificacionRepository {
   final PostgresDatasource _datasource;
 
   NotificacionRepository(this._datasource);

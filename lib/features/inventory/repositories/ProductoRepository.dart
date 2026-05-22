@@ -6,8 +6,9 @@ import 'package:iventi/features/inventory/entities/ProductoEntity.dart';
 import 'package:iventi/features/inventory/dtos/requests/CrearProductoRequest.dart';
 import 'package:iventi/features/inventory/dtos/requests/ActualizarProductoRequest.dart';
 import 'package:iventi/features/inventory/mappers/ProductoMapper.dart';
+import 'package:iventi/features/inventory/repositories/IProductoRepository.dart';
 
-class ProductoRepository {
+class ProductoRepository implements IProductoRepository {
   final PostgresDatasource _datasource;
 
   ProductoRepository(this._datasource);

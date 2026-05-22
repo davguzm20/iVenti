@@ -8,8 +8,9 @@ import 'package:iventi/features/auth/entities/UsuarioEntity.dart';
 import 'package:iventi/features/auth/dtos/requests/LoginRequest.dart';
 import 'package:iventi/features/auth/dtos/requests/CrearUsuarioRequest.dart';
 import 'package:iventi/features/auth/mappers/UsuarioMapper.dart';
+import 'package:iventi/features/auth/repositories/IUsuarioRepository.dart';
 
-class UsuarioRepository {
+class UsuarioRepository implements IUsuarioRepository {
   final PostgresDatasource _datasource;
 
   UsuarioRepository(this._datasource);

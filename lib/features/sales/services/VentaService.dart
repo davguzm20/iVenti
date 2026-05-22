@@ -8,19 +8,19 @@ import 'package:iventi/features/sales/entities/ReciboEntity.dart';
 import 'package:iventi/features/sales/dtos/requests/CrearVentaRequest.dart';
 import 'package:iventi/features/sales/dtos/requests/CrearReciboRequest.dart';
 import 'package:iventi/features/sales/enums/EstadoVenta.dart';
-import 'package:iventi/features/sales/repositories/VentaRepository.dart';
-import 'package:iventi/features/sales/repositories/ReciboRepository.dart';
-import 'package:iventi/features/inventory/repositories/ProductoRepository.dart';
-import 'package:iventi/features/inventory/repositories/LoteRepository.dart';
-import 'package:iventi/features/clients/repositories/ClienteRepository.dart';
+import 'package:iventi/features/sales/repositories/IVentaRepository.dart';
+import 'package:iventi/features/sales/repositories/IReciboRepository.dart';
+import 'package:iventi/features/inventory/repositories/IProductoRepository.dart';
+import 'package:iventi/features/inventory/repositories/ILoteRepository.dart';
+import 'package:iventi/features/clients/repositories/IClienteRepository.dart';
 
 class VentaService {
   final PostgresDatasource _datasource;
-  final VentaRepository _ventaRepository;
-  final ReciboRepository _reciboRepository;
-  final ProductoRepository _productoRepository;
-  final LoteRepository _loteRepository;
-  final ClienteRepository _clienteRepository;
+  final IVentaRepository _ventaRepository;
+  final IReciboRepository _reciboRepository;
+  final IProductoRepository _productoRepository;
+  final ILoteRepository _loteRepository;
+  final IClienteRepository _clienteRepository;
 
   VentaService(
     this._datasource,

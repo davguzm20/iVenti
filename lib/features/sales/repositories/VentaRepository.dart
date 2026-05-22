@@ -10,8 +10,9 @@ import 'package:iventi/features/sales/enums/EstadoVenta.dart';
 import 'package:iventi/features/inventory/repositories/LoteRepository.dart';
 import 'package:iventi/features/inventory/repositories/ProductoRepository.dart';
 import 'package:iventi/features/sales/repositories/ReciboRepository.dart';
+import 'package:iventi/features/sales/repositories/IVentaRepository.dart';
 
-class VentaRepository {
+class VentaRepository implements IVentaRepository {
   final PostgresDatasource _datasource;
   final LoteRepository _loteRepository;
   final ProductoRepository _productoRepository;

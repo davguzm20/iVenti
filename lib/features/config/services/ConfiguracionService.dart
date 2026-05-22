@@ -2,10 +2,10 @@ import 'package:iventi/shared/exceptions/BusinessException.dart';
 import 'package:iventi/shared/exceptions/DatabaseException.dart';
 import 'package:iventi/features/config/entities/ConfiguracionEntity.dart';
 import 'package:iventi/features/config/dtos/requests/CrearConfiguracionRequest.dart';
-import 'package:iventi/features/config/repositories/ConfiguracionRepository.dart';
+import 'package:iventi/features/config/repositories/IConfiguracionRepository.dart';
 
 class ConfiguracionService {
-  final ConfiguracionRepository _configuracionRepository;
+  final IConfiguracionRepository _configuracionRepository;
 
   ConfiguracionService(this._configuracionRepository);
 

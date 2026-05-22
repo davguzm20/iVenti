@@ -7,8 +7,9 @@ import 'package:iventi/features/inventory/dtos/requests/CrearLoteRequest.dart';
 import 'package:iventi/features/inventory/dtos/requests/ActualizarLoteRequest.dart';
 import 'package:iventi/features/inventory/mappers/LoteMapper.dart';
 import 'package:iventi/features/inventory/repositories/ProductoRepository.dart';
+import 'package:iventi/features/inventory/repositories/ILoteRepository.dart';
 
-class LoteRepository {
+class LoteRepository implements ILoteRepository {
   final PostgresDatasource _datasource;
   final ProductoRepository _productoRepository;
 

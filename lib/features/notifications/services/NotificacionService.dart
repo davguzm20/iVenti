@@ -3,16 +3,16 @@ import 'package:iventi/shared/exceptions/DatabaseException.dart';
 import 'package:iventi/features/notifications/entities/NotificacionEntity.dart';
 import 'package:iventi/features/notifications/enums/TipoNotificacion.dart';
 import 'package:iventi/features/notifications/dtos/requests/CrearNotificacionRequest.dart';
-import 'package:iventi/features/notifications/repositories/NotificacionRepository.dart';
-import 'package:iventi/features/inventory/repositories/ProductoRepository.dart';
-import 'package:iventi/features/inventory/repositories/LoteRepository.dart';
-import 'package:iventi/features/config/repositories/ConfiguracionRepository.dart';
+import 'package:iventi/features/notifications/repositories/INotificacionRepository.dart';
+import 'package:iventi/features/inventory/repositories/IProductoRepository.dart';
+import 'package:iventi/features/inventory/repositories/ILoteRepository.dart';
+import 'package:iventi/features/config/repositories/IConfiguracionRepository.dart';
 
 class NotificacionService {
-  final NotificacionRepository _notificacionRepository;
-  final ProductoRepository _productoRepository;
-  final LoteRepository _loteRepository;
-  final ConfiguracionRepository _configuracionRepository;
+  final INotificacionRepository _notificacionRepository;
+  final IProductoRepository _productoRepository;
+  final ILoteRepository _loteRepository;
+  final IConfiguracionRepository _configuracionRepository;
 
   NotificacionService(
     this._notificacionRepository,

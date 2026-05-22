@@ -3,10 +3,10 @@ import 'package:iventi/shared/exceptions/DatabaseException.dart';
 import 'package:iventi/features/clients/entities/ClienteEntity.dart';
 import 'package:iventi/features/clients/dtos/requests/CrearClienteRequest.dart';
 import 'package:iventi/features/clients/dtos/requests/ActualizarClienteRequest.dart';
-import 'package:iventi/features/clients/repositories/ClienteRepository.dart';
+import 'package:iventi/features/clients/repositories/IClienteRepository.dart';
 
 class ClienteService {
-  final ClienteRepository _clienteRepository;
+  final IClienteRepository _clienteRepository;
 
   ClienteService(this._clienteRepository);
 

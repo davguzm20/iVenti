@@ -4,10 +4,10 @@ import 'package:iventi/shared/exceptions/NotFoundException.dart';
 import 'package:iventi/features/inventory/entities/CategoriaEntity.dart';
 import 'package:iventi/features/inventory/dtos/requests/CrearCategoriaRequest.dart';
 import 'package:iventi/features/inventory/dtos/requests/ActualizarCategoriaRequest.dart';
-import 'package:iventi/features/inventory/repositories/CategoriaRepository.dart';
+import 'package:iventi/features/inventory/repositories/ICategoriaRepository.dart';
 
 class CategoriaService {
-  final CategoriaRepository _categoriaRepository;
+  final ICategoriaRepository _categoriaRepository;
 
   CategoriaService(this._categoriaRepository);
 

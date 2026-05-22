@@ -4,8 +4,9 @@ import 'package:iventi/shared/exceptions/DatabaseException.dart';
 import 'package:iventi/features/sales/entities/ReciboEntity.dart';
 import 'package:iventi/features/sales/dtos/requests/CrearReciboRequest.dart';
 import 'package:iventi/features/sales/mappers/ReciboMapper.dart';
+import 'package:iventi/features/sales/repositories/IReciboRepository.dart';
 
-class ReciboRepository {
+class ReciboRepository implements IReciboRepository {
   final PostgresDatasource _datasource;
 
   ReciboRepository(this._datasource);

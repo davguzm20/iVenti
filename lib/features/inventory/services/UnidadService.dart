@@ -1,10 +1,10 @@
 import 'package:iventi/shared/exceptions/BusinessException.dart';
 import 'package:iventi/shared/exceptions/DatabaseException.dart';
 import 'package:iventi/features/inventory/entities/UnidadEntity.dart';
-import 'package:iventi/features/inventory/repositories/UnidadRepository.dart';
+import 'package:iventi/features/inventory/repositories/IUnidadRepository.dart';
 
 class UnidadService {
-  final UnidadRepository _unidadRepository;
+  final IUnidadRepository _unidadRepository;
 
   UnidadService(this._unidadRepository);
 

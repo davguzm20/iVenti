@@ -5,8 +5,9 @@ import 'package:iventi/shared/exceptions/NotFoundException.dart';
 import 'package:iventi/features/config/entities/ConfiguracionEntity.dart';
 import 'package:iventi/features/config/dtos/requests/CrearConfiguracionRequest.dart';
 import 'package:iventi/features/config/mappers/ConfiguracionMapper.dart';
+import 'package:iventi/features/config/repositories/IConfiguracionRepository.dart';
 
-class ConfiguracionRepository {
+class ConfiguracionRepository implements IConfiguracionRepository {
   final PostgresDatasource _datasource;
 
   ConfiguracionRepository(this._datasource);

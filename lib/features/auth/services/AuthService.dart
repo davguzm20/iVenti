@@ -4,10 +4,10 @@ import 'package:iventi/shared/exceptions/ValidationException.dart';
 import 'package:iventi/features/auth/entities/UsuarioEntity.dart';
 import 'package:iventi/features/auth/dtos/requests/CrearUsuarioRequest.dart';
 import 'package:iventi/features/auth/dtos/requests/LoginRequest.dart';
-import 'package:iventi/features/auth/repositories/UsuarioRepository.dart';
+import 'package:iventi/features/auth/repositories/IUsuarioRepository.dart';
 
 class AuthService {
-  final UsuarioRepository _usuarioRepository;
+  final IUsuarioRepository _usuarioRepository;
 
   AuthService(this._usuarioRepository);
 

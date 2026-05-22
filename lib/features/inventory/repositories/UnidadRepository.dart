@@ -3,8 +3,9 @@ import 'package:iventi/shared/utils/PostgresDatasource.dart';
 import 'package:iventi/shared/exceptions/DatabaseException.dart';
 import 'package:iventi/features/inventory/entities/UnidadEntity.dart';
 import 'package:iventi/features/inventory/mappers/UnidadMapper.dart';
+import 'package:iventi/features/inventory/repositories/IUnidadRepository.dart';
 
-class UnidadRepository {
+class UnidadRepository implements IUnidadRepository {
   final PostgresDatasource _datasource;
 
   UnidadRepository(this._datasource);

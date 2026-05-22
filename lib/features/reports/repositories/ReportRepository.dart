@@ -7,8 +7,9 @@ import 'package:iventi/features/reports/dtos/responses/LoteReportResponse.dart';
 import 'package:iventi/features/reports/mappers/VentaReportMapper.dart';
 import 'package:iventi/features/reports/mappers/ProductoVendidoMapper.dart';
 import 'package:iventi/features/reports/mappers/LoteReportMapper.dart';
+import 'package:iventi/features/reports/repositories/IReportRepository.dart';
 
-class ReportRepository {
+class ReportRepository implements IReportRepository {
   final PostgresDatasource _datasource;
 
   ReportRepository(this._datasource);

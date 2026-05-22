@@ -11,10 +11,10 @@ import 'package:iventi/features/reports/dtos/requests/ReporteInventarioGeneralRe
 import 'package:iventi/features/reports/mappers/VentaReportMapper.dart';
 import 'package:iventi/features/reports/mappers/ProductoVendidoMapper.dart';
 import 'package:iventi/features/reports/mappers/LoteReportMapper.dart';
-import 'package:iventi/features/reports/repositories/ReportRepository.dart';
+import 'package:iventi/features/reports/repositories/IReportRepository.dart';
 
 class ReportService {
-  final ReportRepository _repository;
+  final IReportRepository _repository;
 
   ReportService(this._repository);
 

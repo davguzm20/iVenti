@@ -3,14 +3,14 @@ import 'package:iventi/shared/exceptions/DatabaseException.dart';
 import 'package:iventi/features/inventory/entities/LoteEntity.dart';
 import 'package:iventi/features/inventory/dtos/requests/CrearLoteRequest.dart';
 import 'package:iventi/features/inventory/dtos/requests/ActualizarLoteRequest.dart';
-import 'package:iventi/features/inventory/repositories/LoteRepository.dart';
-import 'package:iventi/features/inventory/repositories/ProductoRepository.dart';
-import 'package:iventi/features/sales/repositories/VentaRepository.dart';
+import 'package:iventi/features/inventory/repositories/ILoteRepository.dart';
+import 'package:iventi/features/inventory/repositories/IProductoRepository.dart';
+import 'package:iventi/features/sales/repositories/IVentaRepository.dart';
 
 class LoteService {
-  final LoteRepository _loteRepository;
-  final ProductoRepository _productoRepository;
-  final VentaRepository _ventaRepository;
+  final ILoteRepository _loteRepository;
+  final IProductoRepository _productoRepository;
+  final IVentaRepository _ventaRepository;
 
   LoteService(this._loteRepository, this._productoRepository, this._ventaRepository);
 

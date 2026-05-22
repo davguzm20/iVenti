@@ -7,8 +7,9 @@ import 'package:iventi/features/clients/entities/ClienteEntity.dart';
 import 'package:iventi/features/clients/dtos/requests/CrearClienteRequest.dart';
 import 'package:iventi/features/clients/dtos/requests/ActualizarClienteRequest.dart';
 import 'package:iventi/features/clients/mappers/ClienteMapper.dart';
+import 'package:iventi/features/clients/repositories/IClienteRepository.dart';
 
-class ClienteRepository {
+class ClienteRepository implements IClienteRepository {
   final PostgresDatasource _datasource;
 
   ClienteRepository(this._datasource);

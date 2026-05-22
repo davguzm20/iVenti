@@ -3,12 +3,12 @@ import 'package:iventi/shared/exceptions/DatabaseException.dart';
 import 'package:iventi/features/inventory/entities/ProductoEntity.dart';
 import 'package:iventi/features/inventory/dtos/requests/CrearProductoRequest.dart';
 import 'package:iventi/features/inventory/dtos/requests/ActualizarProductoRequest.dart';
-import 'package:iventi/features/inventory/repositories/ProductoRepository.dart';
-import 'package:iventi/features/inventory/repositories/CategoriaRepository.dart';
+import 'package:iventi/features/inventory/repositories/IProductoRepository.dart';
+import 'package:iventi/features/inventory/repositories/ICategoriaRepository.dart';
 
 class ProductoService {
-  final ProductoRepository _productoRepository;
-  final CategoriaRepository _categoriaRepository;
+  final IProductoRepository _productoRepository;
+  final ICategoriaRepository _categoriaRepository;
 
   ProductoService(this._productoRepository, this._categoriaRepository);
 
