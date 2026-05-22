@@ -256,16 +256,13 @@ class _DetailsSalePageState extends State<DetailsSalePage> {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          if (venta!.codigoBoleta != null)
-                            Text('Boleta: ${venta!.codigoBoleta}', style: const TextStyle(fontWeight: FontWeight.bold, color: AppColors.primary, fontSize: 18)),
-
-                          Text(
-                            'Fecha: ${venta!.creadoEn.toIso8601String().split('T')[0]}',
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Fecha: ${venta!.creadoEn.toIso8601String().split('T')[0]}',
                             style: const TextStyle(
                               fontWeight: FontWeight.bold,
                               color: AppColors.primary,

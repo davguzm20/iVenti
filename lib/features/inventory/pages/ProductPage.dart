@@ -228,9 +228,11 @@ class _ProductPageState extends State<ProductPage> {
       title: 'Eliminar lote',
       message: '¿Estás seguro de eliminar el lote ${lote.idLote}?',
       btnOkOnPress: () async {
-        await _loteController.eliminarLote(lote.idProducto, lote.idLote);
-        _recargarLotes();
-        _cargarDatos();
+        if (lote.idLote != null) {
+          await _loteController.eliminarLote(lote.idProducto, lote.idLote!);
+          _recargarLotes();
+          _cargarDatos();
+        }
       },
     );
   }
