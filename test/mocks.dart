@@ -29,9 +29,7 @@ import 'package:iventi/features/inventory/controllers/UnidadController.dart';
 import 'package:iventi/features/sales/repositories/VentaRepository.dart';
 import 'package:iventi/features/sales/repositories/ReciboRepository.dart';
 import 'package:iventi/features/sales/services/VentaService.dart';
-import 'package:iventi/features/sales/services/ReciboService.dart';
 import 'package:iventi/features/sales/controllers/VentaController.dart';
-import 'package:iventi/features/sales/controllers/ReciboController.dart';
 
 // Reports
 import 'package:iventi/features/reports/repositories/ReportRepository.dart';
@@ -70,9 +68,7 @@ import 'package:iventi/features/config/controllers/ConfiguracionController.dart'
 @GenerateMocks([VentaRepository])
 @GenerateMocks([ReciboRepository])
 @GenerateMocks([VentaService])
-@GenerateMocks([ReciboService])
 @GenerateMocks([VentaController])
-@GenerateMocks([ReciboController])
 @GenerateMocks([ReportRepository])
 @GenerateMocks([ReportService])
 @GenerateMocks([ReportController])
