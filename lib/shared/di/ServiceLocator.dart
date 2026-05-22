@@ -30,6 +30,7 @@ import 'package:iventi/features/inventory/controllers/UnidadController.dart';
 import 'package:iventi/features/sales/repositories/VentaRepository.dart';
 import 'package:iventi/features/sales/repositories/ReciboRepository.dart';
 import 'package:iventi/features/sales/services/VentaService.dart';
+import 'package:iventi/features/sales/services/PagoService.dart';
 import 'package:iventi/features/sales/controllers/VentaController.dart';
 
 // Configuración
@@ -82,6 +83,7 @@ class ServiceLocator {
   static late final VentaRepository ventaRepository;
   static late final ReciboRepository reciboRepository;
   static late final VentaService ventaService;
+  static late final PagoService pagoService;
   static late final VentaController ventaController;
 
   // Configuración
@@ -137,9 +139,14 @@ class ServiceLocator {
     ventaService = VentaService(
       datasource,
       ventaRepository,
-      reciboRepository,
       productoRepository,
       loteRepository,
+      clienteRepository,
+    );
+    pagoService = PagoService(
+      datasource,
+      ventaRepository,
+      reciboRepository,
       clienteRepository,
     );
 
@@ -162,7 +169,7 @@ class ServiceLocator {
     unidadController = UnidadController(unidadService);
 
     // === Controladores de Ventas ===
-    ventaController = VentaController(ventaService);
+    ventaController = VentaController(ventaService, pagoService);
 
     // === Controlador de Configuración ===
     configuracionController = ConfiguracionController(configuracionService);

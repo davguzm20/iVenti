@@ -2492,64 +2492,6 @@ class MockVentaService extends _i1.Mock implements _i48.VentaService {
       ) as _i13.Future<void>);
 
   @override
-  _i13.Future<_i9.ReciboEntity> registrarPago(
-    int? idVenta,
-    double? monto,
-    int? idUsuario,
-  ) =>
-      (super.noSuchMethod(
-        Invocation.method(
-          #registrarPago,
-          [
-            idVenta,
-            monto,
-            idUsuario,
-          ],
-        ),
-        returnValue: _i13.Future<_i9.ReciboEntity>.value(_FakeReciboEntity_7(
-          this,
-          Invocation.method(
-            #registrarPago,
-            [
-              idVenta,
-              monto,
-              idUsuario,
-            ],
-          ),
-        )),
-      ) as _i13.Future<_i9.ReciboEntity>);
-
-  @override
-  _i13.Future<void> registrarPagoCliente(
-    int? idCliente,
-    double? monto,
-    int? idUsuario,
-  ) =>
-      (super.noSuchMethod(
-        Invocation.method(
-          #registrarPagoCliente,
-          [
-            idCliente,
-            monto,
-            idUsuario,
-          ],
-        ),
-        returnValue: _i13.Future<void>.value(),
-        returnValueForMissingStub: _i13.Future<void>.value(),
-      ) as _i13.Future<void>);
-
-  @override
-  _i13.Future<List<_i9.ReciboEntity>> obtenerRecibosDeVenta(int? idVenta) =>
-      (super.noSuchMethod(
-        Invocation.method(
-          #obtenerRecibosDeVenta,
-          [idVenta],
-        ),
-        returnValue:
-            _i13.Future<List<_i9.ReciboEntity>>.value(<_i9.ReciboEntity>[]),
-      ) as _i13.Future<List<_i9.ReciboEntity>>);
-
-  @override
   _i13.Future<int> obtenerCantidadVendidaPorLote(int? idLote) =>
       (super.noSuchMethod(
         Invocation.method(
