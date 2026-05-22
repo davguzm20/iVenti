@@ -8,7 +8,7 @@ import 'package:iventi/AppRoutes.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await dotenv.load(fileName: "lib/.env");
+  await dotenv.load(fileName: ".env");
 
   await ServiceLocator.initialize();
   await DialogMessages.init();

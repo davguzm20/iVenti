@@ -23,13 +23,11 @@ class PostgresDatasource {
   }
 
   Future<void> _initConnection() async {
-    await dotenv.load(fileName: 'lib/.env');
-
-    final host = dotenv.env['POSTGRES_HOST'] ?? '';
-    final port = int.parse(dotenv.env['POSTGRES_PORT'] ?? '');
-    final db = dotenv.env['POSTGRES_DB'] ?? '';
-    final user = dotenv.env['POSTGRES_USER'] ?? '';
-    final password = dotenv.env['POSTGRES_PASSWORD'] ?? '';
+    final host = dotenv.env['PGHOST'] ?? '';
+    final port = int.parse(dotenv.env['PGPORT'] ?? '');
+    final db = dotenv.env['PGDATABASE'] ?? '';
+    final user = dotenv.env['PGUSER'] ?? '';
+    final password = dotenv.env['PGPASSWORD'] ?? '';
 
     _connection = await Connection.open(
       Endpoint(
