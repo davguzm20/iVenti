@@ -3,7 +3,6 @@ import 'package:go_router/go_router.dart';
 import 'package:iventi/shared/di/ServiceLocator.dart';
 import 'package:iventi/shared/theme/AppColors.dart';
 import 'package:iventi/shared/theme/ButtonStyles.dart';
-import 'package:iventi/shared/widgets/BackButton.dart';
 import 'package:iventi/features/config/dtos/requests/CrearConfiguracionRequest.dart';
 
 class ConfigPage extends StatefulWidget {

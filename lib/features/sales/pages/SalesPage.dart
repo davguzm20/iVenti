@@ -67,18 +67,19 @@ class _SalesPageState extends State<SalesPage> {
 
     if (mounted) {
       setState(() {
-        if (reiniciar) ventas = nuevas; else ventas.addAll(nuevas);
-        if (nuevas.isNotEmpty) cantidadCargas++; else hayMasCargas = false;
+        if (reiniciar) {
+          ventas = nuevas;
+        } else {
+          ventas.addAll(nuevas);
+        }
+        if (nuevas.isNotEmpty) {
+          cantidadCargas++;
+        } else {
+          hayMasCargas = false;
+        }
         isLoading = false;
       });
     }
-  }
-
-  void _buscarVentasPorCodigo(String codigo) {
-    if (_searchTimer?.isActive ?? false) _searchTimer!.cancel();
-    _searchTimer = Timer(const Duration(milliseconds: 300), () async {
-      if (codigo.isEmpty) { _cargarVentas(reiniciar: true); return; }
-    });
   }
 
   @override
@@ -123,7 +124,7 @@ class _SalesPageState extends State<SalesPage> {
                       borderSide: BorderSide.none,
                     ),
                     filled: true,
-                    fillColor: Colors.white.withOpacity(0.2),
+                    fillColor: Colors.white.withValues(alpha: 0.2),
                   ),
                   onChanged: (value) {},
                 )
@@ -207,12 +208,12 @@ class _SalesPageState extends State<SalesPage> {
                               color: AppColors.primary, width: 2),
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.black.withOpacity(0.2),
+                              color: Colors.black.withValues(alpha: 0.2),
                               blurRadius: 6,
                               offset: const Offset(0, 4),
                             ),
                             BoxShadow(
-                              color: Colors.black.withOpacity(0.1),
+                              color: Colors.black.withValues(alpha: 0.1),
                               blurRadius: 2,
                               offset: const Offset(0, 2),
                             ),
@@ -295,7 +296,7 @@ class _SalesPageState extends State<SalesPage> {
           if (isLoading)
             Positioned.fill(
               child: Container(
-                color: Colors.black.withOpacity(0.5),
+                color: Colors.black.withValues(alpha: 0.5),
                 child: const Center(
                   child: CircularProgressIndicator(
                     valueColor:

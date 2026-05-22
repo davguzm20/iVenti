@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iventi/shared/theme/AppColors.dart';
-import 'package:iventi/shared/theme/ButtonStyles.dart';
 
 class FilterClientsPage extends StatefulWidget {
   final bool? esDeudorInicial;
@@ -44,7 +43,7 @@ class _FilterClientsPageState extends State<FilterClientsPage> {
                         title: const Text("Filtrar por Estado", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
                         subtitle: const Text("Activa esta opción para filtrar clientes por su estado de deuda.", style: TextStyle(color: Colors.black54)),
                         value: habilitarFiltro,
-                        activeColor: AppColors.success,
+                        activeThumbColor: AppColors.success,
                         onChanged: (value) {
                           setState(() {
                             habilitarFiltro = value;

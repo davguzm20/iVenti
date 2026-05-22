@@ -6,7 +6,6 @@ import 'package:iventi/shared/theme/AppColors.dart';
 import 'package:iventi/shared/theme/ButtonStyles.dart';
 import 'package:iventi/shared/di/ServiceLocator.dart';
 import 'package:iventi/shared/utils/DialogMessages.dart';
-import 'package:iventi/shared/widgets/SuccessDialog.dart';
 import 'package:iventi/shared/widgets/ErrorDialog.dart';
 import 'package:iventi/shared/widgets/BackButton.dart';
 

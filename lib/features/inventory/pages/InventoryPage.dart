@@ -8,7 +8,6 @@ import 'package:iventi/features/inventory/controllers/ProductoController.dart';
 import 'package:iventi/features/inventory/entities/ProductoEntity.dart';
 import 'package:iventi/shared/di/ServiceLocator.dart';
 import 'package:iventi/shared/theme/AppColors.dart';
-import 'package:iventi/shared/theme/ButtonStyles.dart';
 
 class InventoryPage extends StatefulWidget {
   const InventoryPage({super.key});
@@ -147,7 +146,7 @@ class _InventoryPageState extends State<InventoryPage> {
                       borderSide: BorderSide.none,
                     ),
                     filled: true,
-                    fillColor: Colors.white.withOpacity(0.2),
+                    fillColor: Colors.white.withValues(alpha: 0.2),
                   ),
                   onChanged: (value) {
                     setState(() {
@@ -250,7 +249,7 @@ class _InventoryPageState extends State<InventoryPage> {
                           borderRadius: BorderRadius.circular(12),
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.black.withOpacity(0.1),
+                              color: Colors.black.withValues(alpha: 0.1),
                               blurRadius: 6,
                               offset: const Offset(2, 4),
                             ),
@@ -315,8 +314,8 @@ class _InventoryPageState extends State<InventoryPage> {
                                   vertical: 4, horizontal: 8),
                               decoration: BoxDecoration(
                                 color: esStockBajo
-                                    ? Colors.red.withOpacity(0.15)
-                                    : AppColors.success.withOpacity(0.15),
+                                    ? Colors.red.withValues(alpha: 0.15)
+                                    : AppColors.success.withValues(alpha: 0.15),
                                 borderRadius: BorderRadius.circular(6),
                               ),
                               child: Text(
@@ -341,7 +340,7 @@ class _InventoryPageState extends State<InventoryPage> {
           if (isLoading)
             Positioned.fill(
               child: Container(
-                color: Colors.black.withOpacity(0.5),
+                color: Colors.black.withValues(alpha: 0.5),
                 child: const Center(
                   child: SizedBox(
                     width: 50,

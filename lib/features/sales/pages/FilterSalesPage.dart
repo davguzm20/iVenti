@@ -73,15 +73,35 @@ class _FilterSalesState extends State<FilterSalesPage> {
                     SwitchListTile(
                       title: const Text("Filtrar por Tipo de Pago", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
                       subtitle: const Text("Activa esta opción para filtrar por tipo de pago."),
-                      value: habilitarFiltroPago, activeColor: AppColors.success,
+                      value: habilitarFiltroPago, activeThumbColor: AppColors.success,
                       onChanged: (value) => setState(() { habilitarFiltroPago = value; esAlContado = value ? esAlContado : null; }),
                     ),
                     if (habilitarFiltroPago) ...[
                       const Divider(),
-                      RadioListTile<bool>(title: const Text("Al contado"), value: true, groupValue: esAlContado, activeColor: AppColors.success,
-                          onChanged: (value) => setState(() => esAlContado = value)),
-                      RadioListTile<bool>(title: const Text("Crédito"), value: false, groupValue: esAlContado, activeColor: AppColors.success,
-                          onChanged: (value) => setState(() => esAlContado = value)),
+                      const Text("Selecciona tipo de pago:", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                      const SizedBox(height: 10),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          ElevatedButton(
+                            onPressed: () => setState(() => esAlContado = true),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: esAlContado == true ? AppColors.success : Colors.grey[300],
+                              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                            ),
+                            child: Text("Al contado", style: TextStyle(color: esAlContado == true ? Colors.white : Colors.black, fontWeight: FontWeight.bold)),
+                          ),
+                          const SizedBox(width: 20),
+                          ElevatedButton(
+                            onPressed: () => setState(() => esAlContado = false),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: esAlContado == false ? AppColors.success : Colors.grey[300],
+                              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                            ),
+                            child: Text("Crédito", style: TextStyle(color: esAlContado == false ? Colors.white : Colors.black, fontWeight: FontWeight.bold)),
+                          ),
+                        ],
+                      ),
                     ],
                   ],
                 ),
@@ -98,7 +118,7 @@ class _FilterSalesState extends State<FilterSalesPage> {
                     SwitchListTile(
                       title: const Text("Filtrar por Rango de Fechas", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
                       subtitle: const Text("Activa esta opción para filtrar por rango de fechas."),
-                      value: habilitarFiltroFecha, activeColor: AppColors.success,
+                      value: habilitarFiltroFecha, activeThumbColor: AppColors.success,
                       onChanged: (value) => setState(() {
                         habilitarFiltroFecha = value;
                         if (!value) { fechaInicioController.clear(); fechaFinalController.clear(); fechaInicio = null; fechaFinal = null; }

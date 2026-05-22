@@ -10,8 +10,6 @@ import 'package:iventi/features/auth/pages/CodeEmailPage.dart';
 import 'package:iventi/features/auth/pages/CreatePinPage.dart';
 import 'package:iventi/features/config/pages/SetupConfigPage.dart';
 import 'package:iventi/features/auth/pages/RecoverPinPage.dart';
-import 'package:iventi/features/auth/controllers/AuthController.dart';
-import 'package:iventi/features/config/controllers/ConfiguracionController.dart';
 import 'package:iventi/features/inventory/pages/InventoryPage.dart';
 import 'package:iventi/features/inventory/pages/CreateProductPage.dart';
 import 'package:iventi/features/inventory/pages/FilterProductsPage.dart';

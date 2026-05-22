@@ -71,7 +71,7 @@ class PinInput extends StatelessWidget {
       ),
       submittedPinTheme: defaultPinTheme.copyWith(
         decoration: defaultPinTheme.decoration!.copyWith(
-          color: AppColors.success.withOpacity(0.2),
+          color: AppColors.success.withValues(alpha: 0.2),
           borderRadius: BorderRadius.circular(10),
           border: Border.all(color: AppColors.success, width: 2),
         ),

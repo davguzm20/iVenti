@@ -232,7 +232,7 @@ class _CreateProductPageState extends State<CreateProductPage> {
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8.0),
                 child: DropdownButtonFormField<int>(
-                  value: unidadSeleccionada?.idUnidad,
+                  initialValue: unidadSeleccionada?.idUnidad,
                   items: unidadesDisponibles
                       .map(
                         (u) => DropdownMenuItem<int>(
@@ -353,7 +353,7 @@ class _CreateProductPageState extends State<CreateProductPage> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 DropdownButtonFormField<int>(
-                  value: seleccionada?.idCategoria,
+                  initialValue: seleccionada?.idCategoria,
                   items: categoriasDisponibles
                       .map((c) => DropdownMenuItem(
                             value: c.idCategoria,
@@ -420,7 +420,7 @@ class _CreateProductPageState extends State<CreateProductPage> {
         builder: (ctx, setDialogState) => AlertDialog(
           title: const Text('Eliminar categoría'),
           content: DropdownButtonFormField<int>(
-            value: seleccionada?.idCategoria,
+            initialValue: seleccionada?.idCategoria,
             items: categoriasDisponibles
                 .map((c) => DropdownMenuItem(
                       value: c.idCategoria,

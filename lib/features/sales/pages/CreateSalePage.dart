@@ -8,7 +8,6 @@ import 'package:iventi/shared/di/ServiceLocator.dart';
 import 'package:iventi/shared/theme/AppColors.dart';
 import 'package:iventi/shared/theme/ButtonStyles.dart';
 import 'package:iventi/shared/utils/DialogMessages.dart';
-import 'package:iventi/shared/widgets/CustomTextField.dart';
 import 'package:iventi/shared/widgets/ErrorDialog.dart';
 
 class CreateSalePage extends StatefulWidget {
@@ -21,20 +20,11 @@ class CreateSalePage extends StatefulWidget {
 class _CreateSalePageState extends State<CreateSalePage> {
   List<Map<String, dynamic>> productosVenta = [];
   List<ProductoEntity> productosFiltrados = [];
-  final TextEditingController _searchController = TextEditingController();
-  bool _showSearch = false;
-
-  void _buscarProductosPorNombre(String nombre) async {
-    if (nombre.isEmpty) { setState(() => productosFiltrados = []); return; }
-    final results = await ServiceLocator.productoController.buscarPorNombre(nombre);
-    if (mounted) setState(() => productosFiltrados = results);
-  }
 
   void _showAddProductDialog() {
     LoteEntity? loteSeleccionado;
     int cantidadValue = 1;
     double descuentoValue = 0;
-    String busqueda = '';
 
     showDialog(
       context: context,
@@ -54,7 +44,6 @@ class _CreateSalePageState extends State<CreateSalePage> {
                       border: OutlineInputBorder(),
                     ),
                     onChanged: (v) async {
-                      busqueda = v;
                       if (v.isEmpty) {
                         setDialogState(() => productosFiltrados = []);
                       } else {
@@ -85,7 +74,7 @@ class _CreateSalePageState extends State<CreateSalePage> {
                   const Divider(),
                   if (loteSeleccionado != null) ...[
                     DropdownButtonFormField<int>(
-                      value: loteSeleccionado!.idLote,
+                      initialValue: loteSeleccionado!.idLote,
                       items: [loteSeleccionado!].map((l) => DropdownMenuItem(value: l.idLote, child: Text('Lote ${l.idLote} - Stock: ${l.cantidadActual}'))).toList(),
                       onChanged: null,
                       decoration: const InputDecoration(labelText: 'Lote', border: OutlineInputBorder()),

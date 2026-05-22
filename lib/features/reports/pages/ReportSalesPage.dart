@@ -32,7 +32,11 @@ class _ReportSalesPageState extends State<ReportSalesPage> {
       firstDate: DateTime(2020),
       lastDate: DateTime.now(),
     );
-    if (d != null) setState(() { if (inicio) selectedFechaInicio = d; else selectedFechaFinal = d; });
+    if (d != null) setState(() { if (inicio) {
+      selectedFechaInicio = d;
+    } else {
+      selectedFechaFinal = d;
+    } });
   }
 
   Future<void> _generar() async {
@@ -71,7 +75,7 @@ class _ReportSalesPageState extends State<ReportSalesPage> {
             const Text("Tipo de reporte", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
             const SizedBox(height: 8),
             DropdownButtonFormField<String>(
-              value: selectedTipo,
+              initialValue: selectedTipo,
               items: ["General", "Al contado", "Crédito"].map((t) => DropdownMenuItem(value: t, child: Text(t))).toList(),
               onChanged: (v) => setState(() => selectedTipo = v!),
               decoration: const InputDecoration(border: OutlineInputBorder()),

@@ -1,5 +1,4 @@
 import 'package:mockito/annotations.dart';
-import 'package:postgres/postgres.dart';
 import 'package:iventi/shared/utils/PostgresDatasource.dart';
 
 // Auth

@@ -60,7 +60,7 @@ class _ReportLotesPageState extends State<ReportLotesPage> {
           children: [
             const Text("Tipo de lote", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
             DropdownButtonFormField<String>(
-              value: tipo, isExpanded: true,
+              initialValue: tipo, isExpanded: true,
               items: ["General", "Actuales"].map((t) => DropdownMenuItem(value: t, child: Text(t))).toList(),
               onChanged: (v) => setState(() => tipo = v!),
               decoration: const InputDecoration(border: OutlineInputBorder()),

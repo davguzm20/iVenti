@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iventi/features/inventory/entities/ProductoEntity.dart';
@@ -12,17 +11,12 @@ import 'package:iventi/features/inventory/controllers/LoteController.dart';
 import 'package:iventi/features/inventory/controllers/CategoriaController.dart';
 import 'package:iventi/features/inventory/controllers/UnidadController.dart';
 import 'package:iventi/shared/widgets/ErrorDialog.dart';
-import 'package:iventi/shared/widgets/SuccessDialog.dart';
 import 'package:iventi/shared/widgets/ConfirmDialog.dart';
-import 'package:iventi/shared/widgets/CustomTextField.dart';
 import 'package:iventi/shared/theme/AppColors.dart';
-import 'package:iventi/shared/theme/ButtonStyles.dart';
 import 'package:iventi/shared/utils/DialogMessages.dart';
 import 'package:iventi/features/inventory/dtos/requests/ActualizarProductoRequest.dart';
 import 'package:iventi/features/inventory/dtos/requests/CrearLoteRequest.dart';
-import 'package:iventi/features/inventory/dtos/requests/ActualizarLoteRequest.dart';
 import 'package:iventi/features/inventory/dtos/requests/CrearCategoriaRequest.dart';
-import 'package:iventi/features/inventory/dtos/requests/ActualizarCategoriaRequest.dart';
 
 class ProductPage extends StatefulWidget {
   final int idProducto;
@@ -408,10 +402,10 @@ class _ProductPageState extends State<ProductPage> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text("Comprada: ${lote.cantidadComprada} ${unidadProducto?.abreviatura ?? ''}"),
-                              Text("Pérdidas: ${lote.cantidadPerdida ?? 0}"),
+                              Text("Pérdidas: ${lote.cantidadPerdida}"),
                               Text("Precio Compra: S/ ${lote.precioCompra.toStringAsFixed(2)}"),
-                              if (lote.fechaCompra != null) Text("Fecha compra: ${lote.fechaCompra!.toLocal().toString().split(' ')[0]}"),
-                              if (lote.fechaVencimiento != null) Text("Vence: ${lote.fechaVencimiento!.toLocal().toString().split(' ')[0]}"),
+                              Text("Fecha compra: ${lote.fechaCompra.toLocal().toString().split(' ')[0]}"),
+                              Text("Vence: ${lote.fechaVencimiento.toLocal().toString().split(' ')[0]}"),
                             ],
                           ),
                           trailing: PopupMenuButton<String>(
@@ -496,7 +490,7 @@ class _ProductPageState extends State<ProductPage> {
             builder: (ctx, snap) {
               if (!snap.hasData) return const CircularProgressIndicator();
               return DropdownButtonFormField<int>(
-                value: seleccionada?.idCategoria,
+                initialValue: seleccionada?.idCategoria,
                 items: snap.data!.map((c) => DropdownMenuItem(value: c.idCategoria, child: Text(c.nombre))).toList(),
                 onChanged: (v) => setDialogState(() => seleccionada = snap.data!.firstWhere((c) => c.idCategoria == v)),
                 decoration: const InputDecoration(labelText: 'Seleccionar categoría', border: OutlineInputBorder()),

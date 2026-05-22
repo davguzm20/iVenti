@@ -63,8 +63,16 @@ class _ClientsPageState extends State<ClientsPage> {
 
     if (mounted) {
       setState(() {
-        if (reiniciar) clientes = nuevos; else clientes.addAll(nuevos);
-        if (nuevos.isNotEmpty) cantidadCargas++; else hayMasCargas = false;
+        if (reiniciar) {
+          clientes = nuevos;
+        } else {
+          clientes.addAll(nuevos);
+        }
+        if (nuevos.isNotEmpty) {
+          cantidadCargas++;
+        } else {
+          hayMasCargas = false;
+        }
         isLoading = false;
       });
     }
@@ -122,7 +130,7 @@ class _ClientsPageState extends State<ClientsPage> {
                       borderSide: BorderSide.none,
                     ),
                     filled: true,
-                    fillColor: Colors.white.withOpacity(0.2),
+                    fillColor: Colors.white.withValues(alpha: 0.2),
                   ),
                   onChanged: (value) {
                     setState(() => nombreBuscado = value);
@@ -186,12 +194,12 @@ class _ClientsPageState extends State<ClientsPage> {
                               color: AppColors.primary, width: 2),
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.black.withOpacity(0.2),
+                              color: Colors.black.withValues(alpha: 0.2),
                               blurRadius: 6,
                               offset: const Offset(0, 4),
                             ),
                             BoxShadow(
-                              color: Colors.black.withOpacity(0.1),
+                              color: Colors.black.withValues(alpha: 0.1),
                               blurRadius: 2,
                               offset: const Offset(0, 2),
                             ),
@@ -270,7 +278,7 @@ class _ClientsPageState extends State<ClientsPage> {
           if (isLoading)
             Positioned.fill(
               child: Container(
-                color: Colors.black.withOpacity(0.5),
+                color: Colors.black.withValues(alpha: 0.5),
                 child: const Center(
                   child: CircularProgressIndicator(
                     valueColor:

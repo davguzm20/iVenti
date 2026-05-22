@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iventi/shared/di/ServiceLocator.dart';
 import 'package:iventi/shared/theme/AppColors.dart';
-import 'package:iventi/shared/theme/ButtonStyles.dart';
 import 'package:iventi/features/inventory/entities/CategoriaEntity.dart';
 
 class FilterProductsPage extends StatefulWidget {
@@ -79,7 +78,7 @@ class _FilterProductsPageState extends State<FilterProductsPage> {
                               style: TextStyle(color: Colors.black54),
                             ),
                             value: habilitarCategorias,
-                            activeColor: AppColors.success,
+                            activeThumbColor: AppColors.success,
                             onChanged: (value) {
                               setState(() {
                                 habilitarCategorias = value;
@@ -139,7 +138,7 @@ class _FilterProductsPageState extends State<FilterProductsPage> {
                               style: TextStyle(color: Colors.black54),
                             ),
                             value: habilitarStock,
-                            activeColor: AppColors.success,
+                            activeThumbColor: AppColors.success,
                             onChanged: (value) {
                               setState(() {
                                 habilitarStock = value;
