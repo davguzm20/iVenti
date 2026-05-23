@@ -72,13 +72,13 @@ class PagoService {
       throw BusinessException('El monto debe ser mayor a 0');
     }
 
-    final clienteExistente = await _clienteRepository.obtenerClientePorId(idCliente);
-
-    if (clienteExistente == null) {
-      throw BusinessException('Cliente no encontrado');
-    }
-
     try {
+      final clienteExistente = await _clienteRepository.obtenerClientePorId(idCliente);
+
+      if (clienteExistente == null) {
+        throw BusinessException('Cliente no encontrado');
+      }
+
       final conexion = await _datasource.connection;
 
       try {

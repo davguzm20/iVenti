@@ -116,7 +116,11 @@ class AuthService {
   }
 
   Future<UsuarioEntity> obtenerUsuarioRegistrado() async {
-    return await _usuarioRepository.obtenerUsuarioRegistrado();
+    try {
+      return await _usuarioRepository.obtenerUsuarioRegistrado();
+    } on DatabaseException catch (e) {
+      throw BusinessException('Error al obtener usuario registrado: ${e.mensaje}');
+    }
   }
 
   Future<void> recuperarPin(int idUsuario, String pinNuevo) async {
