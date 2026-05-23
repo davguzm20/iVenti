@@ -108,6 +108,16 @@ void main() {
 
       expect(result, isNull);
     });
+
+    test('debe lanzar BusinessException cuando hay DatabaseException', () async {
+      when(mockRepo.obtenerClientePorId(any))
+          .thenThrow(DatabaseException('Error BD'));
+
+      expect(
+        () => service.obtenerClientePorId(1),
+        throwsA(isA<BusinessException>()),
+      );
+    });
   });
 
   group('ClienteService.buscarPorNombre', () {
@@ -118,6 +128,16 @@ void main() {
       final result = await service.buscarPorNombre('Juan');
 
       expect(result, [clienteValido]);
+    });
+
+    test('debe lanzar BusinessException cuando hay DatabaseException', () async {
+      when(mockRepo.obtenerClientesPorNombre(any))
+          .thenThrow(DatabaseException('Error BD'));
+
+      expect(
+        () => service.buscarPorNombre('Juan'),
+        throwsA(isA<BusinessException>()),
+      );
     });
   });
 
@@ -131,6 +151,18 @@ void main() {
 
       expect(result, [clienteValido]);
     });
+
+    test('debe lanzar BusinessException cuando hay DatabaseException', () async {
+      when(mockRepo.obtenerClientesPorFiltros(
+        limite: anyNamed('limite'), offset: anyNamed('offset'),
+        esDeudor: anyNamed('esDeudor'),
+      )).thenThrow(DatabaseException('Error BD'));
+
+      expect(
+        () => service.obtenerFiltrados(limite: 10, offset: 0),
+        throwsA(isA<BusinessException>()),
+      );
+    });
   });
 
   group('ClienteService.actualizarEstadoDeudor', () {
@@ -140,6 +172,16 @@ void main() {
       await service.actualizarEstadoDeudor(1);
 
       verify(mockRepo.actualizarEstadoDeudor(1)).called(1);
+    });
+
+    test('debe lanzar BusinessException cuando hay DatabaseException', () async {
+      when(mockRepo.actualizarEstadoDeudor(any))
+          .thenThrow(DatabaseException('Error BD'));
+
+      expect(
+        () => service.actualizarEstadoDeudor(1),
+        throwsA(isA<BusinessException>()),
+      );
     });
   });
 }

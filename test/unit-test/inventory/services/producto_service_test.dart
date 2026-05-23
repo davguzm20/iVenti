@@ -156,6 +156,16 @@ void main() {
 
       expect(result, [productoValido]);
     });
+
+    test('debe lanzar BusinessException cuando hay DatabaseException', () async {
+      when(mockProductoRepo.obtenerProductosPorNombre(any))
+          .thenThrow(DatabaseException('Error BD'));
+
+      expect(
+        () => service.buscarPorNombre('Producto'),
+        throwsA(isA<BusinessException>()),
+      );
+    });
   });
 
   group('ProductoService.obtenerTodos', () {
@@ -165,6 +175,16 @@ void main() {
       final result = await service.obtenerTodos();
 
       expect(result, [productoValido]);
+    });
+
+    test('debe lanzar BusinessException cuando hay DatabaseException', () async {
+      when(mockProductoRepo.obtenerTodosLosProductos())
+          .thenThrow(DatabaseException('Error BD'));
+
+      expect(
+        () => service.obtenerTodos(),
+        throwsA(isA<BusinessException>()),
+      );
     });
   });
 
@@ -177,6 +197,18 @@ void main() {
       final result = await service.obtenerFiltrados(limite: 10, offset: 0);
 
       expect(result, [productoValido]);
+    });
+
+    test('debe lanzar BusinessException cuando hay DatabaseException', () async {
+      when(mockProductoRepo.obtenerProductosPorFiltros(
+        limite: anyNamed('limite'), offset: anyNamed('offset'),
+        idCategorias: anyNamed('idCategorias'), stockBajo: anyNamed('stockBajo'),
+      )).thenThrow(DatabaseException('Error BD'));
+
+      expect(
+        () => service.obtenerFiltrados(limite: 10, offset: 0),
+        throwsA(isA<BusinessException>()),
+      );
     });
   });
 }

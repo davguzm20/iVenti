@@ -158,6 +158,16 @@ void main() {
 
       expect(result, isNull);
     });
+
+    test('debe lanzar BusinessException cuando hay DatabaseException', () async {
+      when(mockLoteRepo.obtenerLotePorId(any, any))
+          .thenThrow(DatabaseException('Error BD'));
+
+      expect(
+        () => service.obtenerLotePorId(1, 1),
+        throwsA(isA<BusinessException>()),
+      );
+    });
   });
 
   group('LoteService.obtenerLotesDeProducto', () {
@@ -167,6 +177,16 @@ void main() {
       final result = await service.obtenerLotesDeProducto(1);
 
       expect(result, [loteValido]);
+    });
+
+    test('debe lanzar BusinessException cuando hay DatabaseException', () async {
+      when(mockLoteRepo.obtenerLotesDeProducto(any))
+          .thenThrow(DatabaseException('Error BD'));
+
+      expect(
+        () => service.obtenerLotesDeProducto(1),
+        throwsA(isA<BusinessException>()),
+      );
     });
   });
 
@@ -180,6 +200,16 @@ void main() {
 
       expect(result, [loteValido]);
     });
+
+    test('debe lanzar BusinessException cuando hay DatabaseException', () async {
+      when(mockLoteRepo.obtenerLotesPorFechas(any, any))
+          .thenThrow(DatabaseException('Error BD'));
+
+      expect(
+        () => service.obtenerLotesPorFechas(DateTime(2024, 1, 1), DateTime(2024, 12, 31)),
+        throwsA(isA<BusinessException>()),
+      );
+    });
   });
 
   group('LoteService.obtenerLotesProximosAVencer', () {
@@ -189,6 +219,16 @@ void main() {
       final result = await service.obtenerLotesProximosAVencer(30);
 
       expect(result, [loteValido]);
+    });
+
+    test('debe lanzar BusinessException cuando hay DatabaseException', () async {
+      when(mockLoteRepo.obtenerLotesProximosAVencer(any))
+          .thenThrow(DatabaseException('Error BD'));
+
+      expect(
+        () => service.obtenerLotesProximosAVencer(30),
+        throwsA(isA<BusinessException>()),
+      );
     });
   });
 }
