@@ -10,7 +10,7 @@ import 'package:iventi/features/auth/dtos/requests/CrearUsuarioRequest.dart'
     as _i15;
 import 'package:iventi/features/auth/dtos/requests/LoginRequest.dart' as _i16;
 import 'package:iventi/features/auth/entities/UsuarioEntity.dart' as _i3;
-import 'package:iventi/features/auth/repositories/UsuarioRepository.dart'
+import 'package:iventi/features/auth/repositories/IUsuarioRepository.dart'
     as _i14;
 import 'package:iventi/features/auth/services/AuthService.dart' as _i17;
 import 'package:iventi/features/clients/controllers/ClienteController.dart'
@@ -20,19 +20,19 @@ import 'package:iventi/features/clients/dtos/requests/ActualizarClienteRequest.d
 import 'package:iventi/features/clients/dtos/requests/CrearClienteRequest.dart'
     as _i20;
 import 'package:iventi/features/clients/entities/ClienteEntity.dart' as _i4;
-import 'package:iventi/features/clients/repositories/ClienteRepository.dart'
+import 'package:iventi/features/clients/repositories/IClienteRepository.dart'
     as _i19;
 import 'package:iventi/features/clients/services/ClienteService.dart' as _i22;
 import 'package:iventi/features/config/controllers/ConfiguracionController.dart'
-    as _i71;
+    as _i72;
 import 'package:iventi/features/config/dtos/requests/CrearConfiguracionRequest.dart'
-    as _i69;
+    as _i70;
 import 'package:iventi/features/config/entities/ConfiguracionEntity.dart'
     as _i11;
-import 'package:iventi/features/config/repositories/ConfiguracionRepository.dart'
-    as _i68;
+import 'package:iventi/features/config/repositories/IConfiguracionRepository.dart'
+    as _i69;
 import 'package:iventi/features/config/services/ConfiguracionService.dart'
-    as _i70;
+    as _i71;
 import 'package:iventi/features/inventory/controllers/CategoriaController.dart'
     as _i41;
 import 'package:iventi/features/inventory/controllers/LoteController.dart'
@@ -57,13 +57,13 @@ import 'package:iventi/features/inventory/entities/CategoriaEntity.dart' as _i7;
 import 'package:iventi/features/inventory/entities/LoteEntity.dart' as _i6;
 import 'package:iventi/features/inventory/entities/ProductoEntity.dart' as _i5;
 import 'package:iventi/features/inventory/entities/UnidadEntity.dart' as _i34;
-import 'package:iventi/features/inventory/repositories/CategoriaRepository.dart'
+import 'package:iventi/features/inventory/repositories/ICategoriaRepository.dart'
     as _i30;
-import 'package:iventi/features/inventory/repositories/LoteRepository.dart'
+import 'package:iventi/features/inventory/repositories/ILoteRepository.dart'
     as _i27;
-import 'package:iventi/features/inventory/repositories/ProductoRepository.dart'
+import 'package:iventi/features/inventory/repositories/IProductoRepository.dart'
     as _i24;
-import 'package:iventi/features/inventory/repositories/UnidadRepository.dart'
+import 'package:iventi/features/inventory/repositories/IUnidadRepository.dart'
     as _i33;
 import 'package:iventi/features/inventory/services/CategoriaService.dart'
     as _i37;
@@ -72,42 +72,42 @@ import 'package:iventi/features/inventory/services/ProductoService.dart'
     as _i35;
 import 'package:iventi/features/inventory/services/UnidadService.dart' as _i38;
 import 'package:iventi/features/notifications/controllers/NotificacionController.dart'
-    as _i67;
+    as _i68;
 import 'package:iventi/features/notifications/dtos/requests/CrearNotificacionRequest.dart'
-    as _i65;
+    as _i66;
 import 'package:iventi/features/notifications/entities/NotificacionEntity.dart'
     as _i10;
-import 'package:iventi/features/notifications/repositories/NotificacionRepository.dart'
-    as _i64;
+import 'package:iventi/features/notifications/repositories/INotificacionRepository.dart'
+    as _i65;
 import 'package:iventi/features/notifications/services/NotificacionService.dart'
-    as _i66;
+    as _i67;
 import 'package:iventi/features/reports/controllers/ReportController.dart'
-    as _i63;
+    as _i64;
 import 'package:iventi/features/reports/dtos/requests/ReporteInventarioGeneralRequest.dart'
-    as _i62;
+    as _i63;
 import 'package:iventi/features/reports/dtos/requests/ReporteLotesRequest.dart'
-    as _i60;
-import 'package:iventi/features/reports/dtos/requests/ReporteProductosVendidosRequest.dart'
-    as _i58;
-import 'package:iventi/features/reports/dtos/requests/ReporteProximosVencerRequest.dart'
     as _i61;
+import 'package:iventi/features/reports/dtos/requests/ReporteProductosVendidosRequest.dart'
+    as _i59;
+import 'package:iventi/features/reports/dtos/requests/ReporteProximosVencerRequest.dart'
+    as _i62;
 import 'package:iventi/features/reports/dtos/requests/ReporteVentasRequest.dart'
-    as _i56;
-import 'package:iventi/features/reports/dtos/responses/LoteReportResponse.dart'
-    as _i53;
-import 'package:iventi/features/reports/dtos/responses/ProductoVendidoResponse.dart'
-    as _i52;
-import 'package:iventi/features/reports/dtos/responses/VentaReportResponse.dart'
-    as _i51;
-import 'package:iventi/features/reports/entities/LoteReportEntity.dart' as _i59;
-import 'package:iventi/features/reports/entities/ProductoVendidoEntity.dart'
     as _i57;
+import 'package:iventi/features/reports/dtos/responses/LoteReportResponse.dart'
+    as _i54;
+import 'package:iventi/features/reports/dtos/responses/ProductoVendidoResponse.dart'
+    as _i53;
+import 'package:iventi/features/reports/dtos/responses/VentaReportResponse.dart'
+    as _i52;
+import 'package:iventi/features/reports/entities/LoteReportEntity.dart' as _i60;
+import 'package:iventi/features/reports/entities/ProductoVendidoEntity.dart'
+    as _i58;
 import 'package:iventi/features/reports/entities/VentaReportEntity.dart'
-    as _i55;
-import 'package:iventi/features/reports/repositories/ReportRepository.dart'
-    as _i50;
-import 'package:iventi/features/reports/services/ReportService.dart' as _i54;
-import 'package:iventi/features/sales/controllers/VentaController.dart' as _i49;
+    as _i56;
+import 'package:iventi/features/reports/repositories/IReportRepository.dart'
+    as _i51;
+import 'package:iventi/features/reports/services/ReportService.dart' as _i55;
+import 'package:iventi/features/sales/controllers/VentaController.dart' as _i50;
 import 'package:iventi/features/sales/dtos/requests/CrearReciboRequest.dart'
     as _i47;
 import 'package:iventi/features/sales/dtos/requests/CrearVentaRequest.dart'
@@ -115,10 +115,11 @@ import 'package:iventi/features/sales/dtos/requests/CrearVentaRequest.dart'
 import 'package:iventi/features/sales/entities/DetalleVentaEntity.dart' as _i45;
 import 'package:iventi/features/sales/entities/ReciboEntity.dart' as _i9;
 import 'package:iventi/features/sales/entities/VentaEntity.dart' as _i8;
-import 'package:iventi/features/sales/repositories/ReciboRepository.dart'
+import 'package:iventi/features/sales/repositories/IReciboRepository.dart'
     as _i46;
-import 'package:iventi/features/sales/repositories/VentaRepository.dart'
+import 'package:iventi/features/sales/repositories/IVentaRepository.dart'
     as _i43;
+import 'package:iventi/features/sales/services/PagoService.dart' as _i49;
 import 'package:iventi/features/sales/services/VentaService.dart' as _i48;
 import 'package:iventi/shared/utils/PostgresDatasource.dart' as _i12;
 import 'package:mockito/mockito.dart' as _i1;
@@ -272,11 +273,12 @@ class MockPostgresDatasource extends _i1.Mock
       ) as _i13.Future<void>);
 }
 
-/// A class which mocks [UsuarioRepository].
+/// A class which mocks [IUsuarioRepository].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockUsuarioRepository extends _i1.Mock implements _i14.UsuarioRepository {
-  MockUsuarioRepository() {
+class MockIUsuarioRepository extends _i1.Mock
+    implements _i14.IUsuarioRepository {
+  MockIUsuarioRepository() {
     _i1.throwOnMissingStub(this);
   }
 
@@ -750,11 +752,12 @@ class MockAuthController extends _i1.Mock implements _i18.AuthController {
       ) as _i13.Future<void>);
 }
 
-/// A class which mocks [ClienteRepository].
+/// A class which mocks [IClienteRepository].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockClienteRepository extends _i1.Mock implements _i19.ClienteRepository {
-  MockClienteRepository() {
+class MockIClienteRepository extends _i1.Mock
+    implements _i19.IClienteRepository {
+  MockIClienteRepository() {
     _i1.throwOnMissingStub(this);
   }
 
@@ -1055,12 +1058,12 @@ class MockClienteController extends _i1.Mock implements _i23.ClienteController {
       ) as _i13.Future<List<_i4.ClienteEntity>>);
 }
 
-/// A class which mocks [ProductoRepository].
+/// A class which mocks [IProductoRepository].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockProductoRepository extends _i1.Mock
-    implements _i24.ProductoRepository {
-  MockProductoRepository() {
+class MockIProductoRepository extends _i1.Mock
+    implements _i24.IProductoRepository {
+  MockIProductoRepository() {
     _i1.throwOnMissingStub(this);
   }
 
@@ -1187,11 +1190,11 @@ class MockProductoRepository extends _i1.Mock
       ) as _i13.Future<List<_i5.ProductoEntity>>);
 }
 
-/// A class which mocks [LoteRepository].
+/// A class which mocks [ILoteRepository].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockLoteRepository extends _i1.Mock implements _i27.LoteRepository {
-  MockLoteRepository() {
+class MockILoteRepository extends _i1.Mock implements _i27.ILoteRepository {
+  MockILoteRepository() {
     _i1.throwOnMissingStub(this);
   }
 
@@ -1290,25 +1293,6 @@ class MockLoteRepository extends _i1.Mock implements _i27.LoteRepository {
       ) as _i13.Future<List<_i6.LoteEntity>>);
 
   @override
-  _i13.Future<List<_i6.LoteEntity>> obtenerLotesPorRangoDeFechasYDias(
-    DateTime? fechaInicio,
-    DateTime? fechaFinal,
-    int? diasAntesVencimiento,
-  ) =>
-      (super.noSuchMethod(
-        Invocation.method(
-          #obtenerLotesPorRangoDeFechasYDias,
-          [
-            fechaInicio,
-            fechaFinal,
-            diasAntesVencimiento,
-          ],
-        ),
-        returnValue:
-            _i13.Future<List<_i6.LoteEntity>>.value(<_i6.LoteEntity>[]),
-      ) as _i13.Future<List<_i6.LoteEntity>>);
-
-  @override
   _i13.Future<List<_i6.LoteEntity>> obtenerLotesProximosAVencer(
           int? diasAntesVencimiento) =>
       (super.noSuchMethod(
@@ -1321,12 +1305,12 @@ class MockLoteRepository extends _i1.Mock implements _i27.LoteRepository {
       ) as _i13.Future<List<_i6.LoteEntity>>);
 }
 
-/// A class which mocks [CategoriaRepository].
+/// A class which mocks [ICategoriaRepository].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockCategoriaRepository extends _i1.Mock
-    implements _i30.CategoriaRepository {
-  MockCategoriaRepository() {
+class MockICategoriaRepository extends _i1.Mock
+    implements _i30.ICategoriaRepository {
+  MockICategoriaRepository() {
     _i1.throwOnMissingStub(this);
   }
 
@@ -1434,11 +1418,11 @@ class MockCategoriaRepository extends _i1.Mock
       ) as _i13.Future<void>);
 }
 
-/// A class which mocks [UnidadRepository].
+/// A class which mocks [IUnidadRepository].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockUnidadRepository extends _i1.Mock implements _i33.UnidadRepository {
-  MockUnidadRepository() {
+class MockIUnidadRepository extends _i1.Mock implements _i33.IUnidadRepository {
+  MockIUnidadRepository() {
     _i1.throwOnMissingStub(this);
   }
 
@@ -2155,11 +2139,11 @@ class MockUnidadController extends _i1.Mock implements _i42.UnidadController {
       ) as _i13.Future<_i34.UnidadEntity?>);
 }
 
-/// A class which mocks [VentaRepository].
+/// A class which mocks [IVentaRepository].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockVentaRepository extends _i1.Mock implements _i43.VentaRepository {
-  MockVentaRepository() {
+class MockIVentaRepository extends _i1.Mock implements _i43.IVentaRepository {
+  MockIVentaRepository() {
     _i1.throwOnMissingStub(this);
   }
 
@@ -2246,6 +2230,28 @@ class MockVentaRepository extends _i1.Mock implements _i43.VentaRepository {
       ) as _i13.Future<List<_i8.VentaEntity>>);
 
   @override
+  _i13.Future<List<_i45.DetalleVentaEntity>> obtenerDetallesPorVenta(
+          int? idVenta) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #obtenerDetallesPorVenta,
+          [idVenta],
+        ),
+        returnValue: _i13.Future<List<_i45.DetalleVentaEntity>>.value(
+            <_i45.DetalleVentaEntity>[]),
+      ) as _i13.Future<List<_i45.DetalleVentaEntity>>);
+
+  @override
+  _i13.Future<void> anularVenta(int? idVenta) => (super.noSuchMethod(
+        Invocation.method(
+          #anularVenta,
+          [idVenta],
+        ),
+        returnValue: _i13.Future<void>.value(),
+        returnValueForMissingStub: _i13.Future<void>.value(),
+      ) as _i13.Future<void>);
+
+  @override
   _i13.Future<void> actualizarMontoCanceladoVenta(
     int? idVenta,
     double? montoACancelar,
@@ -2280,28 +2286,6 @@ class MockVentaRepository extends _i1.Mock implements _i43.VentaRepository {
       ) as _i13.Future<void>);
 
   @override
-  _i13.Future<List<_i45.DetalleVentaEntity>> obtenerDetallesPorVenta(
-          int? idVenta) =>
-      (super.noSuchMethod(
-        Invocation.method(
-          #obtenerDetallesPorVenta,
-          [idVenta],
-        ),
-        returnValue: _i13.Future<List<_i45.DetalleVentaEntity>>.value(
-            <_i45.DetalleVentaEntity>[]),
-      ) as _i13.Future<List<_i45.DetalleVentaEntity>>);
-
-  @override
-  _i13.Future<void> anularVenta(int? idVenta) => (super.noSuchMethod(
-        Invocation.method(
-          #anularVenta,
-          [idVenta],
-        ),
-        returnValue: _i13.Future<void>.value(),
-        returnValueForMissingStub: _i13.Future<void>.value(),
-      ) as _i13.Future<void>);
-
-  @override
   _i13.Future<int> obtenerCantidadVendidaPorLote(int? idLote) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -2312,11 +2296,11 @@ class MockVentaRepository extends _i1.Mock implements _i43.VentaRepository {
       ) as _i13.Future<int>);
 }
 
-/// A class which mocks [ReciboRepository].
+/// A class which mocks [IReciboRepository].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockReciboRepository extends _i1.Mock implements _i46.ReciboRepository {
-  MockReciboRepository() {
+class MockIReciboRepository extends _i1.Mock implements _i46.IReciboRepository {
+  MockIReciboRepository() {
     _i1.throwOnMissingStub(this);
   }
 
@@ -2333,40 +2317,6 @@ class MockReciboRepository extends _i1.Mock implements _i46.ReciboRepository {
           Invocation.method(
             #crearReciboConRequest,
             [request],
-          ),
-        )),
-      ) as _i13.Future<_i9.ReciboEntity>);
-
-  @override
-  _i13.Future<_i9.ReciboEntity> crearRecibo(
-    int? idVenta,
-    int? idUsuario,
-    double? montoCancelado,
-    DateTime? pagadoEn,
-    _i2.Connection? conexion,
-  ) =>
-      (super.noSuchMethod(
-        Invocation.method(
-          #crearRecibo,
-          [
-            idVenta,
-            idUsuario,
-            montoCancelado,
-            pagadoEn,
-            conexion,
-          ],
-        ),
-        returnValue: _i13.Future<_i9.ReciboEntity>.value(_FakeReciboEntity_7(
-          this,
-          Invocation.method(
-            #crearRecibo,
-            [
-              idVenta,
-              idUsuario,
-              montoCancelado,
-              pagadoEn,
-              conexion,
-            ],
           ),
         )),
       ) as _i13.Future<_i9.ReciboEntity>);
@@ -2502,10 +2452,77 @@ class MockVentaService extends _i1.Mock implements _i48.VentaService {
       ) as _i13.Future<int>);
 }
 
+/// A class which mocks [PagoService].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockPagoService extends _i1.Mock implements _i49.PagoService {
+  MockPagoService() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i13.Future<_i9.ReciboEntity> registrarPago(
+    int? idVenta,
+    double? monto,
+    int? idUsuario,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #registrarPago,
+          [
+            idVenta,
+            monto,
+            idUsuario,
+          ],
+        ),
+        returnValue: _i13.Future<_i9.ReciboEntity>.value(_FakeReciboEntity_7(
+          this,
+          Invocation.method(
+            #registrarPago,
+            [
+              idVenta,
+              monto,
+              idUsuario,
+            ],
+          ),
+        )),
+      ) as _i13.Future<_i9.ReciboEntity>);
+
+  @override
+  _i13.Future<void> registrarPagoCliente(
+    int? idCliente,
+    double? monto,
+    int? idUsuario,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #registrarPagoCliente,
+          [
+            idCliente,
+            monto,
+            idUsuario,
+          ],
+        ),
+        returnValue: _i13.Future<void>.value(),
+        returnValueForMissingStub: _i13.Future<void>.value(),
+      ) as _i13.Future<void>);
+
+  @override
+  _i13.Future<List<_i9.ReciboEntity>> obtenerRecibosDeVenta(int? idVenta) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #obtenerRecibosDeVenta,
+          [idVenta],
+        ),
+        returnValue:
+            _i13.Future<List<_i9.ReciboEntity>>.value(<_i9.ReciboEntity>[]),
+      ) as _i13.Future<List<_i9.ReciboEntity>>);
+}
+
 /// A class which mocks [VentaController].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockVentaController extends _i1.Mock implements _i49.VentaController {
+class MockVentaController extends _i1.Mock implements _i50.VentaController {
   MockVentaController() {
     _i1.throwOnMissingStub(this);
   }
@@ -2679,16 +2696,16 @@ class MockVentaController extends _i1.Mock implements _i49.VentaController {
       ) as _i13.Future<int>);
 }
 
-/// A class which mocks [ReportRepository].
+/// A class which mocks [IReportRepository].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockReportRepository extends _i1.Mock implements _i50.ReportRepository {
-  MockReportRepository() {
+class MockIReportRepository extends _i1.Mock implements _i51.IReportRepository {
+  MockIReportRepository() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i13.Future<List<_i51.VentaReportResponse>> obtenerVentas({
+  _i13.Future<List<_i52.VentaReportResponse>> obtenerVentas({
     required DateTime? fechaInicio,
     required DateTime? fechaFinal,
     String? tipo,
@@ -2703,12 +2720,12 @@ class MockReportRepository extends _i1.Mock implements _i50.ReportRepository {
             #tipo: tipo,
           },
         ),
-        returnValue: _i13.Future<List<_i51.VentaReportResponse>>.value(
-            <_i51.VentaReportResponse>[]),
-      ) as _i13.Future<List<_i51.VentaReportResponse>>);
+        returnValue: _i13.Future<List<_i52.VentaReportResponse>>.value(
+            <_i52.VentaReportResponse>[]),
+      ) as _i13.Future<List<_i52.VentaReportResponse>>);
 
   @override
-  _i13.Future<List<_i52.ProductoVendidoResponse>> obtenerProductosVendidos({
+  _i13.Future<List<_i53.ProductoVendidoResponse>> obtenerProductosVendidos({
     required DateTime? fechaInicio,
     required DateTime? fechaFinal,
   }) =>
@@ -2721,12 +2738,12 @@ class MockReportRepository extends _i1.Mock implements _i50.ReportRepository {
             #fechaFinal: fechaFinal,
           },
         ),
-        returnValue: _i13.Future<List<_i52.ProductoVendidoResponse>>.value(
-            <_i52.ProductoVendidoResponse>[]),
-      ) as _i13.Future<List<_i52.ProductoVendidoResponse>>);
+        returnValue: _i13.Future<List<_i53.ProductoVendidoResponse>>.value(
+            <_i53.ProductoVendidoResponse>[]),
+      ) as _i13.Future<List<_i53.ProductoVendidoResponse>>);
 
   @override
-  _i13.Future<List<_i53.LoteReportResponse>> obtenerLotes({
+  _i13.Future<List<_i54.LoteReportResponse>> obtenerLotes({
     required DateTime? fechaInicio,
     required DateTime? fechaFinal,
     String? tipo,
@@ -2741,184 +2758,184 @@ class MockReportRepository extends _i1.Mock implements _i50.ReportRepository {
             #tipo: tipo,
           },
         ),
-        returnValue: _i13.Future<List<_i53.LoteReportResponse>>.value(
-            <_i53.LoteReportResponse>[]),
-      ) as _i13.Future<List<_i53.LoteReportResponse>>);
+        returnValue: _i13.Future<List<_i54.LoteReportResponse>>.value(
+            <_i54.LoteReportResponse>[]),
+      ) as _i13.Future<List<_i54.LoteReportResponse>>);
 
   @override
-  _i13.Future<List<_i53.LoteReportResponse>> obtenerProximosVencer(int? dias) =>
+  _i13.Future<List<_i54.LoteReportResponse>> obtenerProximosVencer(int? dias) =>
       (super.noSuchMethod(
         Invocation.method(
           #obtenerProximosVencer,
           [dias],
         ),
-        returnValue: _i13.Future<List<_i53.LoteReportResponse>>.value(
-            <_i53.LoteReportResponse>[]),
-      ) as _i13.Future<List<_i53.LoteReportResponse>>);
+        returnValue: _i13.Future<List<_i54.LoteReportResponse>>.value(
+            <_i54.LoteReportResponse>[]),
+      ) as _i13.Future<List<_i54.LoteReportResponse>>);
 
   @override
-  _i13.Future<List<_i53.LoteReportResponse>> obtenerInventarioGeneral(
+  _i13.Future<List<_i54.LoteReportResponse>> obtenerInventarioGeneral(
           DateTime? fecha) =>
       (super.noSuchMethod(
         Invocation.method(
           #obtenerInventarioGeneral,
           [fecha],
         ),
-        returnValue: _i13.Future<List<_i53.LoteReportResponse>>.value(
-            <_i53.LoteReportResponse>[]),
-      ) as _i13.Future<List<_i53.LoteReportResponse>>);
+        returnValue: _i13.Future<List<_i54.LoteReportResponse>>.value(
+            <_i54.LoteReportResponse>[]),
+      ) as _i13.Future<List<_i54.LoteReportResponse>>);
 }
 
 /// A class which mocks [ReportService].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockReportService extends _i1.Mock implements _i54.ReportService {
+class MockReportService extends _i1.Mock implements _i55.ReportService {
   MockReportService() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i13.Future<List<_i55.VentaReportEntity>> generarReporteVentas(
-          _i56.ReporteVentasRequest? request) =>
+  _i13.Future<List<_i56.VentaReportEntity>> generarReporteVentas(
+          _i57.ReporteVentasRequest? request) =>
       (super.noSuchMethod(
         Invocation.method(
           #generarReporteVentas,
           [request],
         ),
-        returnValue: _i13.Future<List<_i55.VentaReportEntity>>.value(
-            <_i55.VentaReportEntity>[]),
-      ) as _i13.Future<List<_i55.VentaReportEntity>>);
+        returnValue: _i13.Future<List<_i56.VentaReportEntity>>.value(
+            <_i56.VentaReportEntity>[]),
+      ) as _i13.Future<List<_i56.VentaReportEntity>>);
 
   @override
-  _i13.Future<List<_i57.ProductoVendidoEntity>> generarReporteProductosVendidos(
-          _i58.ReporteProductosVendidosRequest? request) =>
+  _i13.Future<List<_i58.ProductoVendidoEntity>> generarReporteProductosVendidos(
+          _i59.ReporteProductosVendidosRequest? request) =>
       (super.noSuchMethod(
         Invocation.method(
           #generarReporteProductosVendidos,
           [request],
         ),
-        returnValue: _i13.Future<List<_i57.ProductoVendidoEntity>>.value(
-            <_i57.ProductoVendidoEntity>[]),
-      ) as _i13.Future<List<_i57.ProductoVendidoEntity>>);
+        returnValue: _i13.Future<List<_i58.ProductoVendidoEntity>>.value(
+            <_i58.ProductoVendidoEntity>[]),
+      ) as _i13.Future<List<_i58.ProductoVendidoEntity>>);
 
   @override
-  _i13.Future<List<_i59.LoteReportEntity>> generarReporteLotes(
-          _i60.ReporteLotesRequest? request) =>
+  _i13.Future<List<_i60.LoteReportEntity>> generarReporteLotes(
+          _i61.ReporteLotesRequest? request) =>
       (super.noSuchMethod(
         Invocation.method(
           #generarReporteLotes,
           [request],
         ),
-        returnValue: _i13.Future<List<_i59.LoteReportEntity>>.value(
-            <_i59.LoteReportEntity>[]),
-      ) as _i13.Future<List<_i59.LoteReportEntity>>);
+        returnValue: _i13.Future<List<_i60.LoteReportEntity>>.value(
+            <_i60.LoteReportEntity>[]),
+      ) as _i13.Future<List<_i60.LoteReportEntity>>);
 
   @override
-  _i13.Future<List<_i59.LoteReportEntity>> generarReporteProximosVencer(
-          _i61.ReporteProximosVencerRequest? request) =>
+  _i13.Future<List<_i60.LoteReportEntity>> generarReporteProximosVencer(
+          _i62.ReporteProximosVencerRequest? request) =>
       (super.noSuchMethod(
         Invocation.method(
           #generarReporteProximosVencer,
           [request],
         ),
-        returnValue: _i13.Future<List<_i59.LoteReportEntity>>.value(
-            <_i59.LoteReportEntity>[]),
-      ) as _i13.Future<List<_i59.LoteReportEntity>>);
+        returnValue: _i13.Future<List<_i60.LoteReportEntity>>.value(
+            <_i60.LoteReportEntity>[]),
+      ) as _i13.Future<List<_i60.LoteReportEntity>>);
 
   @override
-  _i13.Future<List<_i59.LoteReportEntity>> generarReporteInventarioGeneral(
-          _i62.ReporteInventarioGeneralRequest? request) =>
+  _i13.Future<List<_i60.LoteReportEntity>> generarReporteInventarioGeneral(
+          _i63.ReporteInventarioGeneralRequest? request) =>
       (super.noSuchMethod(
         Invocation.method(
           #generarReporteInventarioGeneral,
           [request],
         ),
-        returnValue: _i13.Future<List<_i59.LoteReportEntity>>.value(
-            <_i59.LoteReportEntity>[]),
-      ) as _i13.Future<List<_i59.LoteReportEntity>>);
+        returnValue: _i13.Future<List<_i60.LoteReportEntity>>.value(
+            <_i60.LoteReportEntity>[]),
+      ) as _i13.Future<List<_i60.LoteReportEntity>>);
 }
 
 /// A class which mocks [ReportController].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockReportController extends _i1.Mock implements _i63.ReportController {
+class MockReportController extends _i1.Mock implements _i64.ReportController {
   MockReportController() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i13.Future<List<_i55.VentaReportEntity>> generarVentas(
-          _i56.ReporteVentasRequest? request) =>
+  _i13.Future<List<_i56.VentaReportEntity>> generarVentas(
+          _i57.ReporteVentasRequest? request) =>
       (super.noSuchMethod(
         Invocation.method(
           #generarVentas,
           [request],
         ),
-        returnValue: _i13.Future<List<_i55.VentaReportEntity>>.value(
-            <_i55.VentaReportEntity>[]),
-      ) as _i13.Future<List<_i55.VentaReportEntity>>);
+        returnValue: _i13.Future<List<_i56.VentaReportEntity>>.value(
+            <_i56.VentaReportEntity>[]),
+      ) as _i13.Future<List<_i56.VentaReportEntity>>);
 
   @override
-  _i13.Future<List<_i57.ProductoVendidoEntity>> generarProductosVendidos(
-          _i58.ReporteProductosVendidosRequest? request) =>
+  _i13.Future<List<_i58.ProductoVendidoEntity>> generarProductosVendidos(
+          _i59.ReporteProductosVendidosRequest? request) =>
       (super.noSuchMethod(
         Invocation.method(
           #generarProductosVendidos,
           [request],
         ),
-        returnValue: _i13.Future<List<_i57.ProductoVendidoEntity>>.value(
-            <_i57.ProductoVendidoEntity>[]),
-      ) as _i13.Future<List<_i57.ProductoVendidoEntity>>);
+        returnValue: _i13.Future<List<_i58.ProductoVendidoEntity>>.value(
+            <_i58.ProductoVendidoEntity>[]),
+      ) as _i13.Future<List<_i58.ProductoVendidoEntity>>);
 
   @override
-  _i13.Future<List<_i59.LoteReportEntity>> generarLotes(
-          _i60.ReporteLotesRequest? request) =>
+  _i13.Future<List<_i60.LoteReportEntity>> generarLotes(
+          _i61.ReporteLotesRequest? request) =>
       (super.noSuchMethod(
         Invocation.method(
           #generarLotes,
           [request],
         ),
-        returnValue: _i13.Future<List<_i59.LoteReportEntity>>.value(
-            <_i59.LoteReportEntity>[]),
-      ) as _i13.Future<List<_i59.LoteReportEntity>>);
+        returnValue: _i13.Future<List<_i60.LoteReportEntity>>.value(
+            <_i60.LoteReportEntity>[]),
+      ) as _i13.Future<List<_i60.LoteReportEntity>>);
 
   @override
-  _i13.Future<List<_i59.LoteReportEntity>> generarProximosVencer(
-          _i61.ReporteProximosVencerRequest? request) =>
+  _i13.Future<List<_i60.LoteReportEntity>> generarProximosVencer(
+          _i62.ReporteProximosVencerRequest? request) =>
       (super.noSuchMethod(
         Invocation.method(
           #generarProximosVencer,
           [request],
         ),
-        returnValue: _i13.Future<List<_i59.LoteReportEntity>>.value(
-            <_i59.LoteReportEntity>[]),
-      ) as _i13.Future<List<_i59.LoteReportEntity>>);
+        returnValue: _i13.Future<List<_i60.LoteReportEntity>>.value(
+            <_i60.LoteReportEntity>[]),
+      ) as _i13.Future<List<_i60.LoteReportEntity>>);
 
   @override
-  _i13.Future<List<_i59.LoteReportEntity>> generarInventarioGeneral(
-          _i62.ReporteInventarioGeneralRequest? request) =>
+  _i13.Future<List<_i60.LoteReportEntity>> generarInventarioGeneral(
+          _i63.ReporteInventarioGeneralRequest? request) =>
       (super.noSuchMethod(
         Invocation.method(
           #generarInventarioGeneral,
           [request],
         ),
-        returnValue: _i13.Future<List<_i59.LoteReportEntity>>.value(
-            <_i59.LoteReportEntity>[]),
-      ) as _i13.Future<List<_i59.LoteReportEntity>>);
+        returnValue: _i13.Future<List<_i60.LoteReportEntity>>.value(
+            <_i60.LoteReportEntity>[]),
+      ) as _i13.Future<List<_i60.LoteReportEntity>>);
 }
 
-/// A class which mocks [NotificacionRepository].
+/// A class which mocks [INotificacionRepository].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockNotificacionRepository extends _i1.Mock
-    implements _i64.NotificacionRepository {
-  MockNotificacionRepository() {
+class MockINotificacionRepository extends _i1.Mock
+    implements _i65.INotificacionRepository {
+  MockINotificacionRepository() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
   _i13.Future<_i10.NotificacionEntity> crearNotificacion(
-          _i65.CrearNotificacionRequest? request) =>
+          _i66.CrearNotificacionRequest? request) =>
       (super.noSuchMethod(
         Invocation.method(
           #crearNotificacion,
@@ -3015,14 +3032,14 @@ class MockNotificacionRepository extends _i1.Mock
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockNotificacionService extends _i1.Mock
-    implements _i66.NotificacionService {
+    implements _i67.NotificacionService {
   MockNotificacionService() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
   _i13.Future<_i10.NotificacionEntity> crearNotificacion(
-          _i65.CrearNotificacionRequest? request) =>
+          _i66.CrearNotificacionRequest? request) =>
       (super.noSuchMethod(
         Invocation.method(
           #crearNotificacion,
@@ -3138,14 +3155,14 @@ class MockNotificacionService extends _i1.Mock
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockNotificacionController extends _i1.Mock
-    implements _i67.NotificacionController {
+    implements _i68.NotificacionController {
   MockNotificacionController() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
   _i13.Future<_i10.NotificacionEntity> crearNotificacion(
-          _i65.CrearNotificacionRequest? request) =>
+          _i66.CrearNotificacionRequest? request) =>
       (super.noSuchMethod(
         Invocation.method(
           #crearNotificacion,
@@ -3257,12 +3274,12 @@ class MockNotificacionController extends _i1.Mock
       ) as _i13.Future<void>);
 }
 
-/// A class which mocks [ConfiguracionRepository].
+/// A class which mocks [IConfiguracionRepository].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockConfiguracionRepository extends _i1.Mock
-    implements _i68.ConfiguracionRepository {
-  MockConfiguracionRepository() {
+class MockIConfiguracionRepository extends _i1.Mock
+    implements _i69.IConfiguracionRepository {
+  MockIConfiguracionRepository() {
     _i1.throwOnMissingStub(this);
   }
 
@@ -3296,7 +3313,7 @@ class MockConfiguracionRepository extends _i1.Mock
 
   @override
   _i13.Future<_i11.ConfiguracionEntity> crearOActualizarConfiguracion(
-          _i69.CrearConfiguracionRequest? request) =>
+          _i70.CrearConfiguracionRequest? request) =>
       (super.noSuchMethod(
         Invocation.method(
           #crearOActualizarConfiguracion,
@@ -3328,7 +3345,7 @@ class MockConfiguracionRepository extends _i1.Mock
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockConfiguracionService extends _i1.Mock
-    implements _i70.ConfiguracionService {
+    implements _i71.ConfiguracionService {
   MockConfiguracionService() {
     _i1.throwOnMissingStub(this);
   }
@@ -3362,7 +3379,7 @@ class MockConfiguracionService extends _i1.Mock
 
   @override
   _i13.Future<_i11.ConfiguracionEntity> guardarConfiguracion(
-          _i69.CrearConfiguracionRequest? request) =>
+          _i70.CrearConfiguracionRequest? request) =>
       (super.noSuchMethod(
         Invocation.method(
           #guardarConfiguracion,
@@ -3394,7 +3411,7 @@ class MockConfiguracionService extends _i1.Mock
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockConfiguracionController extends _i1.Mock
-    implements _i71.ConfiguracionController {
+    implements _i72.ConfiguracionController {
   MockConfiguracionController() {
     _i1.throwOnMissingStub(this);
   }
@@ -3428,7 +3445,7 @@ class MockConfiguracionController extends _i1.Mock
 
   @override
   _i13.Future<_i11.ConfiguracionEntity> guardarConfiguracion(
-          _i69.CrearConfiguracionRequest? request) =>
+          _i70.CrearConfiguracionRequest? request) =>
       (super.noSuchMethod(
         Invocation.method(
           #guardarConfiguracion,
