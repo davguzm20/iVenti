@@ -11,7 +11,7 @@ class LoteMapper {
       cantidadActual: map['cantidad_actual'] as int,
       cantidadComprada: map['cantidad_comprada'] as int,
       cantidadPerdida: map['cantidad_perdida'] as int,
-      precioCompra: (map['precio_compra'] as num).toDouble(),
+      precioCompra: double.parse(map['precio_compra'].toString()),
       esActivo: map['es_activo'] as bool,
       creadoEn: map['creado_en'] as DateTime,
       actualizadoEn: map['actualizado_en'] as DateTime?,

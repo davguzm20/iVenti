@@ -8,7 +8,7 @@ class ProductoMapper {
       idUnidad: map['id_unidad'] as int,
       codigo: map['codigo'] as String?,
       nombre: map['nombre'] as String,
-      precio: (map['precio'] as num).toDouble(),
+      precio: double.parse(map['precio'].toString()),
       stockActual: map['stock_actual'] as int,
       stockMinimo: map['stock_minimo'] as int,
       rutaImagen: map['ruta_imagen'] as String?,
