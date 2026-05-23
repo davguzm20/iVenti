@@ -79,6 +79,18 @@ void main() {
         throwsA(isA<ValidationException>()),
       );
     });
+
+    test('debe lanzar BusinessException cuando hay DatabaseException', () async {
+      when(mockProductoRepo.obtenerProductoPorId(any)).thenAnswer((_) async => productoValido);
+      when(mockLoteRepo.crearLote(any)).thenThrow(DatabaseException('Error BD'));
+
+      final request = CrearLoteRequest(idProducto: 1, fechaCompra: DateTime(2024, 1, 1), fechaVencimiento: DateTime(2025, 12, 31), cantidadComprada: 100, precioCompra: 50);
+
+      expect(
+        () => service.crearLote(request),
+        throwsA(isA<BusinessException>()),
+      );
+    });
   });
 
   group('LoteService.actualizarLote', () {
@@ -109,6 +121,18 @@ void main() {
         throwsA(isA<ValidationException>()),
       );
     });
+
+    test('debe lanzar BusinessException cuando hay DatabaseException', () async {
+      when(mockLoteRepo.obtenerLotePorId(any, any)).thenAnswer((_) async => loteValido);
+      when(mockLoteRepo.actualizarLote(any)).thenThrow(DatabaseException('Error BD'));
+
+      final request = ActualizarLoteRequest(idProducto: 1, idLote: 1, cantidadActual: 90, cantidadComprada: 100, cantidadPerdida: 0, precioCompra: 50, fechaCompra: DateTime(2024, 1, 1), fechaVencimiento: DateTime(2025, 12, 31));
+
+      expect(
+        () => service.actualizarLote(request),
+        throwsA(isA<BusinessException>()),
+      );
+    });
   });
 
   group('LoteService.eliminarLote', () {
@@ -134,6 +158,17 @@ void main() {
     test('debe lanzar BusinessException cuando lote tiene ventas registradas', () async {
       when(mockLoteRepo.obtenerLotePorId(1, 1)).thenAnswer((_) async => loteValido);
       when(mockVentaRepo.obtenerCantidadVendidaPorLote(1)).thenAnswer((_) async => 5);
+
+      expect(
+        () => service.eliminarLote(1, 1),
+        throwsA(isA<BusinessException>()),
+      );
+    });
+
+    test('debe lanzar BusinessException cuando hay DatabaseException', () async {
+      when(mockLoteRepo.obtenerLotePorId(any, any)).thenAnswer((_) async => loteValido);
+      when(mockVentaRepo.obtenerCantidadVendidaPorLote(any)).thenAnswer((_) async => 0);
+      when(mockLoteRepo.eliminarLote(any, any)).thenThrow(DatabaseException('Error BD'));
 
       expect(
         () => service.eliminarLote(1, 1),

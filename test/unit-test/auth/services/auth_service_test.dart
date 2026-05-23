@@ -145,6 +145,16 @@ void main() {
         throwsA(isA<BusinessException>()),
       );
     });
+
+    test('debe lanzar BusinessException cuando hay DatabaseException', () async {
+      when(mockRepo.obtenerUsuarioPorEmail(any))
+          .thenThrow(DatabaseException('Error BD'));
+
+      expect(
+        () => authService.obtenerUsuarioPorEmail('test@test.com'),
+        throwsA(isA<BusinessException>()),
+      );
+    });
   });
 
   group('AuthService.cambiarPin', () {
@@ -172,6 +182,17 @@ void main() {
         throwsA(isA<BusinessException>()),
       );
     });
+
+    test('debe lanzar BusinessException cuando hay DatabaseException', () async {
+      when(mockRepo.obtenerUsuarioPorId(1)).thenAnswer((_) async => usuarioValido);
+      when(mockRepo.actualizarPIN(any, any))
+          .thenThrow(DatabaseException('Error BD'));
+
+      expect(
+        () => authService.cambiarPin(1, '123456', '654321'),
+        throwsA(isA<BusinessException>()),
+      );
+    });
   });
 
   group('AuthService.obtenerUsuarioRegistrado', () {
@@ -181,6 +202,16 @@ void main() {
       final result = await authService.obtenerUsuarioRegistrado();
 
       expect(result, usuarioValido);
+    });
+
+    test('debe lanzar BusinessException cuando hay DatabaseException', () async {
+      when(mockRepo.obtenerUsuarioRegistrado())
+          .thenThrow(DatabaseException('Error BD'));
+
+      expect(
+        () => authService.obtenerUsuarioRegistrado(),
+        throwsA(isA<BusinessException>()),
+      );
     });
   });
 

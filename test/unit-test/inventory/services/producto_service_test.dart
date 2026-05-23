@@ -90,6 +90,19 @@ void main() {
         throwsA(isA<BusinessException>()),
       );
     });
+
+    test('debe lanzar BusinessException cuando hay DatabaseException', () async {
+      when(mockProductoRepo.obtenerProductoPorId(any)).thenAnswer((_) async => productoValido);
+      when(mockProductoRepo.actualizarProducto(any))
+          .thenThrow(DatabaseException('Error BD'));
+
+      final request = ActualizarProductoRequest(idProducto: 1, idUnidad: 1, nombre: 'Producto', precio: 100, stockMinimo: 5);
+
+      expect(
+        () => service.actualizarProducto(request),
+        throwsA(isA<BusinessException>()),
+      );
+    });
   });
 
   group('ProductoService.eliminarProducto', () {
@@ -107,6 +120,17 @@ void main() {
 
       expect(
         () => service.eliminarProducto(999),
+        throwsA(isA<BusinessException>()),
+      );
+    });
+
+    test('debe lanzar BusinessException cuando hay DatabaseException', () async {
+      when(mockProductoRepo.obtenerProductoPorId(any)).thenAnswer((_) async => productoValido);
+      when(mockProductoRepo.eliminarProducto(any))
+          .thenThrow(DatabaseException('Error BD'));
+
+      expect(
+        () => service.eliminarProducto(1),
         throwsA(isA<BusinessException>()),
       );
     });
@@ -128,6 +152,16 @@ void main() {
 
       expect(result, isNull);
     });
+
+    test('debe lanzar BusinessException cuando hay DatabaseException', () async {
+      when(mockProductoRepo.obtenerProductoPorId(any))
+          .thenThrow(DatabaseException('Error BD'));
+
+      expect(
+        () => service.obtenerProductoPorId(1),
+        throwsA(isA<BusinessException>()),
+      );
+    });
   });
 
   group('ProductoService.obtenerProductoPorCodigo', () {
@@ -145,6 +179,16 @@ void main() {
       final result = await service.obtenerProductoPorCodigo('COD999');
 
       expect(result, isNull);
+    });
+
+    test('debe lanzar BusinessException cuando hay DatabaseException', () async {
+      when(mockProductoRepo.obtenerProductoPorCodigo(any))
+          .thenThrow(DatabaseException('Error BD'));
+
+      expect(
+        () => service.obtenerProductoPorCodigo('COD001'),
+        throwsA(isA<BusinessException>()),
+      );
     });
   });
 

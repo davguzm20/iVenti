@@ -70,6 +70,18 @@ void main() {
         throwsA(isA<BusinessException>()),
       );
     });
+
+    test('debe lanzar BusinessException cuando hay DatabaseException', () async {
+      when(mockRepo.obtenerClientePorId(any)).thenAnswer((_) async => clienteValido);
+      when(mockRepo.actualizarCliente(any)).thenThrow(DatabaseException('Error BD'));
+
+      final request = ActualizarClienteRequest(idCliente: 1, nombres: 'Juan', apellidos: 'Perez');
+
+      expect(
+        () => service.actualizarCliente(request),
+        throwsA(isA<BusinessException>()),
+      );
+    });
   });
 
   group('ClienteService.eliminarCliente', () {
@@ -87,6 +99,16 @@ void main() {
 
       expect(
         () => service.eliminarCliente(999),
+        throwsA(isA<BusinessException>()),
+      );
+    });
+
+    test('debe lanzar BusinessException cuando hay DatabaseException', () async {
+      when(mockRepo.obtenerClientePorId(any)).thenAnswer((_) async => clienteValido);
+      when(mockRepo.eliminarCliente(any)).thenThrow(DatabaseException('Error BD'));
+
+      expect(
+        () => service.eliminarCliente(1),
         throwsA(isA<BusinessException>()),
       );
     });
