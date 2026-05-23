@@ -7,7 +7,7 @@ class ReciboMapper {
       idRecibo: map['id_recibo'] as int,
       idVenta: map['id_venta'] as int,
       idUsuario: map['id_usuario'] as int,
-      montoCancelado: (map['monto_cancelado'] as num).toDouble(),
+      montoCancelado: double.parse(map['monto_cancelado'].toString()),
       pagadoEn: map['pagado_en'] as DateTime,
       creadoEn: map['creado_en'] as DateTime,
     );

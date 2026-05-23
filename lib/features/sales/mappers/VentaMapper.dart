@@ -12,8 +12,8 @@ class VentaMapper {
       idCliente: map['id_cliente'] as int?,
       idUsuario: map['id_usuario'] as int,
       vendidoEn: map['vendido_en'] as DateTime,
-      montoTotal: (map['monto_total'] as num).toDouble(),
-      montoCancelado: (map['monto_cancelado'] as num).toDouble(),
+      montoTotal: double.parse(map['monto_total'].toString()),
+      montoCancelado: double.parse(map['monto_cancelado'].toString()),
       estado: _parseEstado(PgHelper.string(map['estado'])),
       esCredito: map['es_credito'] as bool,
       creadoEn: map['creado_en'] as DateTime,
@@ -64,9 +64,9 @@ class DetalleVentaMapper {
       idVenta: map['id_venta'] as int,
       idLote: map['id_lote'] as int,
       cantidad: map['cantidad'] as int,
-      precioUnitario: (map['precio_unitario'] as num).toDouble(),
-      subtotal: (map['subtotal'] as num).toDouble(),
-      descuento: (map['descuento'] as num).toDouble(),
+      precioUnitario: double.parse(map['precio_unitario'].toString()),
+      subtotal: double.parse(map['subtotal'].toString()),
+      descuento: double.parse(map['descuento'].toString()),
       creadoEn: map['creado_en'] as DateTime,
     );
   }
