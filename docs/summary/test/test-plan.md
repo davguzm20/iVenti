@@ -28,25 +28,29 @@
 
 ## 3. Integration Tests (Pruebas de Integración)
 
-**Objetivo:** Validar interacción con base de datos PostgreSQL y queries SQL.
+**Objetivo:** Validar interacción con base de datos PostgreSQL, queries SQL y transacciones en un entorno real.
 
 **Alcance:**
-- Repositorios: UsuarioRepository, ClienteRepository, ProductoRepository, LoteRepository, CategoriaRepository, UnidadRepository, VentaRepository, ReciboRepository, ConfiguracionRepository, NotificacionRepository, ReportRepository
+- Services: AuthService, ClienteService, ProductoService, CategoriaService, UnidadService, LoteService, VentaService, PagoService, ConfiguracionService, NotificacionService, ReportService
+- Repositorios (capa de infraestructura): UsuarioRepository, ClienteRepository, ProductoRepository, LoteRepository, CategoriaRepository, UnidadRepository, VentaRepository, ReciboRepository, ConfiguracionRepository, NotificacionRepository, ReportRepository
 
-**Herramientas:** `test`, PostgreSQL real (Neon rama test)
+**Herramientas:** `test`, `flutter_test`, PostgreSQL real (Neon rama test)
 
 **Entorno:**
 - Neon rama `test` con datos de prueba
+- Cada test se envuelve en transacción BEGIN/ROLLBACK para aislamiento
 
 **Tipos de pruebas:**
 - CRUD completo (crear, leer, actualizar, eliminar)
 - Transacciones (BEGIN, COMMIT, ROLLBACK)
 - Queries con filtros y joins
-- Manejo de excepciones de base de datos
+- Manejo de excepciones de base de datos (DatabaseException → BusinessException)
+- Validación de restricciones de BD (UNIQUE, FK, CHECK)
+- Persistencia real vs mocks
 
 **Estructura:** `test/integration-test/[feature]/[feature]_integration_test.dart`
 
-**Reportes:** `docs/summary/test/integration-test/`
+**Reportes:** `docs/summary/test/integration-test/[feature]-tests.md`
 
 ---
 
