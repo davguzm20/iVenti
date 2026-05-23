@@ -18,33 +18,39 @@
 
 **Herramientas:** `flutter_test`, `mockito`
 
-**Cobertura esperada:** 100% de métodos públicos con al menos 1 happy path + 1 error path
+**Cobertura esperada:** 100% de métodos públicos (Services y Controllers) con al menos 1 happy path + 1 error path por método
 
-**Reportes:** `docs/summary/unit-test/`
+**Estructura:** `test/unit-test/[feature]/[type]/[file]_test.dart`
+
+**Reportes:** `docs/summary/test/unit-test/`
 
 ---
 
-## 2. Integration Tests (Pruebas de Integración)
+## 3. Integration Tests (Pruebas de Integración)
 
 **Objetivo:** Validar interacción con base de datos PostgreSQL y queries SQL.
 
 **Alcance:**
 - Repositorios: UsuarioRepository, ClienteRepository, ProductoRepository, LoteRepository, CategoriaRepository, UnidadRepository, VentaRepository, ReciboRepository, ConfiguracionRepository, NotificacionRepository, ReportRepository
 
-**Herramientas:** `test`, `testcontainers` (PostgreSQL), base de datos de prueba
+**Herramientas:** `test`, PostgreSQL real (Neon rama test)
+
+**Entorno:**
+- Neon rama `test` con datos de prueba
 
 **Tipos de pruebas:**
-- Conexión y configuración de DB
 - CRUD completo (crear, leer, actualizar, eliminar)
 - Transacciones (BEGIN, COMMIT, ROLLBACK)
 - Queries con filtros y joins
 - Manejo de excepciones de base de datos
 
-**Reportes:** `docs/summary/integration-test/`
+**Estructura:** `test/integration-test/[feature]/[feature]_integration_test.dart`
+
+**Reportes:** `docs/summary/test/integration-test/`
 
 ---
 
-## 3. Widget Tests (Pruebas de Componentes UI)
+## 4. Widget Tests (Pruebas de Componentes UI)
 
 **Objetivo:** Validar renderizado e interacción de componentes visuales reutilizables.
 
@@ -68,7 +74,7 @@
 
 ---
 
-## 4. Page Tests (Pruebas de Pantallas)
+## 5. Page Tests (Pruebas de Pantallas)
 
 **Objetivo:** Validar flujo completo de pantallas individuales con Provider.
 
@@ -97,7 +103,7 @@
 
 ---
 
-## 5. End-to-End Tests (E2E)
+## 6. End-to-End Tests (E2E)
 
 **Objetivo:** Validar flujos de negocio completos de extremo a extremo.
 
@@ -116,7 +122,7 @@
 
 ---
 
-## 6. Performance Tests (Pruebas de Rendimiento)
+## 7. Performance Tests (Pruebas de Rendimiento)
 
 **Objetivo:** Validar tiempos de respuesta en operaciones críticas.
 
@@ -138,7 +144,7 @@
 
 ---
 
-## 7. Stress Tests (Pruebas de Estrés)
+## 8. Stress Tests (Pruebas de Estrés)
 
 **Objetivo:** Validar comportamiento bajo carga extrema.
 
@@ -160,7 +166,7 @@
 
 ---
 
-## 8. Security Tests (Pruebas de Seguridad)
+## 9. Security Tests (Pruebas de Seguridad)
 
 **Objetivo:** Validar manejo seguro de datos sensibles.
 
