@@ -27,7 +27,6 @@ Cada reporte de feature sigue la estructura definida en la plantilla y se guarda
 ### 2.1. Convencion de Nombres
 
 - **Formato:** `[feature]-tests.md`
-- **Ejemplo:** `auth-tests.md`
 
 ### 2.2. Plantilla de Reporte
 
@@ -84,7 +83,7 @@ Cada reporte de feature sigue la estructura definida en la plantilla y se guarda
 [Texto libre descriptivo del estado del componente y recomendaciones]
 ```
 
-## 3. Documentos Generados
+## 3. Pruebas Generadas
 
 Los reportes se generan en `docs/summary/test/unit-test/` siguiendo la convencion `[feature]-tests.md`.
 
@@ -102,3 +101,16 @@ Los reportes se generan en `docs/summary/test/unit-test/` siguiendo la convencio
 ### 4.3. Titulos de Tests
 
 - **Formato:** `test('debe <accion> cuando <condicion>', () { ... })`
+
+## 5. Ejecucion
+
+```bash
+# Ejecutar todos los tests unitarios
+flutter test test/unit-test/
+
+# Ejecutar tests de una feature especifica
+flutter test test/unit-test/[feature]/
+
+# Ejecutar un archivo especifico
+flutter test test/unit-test/[feature]/[type]/[file]_test.dart
+```
