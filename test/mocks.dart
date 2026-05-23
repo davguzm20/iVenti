@@ -31,6 +31,7 @@ import 'package:iventi/features/sales/repositories/IReciboRepository.dart';
 import 'package:iventi/features/sales/services/VentaService.dart';
 import 'package:iventi/features/sales/services/PagoService.dart';
 import 'package:iventi/features/sales/controllers/VentaController.dart';
+import 'package:iventi/features/clients/repositories/IClienteRepository.dart';
 
 // Reports
 import 'package:iventi/features/reports/repositories/IReportRepository.dart';
