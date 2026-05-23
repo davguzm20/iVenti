@@ -25,8 +25,8 @@ class ReportRepository implements IReportRepository {
 
     try {
       String sql = '''
-        SELECT v.id_venta, v.codigo_boleta,
-               COALESCE(c.nombre, 'Sin cliente') AS cliente,
+        SELECT v.id_venta, '' AS codigo_boleta,
+               COALESCE(c.nombres || ' ' || c.apellidos, 'Sin cliente') AS cliente,
                v.vendido_en AS fecha, v.monto_total, v.monto_cancelado,
                CASE WHEN v.es_credito THEN 'Crédito' ELSE 'Al contado' END AS tipo
         FROM ventas v

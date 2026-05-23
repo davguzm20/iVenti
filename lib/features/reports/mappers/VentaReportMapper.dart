@@ -20,8 +20,8 @@ class VentaReportMapper {
       codigoBoleta: (map['codigo_boleta'] ?? '') as String,
       cliente: map['cliente'] as String,
       fecha: map['fecha'] as DateTime,
-      montoTotal: (map['monto_total'] as num).toDouble(),
-      montoCancelado: (map['monto_cancelado'] as num).toDouble(),
+      montoTotal: double.parse(map['monto_total'].toString()),
+      montoCancelado: double.parse(map['monto_cancelado'].toString()),
       tipo: map['tipo'] as String,
     );
   }

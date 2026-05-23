@@ -15,8 +15,8 @@ class ProductoVendidoMapper {
     return ProductoVendidoResponse(
       producto: map['producto'] as String,
       cantidad: (map['cantidad'] as num).toInt(),
-      precioUnitario: (map['precio_unitario'] as num).toDouble(),
-      subtotal: (map['subtotal'] as num).toDouble(),
+      precioUnitario: double.parse(map['precio_unitario'].toString()),
+      subtotal: double.parse(map['subtotal'].toString()),
     );
   }
 }
