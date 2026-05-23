@@ -5,27 +5,27 @@
 ### 1.1. Salida de Consola
 
 ```
-00:00 +17: All tests passed!
+00:00 +15: All tests passed!
 ```
 
 ### 1.2. Resumen de Resultados
 
 | Concepto | Cantidad |
 |----------|----------|
-| Total | 17 |
-| Exitosas | 17 |
+| Total | 21 |
+| Exitosas | 21 |
 | Fallidas | 0 |
 
 ### 1.3. Desglose por Tipo
 
 | Tipo | Tests | Exitosos |
 |------|-------|----------|
-| ClienteService | 11 | 11 |
+| ClienteService | 15 | 15 |
 | ClienteController | 6 | 6 |
 
 ## 2. Tests Ejecutados
 
-### 2.1. ClienteService (11 tests)
+### 2.1. ClienteService (15 tests)
 
 | # | Método | Descripción | Tipo |
 |---|--------|-------------|------|
@@ -37,9 +37,13 @@
 | 6 | eliminarCliente | debe lanzar BusinessException cuando cliente no existe | Error Path |
 | 7 | obtenerClientePorId | debe retornar cliente cuando existe | Happy Path |
 | 8 | obtenerClientePorId | debe retornar null cuando no existe | Happy Path |
-| 9 | buscarPorNombre | debe retornar lista de clientes | Happy Path |
-| 10 | obtenerFiltrados | debe retornar clientes filtrados | Happy Path |
-| 11 | actualizarEstadoDeudor | debe actualizar estado deudor | Happy Path |
+| 9 | obtenerClientePorId | debe lanzar BusinessException cuando hay DatabaseException | Error Path |
+| 10 | buscarPorNombre | debe retornar lista de clientes | Happy Path |
+| 11 | buscarPorNombre | debe lanzar BusinessException cuando hay DatabaseException | Error Path |
+| 12 | obtenerFiltrados | debe retornar clientes filtrados | Happy Path |
+| 13 | obtenerFiltrados | debe lanzar BusinessException cuando hay DatabaseException | Error Path |
+| 14 | actualizarEstadoDeudor | debe actualizar estado deudor | Happy Path |
+| 15 | actualizarEstadoDeudor | debe lanzar BusinessException cuando hay DatabaseException | Error Path |
 
 ### 2.2. ClienteController (6 tests)
 
@@ -59,14 +63,14 @@
 | crearCliente | sí | sí | vacío |
 | actualizarCliente | sí | sí | vacío |
 | eliminarCliente | sí | sí | vacío |
-| obtenerClientePorId | sí | vacío | vacío |
-| buscarPorNombre | sí | vacío | vacío |
-| obtenerFiltrados | sí | vacío | vacío |
-| actualizarEstadoDeudor | sí | vacío | vacío |
+| obtenerClientePorId | sí | sí | vacío |
+| buscarPorNombre | sí | sí | vacío |
+| obtenerFiltrados | sí | sí | vacío |
+| actualizarEstadoDeudor | sí | sí | vacío |
 
 ## 4. Interpretación
 
-1. **Cobertura:** 7 métodos del service + 6 métodos del controller evaluados
+1. **Cobertura:** 7 métodos del service + 6 métodos del controller evaluados, 21 tests aprobados
 2. **Patrones verificados:**
    - DatabaseException se traduce a BusinessException
    - Validación de cliente existente
@@ -75,3 +79,5 @@
 ## 5. Conclusiones
 
 ClienteService y ClienteController están completamente probados. Todos los métodos manejan correctamente happy path y error path.
+
+**Estado:** Completado - 21/21 tests aprobados (100%)

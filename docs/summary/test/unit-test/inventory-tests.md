@@ -5,33 +5,33 @@
 ### 1.1. Salida de Consola
 
 ```
-00:03 +64: All tests passed!
+00:03 +72: All tests passed!
 ```
 
 ### 1.2. Resumen de Resultados
 
 | Concepto | Cantidad |
 |----------|----------|
-| Total | 64 |
-| Exitosas | 64 |
+| Total | 72 |
+| Exitosas | 72 |
 | Fallidas | 0 |
 
 ### 1.3. Desglose por Tipo
 
 | Tipo | Tests | Exitosos |
 |------|-------|----------|
-| ProductoService | 11 | 11 |
+| ProductoService | 17 | 17 |
 | ProductoController | 8 | 8 |
-| CategoriaService | 7 | 7 |
+| CategoriaService | 10 | 10 |
 | CategoriaController | 5 | 5 |
 | UnidadService | 5 | 5 |
 | UnidadController | 2 | 2 |
-| LoteService | 14 | 14 |
+| LoteService | 18 | 18 |
 | LoteController | 7 | 7 |
 
 ## 2. Tests Ejecutados
 
-### 2.1. ProductoService (11 tests)
+### 2.1. ProductoService (17 tests)
 
 | # | Metodo | Descripcion | Tipo |
 |---|--------|-------------|------|
@@ -47,8 +47,11 @@
 | 10 | obtenerProductoPorCodigo | debe retornar producto cuando existe | Happy Path |
 | 11 | obtenerProductoPorCodigo | debe retornar null cuando no existe | Happy Path |
 | 12 | buscarPorNombre | debe retornar lista de productos | Happy Path |
-| 13 | obtenerTodos | debe retornar lista de todos los productos | Happy Path |
-| 14 | obtenerFiltrados | debe retornar productos filtrados | Happy Path |
+| 13 | buscarPorNombre | debe lanzar BusinessException cuando hay DatabaseException | Error Path |
+| 14 | obtenerTodos | debe retornar lista de todos los productos | Happy Path |
+| 15 | obtenerTodos | debe lanzar BusinessException cuando hay DatabaseException | Error Path |
+| 16 | obtenerFiltrados | debe retornar productos filtrados | Happy Path |
+| 17 | obtenerFiltrados | debe lanzar BusinessException cuando hay DatabaseException | Error Path |
 
 ### 2.2. ProductoController (8 tests)
 
@@ -63,7 +66,7 @@
 | 7 | obtenerTodos | delega a ProductoService | Delegacion |
 | 8 | obtenerFiltrados | delega a ProductoService | Delegacion |
 
-### 2.3. CategoriaService (7 tests)
+### 2.3. CategoriaService (10 tests)
 
 | # | Metodo | Descripcion | Tipo |
 |---|--------|-------------|------|
@@ -72,10 +75,11 @@
 | 3 | actualizarCategoria | debe actualizar categoria correctamente | Happy Path |
 | 4 | actualizarCategoria | debe lanzar BusinessException cuando hay DatabaseException | Error Path |
 | 5 | eliminarCategoria | debe eliminar categoria correctamente | Happy Path |
-| 6 | obtenerTodas | debe retornar lista de categorias | Happy Path |
-| 7 | obtenerTodas | debe lanzar BusinessException cuando hay DatabaseException | Error Path |
-| 8 | obtenerDeProducto | debe retornar categorias de un producto | Happy Path |
-| 9 | obtenerDeProducto | debe lanzar BusinessException cuando hay DatabaseException | Error Path |
+| 6 | eliminarCategoria | debe lanzar BusinessException cuando hay DatabaseException | Error Path |
+| 7 | obtenerTodas | debe retornar lista de categorias | Happy Path |
+| 8 | obtenerTodas | debe lanzar BusinessException cuando hay DatabaseException | Error Path |
+| 9 | obtenerDeProducto | debe retornar categorias de un producto | Happy Path |
+| 10 | obtenerDeProducto | debe lanzar BusinessException cuando hay DatabaseException | Error Path |
 
 ### 2.4. CategoriaController (5 tests)
 
@@ -104,7 +108,7 @@
 | 1 | obtenerTodas | delega a UnidadService | Delegacion |
 | 2 | obtenerPorId | delega a UnidadService | Delegacion |
 
-### 2.7. LoteService (14 tests)
+### 2.7. LoteService (18 tests)
 
 | # | Metodo | Descripcion | Tipo |
 |---|--------|-------------|------|
@@ -119,9 +123,13 @@
 | 9 | eliminarLote | debe lanzar BusinessException cuando lote tiene ventas registradas | Error Path |
 | 10 | obtenerLotePorId | debe retornar lote cuando existe | Happy Path |
 | 11 | obtenerLotePorId | debe retornar null cuando no existe | Happy Path |
-| 12 | obtenerLotesDeProducto | debe retornar lista de lotes de un producto | Happy Path |
-| 13 | obtenerLotesPorFechas | debe retornar lista de lotes por rango de fechas | Happy Path |
-| 14 | obtenerLotesProximosAVencer | debe retornar lista de lotes proximos a vencer | Happy Path |
+| 12 | obtenerLotePorId | debe lanzar BusinessException cuando hay DatabaseException | Error Path |
+| 13 | obtenerLotesDeProducto | debe retornar lista de lotes de un producto | Happy Path |
+| 14 | obtenerLotesDeProducto | debe lanzar BusinessException cuando hay DatabaseException | Error Path |
+| 15 | obtenerLotesPorFechas | debe retornar lista de lotes por rango de fechas | Happy Path |
+| 16 | obtenerLotesPorFechas | debe lanzar BusinessException cuando hay DatabaseException | Error Path |
+| 17 | obtenerLotesProximosAVencer | debe retornar lista de lotes proximos a vencer | Happy Path |
+| 18 | obtenerLotesProximosAVencer | debe lanzar BusinessException cuando hay DatabaseException | Error Path |
 
 ### 2.8. LoteController (7 tests)
 
@@ -146,9 +154,9 @@
 | eliminarProducto | si | si | no |
 | obtenerProductoPorId | si | si | no |
 | obtenerProductoPorCodigo | si | si | no |
-| buscarPorNombre | si | no | no |
-| obtenerTodos | si | no | no |
-| obtenerFiltrados | si | no | no |
+| buscarPorNombre | si | si | no |
+| obtenerTodos | si | si | no |
+| obtenerFiltrados | si | si | no |
 
 ### 3.2. CategoriaService
 
@@ -156,7 +164,7 @@
 |--------|------------|------------|--------------|
 | crearCategoria | si | si | no |
 | actualizarCategoria | si | si | no |
-| eliminarCategoria | si | no | no |
+| eliminarCategoria | si | si | no |
 | obtenerTodas | si | si | no |
 | obtenerDeProducto | si | si | no |
 
@@ -174,17 +182,17 @@
 | crearLote | si | si | si (cantidad <= 0) |
 | actualizarLote | si | si | si (cantidadActual < 0) |
 | eliminarLote | si | si | si (ventas registradas) |
-| obtenerLotePorId | si | no | no |
-| obtenerLotesDeProducto | si | no | no |
-| obtenerLotesPorFechas | si | no | no |
-| obtenerLotesProximosAVencer | si | no | no |
+| obtenerLotePorId | si | si | no |
+| obtenerLotesDeProducto | si | si | no |
+| obtenerLotesPorFechas | si | si | no |
+| obtenerLotesProximosAVencer | si | si | no |
 
 ## 4. Interpretacion
 
-1. **Cobertura:** 4 servicios y 4 controllers evaluados, 64 tests aprobados
+1. **Cobertura:** 4 servicios y 4 controllers evaluados, 72 tests aprobados
 2. **Patrones verificados:** DatabaseException se traduce a BusinessException, validaciones de cantidad y ventas registradas
 3. **Controllers:** delegan correctamente a sus servicios
 
 ## 5. Conclusiones
 
-Los 4 modulos de Inventory (Producto, Categoria, Unidad, Lote) estan completamente probados con 64 tests aprobados (100%).
+Los 4 modulos de Inventory (Producto, Categoria, Unidad, Lote) estan completamente probados con 72 tests aprobados (100%).
