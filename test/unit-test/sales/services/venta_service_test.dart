@@ -315,6 +315,74 @@ void main() {
     });
   });
 
+  group('VentaService.obtenerVentasFiltradas', () {
+    test('debe retornar ventas filtradas', () async {
+      final ventas = [
+        VentaEntity(
+          idVenta: 1, idCliente: null, idUsuario: 1,
+          vendidoEn: DateTime.now(), montoTotal: 100, montoCancelado: 100,
+          estado: EstadoVenta.PENDIENTE, esCredito: false, creadoEn: DateTime.now(),
+        ),
+      ];
+
+      when(mockVentaRepository.obtenerVentasPorFiltros(
+        limite: anyNamed('limite'), offset: anyNamed('offset'),
+        esAlContado: anyNamed('esAlContado'), fechaInicio: anyNamed('fechaInicio'),
+        fechaFinal: anyNamed('fechaFinal'),
+      )).thenAnswer((_) async => ventas);
+
+      final result = await buildService().obtenerVentasFiltradas(limite: 10, offset: 0);
+
+      expect(result, equals(ventas));
+    });
+
+    test('debe lanzar BusinessException cuando hay DatabaseException', () async {
+      when(mockVentaRepository.obtenerVentasPorFiltros(
+        limite: anyNamed('limite'), offset: anyNamed('offset'),
+        esAlContado: anyNamed('esAlContado'), fechaInicio: anyNamed('fechaInicio'),
+        fechaFinal: anyNamed('fechaFinal'),
+      )).thenThrow(DatabaseException('Error de DB'));
+
+      expect(
+        () => buildService().obtenerVentasFiltradas(limite: 10, offset: 0),
+        throwsA(isA<BusinessException>().having((e) => e.mensaje, 'mensaje', contains('Error al filtrar ventas'))),
+      );
+    });
+  });
+
+  group('VentaService.obtenerVentasPorFechas', () {
+    test('debe retornar ventas por rango de fechas', () async {
+      final ventas = [
+        VentaEntity(
+          idVenta: 1, idCliente: null, idUsuario: 1,
+          vendidoEn: DateTime.now(), montoTotal: 100, montoCancelado: 100,
+          estado: EstadoVenta.PENDIENTE, esCredito: false, creadoEn: DateTime.now(),
+        ),
+      ];
+
+      when(mockVentaRepository.obtenerVentasPorFechas(any, any))
+          .thenAnswer((_) async => ventas);
+
+      final result = await buildService().obtenerVentasPorFechas(
+        DateTime(2024, 1, 1), DateTime(2024, 12, 31),
+      );
+
+      expect(result, equals(ventas));
+    });
+
+    test('debe lanzar BusinessException cuando hay DatabaseException', () async {
+      when(mockVentaRepository.obtenerVentasPorFechas(any, any))
+          .thenThrow(DatabaseException('Error de DB'));
+
+      expect(
+        () => buildService().obtenerVentasPorFechas(
+          DateTime(2024, 1, 1), DateTime(2024, 12, 31),
+        ),
+        throwsA(isA<BusinessException>().having((e) => e.mensaje, 'mensaje', contains('Error al obtener ventas por fechas'))),
+      );
+    });
+  });
+
   group('VentaService.anularVenta', () {
     test('debe lanzar BusinessException cuando venta no existe', () async {
       when(mockVentaRepository.obtenerVentaPorId(any))
@@ -345,6 +413,30 @@ void main() {
       expect(
         () => buildService().anularVenta(1),
         throwsA(isA<BusinessException>().having((e) => e.mensaje, 'mensaje', contains('ya esta anulada'))),
+      );
+    });
+
+    test('debe lanzar BusinessException cuando hay DatabaseException', () async {
+      final ventaEntity = VentaEntity(
+        idVenta: 1,
+        idCliente: null,
+        idUsuario: 1,
+        vendidoEn: DateTime.now(),
+        montoTotal: 100,
+        montoCancelado: 100,
+        estado: EstadoVenta.PENDIENTE,
+        esCredito: false,
+        creadoEn: DateTime.now(),
+      );
+
+      when(mockVentaRepository.obtenerVentaPorId(any))
+          .thenAnswer((_) async => ventaEntity);
+      when(mockDatasource.connection)
+          .thenThrow(DatabaseException('Error de DB'));
+
+      expect(
+        () => buildService().anularVenta(1),
+        throwsA(isA<BusinessException>().having((e) => e.mensaje, 'mensaje', contains('Error al anular venta'))),
       );
     });
   });

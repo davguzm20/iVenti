@@ -129,6 +129,17 @@ void main() {
         throwsA(isA<BusinessException>().having((e) => e.mensaje, 'mensaje', contains('Cliente no encontrado'))),
       );
     });
+
+    test('debe lanzar BusinessException cuando hay DatabaseException', () async {
+      when(mockClienteRepository.obtenerClientePorId(any))
+          .thenThrow(DatabaseException('Error BD'));
+
+      expect(
+        () => buildService().registrarPagoCliente(1, 50, 1),
+        throwsA(isA<BusinessException>()),
+      );
+    });
+
   });
 
   group('PagoService.obtenerRecibosDeVenta', () {

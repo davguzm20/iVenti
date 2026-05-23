@@ -5,7 +5,9 @@ import 'package:iventi/shared/exceptions/DatabaseException.dart';
 import 'package:iventi/features/notifications/services/NotificacionService.dart';
 import 'package:iventi/features/notifications/entities/NotificacionEntity.dart';
 import 'package:iventi/features/notifications/enums/TipoNotificacion.dart';
+import 'package:iventi/features/notifications/dtos/requests/CrearNotificacionRequest.dart';
 import 'package:iventi/features/notifications/repositories/INotificacionRepository.dart';
+import 'package:iventi/shared/exceptions/ValidationException.dart';
 import 'package:iventi/features/inventory/repositories/IProductoRepository.dart';
 import 'package:iventi/features/inventory/repositories/ILoteRepository.dart';
 import 'package:iventi/features/config/repositories/IConfiguracionRepository.dart';
@@ -33,6 +35,42 @@ void main() {
     reset(mockProductoRepository);
     reset(mockLoteRepository);
     reset(mockConfiguracionRepository);
+  });
+
+  group('NotificacionService.crearNotificacion', () {
+    test('debe crear notificacion correctamente', () async {
+      final notificacion = NotificacionEntity(
+        idNotificacion: 1, idUsuario: 1, tipo: TipoNotificacion.STOCK_BAJO,
+        titulo: 'Test', contenido: 'Test', creadoEn: DateTime.now(),
+      );
+      final request = CrearNotificacionRequest(
+        idUsuario: 1, tipo: TipoNotificacion.STOCK_BAJO,
+        titulo: 'Test', contenido: 'Test',
+      );
+
+      when(mockNotificacionRepository.crearNotificacion(any))
+          .thenAnswer((_) async => notificacion);
+
+      final result = await buildService().crearNotificacion(request);
+
+      expect(result, notificacion);
+      verify(mockNotificacionRepository.crearNotificacion(request)).called(1);
+    });
+
+    test('debe lanzar BusinessException cuando hay DatabaseException', () async {
+      final request = CrearNotificacionRequest(
+        idUsuario: 1, tipo: TipoNotificacion.STOCK_BAJO,
+        titulo: 'Test', contenido: 'Test',
+      );
+
+      when(mockNotificacionRepository.crearNotificacion(any))
+          .thenThrow(DatabaseException('Error BD'));
+
+      expect(
+        () => buildService().crearNotificacion(request),
+        throwsA(isA<BusinessException>()),
+      );
+    });
   });
 
   group('NotificacionService.obtenerNotificaciones', () {
@@ -127,6 +165,16 @@ void main() {
 
       verify(mockNotificacionRepository.marcarTodasComoLeidas(1)).called(1);
     });
+
+    test('debe lanzar BusinessException cuando hay DatabaseException', () async {
+      when(mockNotificacionRepository.marcarTodasComoLeidas(any))
+          .thenThrow(DatabaseException('Error BD'));
+
+      expect(
+        () => buildService().marcarTodasComoLeidas(1),
+        throwsA(isA<BusinessException>()),
+      );
+    });
   });
 
   group('NotificacionService.eliminarNotificacion', () {
@@ -157,6 +205,16 @@ void main() {
       await buildService().limpiarHistorial(1);
 
       verify(mockNotificacionRepository.limpiarHistorial(1)).called(1);
+    });
+
+    test('debe lanzar BusinessException cuando hay DatabaseException', () async {
+      when(mockNotificacionRepository.limpiarHistorial(any))
+          .thenThrow(DatabaseException('Error BD'));
+
+      expect(
+        () => buildService().limpiarHistorial(1),
+        throwsA(isA<BusinessException>()),
+      );
     });
   });
 
