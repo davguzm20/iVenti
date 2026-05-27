@@ -5,7 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:iventi/shared/services/MailerService.dart';
 import 'package:iventi/shared/theme/AppColors.dart';
 import 'package:iventi/shared/theme/ButtonStyles.dart';
-import 'package:iventi/shared/widgets/PinInput.dart';
+import 'package:iventi/features/auth/widgets/PinInput.dart';
 import 'package:iventi/shared/widgets/BackButton.dart';
 
 class RecoverPinPage extends StatefulWidget {

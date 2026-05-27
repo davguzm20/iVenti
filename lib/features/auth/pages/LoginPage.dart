@@ -7,7 +7,7 @@ import 'package:iventi/shared/exceptions/AppException.dart';
 import 'package:iventi/shared/theme/AppColors.dart';
 import 'package:iventi/shared/theme/ButtonStyles.dart';
 import 'package:iventi/shared/widgets/ErrorDialog.dart';
-import 'package:iventi/shared/widgets/PinInput.dart';
+import 'package:iventi/features/auth/widgets/PinInput.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
