@@ -35,7 +35,7 @@ class ClientCard extends StatelessWidget {
                 children: [
                   Expanded(
                     child: Text(
-                      client.nombresComple,
+                      '${client.nombres} ${client.apellidos}',
                       style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
