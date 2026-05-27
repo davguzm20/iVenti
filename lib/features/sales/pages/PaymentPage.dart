@@ -337,6 +337,7 @@ class _PaymentPageState extends State<PaymentPage> {
                   idCliente = nuevo.idCliente;
 
                 } catch (e) {
+                  if (!mounted) return;
                   final (title, desc) = DialogMessages.ventas.noSePudoRegistrarCliente;
                   ErrorDialog(
                     context: context,
@@ -351,6 +352,7 @@ class _PaymentPageState extends State<PaymentPage> {
               }
 
               if (idCliente == null) {
+                if (!mounted) return;
                 final (title, desc) = DialogMessages.ventas.clienteNoEncontrado;
                 ErrorDialog(
                   context: context,
@@ -394,6 +396,7 @@ class _PaymentPageState extends State<PaymentPage> {
                 }
 
               } catch (e) {
+                if (!mounted) return;
                 final (title, desc) = DialogMessages.ventas.noSePudoRegistrarVenta;
                 ErrorDialog(
                   context: context,

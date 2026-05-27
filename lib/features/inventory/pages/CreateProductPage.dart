@@ -332,6 +332,7 @@ class _CreateProductPageState extends State<CreateProductPage> {
                 final cats = await _categoriaController.obtenerTodas();
                 setState(() => categoriasDisponibles = cats);
               }
+              if (!mounted) return;
               context.pop();
             },
             child: const Text('Guardar'),
@@ -401,6 +402,7 @@ class _CreateProductPageState extends State<CreateProductPage> {
                     final cats = await _categoriaController.obtenerTodas();
                     setState(() => categoriasDisponibles = cats);
                   }
+                  if (!mounted) return;
                   context.pop();
                 },
                 child: const Text('Guardar'),
@@ -444,6 +446,7 @@ class _CreateProductPageState extends State<CreateProductPage> {
                   final cats = await _categoriaController.obtenerTodas();
                   setState(() => categoriasDisponibles = cats);
                 }
+                if (!mounted) return;
                 context.pop();
               },
               style: TextButton.styleFrom(foregroundColor: AppColors.danger),
@@ -534,6 +537,7 @@ class _CreateProductPageState extends State<CreateProductPage> {
           }
 
         } catch (e) {
+          if (!mounted) return;
           final (title, desc) = DialogMessages.inventario.noSePudoRegistrarProducto;
           ErrorDialog(
             context: context,

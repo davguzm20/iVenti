@@ -51,6 +51,7 @@ class _ProductPageState extends State<ProductPage> {
   Future<void> _cargarDatos() async {
     final p = await _productoController.obtenerProductoPorId(widget.idProducto);
     if (p == null) {
+      if (!mounted) return;
       final (t, d) = DialogMessages.inventario.productoNoEncontrado;
       ErrorDialog(context: context, title: t, description: d);
       return;
@@ -124,6 +125,7 @@ class _ProductPageState extends State<ProductPage> {
                   rutaImagen: nuevaRuta,
                 ),
               );
+              if (!mounted) return;
               context.pop();
               _cargarDatos();
             },
@@ -200,6 +202,7 @@ class _ProductPageState extends State<ProductPage> {
                   precioCompra: double.tryParse(precioCompraCtrl.text) ?? 0,
                 ),
               );
+              if (!mounted) return;
               context.pop();
               _recargarLotes();
               _cargarDatos();
@@ -527,6 +530,7 @@ class _ProductPageState extends State<ProductPage> {
             onPressed: () async {
               if (ctrl.text.trim().isNotEmpty) {
                 await _categoriaController.crearCategoria(CrearCategoriaRequest(nombre: ctrl.text.trim()));
+                if (!mounted) return;
                 context.pop();
                 _recargarCategorias();
               }

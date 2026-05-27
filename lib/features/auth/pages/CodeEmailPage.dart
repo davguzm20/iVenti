@@ -47,6 +47,7 @@ class _CodeEmailPageState extends State<CodeEmailPage> {
           await authController.obtenerUsuarioPorEmail(widget.emailUser);
         } catch (_) {
           final (titulo, desc) = DialogMessages.auth.cuentaNoEncontrada;
+          if (!mounted) return;
         ErrorDialog(
             context: context,
             title: titulo,
@@ -57,6 +58,7 @@ class _CodeEmailPageState extends State<CodeEmailPage> {
         }
       }
 
+      if (!mounted) return;
       AwesomeDialog(
         context: context,
         dialogType: DialogType.success,

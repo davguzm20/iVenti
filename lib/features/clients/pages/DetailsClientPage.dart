@@ -180,7 +180,7 @@ class _DetailsClientPageState extends State<DetailsClientPage> {
                         1,
                       );
 
-                      if (mounted) {
+                      if (context.mounted) {
                         final (title, desc) = DialogMessages.clientes.pagoRegistrado;
                         SuccessDialog(
                           context: context,
@@ -194,6 +194,7 @@ class _DetailsClientPageState extends State<DetailsClientPage> {
                       }
 
                     } catch (e) {
+                      if (!context.mounted) return;
                       final (title, desc) = DialogMessages.clientes.noSePudoRegistrarPago;
                       ErrorDialog(
                         context: context,

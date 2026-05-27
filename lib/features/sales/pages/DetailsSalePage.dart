@@ -47,6 +47,7 @@ class _DetailsSalePageState extends State<DetailsSalePage> {
       }
 
     } else {
+      if (!mounted) return;
       final (title, desc) = DialogMessages.ventas.ventaNoEncontrada;
       ErrorDialog(
         context: context,
@@ -161,7 +162,7 @@ class _DetailsSalePageState extends State<DetailsSalePage> {
                         1,
                       );
 
-                      if (mounted) {
+                      if (context.mounted) {
                         final (title, desc) = DialogMessages.ventas.pagoRegistrado;
                         SuccessDialog(
                           context: context,
@@ -175,6 +176,7 @@ class _DetailsSalePageState extends State<DetailsSalePage> {
                       }
 
                     } catch (e) {
+                      if (!context.mounted) return;
                       final (title, desc) = DialogMessages.ventas.noSePudoRegistrarPago;
                       ErrorDialog(
                         context: context,
