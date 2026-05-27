@@ -6,6 +6,7 @@ import 'package:iventi/shared/di/ServiceLocator.dart';
 import 'package:iventi/features/clients/controllers/ClienteController.dart';
 import 'package:iventi/shared/theme/AppColors.dart';
 import 'package:iventi/shared/theme/ButtonStyles.dart';
+import 'package:iventi/features/clients/widgets/ClientCard.dart';
 
 class ClientsPage extends StatefulWidget {
   const ClientsPage({super.key});
@@ -186,90 +187,12 @@ class _ClientsPageState extends State<ClientsPage> {
                     itemBuilder: (context, index) {
                       final cliente = clientes[index];
 
-                      return Container(
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(12),
-                          border: Border.all(
-                              color: AppColors.primary, width: 2),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withValues(alpha: 0.2),
-                              blurRadius: 6,
-                              offset: const Offset(0, 4),
-                            ),
-                            BoxShadow(
-                              color: Colors.black.withValues(alpha: 0.1),
-                              blurRadius: 2,
-                              offset: const Offset(0, 2),
-                            ),
-                          ],
-                        ),
-                        margin: const EdgeInsets.only(bottom: 12),
-                        child: Padding(
-                          padding: const EdgeInsets.all(12.0),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      "${cliente.nombres} ${cliente.apellidos}",
-                                      style: const TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 20,
-                                        color: AppColors.primary,
-                                      ),
-                                    ),
-
-                                    const SizedBox(height: 5),
-
-                                    Text(
-                                      "Email: ${cliente.email ?? "---"}",
-                                      style: const TextStyle(
-                                          color: Colors.black),
-                                    ),
-
-                                    Text(
-                                      "Teléfono: ${cliente.telefono ?? "---"}",
-                                      style: const TextStyle(
-                                          color: Colors.black),
-                                    ),
-
-                                    Text(
-                                      "Estado: ${cliente.esDeudor ? "Deudor" : "Regular"}",
-                                      style: TextStyle(
-                                        color: cliente.esDeudor
-                                            ? Colors.red
-                                            : Colors.black,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  ElevatedButton(
-                                    style: ButtonStyles.success(),
-                                    onPressed: () async {
-                                      await context.push(
-                                          '/clients/details-client/${cliente.idCliente}');
-
-                                      _cargarClientes(reiniciar: true);
-                                    },
-                                    child: const Text("Detalles"),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
+                      return ClientCard(
+                        client: cliente,
+                        onViewDetail: () async {
+                          await context.push('/clients/details-client/${cliente.idCliente}');
+                          _cargarClientes(reiniciar: true);
+                        },
                       );
                     },
                   ),
