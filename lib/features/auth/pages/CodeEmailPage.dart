@@ -1,10 +1,11 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
+import 'package:iventi/features/auth/controllers/AuthController.dart';
 import 'package:iventi/features/auth/widgets/PinInput.dart';
 import 'package:iventi/shared/theme/AppColors.dart';
 import 'package:iventi/shared/theme/ButtonStyles.dart';
-import 'package:iventi/shared/di/ServiceLocator.dart';
 import 'package:iventi/shared/utils/DialogMessages.dart';
 import 'package:iventi/shared/widgets/ErrorDialog.dart';
 import 'package:iventi/shared/widgets/BackButton.dart';
@@ -41,7 +42,7 @@ class _CodeEmailPageState extends State<CodeEmailPage> {
 
     if (inputCode == widget.correctCode) {
       if (widget.flujo == 'verify') {
-        final authController = ServiceLocator.authController;
+        final authController = context.read<AuthController>();
 
         try {
           await authController.obtenerUsuarioPorEmail(widget.emailUser);

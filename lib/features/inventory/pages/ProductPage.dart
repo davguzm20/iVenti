@@ -2,7 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iventi/features/inventory/entities/ProductoEntity.dart';
-import 'package:iventi/shared/di/ServiceLocator.dart';
+import 'package:provider/provider.dart';
 import 'package:iventi/features/inventory/entities/LoteEntity.dart';
 import 'package:iventi/features/inventory/entities/CategoriaEntity.dart';
 import 'package:iventi/features/inventory/entities/UnidadEntity.dart';
@@ -35,12 +35,12 @@ class _ProductPageState extends State<ProductPage> {
   bool editandoCategorias = false;
 
   ProductoController get _productoController =>
-      ServiceLocator.productoController;
-  LoteController get _loteController => ServiceLocator.loteController;
+      context.read<ProductoController>();
+  LoteController get _loteController => context.read<LoteController>();
   CategoriaController get _categoriaController =>
-      ServiceLocator.categoriaController;
+      context.read<CategoriaController>();
   UnidadController get _unidadController =>
-      ServiceLocator.unidadController;
+      context.read<UnidadController>();
 
   @override
   void initState() {

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iventi/features/sales/entities/VentaEntity.dart';
-import 'package:iventi/shared/di/ServiceLocator.dart';
+import 'package:provider/provider.dart';
 import 'package:iventi/features/sales/entities/DetalleVentaEntity.dart';
 import 'package:iventi/features/sales/controllers/VentaController.dart';
 import 'package:iventi/shared/widgets/ErrorDialog.dart';
@@ -24,7 +24,7 @@ class _DetailsSalePageState extends State<DetailsSalePage> {
   VentaEntity? venta;
   List<DetalleVentaEntity> detalles = [];
 
-  VentaController get _ventaController => ServiceLocator.ventaController;
+  VentaController get _ventaController => context.read<VentaController>();
 
   @override
   void initState() {

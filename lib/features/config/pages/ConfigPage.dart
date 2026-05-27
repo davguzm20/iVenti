@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 import 'package:iventi/shared/di/ServiceLocator.dart';
+import 'package:iventi/features/auth/controllers/AuthController.dart';
+import 'package:iventi/features/config/controllers/ConfiguracionController.dart';
 import 'package:iventi/shared/theme/AppColors.dart';
 import 'package:iventi/shared/theme/ButtonStyles.dart';
 import 'package:iventi/features/config/dtos/requests/CrearConfiguracionRequest.dart';
@@ -26,10 +29,12 @@ class _ConfigPageState extends State<ConfigPage> {
 
   Future<void> _cargar() async {
     setState(() => isLoading = true);
+    final authCtrl = context.read<AuthController>();
+    final configCtrl = context.read<ConfiguracionController>();
     try {
-      final usuario = await ServiceLocator.authController.obtenerUsuarioRegistrado();
+      final usuario = await authCtrl.obtenerUsuarioRegistrado();
       _nombreController.text = usuario.nombre;
-      final configs = await ServiceLocator.configuracionController.obtenerTodas(usuario.idUsuario!);
+      final configs = await configCtrl.obtenerTodas(usuario.idUsuario!);
       for (final c in configs) {
         if (c.clave == 'dias_vencimiento') _diasVencimientoController.text = c.valor;
         if (c.clave == 'stock_minimo_alerta') _stockMinimoController.text = c.valor;
@@ -39,17 +44,19 @@ class _ConfigPageState extends State<ConfigPage> {
   }
 
   Future<void> _guardar() async {
+    final authCtrl = context.read<AuthController>();
+    final configCtrl = context.read<ConfiguracionController>();
     final idUsuario = ServiceLocator.usuarioActualId ?? 1;
     if (_nombreController.text.trim().isNotEmpty) {
-      await ServiceLocator.authController.actualizarPerfil(idUsuario, nombre: _nombreController.text.trim());
+      await authCtrl.actualizarPerfil(idUsuario, nombre: _nombreController.text.trim());
     }
     if (_diasVencimientoController.text.isNotEmpty) {
-      await ServiceLocator.configuracionController.guardarConfiguracion(
+      await configCtrl.guardarConfiguracion(
         CrearConfiguracionRequest(idUsuario: idUsuario, clave: 'dias_vencimiento', valor: _diasVencimientoController.text),
       );
     }
     if (_stockMinimoController.text.isNotEmpty) {
-      await ServiceLocator.configuracionController.guardarConfiguracion(
+      await configCtrl.guardarConfiguracion(
         CrearConfiguracionRequest(idUsuario: idUsuario, clave: 'stock_minimo_alerta', valor: _stockMinimoController.text),
       );
     }

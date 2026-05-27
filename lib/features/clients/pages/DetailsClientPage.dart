@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iventi/features/clients/entities/ClienteEntity.dart';
-import 'package:iventi/shared/di/ServiceLocator.dart';
+import 'package:provider/provider.dart';
 import 'package:iventi/features/clients/controllers/ClienteController.dart';
 import 'package:iventi/features/sales/entities/VentaEntity.dart';
 import 'package:iventi/features/sales/controllers/VentaController.dart';
@@ -26,8 +26,8 @@ class _DetailsClientPageState extends State<DetailsClientPage> {
   List<VentaEntity> ventasCliente = [];
 
   ClienteController get _clienteController =>
-      ServiceLocator.clienteController;
-  VentaController get _ventaController => ServiceLocator.ventaController;
+      context.read<ClienteController>();
+  VentaController get _ventaController => context.read<VentaController>();
 
   @override
   void initState() {

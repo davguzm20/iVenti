@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:iventi/features/notifications/entities/NotificacionEntity.dart';
-import 'package:iventi/shared/di/ServiceLocator.dart';
+import 'package:provider/provider.dart';
 import 'package:iventi/features/notifications/controllers/NotificacionController.dart';
 import 'package:iventi/shared/theme/AppColors.dart';
 import 'package:iventi/features/notifications/widgets/NotificationCard.dart';
@@ -17,7 +17,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
   bool isLoading = false;
 
   NotificacionController get _controller =>
-      ServiceLocator.notificacionController;
+      context.read<NotificacionController>();
 
   @override
   void initState() {

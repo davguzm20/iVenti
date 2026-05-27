@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iventi/shared/widgets/CustomTextField.dart';
-import 'package:iventi/shared/di/ServiceLocator.dart';
+import 'package:provider/provider.dart';
 import 'package:iventi/shared/widgets/ErrorDialog.dart';
 import 'package:iventi/shared/widgets/SuccessDialog.dart';
 import 'package:iventi/features/sales/controllers/VentaController.dart';
@@ -36,9 +36,9 @@ class _PaymentPageState extends State<PaymentPage> {
   ClienteEntity? clienteSeleccionado;
   double cantidadRecibida = 0.0;
 
-  VentaController get _ventaController => ServiceLocator.ventaController;
+  VentaController get _ventaController => context.read<VentaController>();
   ClienteController get _clienteController =>
-      ServiceLocator.clienteController;
+      context.read<ClienteController>();
 
   double _calcularTotalVenta() =>
       widget.detallesVenta.fold(0.0, (total, d) => total + (d['subtotalProducto'] as double));

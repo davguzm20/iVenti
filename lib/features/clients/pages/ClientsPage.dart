@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iventi/features/clients/entities/ClienteEntity.dart';
-import 'package:iventi/shared/di/ServiceLocator.dart';
+import 'package:provider/provider.dart';
 import 'package:iventi/features/clients/controllers/ClienteController.dart';
 import 'package:iventi/features/clients/widgets/ClientCard.dart';
 
@@ -26,7 +26,7 @@ class _ClientsPageState extends State<ClientsPage> {
   bool isSearching = false;
   bool isLoading = false;
 
-  ClienteController get _clienteController => ServiceLocator.clienteController;
+  ClienteController get _clienteController => context.read<ClienteController>();
 
   @override
   void initState() {

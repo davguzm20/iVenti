@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:iventi/features/auth/controllers/AuthController.dart';
-import 'package:iventi/shared/di/ServiceLocator.dart';
+import 'package:provider/provider.dart';
 import 'package:iventi/shared/exceptions/AppException.dart';
 import 'package:iventi/shared/theme/AppColors.dart';
 import 'package:iventi/shared/theme/ButtonStyles.dart';
@@ -25,7 +25,7 @@ class _CreatePinPageState extends State<CreatePinPage> {
   String confirmPin = "";
   String email = "";
 
-  AuthController get _authController => ServiceLocator.authController;
+  AuthController get _authController => context.read<AuthController>();
 
   @override
   void didChangeDependencies() {

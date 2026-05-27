@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:iventi/shared/theme/AppColors.dart';
 import 'package:iventi/shared/theme/ButtonStyles.dart';
-import 'package:iventi/shared/di/ServiceLocator.dart';
+import 'package:provider/provider.dart';
 import 'package:iventi/features/reports/controllers/ReportController.dart';
 import 'package:iventi/features/reports/dtos/requests/ReporteProductosVendidosRequest.dart';
 import 'package:iventi/features/reports/widgets/DateRangePicker.dart';
@@ -22,7 +22,7 @@ class _ReportProductosVendidosPageState extends State<ReportProductosVendidosPag
   @override
   void initState() {
     super.initState();
-    _controller = ServiceLocator.reportController;
+    _controller = context.read<ReportController>();
   }
 
   Future<void> _generar() async {

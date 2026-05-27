@@ -8,7 +8,7 @@ import 'package:iventi/features/inventory/controllers/ProductoController.dart';
 import 'package:iventi/features/inventory/dtos/requests/ActualizarCategoriaRequest.dart';
 import 'package:iventi/features/inventory/dtos/requests/CrearCategoriaRequest.dart';
 import 'package:iventi/features/inventory/dtos/requests/CrearProductoRequest.dart';
-import 'package:iventi/shared/di/ServiceLocator.dart';
+import 'package:provider/provider.dart';
 import 'package:iventi/shared/theme/AppColors.dart';
 import 'package:iventi/shared/theme/ButtonStyles.dart';
 import 'package:iventi/shared/utils/DialogMessages.dart';
@@ -41,11 +41,11 @@ class _CreateProductPageState extends State<CreateProductPage> {
   String? rutaImagen;
 
   ProductoController get _productoController =>
-      ServiceLocator.productoController;
+      context.read<ProductoController>();
   CategoriaController get _categoriaController =>
-      ServiceLocator.categoriaController;
+      context.read<CategoriaController>();
   UnidadController get _unidadController =>
-      ServiceLocator.unidadController;
+      context.read<UnidadController>();
 
   @override
   void initState() {
