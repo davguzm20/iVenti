@@ -4,6 +4,7 @@ import 'package:iventi/shared/theme/ButtonStyles.dart';
 import 'package:iventi/shared/di/ServiceLocator.dart';
 import 'package:iventi/features/reports/controllers/ReportController.dart';
 import 'package:iventi/features/reports/dtos/requests/ReporteProductosVendidosRequest.dart';
+import 'package:iventi/features/reports/widgets/DateRangePicker.dart';
 
 class ReportProductosVendidosPage extends StatefulWidget {
   const ReportProductosVendidosPage({super.key});
@@ -57,8 +58,12 @@ class _ReportProductosVendidosPageState extends State<ReportProductosVendidosPag
           children: [
             const Text("Rango de fechas", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
             const SizedBox(height: 10),
-            _buildDateField("Inicio", inicio, (d) => setState(() => inicio = d)),
-            _buildDateField("Final", fin, (d) => setState(() => fin = d)),
+            DateRangePickerWidget(
+              startDate: inicio,
+              endDate: fin,
+              onStartDateChanged: (d) => setState(() => inicio = d),
+              onEndDateChanged: (d) => setState(() => fin = d),
+            ),
             const Spacer(),
             SizedBox(
               width: double.infinity,
@@ -74,18 +79,5 @@ class _ReportProductosVendidosPageState extends State<ReportProductosVendidosPag
         ),
       ),
     );
-  }
-
-  Widget _buildDateField(String label, DateTime date, ValueChanged<DateTime> onChanged) {
-    return Row(children: [
-      Expanded(child: Text("$label: ${date.toIso8601String().split('T')[0]}")),
-      TextButton(
-        onPressed: () async {
-          final d = await showDatePicker(context: context, initialDate: date, firstDate: DateTime(2020), lastDate: DateTime.now());
-          if (d != null) onChanged(d);
-        },
-        child: const Text("Seleccionar"),
-      ),
-    ]);
   }
 }

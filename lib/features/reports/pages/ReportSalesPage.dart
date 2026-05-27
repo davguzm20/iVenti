@@ -4,6 +4,7 @@ import 'package:iventi/shared/theme/ButtonStyles.dart';
 import 'package:iventi/shared/di/ServiceLocator.dart';
 import 'package:iventi/features/reports/controllers/ReportController.dart';
 import 'package:iventi/features/reports/dtos/requests/ReporteVentasRequest.dart';
+import 'package:iventi/features/reports/widgets/DateRangePicker.dart';
 
 class ReportSalesPage extends StatefulWidget {
   const ReportSalesPage({super.key});
@@ -81,14 +82,12 @@ class _ReportSalesPageState extends State<ReportSalesPage> {
               decoration: const InputDecoration(border: OutlineInputBorder()),
             ),
             const SizedBox(height: 20),
-            Row(children: [
-              Expanded(child: Text("Inicio: ${selectedFechaInicio.toIso8601String().split('T')[0]}")),
-              TextButton(onPressed: () => _seleccionarFecha(true), child: const Text("Seleccionar")),
-            ]),
-            Row(children: [
-              Expanded(child: Text("Final: ${selectedFechaFinal.toIso8601String().split('T')[0]}")),
-              TextButton(onPressed: () => _seleccionarFecha(false), child: const Text("Seleccionar")),
-            ]),
+            DateRangePickerWidget(
+              startDate: selectedFechaInicio,
+              endDate: selectedFechaFinal,
+              onStartDateChanged: (d) => setState(() => selectedFechaInicio = d),
+              onEndDateChanged: (d) => setState(() => selectedFechaFinal = d),
+            ),
             const Spacer(),
             SizedBox(
               width: double.infinity,
