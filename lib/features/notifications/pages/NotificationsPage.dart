@@ -4,6 +4,7 @@ import 'package:iventi/features/notifications/entities/NotificacionEntity.dart';
 import 'package:iventi/shared/di/ServiceLocator.dart';
 import 'package:iventi/features/notifications/controllers/NotificacionController.dart';
 import 'package:iventi/shared/theme/AppColors.dart';
+import 'package:iventi/features/notifications/widgets/NotificationCard.dart';
 
 class NotificationsPage extends StatefulWidget {
   const NotificationsPage({super.key});
@@ -67,42 +68,19 @@ class _NotificationsPageState extends State<NotificationsPage> {
                   itemCount: notificaciones.length,
                   itemBuilder: (context, index) {
                     final notif = notificaciones[index];
-                    final iconColor = notif.leida ? Colors.grey : AppColors.primary;
 
-                    return Slidable(
-                      key: ValueKey(notif.idNotificacion),
-                      endActionPane: ActionPane(
-                        motion: const ScrollMotion(),
-                        children: [
-                          if (!notif.leida)
-                            SlidableAction(
-                              onPressed: (_) async { await _controller.marcarComoLeida(notif.idNotificacion!); _cargar(); },
-                              backgroundColor: Colors.blue, foregroundColor: Colors.white, icon: Icons.check, label: 'Leer',
-                            ),
-                          SlidableAction(
-                            onPressed: (_) async { await _controller.eliminarNotificacion(notif.idNotificacion!); _cargar(); },
-                            backgroundColor: Colors.red, foregroundColor: Colors.white, icon: Icons.delete, label: 'Eliminar',
-                          ),
-                        ],
-                      ),
-                      child: Card(
-                        margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                        child: ListTile(
-                          leading: Icon(notif.leida ? Icons.notifications_off : Icons.notifications_active, color: iconColor),
-                          title: Text(notif.titulo, style: const TextStyle(fontWeight: FontWeight.bold)),
-                          subtitle: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(notif.contenido),
-                              const SizedBox(height: 4),
-                              Text(notif.creadoEn.toIso8601String().split('T')[0], style: TextStyle(fontSize: 12, color: Colors.grey[600])),
-                            ],
-                          ),
-                          trailing: notif.leida
-                              ? null
-                              : IconButton(icon: const Icon(Icons.check, color: Colors.green), onPressed: () async { await _controller.marcarComoLeida(notif.idNotificacion!); _cargar(); }),
-                        ),
-                      ),
+                    return NotificationCard(
+                      notification: notif,
+                      onMarkAsRead: !notif.leido
+                          ? () async {
+                              await _controller.marcarComoLeida(notif.idNotificacion!);
+                              _cargar();
+                            }
+                          : null,
+                      onDelete: () async {
+                        await _controller.eliminarNotificacion(notif.idNotificacion!);
+                        _cargar();
+                      },
                     );
                   },
                 ),
