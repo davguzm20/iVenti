@@ -20,18 +20,12 @@ class NotificationCard extends StatelessWidget {
     switch (notification.tipo) {
       case TipoNotificacion.STOCK_BAJO:
         return Colors.orange;
-      case TipoNotificacion.PRODUCTO_AGOTADO:
+      case TipoNotificacion.STOCK_AGOTADO:
         return Colors.red;
-      case TipoNotificacion.LOTE_PROXIMO_A_VENCER:
+      case TipoNotificacion.PROXIMO_VENCER:
         return Colors.amber;
-      case TipoNotificacion.LOTE_VENCIDO:
+      case TipoNotificacion.VENCIDO:
         return Colors.red.shade900;
-      case TipoNotificacion.VENTA_REALIZADA:
-        return Colors.green;
-      case TipoNotificacion.PAGO_RECIBIDO:
-        return Colors.blue;
-      default:
-        return Colors.grey;
     }
   }
 
@@ -39,18 +33,12 @@ class NotificationCard extends StatelessWidget {
     switch (notification.tipo) {
       case TipoNotificacion.STOCK_BAJO:
         return Icons.inventory_2_outlined;
-      case TipoNotificacion.PRODUCTO_AGOTADO:
+      case TipoNotificacion.STOCK_AGOTADO:
         return Icons.shopping_cart_outlined;
-      case TipoNotificacion.LOTE_PROXIMO_A_VENCER:
+      case TipoNotificacion.PROXIMO_VENCER:
         return Icons.calendar_today_outlined;
-      case TipoNotificacion.LOTE_VENCIDO:
+      case TipoNotificacion.VENCIDO:
         return Icons.event_busy;
-      case TipoNotificacion.VENTA_REALIZADA:
-        return Icons.shopping_bag_outlined;
-      case TipoNotificacion.PAGO_RECIBIDO:
-        return Icons.payment_outlined;
-      default:
-        return Icons.notifications_outlined;
     }
   }
 
@@ -101,7 +89,7 @@ class NotificationCard extends StatelessWidget {
                             overflow: TextOverflow.ellipsis,
                           ),
                         ),
-                        if (!notification.leido)
+                        if (!notification.leida)
                           Container(
                             width: 10,
                             height: 10,
@@ -136,7 +124,7 @@ class NotificationCard extends StatelessWidget {
                         Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            if (onMarkAsRead != null && !notification.leido)
+                            if (onMarkAsRead != null && !notification.leida)
                               IconButton(
                                 icon: const Icon(Icons.done, size: 20),
                                 onPressed: onMarkAsRead,
