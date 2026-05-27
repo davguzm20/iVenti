@@ -21,6 +21,7 @@ class VentaRepository implements IVentaRepository {
 
   Future<Connection> get _conexion => _datasource.connection;
 
+  @override
   Future<VentaEntity> crearVenta(CrearVentaRequest request) async {
     final conexion = await _conexion;
 
@@ -105,6 +106,7 @@ class VentaRepository implements IVentaRepository {
     }
   }
 
+  @override
   Future<VentaEntity?> obtenerVentaPorId(int idVenta) async {
     final conexion = await _conexion;
 
@@ -122,6 +124,7 @@ class VentaRepository implements IVentaRepository {
     }
   }
 
+  @override
   Future<List<VentaEntity>> obtenerVentasPorFiltros({
     required int limite,
     required int offset,
@@ -165,6 +168,7 @@ class VentaRepository implements IVentaRepository {
     }
   }
 
+  @override
   Future<List<VentaEntity>> obtenerVentasDeCliente(int idCliente, {bool esAlContado = false}) async {
     final conexion = await _conexion;
 
@@ -182,6 +186,7 @@ class VentaRepository implements IVentaRepository {
     }
   }
 
+  @override
   Future<List<VentaEntity>> obtenerVentasPorFechas(DateTime fechaInicio, DateTime fechaFinal) async {
     final conexion = await _conexion;
 
@@ -202,6 +207,7 @@ class VentaRepository implements IVentaRepository {
     }
   }
 
+  @override
   Future<void> actualizarMontoCanceladoVenta(int idVenta, double montoACancelar) async {
     final conexion = await _conexion;
 
@@ -228,6 +234,7 @@ class VentaRepository implements IVentaRepository {
     }
   }
 
+  @override
   Future<void> actualizarMontoCanceladoVentasCliente(int idCliente, double montoACancelar) async {
     final conexion = await _conexion;
 
@@ -280,6 +287,7 @@ class VentaRepository implements IVentaRepository {
     }
   }
 
+  @override
   Future<List<DetalleVentaEntity>> obtenerDetallesPorVenta(int idVenta) async {
     final conexion = await _conexion;
 
@@ -297,6 +305,7 @@ class VentaRepository implements IVentaRepository {
     }
   }
 
+  @override
   Future<void> anularVenta(int idVenta) async {
     final conexion = await _conexion;
 
@@ -320,6 +329,7 @@ class VentaRepository implements IVentaRepository {
     }
   }
 
+  @override
   Future<int> obtenerCantidadVendidaPorLote(int idLote) async {
     final conexion = await _conexion;
 

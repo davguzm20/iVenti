@@ -17,6 +17,7 @@ class UsuarioRepository implements IUsuarioRepository {
 
   Future<Connection> get _conexion => _datasource.connection;
 
+  @override
   Future<UsuarioEntity> crearUsuario(CrearUsuarioRequest request) async {
     final conexion = await _conexion;
 
@@ -37,6 +38,7 @@ class UsuarioRepository implements IUsuarioRepository {
     }
   }
 
+  @override
   Future<UsuarioEntity?> obtenerUsuarioPorEmail(String email) async {
     final conexion = await _conexion;
 
@@ -54,6 +56,7 @@ class UsuarioRepository implements IUsuarioRepository {
     }
   }
 
+  @override
   Future<UsuarioEntity?> obtenerUsuarioPorId(int idUsuario) async {
     final conexion = await _conexion;
 
@@ -71,6 +74,7 @@ class UsuarioRepository implements IUsuarioRepository {
     }
   }
 
+  @override
   Future<UsuarioEntity> validarCredenciales(LoginRequest request) async {
     final usuarioEncontrado = await obtenerUsuarioPorEmail(request.email);
 
@@ -85,6 +89,7 @@ class UsuarioRepository implements IUsuarioRepository {
     return usuarioEncontrado;
   }
 
+  @override
   Future<void> actualizarPIN(int idUsuario, String nuevoPIN) async {
     final conexion = await _conexion;
 
@@ -108,6 +113,7 @@ class UsuarioRepository implements IUsuarioRepository {
     }
   }
 
+  @override
   Future<UsuarioEntity> obtenerUsuarioRegistrado() async {
     final conexion = await _conexion;
 
@@ -129,6 +135,7 @@ class UsuarioRepository implements IUsuarioRepository {
     }
   }
 
+  @override
   Future<UsuarioEntity> actualizarUsuario(int idUsuario, {String? nombre, String? email}) async {
     final conexion = await _conexion;
 
@@ -150,6 +157,7 @@ class UsuarioRepository implements IUsuarioRepository {
     }
   }
 
+  @override
   Future<void> desactivarUsuario(int idUsuario) async {
     final conexion = await _conexion;
 

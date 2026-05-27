@@ -14,6 +14,7 @@ class NotificacionRepository implements INotificacionRepository {
 
   Future<Connection> get _conexion => _datasource.connection;
 
+  @override
   Future<NotificacionEntity> crearNotificacion(CrearNotificacionRequest request) async {
     final conexion = await _conexion;
 
@@ -36,6 +37,7 @@ class NotificacionRepository implements INotificacionRepository {
     }
   }
 
+  @override
   Future<List<NotificacionEntity>> obtenerNotificaciones(int idUsuario) async {
     final conexion = await _conexion;
 
@@ -53,6 +55,7 @@ class NotificacionRepository implements INotificacionRepository {
     }
   }
 
+  @override
   Future<List<NotificacionEntity>> obtenerNotificacionesNoLeidas(int idUsuario) async {
     final conexion = await _conexion;
 
@@ -70,6 +73,7 @@ class NotificacionRepository implements INotificacionRepository {
     }
   }
 
+  @override
   Future<int> contarNotificacionesNoLeidas(int idUsuario) async {
     final conexion = await _conexion;
 
@@ -85,6 +89,7 @@ class NotificacionRepository implements INotificacionRepository {
     }
   }
 
+  @override
   Future<void> marcarComoLeida(int idNotificacion) async {
     final conexion = await _conexion;
 
@@ -104,6 +109,7 @@ class NotificacionRepository implements INotificacionRepository {
     }
   }
 
+  @override
   Future<void> marcarTodasComoLeidas(int idUsuario) async {
     final conexion = await _conexion;
 
@@ -117,6 +123,7 @@ class NotificacionRepository implements INotificacionRepository {
     }
   }
 
+  @override
   Future<void> eliminarNotificacion(int idNotificacion) async {
     final conexion = await _conexion;
 
@@ -136,6 +143,7 @@ class NotificacionRepository implements INotificacionRepository {
     }
   }
 
+  @override
   Future<void> limpiarHistorial(int idUsuario) async {
     final conexion = await _conexion;
 

@@ -15,6 +15,7 @@ class CategoriaRepository implements ICategoriaRepository {
 
   Future<Connection> get _conexion => _datasource.connection;
 
+  @override
   Future<CategoriaEntity> crearCategoria(CrearCategoriaRequest request) async {
     final conexion = await _conexion;
 
@@ -30,6 +31,7 @@ class CategoriaRepository implements ICategoriaRepository {
     }
   }
 
+  @override
   Future<CategoriaEntity> editarCategoria(ActualizarCategoriaRequest request) async {
     final conexion = await _conexion;
 
@@ -54,6 +56,7 @@ class CategoriaRepository implements ICategoriaRepository {
     }
   }
 
+  @override
   Future<void> eliminarCategoria(int idCategoria) async {
     final conexion = await _conexion;
 
@@ -73,6 +76,7 @@ class CategoriaRepository implements ICategoriaRepository {
     }
   }
 
+  @override
   Future<List<CategoriaEntity>> obtenerCategorias() async {
     final conexion = await _conexion;
 
@@ -87,6 +91,7 @@ class CategoriaRepository implements ICategoriaRepository {
     }
   }
 
+  @override
   Future<void> asignarRelacion(int idProducto, int idCategoria) async {
     final conexion = await _conexion;
 
@@ -100,6 +105,7 @@ class CategoriaRepository implements ICategoriaRepository {
     }
   }
 
+  @override
   Future<List<CategoriaEntity>> obtenerCategoriasDeProducto(int idProducto) async {
     final conexion = await _conexion;
 
@@ -121,6 +127,7 @@ class CategoriaRepository implements ICategoriaRepository {
     }
   }
 
+  @override
   Future<void> actualizarCategoriasProducto(int idProducto, List<int> idCategorias) async {
     final conexion = await _conexion;
 

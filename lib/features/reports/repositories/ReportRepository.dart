@@ -16,6 +16,7 @@ class ReportRepository implements IReportRepository {
 
   Future<Connection> get _conexion => _datasource.connection;
 
+  @override
   Future<List<VentaReportResponse>> obtenerVentas({
     required DateTime fechaInicio,
     required DateTime fechaFinal,
@@ -63,6 +64,7 @@ class ReportRepository implements IReportRepository {
     }
   }
 
+  @override
   Future<List<ProductoVendidoResponse>> obtenerProductosVendidos({
     required DateTime fechaInicio,
     required DateTime fechaFinal,
@@ -104,6 +106,7 @@ class ReportRepository implements IReportRepository {
     }
   }
 
+  @override
   Future<List<LoteReportResponse>> obtenerLotes({
     required DateTime fechaInicio,
     required DateTime fechaFinal,
@@ -148,6 +151,7 @@ class ReportRepository implements IReportRepository {
     }
   }
 
+  @override
   Future<List<LoteReportResponse>> obtenerProximosVencer(int dias) async {
     final conexion = await _conexion;
 
@@ -175,6 +179,7 @@ class ReportRepository implements IReportRepository {
     }
   }
 
+  @override
   Future<List<LoteReportResponse>> obtenerInventarioGeneral(DateTime fecha) async {
     final conexion = await _conexion;
 

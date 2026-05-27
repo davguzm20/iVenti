@@ -12,6 +12,7 @@ class UnidadRepository implements IUnidadRepository {
 
   Future<Connection> get _conexion => _datasource.connection;
 
+  @override
   Future<List<UnidadEntity>> obtenerUnidades() async {
     final conexion = await _conexion;
 
@@ -26,6 +27,7 @@ class UnidadRepository implements IUnidadRepository {
     }
   }
 
+  @override
   Future<UnidadEntity?> obtenerUnidadPorId(int idUnidad) async {
     final conexion = await _conexion;
 

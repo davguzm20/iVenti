@@ -16,6 +16,7 @@ class ClienteRepository implements IClienteRepository {
 
   Future<Connection> get _conexion => _datasource.connection;
 
+  @override
   Future<ClienteEntity> crearCliente(CrearClienteRequest request) async {
     final conexion = await _conexion;
 
@@ -37,6 +38,7 @@ class ClienteRepository implements IClienteRepository {
     }
   }
 
+  @override
   Future<ClienteEntity?> obtenerClientePorId(int idCliente) async {
     final conexion = await _conexion;
 
@@ -54,6 +56,7 @@ class ClienteRepository implements IClienteRepository {
     }
   }
 
+  @override
   Future<List<ClienteEntity>> obtenerClientesPorNombre(String nombre) async {
     final conexion = await _conexion;
 
@@ -75,6 +78,7 @@ class ClienteRepository implements IClienteRepository {
     }
   }
 
+  @override
   Future<List<ClienteEntity>> obtenerClientesPorFiltros({required int limite, required int offset, bool? esDeudor}) async {
     final conexion = await _conexion;
 
@@ -100,6 +104,7 @@ class ClienteRepository implements IClienteRepository {
     }
   }
 
+  @override
   Future<ClienteEntity> actualizarCliente(ActualizarClienteRequest request) async {
     final conexion = await _conexion;
 
@@ -128,6 +133,7 @@ class ClienteRepository implements IClienteRepository {
     }
   }
 
+  @override
   Future<void> eliminarCliente(int idCliente) async {
     final conexion = await _conexion;
 
@@ -147,6 +153,7 @@ class ClienteRepository implements IClienteRepository {
     }
   }
 
+  @override
   Future<void> actualizarEstadoDeudor(int idCliente) async {
     final conexion = await _conexion;
 

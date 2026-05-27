@@ -13,6 +13,7 @@ class ReciboRepository implements IReciboRepository {
 
   Future<Connection> get _conexion => _datasource.connection;
 
+  @override
   Future<ReciboEntity> crearReciboConRequest(CrearReciboRequest request) async {
     final conexion = await _conexion;
 
@@ -50,6 +51,7 @@ class ReciboRepository implements IReciboRepository {
     }
   }
 
+  @override
   Future<List<ReciboEntity>> obtenerRecibosPorVenta(int idVenta) async {
     final conexion = await _conexion;
 

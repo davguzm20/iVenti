@@ -15,6 +15,7 @@ class ProductoRepository implements IProductoRepository {
 
   Future<Connection> get _conexion => _datasource.connection;
 
+  @override
   Future<ProductoEntity> crearProducto(CrearProductoRequest request) async {
     final conexion = await _conexion;
 
@@ -55,6 +56,7 @@ class ProductoRepository implements IProductoRepository {
     }
   }
 
+  @override
   Future<ProductoEntity?> obtenerProductoPorId(int idProducto) async {
     final conexion = await _conexion;
 
@@ -72,6 +74,7 @@ class ProductoRepository implements IProductoRepository {
     }
   }
 
+  @override
   Future<ProductoEntity?> obtenerProductoPorCodigo(String codigo) async {
     final conexion = await _conexion;
 
@@ -89,6 +92,7 @@ class ProductoRepository implements IProductoRepository {
     }
   }
 
+  @override
   Future<List<ProductoEntity>> obtenerProductosPorNombre(String nombre) async {
     final conexion = await _conexion;
 
@@ -110,6 +114,7 @@ class ProductoRepository implements IProductoRepository {
     }
   }
 
+  @override
   Future<List<ProductoEntity>> obtenerTodosLosProductos() async {
     final conexion = await _conexion;
 
@@ -125,6 +130,7 @@ class ProductoRepository implements IProductoRepository {
     }
   }
 
+  @override
   Future<ProductoEntity> actualizarProducto(ActualizarProductoRequest request) async {
     final conexion = await _conexion;
 
@@ -161,6 +167,7 @@ class ProductoRepository implements IProductoRepository {
     }
   }
 
+  @override
   Future<void> eliminarProducto(int idProducto) async {
     final conexion = await _conexion;
 
@@ -184,6 +191,7 @@ class ProductoRepository implements IProductoRepository {
     }
   }
 
+  @override
   Future<void> actualizarStockActual(int idProducto) async {
     final conexion = await _conexion;
 
@@ -212,6 +220,7 @@ class ProductoRepository implements IProductoRepository {
     }
   }
 
+  @override
   Future<List<ProductoEntity>> obtenerProductosPorFiltros({
     required int limite,
     required int offset,

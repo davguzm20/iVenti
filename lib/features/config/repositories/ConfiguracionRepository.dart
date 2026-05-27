@@ -14,6 +14,7 @@ class ConfiguracionRepository implements IConfiguracionRepository {
 
   Future<Connection> get _conexion => _datasource.connection;
 
+  @override
   Future<ConfiguracionEntity?> obtenerConfiguracion(int idUsuario, String clave) async {
     final conexion = await _conexion;
 
@@ -31,6 +32,7 @@ class ConfiguracionRepository implements IConfiguracionRepository {
     }
   }
 
+  @override
   Future<List<ConfiguracionEntity>> obtenerTodasConfiguraciones(int idUsuario) async {
     final conexion = await _conexion;
 
@@ -48,6 +50,7 @@ class ConfiguracionRepository implements IConfiguracionRepository {
     }
   }
 
+  @override
   Future<ConfiguracionEntity> crearOActualizarConfiguracion(CrearConfiguracionRequest request) async {
     final conexion = await _conexion;
 
@@ -67,6 +70,7 @@ class ConfiguracionRepository implements IConfiguracionRepository {
     }
   }
 
+  @override
   Future<void> eliminarConfiguracion(int idConfiguracion) async {
     final conexion = await _conexion;
 

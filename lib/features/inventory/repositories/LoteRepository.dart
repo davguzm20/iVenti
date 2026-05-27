@@ -17,6 +17,7 @@ class LoteRepository implements ILoteRepository {
 
   Future<Connection> get _conexion => _datasource.connection;
 
+  @override
   Future<LoteEntity> crearLote(CrearLoteRequest request) async {
     final conexion = await _conexion;
 
@@ -49,6 +50,7 @@ class LoteRepository implements ILoteRepository {
     }
   }
 
+  @override
   Future<LoteEntity?> obtenerLotePorId(int idProducto, int idLote) async {
     final conexion = await _conexion;
 
@@ -66,6 +68,7 @@ class LoteRepository implements ILoteRepository {
     }
   }
 
+  @override
   Future<List<LoteEntity>> obtenerLotesDeProducto(int idProducto) async {
     final conexion = await _conexion;
 
@@ -83,6 +86,7 @@ class LoteRepository implements ILoteRepository {
     }
   }
 
+  @override
   Future<LoteEntity> actualizarLote(ActualizarLoteRequest request) async {
     final conexion = await _conexion;
 
@@ -125,6 +129,7 @@ class LoteRepository implements ILoteRepository {
     }
   }
 
+  @override
   Future<void> eliminarLote(int idProducto, int idLote) async {
     final conexion = await _conexion;
 
@@ -150,6 +155,7 @@ class LoteRepository implements ILoteRepository {
     }
   }
 
+  @override
   Future<List<LoteEntity>> obtenerLotesPorFechas(DateTime fechaInicio, DateTime fechaFinal) async {
     final conexion = await _conexion;
 
@@ -200,6 +206,7 @@ class LoteRepository implements ILoteRepository {
     }
   }
 
+  @override
   Future<List<LoteEntity>> obtenerLotesProximosAVencer(int diasAntesVencimiento) async {
     final conexion = await _conexion;
 
