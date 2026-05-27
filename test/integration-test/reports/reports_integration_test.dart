@@ -1,8 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:postgres/postgres.dart';
 import 'package:iventi/shared/utils/PostgresDatasource.dart';
-import 'package:iventi/shared/exceptions/BusinessException.dart';
 import 'package:iventi/shared/exceptions/ValidationException.dart';
 import 'package:iventi/features/reports/services/ReportService.dart';
 import 'package:iventi/features/reports/repositories/ReportRepository.dart';

@@ -26,20 +26,6 @@ class _ReportSalesPageState extends State<ReportSalesPage> {
     _controller = ServiceLocator.reportController;
   }
 
-  Future<void> _seleccionarFecha(bool inicio) async {
-    final d = await showDatePicker(
-      context: context,
-      initialDate: inicio ? selectedFechaInicio : selectedFechaFinal,
-      firstDate: DateTime(2020),
-      lastDate: DateTime.now(),
-    );
-    if (d != null) setState(() { if (inicio) {
-      selectedFechaInicio = d;
-    } else {
-      selectedFechaFinal = d;
-    } });
-  }
-
   Future<void> _generar() async {
     setState(() => _generando = true);
     try {

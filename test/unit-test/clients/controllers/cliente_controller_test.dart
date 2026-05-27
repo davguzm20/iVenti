@@ -3,7 +3,6 @@ import 'package:mockito/mockito.dart';
 import 'package:iventi/features/clients/entities/ClienteEntity.dart';
 import 'package:iventi/features/clients/dtos/requests/CrearClienteRequest.dart';
 import 'package:iventi/features/clients/dtos/requests/ActualizarClienteRequest.dart';
-import 'package:iventi/features/clients/services/ClienteService.dart';
 import 'package:iventi/features/clients/controllers/ClienteController.dart';
 
 import '../../../mocks_mocks.dart';
@@ -45,7 +44,7 @@ void main() {
   });
 
   test('eliminarCliente delega a ClienteService', () async {
-    when(mockService.eliminarCliente(1)).thenAnswer((_) async => null);
+    when(mockService.eliminarCliente(1)).thenAnswer((_) async {});
     
     await controller.eliminarCliente(1);
     

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:iventi/shared/theme/AppColors.dart';
 
 class DateRangePickerWidget extends StatelessWidget {
   final DateTime startDate;

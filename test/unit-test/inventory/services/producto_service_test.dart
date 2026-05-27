@@ -6,8 +6,6 @@ import 'package:iventi/features/inventory/entities/ProductoEntity.dart';
 import 'package:iventi/features/inventory/dtos/requests/CrearProductoRequest.dart';
 import 'package:iventi/features/inventory/dtos/requests/ActualizarProductoRequest.dart';
 import 'package:iventi/features/inventory/services/ProductoService.dart';
-import 'package:iventi/features/inventory/repositories/IProductoRepository.dart';
-import 'package:iventi/features/inventory/repositories/ICategoriaRepository.dart';
 
 import '../../../mocks_mocks.dart';
 
@@ -108,7 +106,7 @@ void main() {
   group('ProductoService.eliminarProducto', () {
     test('debe eliminar producto cuando existe', () async {
       when(mockProductoRepo.obtenerProductoPorId(1)).thenAnswer((_) async => productoValido);
-      when(mockProductoRepo.eliminarProducto(1)).thenAnswer((_) async => null);
+      when(mockProductoRepo.eliminarProducto(1)).thenAnswer((_) async {});
 
       await service.eliminarProducto(1);
 

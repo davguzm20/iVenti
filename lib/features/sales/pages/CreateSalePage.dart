@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:iventi/features/inventory/entities/LoteEntity.dart';
 import 'package:iventi/features/inventory/entities/ProductoEntity.dart';
 import 'package:iventi/shared/di/ServiceLocator.dart';
-import 'package:iventi/shared/theme/AppColors.dart';
-import 'package:iventi/shared/theme/ButtonStyles.dart';
 import 'package:iventi/shared/utils/DialogMessages.dart';
 import 'package:iventi/shared/widgets/ErrorDialog.dart';
 import 'package:iventi/features/sales/widgets/CartWidget.dart';

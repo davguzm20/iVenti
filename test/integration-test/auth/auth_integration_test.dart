@@ -1,6 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:postgres/postgres.dart';
 import 'package:iventi/shared/utils/PostgresDatasource.dart';
 import 'package:iventi/shared/exceptions/BusinessException.dart';
 import 'package:iventi/shared/exceptions/AuthenticationException.dart';
@@ -37,17 +36,17 @@ void main() {
     await datasource.close();
   });
 
-  int _contador = 0;
-  String _emailUnico() =>
-      'test_${DateTime.now().millisecondsSinceEpoch}_${_contador++}@test.com';
+  int contador = 0;
+  String emailUnico() =>
+      'test_${DateTime.now().millisecondsSinceEpoch}_${contador++}@test.com';
 
-  Future<UsuarioEntity> _crearUsuario({
+  Future<UsuarioEntity> crearUsuario({
     String? email,
     String pin = '123456',
   }) async {
     final request = CrearUsuarioRequest(
       nombre: 'Test User',
-      email: email ?? _emailUnico(),
+      email: email ?? emailUnico(),
       pin: pin,
     );
     return await authService.registrar(request);
@@ -57,8 +56,8 @@ void main() {
     test(
         'debe crear un usuario correctamente cuando los datos son validos [en BD real]',
         () async {
-      final email = _emailUnico();
-      final usuario = await _crearUsuario(email: email);
+      final email = emailUnico();
+      final usuario = await crearUsuario(email: email);
 
       expect(usuario.idUsuario, isNotNull);
       expect(usuario.nombre, 'Test User');
@@ -71,11 +70,11 @@ void main() {
     test(
         'debe lanzar BusinessException cuando el email ya esta registrado [en BD real]',
         () async {
-      final email = _emailUnico();
-      await _crearUsuario(email: email);
+      final email = emailUnico();
+      await crearUsuario(email: email);
 
       expect(
-        () => _crearUsuario(email: email),
+        () => crearUsuario(email: email),
         throwsA(isA<BusinessException>()),
       );
     });
@@ -85,8 +84,8 @@ void main() {
     test(
         'debe iniciar sesion correctamente cuando las credenciales son validas [en BD real]',
         () async {
-      final email = _emailUnico();
-      final creado = await _crearUsuario(email: email, pin: '654321');
+      final email = emailUnico();
+      final creado = await crearUsuario(email: email, pin: '654321');
 
       final usuario = await authService.iniciarSesion(email, '654321');
 
@@ -98,7 +97,7 @@ void main() {
         'debe lanzar AuthenticationException cuando el email no existe [en BD real]',
         () async {
       expect(
-        () => authService.iniciarSesion('no_existe_${_emailUnico()}@test.com', '123456'),
+        () => authService.iniciarSesion('no_existe_${emailUnico()}@test.com', '123456'),
         throwsA(isA<AuthenticationException>()),
       );
     });
@@ -106,8 +105,8 @@ void main() {
     test(
         'debe lanzar AuthenticationException cuando el PIN es incorrecto [en BD real]',
         () async {
-      final email = _emailUnico();
-      await _crearUsuario(email: email, pin: '654321');
+      final email = emailUnico();
+      await crearUsuario(email: email, pin: '654321');
 
       expect(
         () => authService.iniciarSesion(email, '000000'),
@@ -120,8 +119,8 @@ void main() {
     test(
         'debe obtener un usuario por ID cuando existe [en BD real]',
         () async {
-      final email = _emailUnico();
-      final creado = await _crearUsuario(email: email);
+      final email = emailUnico();
+      final creado = await crearUsuario(email: email);
 
       final usuario = await authService.obtenerUsuarioPorId(creado.idUsuario!);
 
@@ -143,8 +142,8 @@ void main() {
     test(
         'debe obtener un usuario por email cuando existe [en BD real]',
         () async {
-      final email = _emailUnico();
-      await _crearUsuario(email: email);
+      final email = emailUnico();
+      await crearUsuario(email: email);
 
       final usuario = await authService.obtenerUsuarioPorEmail(email);
 
@@ -155,7 +154,7 @@ void main() {
         'debe lanzar BusinessException cuando el email no existe [en BD real]',
         () async {
       expect(
-        () => authService.obtenerUsuarioPorEmail('no_existe_${_emailUnico()}@test.com'),
+        () => authService.obtenerUsuarioPorEmail('no_existe_${emailUnico()}@test.com'),
         throwsA(isA<BusinessException>()),
       );
     });
@@ -165,8 +164,8 @@ void main() {
     test(
         'debe cambiar el PIN correctamente cuando el PIN actual es correcto [en BD real]',
         () async {
-      final email = _emailUnico();
-      final creado = await _crearUsuario(email: email, pin: '654321');
+      final email = emailUnico();
+      final creado = await crearUsuario(email: email, pin: '654321');
 
       await authService.cambiarPin(creado.idUsuario!, '654321', '123456');
 
@@ -177,8 +176,8 @@ void main() {
     test(
         'debe lanzar BusinessException cuando el PIN actual es incorrecto [en BD real]',
         () async {
-      final email = _emailUnico();
-      final creado = await _crearUsuario(email: email, pin: '654321');
+      final email = emailUnico();
+      final creado = await crearUsuario(email: email, pin: '654321');
 
       expect(
         () => authService.cambiarPin(creado.idUsuario!, '000000', '123456'),
@@ -191,8 +190,8 @@ void main() {
     test(
         'debe recuperar el PIN correctamente [en BD real]',
         () async {
-      final email = _emailUnico();
-      final creado = await _crearUsuario(email: email, pin: '654321');
+      final email = emailUnico();
+      final creado = await crearUsuario(email: email, pin: '654321');
 
       await authService.recuperarPin(creado.idUsuario!, '000000');
 
@@ -203,8 +202,8 @@ void main() {
     test(
         'debe lanzar ValidationException cuando el nuevo PIN no tiene 6 digitos [en BD real]',
         () async {
-      final email = _emailUnico();
-      final creado = await _crearUsuario(email: email);
+      final email = emailUnico();
+      final creado = await crearUsuario(email: email);
 
       expect(
         () => authService.recuperarPin(creado.idUsuario!, '123'),
@@ -217,8 +216,8 @@ void main() {
     test(
         'debe actualizar el perfil correctamente [en BD real]',
         () async {
-      final email = _emailUnico();
-      final creado = await _crearUsuario(email: email);
+      final email = emailUnico();
+      final creado = await crearUsuario(email: email);
 
       final actualizado = await authService.actualizarPerfil(
         creado.idUsuario!,
@@ -235,8 +234,8 @@ void main() {
     test(
         'debe desactivar un usuario correctamente [en BD real]',
         () async {
-      final email = _emailUnico();
-      final creado = await _crearUsuario(email: email);
+      final email = emailUnico();
+      final creado = await crearUsuario(email: email);
 
       await authService.desactivarUsuario(creado.idUsuario!);
 
@@ -260,8 +259,8 @@ void main() {
     test(
         'debe obtener el primer usuario registrado cuando existe [en BD real]',
         () async {
-      final email = _emailUnico();
-      await _crearUsuario(email: email);
+      final email = emailUnico();
+      await crearUsuario(email: email);
 
       final usuario = await authService.obtenerUsuarioRegistrado();
 

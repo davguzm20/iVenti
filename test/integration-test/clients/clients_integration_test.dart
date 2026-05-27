@@ -34,18 +34,18 @@ void main() {
     await datasource.close();
   });
 
-  int _contador = 0;
-  String _dniUnico() =>
-      'DNI${DateTime.now().millisecondsSinceEpoch.toString().substring(6)}${_contador++}';
-  String _emailUnico() =>
-      'cliente_${DateTime.now().millisecondsSinceEpoch}_${_contador++}@test.com';
+  int contador = 0;
+  String dniUnico() =>
+      'DNI${DateTime.now().millisecondsSinceEpoch.toString().substring(6)}${contador++}';
+  String emailUnico() =>
+      'cliente_${DateTime.now().millisecondsSinceEpoch}_${contador++}@test.com';
 
-  Future<ClienteEntity> _crearCliente({String? dni}) async {
+  Future<ClienteEntity> crearCliente({String? dni}) async {
     final request = CrearClienteRequest(
-      dni: dni ?? _dniUnico(),
+      dni: dni ?? dniUnico(),
       nombres: 'Juan',
       apellidos: 'Perez',
-      email: _emailUnico(),
+      email: emailUnico(),
       telefono: '999888777',
     );
     return await clienteService.crearCliente(request);
@@ -55,8 +55,8 @@ void main() {
     test(
         'debe crear un cliente correctamente cuando los datos son validos [en BD real]',
         () async {
-      final email = _emailUnico();
-      final dni = _dniUnico();
+      final email = emailUnico();
+      final dni = dniUnico();
       final request = CrearClienteRequest(
         dni: dni,
         nombres: 'Maria',
@@ -100,7 +100,7 @@ void main() {
     test(
         'debe obtener un cliente por ID cuando existe [en BD real]',
         () async {
-      final creado = await _crearCliente();
+      final creado = await crearCliente();
 
       final cliente = await clienteService.obtenerClientePorId(creado.idCliente!);
 
@@ -122,8 +122,8 @@ void main() {
     test(
         'debe encontrar clientes que coincidan con el nombre [en BD real]',
         () async {
-      await _crearCliente();
-      await _crearCliente();
+      await crearCliente();
+      await crearCliente();
 
       final resultados = await clienteService.buscarPorNombre('Juan');
 
@@ -147,7 +147,7 @@ void main() {
     test(
         'debe obtener clientes con paginacion [en BD real]',
         () async {
-      await _crearCliente();
+      await crearCliente();
 
       final resultados = await clienteService.obtenerFiltrados(
         limite: 10,
@@ -174,8 +174,8 @@ void main() {
     test(
         'debe actualizar un cliente correctamente [en BD real]',
         () async {
-      final creado = await _crearCliente();
-      final nuevoDni = _dniUnico();
+      final creado = await crearCliente();
+      final nuevoDni = dniUnico();
 
       final actualizado = await clienteService.actualizarCliente(
         ActualizarClienteRequest(
@@ -214,7 +214,7 @@ void main() {
     test(
         'debe eliminar (desactivar) un cliente correctamente [en BD real]',
         () async {
-      final creado = await _crearCliente();
+      final creado = await crearCliente();
 
       await clienteService.eliminarCliente(creado.idCliente!);
 
@@ -236,7 +236,7 @@ void main() {
     test(
         'debe ejecutarse sin errores para un cliente existente [en BD real]',
         () async {
-      final creado = await _crearCliente();
+      final creado = await crearCliente();
 
       await clienteService.actualizarEstadoDeudor(creado.idCliente!);
     });

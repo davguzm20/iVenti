@@ -4,10 +4,8 @@ import 'package:iventi/shared/exceptions/BusinessException.dart';
 import 'package:iventi/shared/exceptions/DatabaseException.dart';
 import 'package:iventi/shared/exceptions/ValidationException.dart';
 import 'package:iventi/features/auth/entities/UsuarioEntity.dart';
-import 'package:iventi/features/auth/dtos/requests/LoginRequest.dart';
 import 'package:iventi/features/auth/dtos/requests/CrearUsuarioRequest.dart';
 import 'package:iventi/features/auth/services/AuthService.dart';
-import 'package:iventi/features/auth/repositories/IUsuarioRepository.dart';
 
 import '../../../mocks_mocks.dart';
 import 'package:iventi/features/auth/enums/TipoRol.dart';
@@ -160,7 +158,7 @@ void main() {
   group('AuthService.cambiarPin', () {
     test('debe actualizar PIN cuando los datos son correctos', () async {
       when(mockRepo.obtenerUsuarioPorId(1)).thenAnswer((_) async => usuarioValido);
-      when(mockRepo.actualizarPIN(1, '654321')).thenAnswer((_) async => null);
+      when(mockRepo.actualizarPIN(1, '654321')).thenAnswer((_) async {});
 
       await authService.cambiarPin(1, '123456', '654321');
 
@@ -217,7 +215,7 @@ void main() {
 
   group('AuthService.recuperarPin', () {
     test('debe actualizar PIN cuando el nuevo PIN es valido', () async {
-      when(mockRepo.actualizarPIN(1, '654321')).thenAnswer((_) async => null);
+      when(mockRepo.actualizarPIN(1, '654321')).thenAnswer((_) async {});
 
       await authService.recuperarPin(1, '654321');
 
@@ -264,7 +262,7 @@ void main() {
 
   group('AuthService.desactivarUsuario', () {
     test('debe desactivar el usuario correctamente', () async {
-      when(mockRepo.desactivarUsuario(1)).thenAnswer((_) async => null);
+      when(mockRepo.desactivarUsuario(1)).thenAnswer((_) async {});
 
       await authService.desactivarUsuario(1);
 

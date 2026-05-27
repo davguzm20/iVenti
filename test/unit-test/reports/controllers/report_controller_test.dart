@@ -1,14 +1,10 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
-import 'package:iventi/features/reports/entities/VentaReportEntity.dart';
-import 'package:iventi/features/reports/entities/ProductoVendidoEntity.dart';
-import 'package:iventi/features/reports/entities/LoteReportEntity.dart';
 import 'package:iventi/features/reports/dtos/requests/ReporteVentasRequest.dart';
 import 'package:iventi/features/reports/dtos/requests/ReporteProductosVendidosRequest.dart';
 import 'package:iventi/features/reports/dtos/requests/ReporteLotesRequest.dart';
 import 'package:iventi/features/reports/dtos/requests/ReporteProximosVencerRequest.dart';
 import 'package:iventi/features/reports/dtos/requests/ReporteInventarioGeneralRequest.dart';
-import 'package:iventi/features/reports/services/ReportService.dart';
 import 'package:iventi/features/reports/controllers/ReportController.dart';
 
 import '../../../mocks_mocks.dart';

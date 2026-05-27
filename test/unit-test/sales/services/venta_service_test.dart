@@ -1,7 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
-import 'package:postgres/postgres.dart';
-import 'package:iventi/shared/utils/PostgresDatasource.dart';
 import 'package:iventi/shared/exceptions/BusinessException.dart';
 import 'package:iventi/shared/exceptions/DatabaseException.dart';
 import 'package:iventi/features/sales/services/VentaService.dart';
@@ -9,10 +7,6 @@ import 'package:iventi/features/sales/entities/VentaEntity.dart';
 import 'package:iventi/features/sales/entities/DetalleVentaEntity.dart';
 import 'package:iventi/features/sales/dtos/requests/CrearVentaRequest.dart';
 import 'package:iventi/features/sales/enums/EstadoVenta.dart';
-import 'package:iventi/features/inventory/repositories/IProductoRepository.dart';
-import 'package:iventi/features/inventory/repositories/ILoteRepository.dart';
-import 'package:iventi/features/clients/repositories/IClienteRepository.dart';
-import 'package:iventi/features/sales/repositories/IVentaRepository.dart';
 import 'package:iventi/features/inventory/entities/LoteEntity.dart';
 
 import '../../../mocks_mocks.dart';

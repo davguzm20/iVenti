@@ -6,12 +6,9 @@ import 'package:iventi/shared/exceptions/BusinessException.dart';
 import 'package:iventi/shared/exceptions/ValidationException.dart';
 import 'package:iventi/features/inventory/services/ProductoService.dart';
 import 'package:iventi/features/inventory/services/LoteService.dart';
-import 'package:iventi/features/inventory/services/CategoriaService.dart';
-import 'package:iventi/features/inventory/services/UnidadService.dart';
 import 'package:iventi/features/inventory/repositories/ProductoRepository.dart';
 import 'package:iventi/features/inventory/repositories/LoteRepository.dart';
 import 'package:iventi/features/inventory/repositories/CategoriaRepository.dart';
-import 'package:iventi/features/inventory/repositories/UnidadRepository.dart';
 import 'package:iventi/features/inventory/entities/ProductoEntity.dart';
 import 'package:iventi/features/inventory/entities/LoteEntity.dart';
 import 'package:iventi/features/inventory/dtos/requests/CrearProductoRequest.dart';
@@ -31,11 +28,9 @@ void main() {
   late ProductoRepository productoRepository;
   late LoteRepository loteRepository;
   late CategoriaRepository categoriaRepository;
-  late UnidadRepository unidadRepository;
   late ProductoService productoService;
   late LoteService loteService;
-  late CategoriaService categoriaService;
-  late UnidadService unidadService;
+
   late ClienteRepository clienteRepository;
   late ClienteService clienteService;
   late VentaRepository ventaRepository;
@@ -44,9 +39,9 @@ void main() {
   late PagoService pagoService;
   int testUserId = 0;
 
-  int _contador = 0;
-  String _codigoUnico() =>
-      'C${DateTime.now().millisecondsSinceEpoch.toString().substring(7)}${_contador++}';
+  int contador = 0;
+  String codigoUnico() =>
+      'C${DateTime.now().millisecondsSinceEpoch.toString().substring(7)}${contador++}';
 
   setUpAll(() async {
     await dotenv.load(fileName: '.env');
@@ -70,14 +65,11 @@ void main() {
     productoRepository = ProductoRepository(datasource);
     loteRepository = LoteRepository(datasource, productoRepository);
     categoriaRepository = CategoriaRepository(datasource);
-    unidadRepository = UnidadRepository(datasource);
     clienteRepository = ClienteRepository(datasource);
     ventaRepository = VentaRepository(datasource, loteRepository, productoRepository);
     reciboRepository = ReciboRepository(datasource);
 
     productoService = ProductoService(productoRepository, categoriaRepository);
-    categoriaService = CategoriaService(categoriaRepository);
-    unidadService = UnidadService(unidadRepository);
     clienteService = ClienteService(clienteRepository);
     loteService = LoteService(loteRepository, productoRepository, ventaRepository);
     ventaService = VentaService(
@@ -94,7 +86,7 @@ void main() {
     }
   });
 
-  Future<void> _cleanupVenta(int idVenta) async {
+  Future<void> cleanupVenta(int idVenta) async {
     final conn = await datasource.connection;
     final detalles = await conn.execute(
       Sql.named('SELECT id_lote, cantidad FROM detalle_ventas WHERE id_venta = @id'),
@@ -135,8 +127,8 @@ void main() {
     setUpAll(() async {
       sharedProducto = await productoService.crearProducto(CrearProductoRequest(
         idUnidad: 1,
-        nombre: 'Prod Venta Test ${_codigoUnico()}',
-        codigo: _codigoUnico(),
+        nombre: 'Prod Venta Test ${codigoUnico()}',
+        codigo: codigoUnico(),
         precio: 50.0,
         stockMinimo: 5,
       ));
@@ -151,7 +143,7 @@ void main() {
       sharedCliente = await clienteService.crearCliente(CrearClienteRequest(
         nombres: 'Cliente',
         apellidos: 'Venta Test',
-        dni: _codigoUnico(),
+        dni: codigoUnico(),
       ));
     });
 
@@ -271,7 +263,7 @@ void main() {
       expect(venta.montoCancelado, 100.0);
       expect(venta.idCliente, sharedCliente.idCliente);
 
-      await _cleanupVenta(venta.idVenta!);
+      await cleanupVenta(venta.idVenta!);
     });
   });
 
@@ -356,8 +348,8 @@ void main() {
     setUpAll(() async {
       sharedProducto = await productoService.crearProducto(CrearProductoRequest(
         idUnidad: 1,
-        nombre: 'Prod Pago Test ${_codigoUnico()}',
-        codigo: _codigoUnico(),
+        nombre: 'Prod Pago Test ${codigoUnico()}',
+        codigo: codigoUnico(),
         precio: 50.0,
         stockMinimo: 5,
       ));
@@ -372,7 +364,7 @@ void main() {
       sharedCliente = await clienteService.crearCliente(CrearClienteRequest(
         nombres: 'Cliente',
         apellidos: 'Pago Test',
-        dni: _codigoUnico(),
+        dni: codigoUnico(),
       ));
     });
 
@@ -430,7 +422,7 @@ void main() {
       expect(recibo.idRecibo, isNotNull);
       expect(recibo.montoCancelado, 100.0);
 
-      await _cleanupVenta(venta.idVenta!);
+      await cleanupVenta(venta.idVenta!);
     });
   });
 }

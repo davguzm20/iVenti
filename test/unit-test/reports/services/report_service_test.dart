@@ -3,7 +3,6 @@ import 'package:mockito/mockito.dart';
 import 'package:iventi/shared/exceptions/BusinessException.dart';
 import 'package:iventi/shared/exceptions/DatabaseException.dart';
 import 'package:iventi/features/reports/services/ReportService.dart';
-import 'package:iventi/features/reports/repositories/IReportRepository.dart';
 import 'package:iventi/features/reports/dtos/requests/ReporteVentasRequest.dart';
 import 'package:iventi/features/reports/dtos/requests/ReporteProductosVendidosRequest.dart';
 import 'package:iventi/features/reports/dtos/requests/ReporteLotesRequest.dart';

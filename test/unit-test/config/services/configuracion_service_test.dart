@@ -5,7 +5,6 @@ import 'package:iventi/shared/exceptions/DatabaseException.dart';
 import 'package:iventi/features/config/services/ConfiguracionService.dart';
 import 'package:iventi/features/config/entities/ConfiguracionEntity.dart';
 import 'package:iventi/features/config/dtos/requests/CrearConfiguracionRequest.dart';
-import 'package:iventi/features/config/repositories/IConfiguracionRepository.dart';
 
 import '../../../mocks_mocks.dart';
 

@@ -3,7 +3,6 @@ import 'package:mockito/mockito.dart';
 import 'package:iventi/features/auth/entities/UsuarioEntity.dart';
 import 'package:iventi/features/auth/dtos/requests/CrearUsuarioRequest.dart';
 import 'package:iventi/features/auth/enums/TipoRol.dart';
-import 'package:iventi/features/auth/services/AuthService.dart';
 import 'package:iventi/features/auth/controllers/AuthController.dart';
 
 import '../../../mocks_mocks.dart';
@@ -75,7 +74,7 @@ void main() {
   });
 
   test('cambiarPin delega al servicio', () async {
-    when(mockService.cambiarPin(1, '123456', '654321')).thenAnswer((_) async => null);
+    when(mockService.cambiarPin(1, '123456', '654321')).thenAnswer((_) async {});
 
     await controller.cambiarPin(1, '123456', '654321');
 
@@ -83,7 +82,7 @@ void main() {
   });
 
   test('recuperarPin delega al servicio', () async {
-    when(mockService.recuperarPin(1, '654321')).thenAnswer((_) async => null);
+    when(mockService.recuperarPin(1, '654321')).thenAnswer((_) async {});
 
     await controller.recuperarPin(1, '654321');
 
@@ -101,7 +100,7 @@ void main() {
   });
 
   test('desactivarUsuario delega al servicio', () async {
-    when(mockService.desactivarUsuario(1)).thenAnswer((_) async => null);
+    when(mockService.desactivarUsuario(1)).thenAnswer((_) async {});
 
     await controller.desactivarUsuario(1);
 

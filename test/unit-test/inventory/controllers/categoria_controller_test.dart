@@ -3,7 +3,6 @@ import 'package:mockito/mockito.dart';
 import 'package:iventi/features/inventory/entities/CategoriaEntity.dart';
 import 'package:iventi/features/inventory/dtos/requests/CrearCategoriaRequest.dart';
 import 'package:iventi/features/inventory/dtos/requests/ActualizarCategoriaRequest.dart';
-import 'package:iventi/features/inventory/services/CategoriaService.dart';
 import 'package:iventi/features/inventory/controllers/CategoriaController.dart';
 
 import '../../../mocks_mocks.dart';
@@ -45,7 +44,7 @@ void main() {
   });
 
   test('eliminarCategoria delega a CategoriaService', () async {
-    when(mockService.eliminarCategoria(1)).thenAnswer((_) async => null);
+    when(mockService.eliminarCategoria(1)).thenAnswer((_) async {});
 
     await controller.eliminarCategoria(1);
 

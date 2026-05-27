@@ -5,8 +5,6 @@ import 'package:iventi/features/sales/entities/DetalleVentaEntity.dart';
 import 'package:iventi/features/sales/entities/ReciboEntity.dart';
 import 'package:iventi/features/sales/dtos/requests/CrearVentaRequest.dart';
 import 'package:iventi/features/sales/enums/EstadoVenta.dart';
-import 'package:iventi/features/sales/services/VentaService.dart';
-import 'package:iventi/features/sales/services/PagoService.dart';
 import 'package:iventi/features/sales/controllers/VentaController.dart';
 
 import '../../../mocks_mocks.dart';
@@ -105,7 +103,7 @@ void main() {
   });
 
   test('anularVenta delega a VentaService', () async {
-    when(mockVentaService.anularVenta(1)).thenAnswer((_) async => null);
+    when(mockVentaService.anularVenta(1)).thenAnswer((_) async {});
 
     await controller.anularVenta(1);
 
@@ -126,7 +124,7 @@ void main() {
   });
 
   test('registrarPagoCliente delega a PagoService', () async {
-    when(mockPagoService.registrarPagoCliente(1, 100.0, 1)).thenAnswer((_) async => null);
+    when(mockPagoService.registrarPagoCliente(1, 100.0, 1)).thenAnswer((_) async {});
 
     await controller.registrarPagoCliente(1, 100.0, 1);
 

@@ -3,7 +3,6 @@ import 'package:mockito/mockito.dart';
 import 'package:iventi/features/inventory/entities/ProductoEntity.dart';
 import 'package:iventi/features/inventory/dtos/requests/CrearProductoRequest.dart';
 import 'package:iventi/features/inventory/dtos/requests/ActualizarProductoRequest.dart';
-import 'package:iventi/features/inventory/services/ProductoService.dart';
 import 'package:iventi/features/inventory/controllers/ProductoController.dart';
 
 import '../../../mocks_mocks.dart';
@@ -50,7 +49,7 @@ void main() {
   });
 
   test('eliminarProducto delega a ProductoService', () async {
-    when(mockService.eliminarProducto(1)).thenAnswer((_) async => null);
+    when(mockService.eliminarProducto(1)).thenAnswer((_) async {});
 
     await controller.eliminarProducto(1);
 

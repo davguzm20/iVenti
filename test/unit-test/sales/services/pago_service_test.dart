@@ -1,16 +1,11 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
-import 'package:postgres/postgres.dart';
-import 'package:iventi/shared/utils/PostgresDatasource.dart';
 import 'package:iventi/shared/exceptions/BusinessException.dart';
 import 'package:iventi/shared/exceptions/DatabaseException.dart';
 import 'package:iventi/features/sales/services/PagoService.dart';
 import 'package:iventi/features/sales/entities/VentaEntity.dart';
 import 'package:iventi/features/sales/entities/ReciboEntity.dart';
 import 'package:iventi/features/sales/enums/EstadoVenta.dart';
-import 'package:iventi/features/sales/repositories/IVentaRepository.dart';
-import 'package:iventi/features/sales/repositories/IReciboRepository.dart';
-import 'package:iventi/features/clients/repositories/IClienteRepository.dart';
 
 import '../../../mocks_mocks.dart';
 
@@ -46,7 +41,7 @@ void main() {
       );
 
       when(mockVentaRepository.obtenerVentaPorId(1)).thenAnswer((_) async => venta);
-      when(mockVentaRepository.actualizarMontoCanceladoVenta(1, 50.0)).thenAnswer((_) async => null);
+      when(mockVentaRepository.actualizarMontoCanceladoVenta(1, 50.0)).thenAnswer((_) async {});
       when(mockReciboRepository.crearReciboConRequest(any)).thenAnswer((_) async => recibo);
 
       final result = await buildService().registrarPago(1, 50.0, 1);

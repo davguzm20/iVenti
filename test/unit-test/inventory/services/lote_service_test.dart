@@ -8,9 +8,6 @@ import 'package:iventi/features/inventory/entities/ProductoEntity.dart';
 import 'package:iventi/features/inventory/dtos/requests/CrearLoteRequest.dart';
 import 'package:iventi/features/inventory/dtos/requests/ActualizarLoteRequest.dart';
 import 'package:iventi/features/inventory/services/LoteService.dart';
-import 'package:iventi/features/inventory/repositories/ILoteRepository.dart';
-import 'package:iventi/features/inventory/repositories/IProductoRepository.dart';
-import 'package:iventi/features/sales/repositories/IVentaRepository.dart';
 
 import '../../../mocks_mocks.dart';
 
@@ -139,7 +136,7 @@ void main() {
     test('debe eliminar lote correctamente', () async {
       when(mockLoteRepo.obtenerLotePorId(1, 1)).thenAnswer((_) async => loteValido);
       when(mockVentaRepo.obtenerCantidadVendidaPorLote(1)).thenAnswer((_) async => 0);
-      when(mockLoteRepo.eliminarLote(1, 1)).thenAnswer((_) async => null);
+      when(mockLoteRepo.eliminarLote(1, 1)).thenAnswer((_) async {});
 
       await service.eliminarLote(1, 1);
 

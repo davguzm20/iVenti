@@ -6,7 +6,6 @@ import 'package:iventi/features/inventory/entities/CategoriaEntity.dart';
 import 'package:iventi/features/inventory/dtos/requests/CrearCategoriaRequest.dart';
 import 'package:iventi/features/inventory/dtos/requests/ActualizarCategoriaRequest.dart';
 import 'package:iventi/features/inventory/services/CategoriaService.dart';
-import 'package:iventi/features/inventory/repositories/ICategoriaRepository.dart';
 
 import '../../../mocks_mocks.dart';
 
@@ -72,7 +71,7 @@ void main() {
 
   group('CategoriaService.eliminarCategoria', () {
     test('debe eliminar categoria correctamente', () async {
-      when(mockRepo.eliminarCategoria(1)).thenAnswer((_) async => null);
+      when(mockRepo.eliminarCategoria(1)).thenAnswer((_) async {});
 
       await service.eliminarCategoria(1);
 

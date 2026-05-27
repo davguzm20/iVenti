@@ -6,8 +6,6 @@ import 'package:go_router/go_router.dart';
 import 'package:iventi/features/sales/controllers/VentaController.dart';
 import 'package:iventi/features/sales/entities/VentaEntity.dart';
 import 'package:iventi/shared/di/ServiceLocator.dart';
-import 'package:iventi/shared/theme/AppColors.dart';
-import 'package:iventi/shared/theme/ButtonStyles.dart';
 import 'package:iventi/features/sales/widgets/SaleCard.dart';
 
 class SalesPage extends StatefulWidget {

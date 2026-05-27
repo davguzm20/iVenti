@@ -2,7 +2,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:iventi/features/notifications/entities/NotificacionEntity.dart';
 import 'package:iventi/features/notifications/dtos/requests/CrearNotificacionRequest.dart';
-import 'package:iventi/features/notifications/services/NotificacionService.dart';
 import 'package:iventi/features/notifications/controllers/NotificacionController.dart';
 import 'package:iventi/features/notifications/enums/TipoNotificacion.dart';
 
@@ -62,7 +61,7 @@ void main() {
   });
 
   test('marcarComoLeida delega a NotificacionService', () async {
-    when(mockNotificacionService.marcarComoLeida(1)).thenAnswer((_) async => null);
+    when(mockNotificacionService.marcarComoLeida(1)).thenAnswer((_) async {});
 
     await buildController().marcarComoLeida(1);
 
@@ -70,7 +69,7 @@ void main() {
   });
 
   test('marcarTodasComoLeidas delega a NotificacionService', () async {
-    when(mockNotificacionService.marcarTodasComoLeidas(1)).thenAnswer((_) async => null);
+    when(mockNotificacionService.marcarTodasComoLeidas(1)).thenAnswer((_) async {});
 
     await buildController().marcarTodasComoLeidas(1);
 
@@ -78,7 +77,7 @@ void main() {
   });
 
   test('eliminarNotificacion delega a NotificacionService', () async {
-    when(mockNotificacionService.eliminarNotificacion(1)).thenAnswer((_) async => null);
+    when(mockNotificacionService.eliminarNotificacion(1)).thenAnswer((_) async {});
 
     await buildController().eliminarNotificacion(1);
 
@@ -86,7 +85,7 @@ void main() {
   });
 
   test('limpiarHistorial delega a NotificacionService', () async {
-    when(mockNotificacionService.limpiarHistorial(1)).thenAnswer((_) async => null);
+    when(mockNotificacionService.limpiarHistorial(1)).thenAnswer((_) async {});
 
     await buildController().limpiarHistorial(1);
 
@@ -94,7 +93,7 @@ void main() {
   });
 
   test('generarAlertasStock delega a NotificacionService', () async {
-    when(mockNotificacionService.generarAlertasStock(1)).thenAnswer((_) async => null);
+    when(mockNotificacionService.generarAlertasStock(1)).thenAnswer((_) async {});
 
     await buildController().generarAlertasStock(1);
 
@@ -102,7 +101,7 @@ void main() {
   });
 
   test('generarAlertasVencimiento delega a NotificacionService', () async {
-    when(mockNotificacionService.generarAlertasVencimiento(1)).thenAnswer((_) async => null);
+    when(mockNotificacionService.generarAlertasVencimiento(1)).thenAnswer((_) async {});
 
     await buildController().generarAlertasVencimiento(1);
 

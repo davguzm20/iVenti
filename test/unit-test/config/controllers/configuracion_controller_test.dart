@@ -1,7 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:iventi/features/config/controllers/ConfiguracionController.dart';
-import 'package:iventi/features/config/services/ConfiguracionService.dart';
 import 'package:iventi/features/config/entities/ConfiguracionEntity.dart';
 import 'package:iventi/features/config/dtos/requests/CrearConfiguracionRequest.dart';
 

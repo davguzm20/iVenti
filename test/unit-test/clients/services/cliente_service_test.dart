@@ -6,7 +6,6 @@ import 'package:iventi/features/clients/entities/ClienteEntity.dart';
 import 'package:iventi/features/clients/dtos/requests/CrearClienteRequest.dart';
 import 'package:iventi/features/clients/dtos/requests/ActualizarClienteRequest.dart';
 import 'package:iventi/features/clients/services/ClienteService.dart';
-import 'package:iventi/features/clients/repositories/IClienteRepository.dart';
 
 import '../../../mocks_mocks.dart';
 
@@ -87,7 +86,7 @@ void main() {
   group('ClienteService.eliminarCliente', () {
     test('debe eliminar cliente cuando existe', () async {
       when(mockRepo.obtenerClientePorId(1)).thenAnswer((_) async => clienteValido);
-      when(mockRepo.eliminarCliente(1)).thenAnswer((_) async => null);
+      when(mockRepo.eliminarCliente(1)).thenAnswer((_) async {});
 
       await service.eliminarCliente(1);
 
@@ -189,7 +188,7 @@ void main() {
 
   group('ClienteService.actualizarEstadoDeudor', () {
     test('debe actualizar estado deudor', () async {
-      when(mockRepo.actualizarEstadoDeudor(1)).thenAnswer((_) async => null);
+      when(mockRepo.actualizarEstadoDeudor(1)).thenAnswer((_) async {});
 
       await service.actualizarEstadoDeudor(1);
 

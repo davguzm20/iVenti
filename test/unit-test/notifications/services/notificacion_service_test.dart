@@ -6,11 +6,6 @@ import 'package:iventi/features/notifications/services/NotificacionService.dart'
 import 'package:iventi/features/notifications/entities/NotificacionEntity.dart';
 import 'package:iventi/features/notifications/enums/TipoNotificacion.dart';
 import 'package:iventi/features/notifications/dtos/requests/CrearNotificacionRequest.dart';
-import 'package:iventi/features/notifications/repositories/INotificacionRepository.dart';
-import 'package:iventi/shared/exceptions/ValidationException.dart';
-import 'package:iventi/features/inventory/repositories/IProductoRepository.dart';
-import 'package:iventi/features/inventory/repositories/ILoteRepository.dart';
-import 'package:iventi/features/config/repositories/IConfiguracionRepository.dart';
 import 'package:iventi/features/inventory/entities/ProductoEntity.dart';
 import 'package:iventi/features/inventory/entities/LoteEntity.dart';
 import 'package:iventi/features/config/entities/ConfiguracionEntity.dart';
@@ -139,7 +134,7 @@ void main() {
 
   group('NotificacionService.marcarComoLeida', () {
     test('debe marcar notificacion como leida', () async {
-      when(mockNotificacionRepository.marcarComoLeida(1)).thenAnswer((_) async => null);
+      when(mockNotificacionRepository.marcarComoLeida(1)).thenAnswer((_) async {});
 
       await buildService().marcarComoLeida(1);
 
@@ -159,7 +154,7 @@ void main() {
 
   group('NotificacionService.marcarTodasComoLeidas', () {
     test('debe marcar todas como leidas', () async {
-      when(mockNotificacionRepository.marcarTodasComoLeidas(1)).thenAnswer((_) async => null);
+      when(mockNotificacionRepository.marcarTodasComoLeidas(1)).thenAnswer((_) async {});
 
       await buildService().marcarTodasComoLeidas(1);
 
@@ -200,7 +195,7 @@ void main() {
 
   group('NotificacionService.limpiarHistorial', () {
     test('debe limpiar historial', () async {
-      when(mockNotificacionRepository.limpiarHistorial(1)).thenAnswer((_) async => null);
+      when(mockNotificacionRepository.limpiarHistorial(1)).thenAnswer((_) async {});
 
       await buildService().limpiarHistorial(1);
 

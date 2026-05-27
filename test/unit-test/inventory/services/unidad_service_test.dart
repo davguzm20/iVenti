@@ -4,7 +4,6 @@ import 'package:iventi/shared/exceptions/BusinessException.dart';
 import 'package:iventi/shared/exceptions/DatabaseException.dart';
 import 'package:iventi/features/inventory/entities/UnidadEntity.dart';
 import 'package:iventi/features/inventory/services/UnidadService.dart';
-import 'package:iventi/features/inventory/repositories/IUnidadRepository.dart';
 
 import '../../../mocks_mocks.dart';
 

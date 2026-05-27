@@ -3,7 +3,6 @@ import 'package:mockito/mockito.dart';
 import 'package:iventi/features/inventory/entities/LoteEntity.dart';
 import 'package:iventi/features/inventory/dtos/requests/CrearLoteRequest.dart';
 import 'package:iventi/features/inventory/dtos/requests/ActualizarLoteRequest.dart';
-import 'package:iventi/features/inventory/services/LoteService.dart';
 import 'package:iventi/features/inventory/controllers/LoteController.dart';
 
 import '../../../mocks_mocks.dart';
@@ -51,7 +50,7 @@ void main() {
   });
 
   test('eliminarLote delega a LoteService', () async {
-    when(mockService.eliminarLote(1, 1)).thenAnswer((_) async => null);
+    when(mockService.eliminarLote(1, 1)).thenAnswer((_) async {});
 
     await controller.eliminarLote(1, 1);
 

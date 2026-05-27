@@ -2,7 +2,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:postgres/postgres.dart';
 import 'package:iventi/shared/utils/PostgresDatasource.dart';
-import 'package:iventi/shared/exceptions/BusinessException.dart';
 import 'package:iventi/features/notifications/services/NotificacionService.dart';
 import 'package:iventi/features/notifications/repositories/NotificacionRepository.dart';
 import 'package:iventi/features/notifications/enums/TipoNotificacion.dart';
@@ -10,8 +9,6 @@ import 'package:iventi/features/notifications/dtos/requests/CrearNotificacionReq
 import 'package:iventi/features/inventory/repositories/ProductoRepository.dart';
 import 'package:iventi/features/inventory/repositories/LoteRepository.dart';
 import 'package:iventi/features/config/repositories/ConfiguracionRepository.dart';
-import 'package:iventi/features/config/dtos/requests/CrearConfiguracionRequest.dart';
-import 'package:iventi/features/config/services/ConfiguracionService.dart';
 
 void main() {
   late PostgresDatasource datasource;

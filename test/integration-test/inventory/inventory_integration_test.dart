@@ -2,10 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:iventi/shared/utils/PostgresDatasource.dart';
 import 'package:iventi/shared/exceptions/BusinessException.dart';
-import 'package:iventi/features/inventory/entities/UnidadEntity.dart';
-import 'package:iventi/features/inventory/entities/CategoriaEntity.dart';
 import 'package:iventi/features/inventory/entities/ProductoEntity.dart';
-import 'package:iventi/features/inventory/entities/LoteEntity.dart';
 import 'package:iventi/features/inventory/repositories/UnidadRepository.dart';
 import 'package:iventi/features/inventory/repositories/CategoriaRepository.dart';
 import 'package:iventi/features/inventory/repositories/ProductoRepository.dart';
@@ -63,9 +60,9 @@ void main() {
     await datasource.close();
   });
 
-  int _contador = 0;
-  String _codigoUnico() =>
-      'C${DateTime.now().millisecondsSinceEpoch.toString().substring(7)}${_contador++}';
+  int contador = 0;
+  String codigoUnico() =>
+      'C${DateTime.now().millisecondsSinceEpoch.toString().substring(7)}${contador++}';
 
   // =========================================================================
   // UNIDAD SERVICE
@@ -184,7 +181,7 @@ void main() {
   // =========================================================================
   group('ProductoService con BD real', () {
     test('debe crear un producto correctamente [en BD real]', () async {
-      final codigo = _codigoUnico();
+      final codigo = codigoUnico();
       final request = CrearProductoRequest(
         idUnidad: 1,
         codigo: codigo,
@@ -208,7 +205,7 @@ void main() {
     test(
         'debe lanzar BusinessException cuando el codigo ya existe [en BD real]',
         () async {
-      final codigo = _codigoUnico();
+      final codigo = codigoUnico();
       final request = CrearProductoRequest(
         idUnidad: 1,
         codigo: codigo,
@@ -231,7 +228,7 @@ void main() {
     });
 
     test('debe obtener producto por ID [en BD real]', () async {
-      final codigo = _codigoUnico();
+      final codigo = codigoUnico();
       final creado = await productoService.crearProducto(CrearProductoRequest(
         idUnidad: 1,
         codigo: codigo,
@@ -254,7 +251,7 @@ void main() {
     });
 
     test('debe obtener producto por codigo [en BD real]', () async {
-      final codigo = _codigoUnico();
+      final codigo = codigoUnico();
       await productoService.crearProducto(CrearProductoRequest(
         idUnidad: 1,
         codigo: codigo,
@@ -290,7 +287,7 @@ void main() {
     });
 
     test('debe actualizar un producto correctamente [en BD real]', () async {
-      final codigo = _codigoUnico();
+      final codigo = codigoUnico();
       final creado = await productoService.crearProducto(CrearProductoRequest(
         idUnidad: 1,
         codigo: codigo,
@@ -326,7 +323,7 @@ void main() {
 
     test('debe eliminar (desactivar) un producto correctamente [en BD real]',
         () async {
-      final codigo = _codigoUnico();
+      final codigo = codigoUnico();
       final creado = await productoService.crearProducto(CrearProductoRequest(
         idUnidad: 1,
         codigo: codigo,
@@ -379,8 +376,8 @@ void main() {
   // LOTE SERVICE
   // =========================================================================
   group('LoteService con BD real', () {
-    Future<ProductoEntity> _crearProductoBase() async {
-      final codigo = _codigoUnico();
+    Future<ProductoEntity> crearProductoBase() async {
+      final codigo = codigoUnico();
       return await productoService.crearProducto(CrearProductoRequest(
         idUnidad: 1,
         codigo: codigo,
@@ -390,7 +387,7 @@ void main() {
     }
 
     test('debe crear un lote correctamente [en BD real]', () async {
-      final producto = await _crearProductoBase();
+      final producto = await crearProductoBase();
       final now = DateTime.now();
 
       final lote = await loteService.crearLote(CrearLoteRequest(
@@ -429,7 +426,7 @@ void main() {
     });
 
     test('debe obtener lote por ID [en BD real]', () async {
-      final producto = await _crearProductoBase();
+      final producto = await crearProductoBase();
       final now = DateTime.now();
       final creado = await loteService.crearLote(CrearLoteRequest(
         idProducto: producto.idProducto!,
@@ -447,7 +444,7 @@ void main() {
     });
 
     test('debe obtener lotes de un producto [en BD real]', () async {
-      final producto = await _crearProductoBase();
+      final producto = await crearProductoBase();
       final now = DateTime.now();
       await loteService.crearLote(CrearLoteRequest(
         idProducto: producto.idProducto!,
@@ -465,7 +462,7 @@ void main() {
     });
 
     test('debe actualizar un lote correctamente [en BD real]', () async {
-      final producto = await _crearProductoBase();
+      final producto = await crearProductoBase();
       final now = DateTime.now();
       final creado = await loteService.crearLote(CrearLoteRequest(
         idProducto: producto.idProducto!,
@@ -490,7 +487,7 @@ void main() {
     });
 
     test('debe obtener lotes por fechas [en BD real]', () async {
-      final producto = await _crearProductoBase();
+      final producto = await crearProductoBase();
       final now = DateTime.now();
       await loteService.crearLote(CrearLoteRequest(
         idProducto: producto.idProducto!,
