@@ -8,6 +8,7 @@ import 'package:iventi/features/sales/entities/VentaEntity.dart';
 import 'package:iventi/shared/di/ServiceLocator.dart';
 import 'package:iventi/shared/theme/AppColors.dart';
 import 'package:iventi/shared/theme/ButtonStyles.dart';
+import 'package:iventi/features/sales/widgets/SaleCard.dart';
 
 class SalesPage extends StatefulWidget {
   const SalesPage({super.key});
@@ -194,100 +195,17 @@ class _SalesPageState extends State<SalesPage> {
                     itemCount: ventas.length,
                     itemBuilder: (context, index) {
                       final venta = ventas[index];
-                      final tipoPago = venta.esCredito
-                          ? (venta.montoCancelado >= venta.montoTotal
-                              ? "Crédito (Cancelado)"
-                              : "Crédito")
-                          : "Al contado";
 
-                      return Container(
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(12),
-                          border: Border.all(
-                              color: AppColors.primary, width: 2),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withValues(alpha: 0.2),
-                              blurRadius: 6,
-                              offset: const Offset(0, 4),
-                            ),
-                            BoxShadow(
-                              color: Colors.black.withValues(alpha: 0.1),
-                              blurRadius: 2,
-                              offset: const Offset(0, 2),
-                            ),
-                          ],
-                        ),
-                        margin: const EdgeInsets.only(bottom: 12),
-                        child: Padding(
-                          padding: const EdgeInsets.all(12.0),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      "Venta ${venta.idVenta}",
-                                      style: const TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 20,
-                                        color: AppColors.primary,
-                                      ),
-                                    ),
-
-                                    const SizedBox(height: 5),
-
-                                    Text(
-                                      "Fecha: ${venta.creadoEn.toIso8601String().split('T')[0]}",
-                                      style: const TextStyle(
-                                          color: Colors.black),
-                                    ),
-
-                                    Text(
-                                      "Monto: S/ ${venta.montoTotal.toStringAsFixed(2)}",
-                                      style: const TextStyle(
-                                          color: Colors.black),
-                                    ),
-
-                                    Text(
-                                      "Tipo de pago: $tipoPago",
-                                      style: TextStyle(
-                                        color: venta.esCredito &&
-                                                venta.montoCancelado <
-                                                    venta.montoTotal
-                                            ? Colors.red
-                                            : venta.esCredito
-                                                ? AppColors.success
-                                                : Colors.black,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  ElevatedButton(
-                                    style: ButtonStyles.success(),
-                                    onPressed: () {
-                                      context.push(
-                                          '/sales/details-sale/${venta.idVenta}');
-
-                                      _cargarVentas(reiniciar: true);
-                                    },
-                                    child: const Text("Detalles"),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
+                      return SaleCard(
+                        venta: venta,
+                        onTap: () {
+                          context.push('/sales/details-sale/${venta.idVenta}');
+                          _cargarVentas(reiniciar: true);
+                        },
+                        onDetails: () {
+                          context.push('/sales/details-sale/${venta.idVenta}');
+                          _cargarVentas(reiniciar: true);
+                        },
                       );
                     },
                   ),
