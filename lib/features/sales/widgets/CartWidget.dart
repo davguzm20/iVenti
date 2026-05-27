@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:iventi/features/sales/widgets/CartItemWidget.dart';
+import 'package:iventi/shared/theme/AppColors.dart';
 import 'package:iventi/shared/theme/ButtonStyles.dart';
 
 class CartWidget extends StatelessWidget {
