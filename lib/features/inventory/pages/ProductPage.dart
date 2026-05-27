@@ -12,6 +12,8 @@ import 'package:iventi/features/inventory/controllers/CategoriaController.dart';
 import 'package:iventi/features/inventory/controllers/UnidadController.dart';
 import 'package:iventi/shared/widgets/ErrorDialog.dart';
 import 'package:iventi/shared/widgets/ConfirmDialog.dart';
+import 'package:iventi/features/inventory/widgets/ProductCard.dart';
+import 'package:iventi/features/inventory/widgets/LoteCard.dart';
 import 'package:iventi/shared/theme/AppColors.dart';
 import 'package:iventi/shared/utils/DialogMessages.dart';
 import 'package:iventi/features/inventory/dtos/requests/ActualizarProductoRequest.dart';

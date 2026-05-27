@@ -8,6 +8,7 @@ import 'package:iventi/features/inventory/controllers/ProductoController.dart';
 import 'package:iventi/features/inventory/entities/ProductoEntity.dart';
 import 'package:iventi/shared/di/ServiceLocator.dart';
 import 'package:iventi/shared/theme/AppColors.dart';
+import 'package:iventi/features/inventory/widgets/ProductCard.dart';
 
 class InventoryPage extends StatefulWidget {
   const InventoryPage({super.key});
@@ -220,7 +221,7 @@ class _InventoryPageState extends State<InventoryPage> {
                     style: TextStyle(fontSize: 16),
                   ),
                 )
-              : GridView.builder(
+: GridView.builder(
                   padding: const EdgeInsets.all(10.0),
                   gridDelegate:
                       const SliverGridDelegateWithFixedCrossAxisCount(
@@ -229,6 +230,21 @@ class _InventoryPageState extends State<InventoryPage> {
                     mainAxisSpacing: 15,
                     childAspectRatio: 0.75,
                   ),
+                  itemCount: productos.length,
+                  itemBuilder: (context, index) {
+                    final producto = productos[index];
+
+                    return ProductCard(
+                      product: producto,
+                      onTap: () async {
+                        await context.push(
+                            '/inventory/product/${producto.idProducto}');
+
+                        _cargarProductos(reiniciar: true);
+                      },
+                    );
+                  },
+                ),
                   itemCount: productos.length,
                   itemBuilder: (context, index) {
                     final producto = productos[index];
