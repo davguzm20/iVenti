@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:iventi/features/notifications/entities/NotificacionEntity.dart';
 import 'package:iventi/shared/di/ServiceLocator.dart';
 import 'package:iventi/features/notifications/controllers/NotificacionController.dart';
@@ -71,7 +70,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
 
                     return NotificationCard(
                       notification: notif,
-                      onMarkAsRead: !notif.leido
+                      onMarkAsRead: !notif.leida
                           ? () async {
                               await _controller.marcarComoLeida(notif.idNotificacion!);
                               _cargar();

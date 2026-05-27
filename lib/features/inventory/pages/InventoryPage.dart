@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -7,7 +6,6 @@ import 'package:go_router/go_router.dart';
 import 'package:iventi/features/inventory/controllers/ProductoController.dart';
 import 'package:iventi/features/inventory/entities/ProductoEntity.dart';
 import 'package:iventi/shared/di/ServiceLocator.dart';
-import 'package:iventi/shared/theme/AppColors.dart';
 import 'package:iventi/features/inventory/widgets/ProductCard.dart';
 
 class InventoryPage extends StatefulWidget {
@@ -242,113 +240,6 @@ class _InventoryPageState extends State<InventoryPage> {
 
                         _cargarProductos(reiniciar: true);
                       },
-                    );
-                  },
-                ),
-                  itemCount: productos.length,
-                  itemBuilder: (context, index) {
-                    final producto = productos[index];
-                    final bool esStockBajo =
-                        producto.stockActual < producto.stockMinimo;
-
-                    return GestureDetector(
-                      onTap: () async {
-                        await context.push(
-                            '/inventory/product/${producto.idProducto}');
-
-                        _cargarProductos(reiniciar: true);
-                      },
-                      child: Container(
-                        padding: const EdgeInsets.all(12),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(12),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withValues(alpha: 0.1),
-                              blurRadius: 6,
-                              offset: const Offset(2, 4),
-                            ),
-                          ],
-                          border: Border.all(
-                            color: AppColors.primary,
-                            width: 2,
-                          ),
-                        ),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            SizedBox(
-                              width: 90,
-                              height: 90,
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(10),
-                                child: producto.rutaImagen == null
-                                    ? const Image(
-                                        image: AssetImage(
-                                            'lib/assets/iconos/iconoImagen.png'),
-                                        fit: BoxFit.contain,
-                                      )
-                                    : Image.file(
-                                        File(producto.rutaImagen!),
-                                        fit: BoxFit.cover,
-                                      ),
-                              ),
-                            ),
-
-                            const SizedBox(height: 10),
-
-                            Text(
-                              producto.nombre,
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 14,
-                                color: AppColors.primary,
-                              ),
-                              textAlign: TextAlign.center,
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 1,
-                            ),
-
-                            const SizedBox(height: 5),
-
-                            Text(
-                              "S/. ${producto.precio.toStringAsFixed(2)}",
-                              textAlign: TextAlign.center,
-                              style: const TextStyle(
-                                fontSize: 12,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black87,
-                              ),
-                            ),
-
-                            const SizedBox(height: 5),
-
-                            Container(
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 4, horizontal: 8),
-                              decoration: BoxDecoration(
-                                color: esStockBajo
-                                    ? Colors.red.withValues(alpha: 0.15)
-                                    : AppColors.success.withValues(alpha: 0.15),
-                                borderRadius: BorderRadius.circular(6),
-                              ),
-                              child: Text(
-                                "Stock: ${producto.stockActual}",
-                                style: TextStyle(
-                                  color: esStockBajo
-                                      ? Colors.red
-                                      : AppColors.success,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 12,
-                                ),
-                                textAlign: TextAlign.center,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
                     );
                   },
                 ),
