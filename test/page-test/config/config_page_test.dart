@@ -1,0 +1,70 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:provider/provider.dart';
+import 'package:mockito/mockito.dart';
+import 'package:iventi/features/config/pages/ConfigPage.dart';
+import 'package:iventi/features/auth/controllers/AuthController.dart';
+import 'package:iventi/features/config/controllers/ConfiguracionController.dart';
+import 'package:iventi/features/auth/entities/UsuarioEntity.dart';
+import 'package:iventi/features/auth/enums/TipoRol.dart';
+import 'package:iventi/features/config/entities/ConfiguracionEntity.dart';
+
+import '../../mocks_mocks.dart';
+import '../helpers.dart';
+
+void main() {
+  late MockAuthController mockAuthController;
+  late MockConfiguracionController mockConfigController;
+
+  setUp(() {
+    mockAuthController = MockAuthController();
+    mockConfigController = MockConfiguracionController();
+  });
+
+  group('ConfigPage', () {
+    testWidgets('debe mostrar loading inicial', (tester) async {
+      when(mockAuthController.obtenerUsuarioRegistrado())
+          .thenAnswer((_) async => UsuarioEntity(idUsuario: 1, email: 'test@test.com', nombre: 'Test', pin: '123456', rol: TipoRol.ADMINISTRADOR, creadoEn: DateTime(2025, 5, 1)));
+      when(mockConfigController.obtenerTodas(1)).thenAnswer((_) async => []);
+
+      await pumpPageWithRouter(
+        tester,
+        location: '/config',
+        page: const ConfigPage(),
+        providers: [
+          Provider<AuthController>.value(value: mockAuthController),
+          Provider<ConfiguracionController>.value(value: mockConfigController),
+        ],
+      );
+
+      expect(find.byType(CircularProgressIndicator), findsOneWidget);
+    });
+
+    testWidgets('debe mostrar formulario con datos cargados', (tester) async {
+      when(mockAuthController.obtenerUsuarioRegistrado())
+          .thenAnswer((_) async => UsuarioEntity(idUsuario: 1, email: 'test@test.com', nombre: 'Test User', pin: '123456', rol: TipoRol.ADMINISTRADOR, creadoEn: DateTime(2025, 5, 1)));
+      when(mockConfigController.obtenerTodas(1)).thenAnswer((_) async => [
+        ConfiguracionEntity(idConfiguracion: 1, idUsuario: 1, clave: 'dias_vencimiento', valor: '30', creadoEn: DateTime(2025, 5, 1)),
+        ConfiguracionEntity(idConfiguracion: 2, idUsuario: 1, clave: 'stock_minimo_alerta', valor: '10', creadoEn: DateTime(2025, 5, 1)),
+      ]);
+
+      await pumpPageWithRouter(
+        tester,
+        location: '/config',
+        page: const ConfigPage(),
+        providers: [
+          Provider<AuthController>.value(value: mockAuthController),
+          Provider<ConfiguracionController>.value(value: mockConfigController),
+        ],
+      );
+
+      await tester.pump();
+      await tester.pump();
+
+      expect(find.text('Configuración'), findsOneWidget);
+      expect(find.text('Perfil'), findsOneWidget);
+      expect(find.text('Alertas'), findsOneWidget);
+      expect(find.text('Guardar configuración'), findsOneWidget);
+    });
+  });
+}
