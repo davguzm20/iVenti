@@ -6,9 +6,9 @@ import 'package:iventi/shared/di/ServiceLocator.dart';
 import 'package:iventi/shared/utils/DialogMessages.dart';
 import 'package:iventi/AppRoutes.dart';
 
-Future<void> main() async {
+Future<void> main({String envFile = ".env"}) async {
   WidgetsFlutterBinding.ensureInitialized();
-  await dotenv.load(fileName: ".env");
+  await dotenv.load(fileName: envFile);
 
   await ServiceLocator.initialize();
   await DialogMessages.init();

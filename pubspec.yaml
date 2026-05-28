@@ -38,6 +38,8 @@ dev_dependencies:
   test: any
   flutter_test:
     sdk: flutter
+  integration_test:
+    sdk: flutter
   mockito: ^5.4.2
   build_runner: ^2.4.6
 
