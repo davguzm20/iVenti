@@ -25,11 +25,11 @@
 
 ## 2. Estructura de Reportes
 
-Cada reporte de feature sigue la estructura definida en la plantilla y se guarda como `[feature]_page_tests.md`.
+Cada reporte de feature sigue la estructura definida en la plantilla y se guarda como `[feature]-tests.md`.
 
 ### 2.1. Convencion de Nombres
 
-- **Formato:** `[feature]_page_tests.md`
+- **Formato:** `[feature]-tests.md`
 
 ### 2.2. Plantilla de Reporte
 
@@ -85,7 +85,7 @@ Cada reporte de feature sigue la estructura definida en la plantilla y se guarda
 
 ## 3. Pruebas Generadas
 
-Los reportes se generan en `docs/summary/test/page-test/` siguiendo la convencion `[feature]_page_tests.md`.
+Los reportes se generan en `docs/summary/test/page-test/` siguiendo la convencion `[feature]-tests.md`.
 Los archivos de prueba se ubican en `test/page-test/[feature]/`.
 
 ## 4. Convenciones de Nomenclatura
