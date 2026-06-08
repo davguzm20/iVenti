@@ -6,6 +6,7 @@ import 'package:iventi/shared/di/ServiceLocator.dart';
 import 'package:iventi/shared/exceptions/AppException.dart';
 import 'package:iventi/shared/theme/AppColors.dart';
 import 'package:iventi/shared/theme/ButtonStyles.dart';
+import 'package:iventi/shared/utils/DialogMessages.dart';
 import 'package:iventi/shared/widgets/ErrorDialog.dart';
 import 'package:iventi/features/auth/widgets/PinInput.dart';
 
@@ -74,11 +75,8 @@ class _LoginPageState extends State<LoginPage> {
 
     } on AppException catch (e) {
       if (mounted) {
-        ErrorDialog(
-          context: context,
-          title: e.mensaje,
-          description: e.descripcion ?? 'Ocurrió un error inesperado, intenta de nuevo',
-        );
+        final (title, description) = _tituloError(e);
+        ErrorDialog(context: context, title: title, description: description);
       }
 
     } catch (e) {
@@ -90,6 +88,21 @@ class _LoginPageState extends State<LoginPage> {
 
   void _mostrarError(String titulo, String descripcion) {
     if (mounted) ErrorDialog(context: context, title: titulo, description: descripcion);
+  }
+
+  (String, String) _tituloError(AppException e) {
+    switch (e.codigo) {
+      case 'VALIDATION_ERROR':
+        return DialogMessages.error.validacion(e.mensaje);
+      case 'AUTH_ERROR':
+        return DialogMessages.error.autenticacion(e.mensaje);
+      case 'DATABASE_ERROR':
+        return DialogMessages.error.conexion(e.mensaje);
+      case 'NOT_FOUND':
+        return DialogMessages.error.noEncontrado(e.mensaje);
+      default:
+        return (e.mensaje, e.descripcion ?? '');
+    }
   }
 
   @override

@@ -102,5 +102,16 @@
   "clientesPagoRegistradoDescripcion": "El pago se registró correctamente",
 
   "clientesNoSePudoRegistrarPagoTitulo": "No se pudo registrar el pago",
-  "clientesNoSePudoRegistrarPagoDescripcion": "No pudimos registrar el pago"
+  "clientesNoSePudoRegistrarPagoDescripcion": "No pudimos registrar el pago",
+
+  "errorValidacionTitulo": "Error de validación",
+  "errorValidacionDescripcion": "{mensaje}",
+  "errorAutenticacionTitulo": "Error de autenticación",
+  "errorAutenticacionDescripcion": "{mensaje}",
+  "errorConexionTitulo": "Error de conexión",
+  "errorConexionDescripcion": "{mensaje}",
+  "errorNoEncontradoTitulo": "No encontrado",
+  "errorNoEncontradoDescripcion": "{mensaje}",
+  "errorInesperadoTitulo": "Error inesperado",
+  "errorInesperadoDescripcion": "{mensaje}"
 }

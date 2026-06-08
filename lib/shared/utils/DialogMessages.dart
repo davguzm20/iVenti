@@ -19,9 +19,9 @@ class DialogMessages {
     return (titulo, descripcion);
   }
 
-  static (String, String) _mensajeCon(String key, String parametro) {
+  static (String, String) _mensajeCon(String key, String parametro, {String tag = 'email'}) {
     final titulo = _cache?['${key}Titulo'] ?? '[$key]';
-    final descripcion = (_cache?['${key}Descripcion'] ?? '').replaceAll('{email}', parametro);
+    final descripcion = (_cache?['${key}Descripcion'] ?? '').replaceAll('{$tag}', parametro);
     return (titulo, descripcion);
   }
 
@@ -29,6 +29,7 @@ class DialogMessages {
   static final ventas = _VentasMessages();
   static final inventario = _InventarioMessages();
   static final clientes = _ClientesMessages();
+  static final error = _ErrorMessages();
 }
 
 class _AuthMessages {
@@ -74,4 +75,12 @@ class _ClientesMessages {
   (String, String) get montoExcedido => DialogMessages._mensaje('clientesMontoExcedido');
   (String, String) get pagoRegistrado => DialogMessages._mensaje('clientesPagoRegistrado');
   (String, String) get noSePudoRegistrarPago => DialogMessages._mensaje('clientesNoSePudoRegistrarPago');
+}
+
+class _ErrorMessages {
+  (String, String) validacion(String mensaje) => DialogMessages._mensajeCon('errorValidacion', mensaje, tag: 'mensaje');
+  (String, String) autenticacion(String mensaje) => DialogMessages._mensajeCon('errorAutenticacion', mensaje, tag: 'mensaje');
+  (String, String) conexion(String mensaje) => DialogMessages._mensajeCon('errorConexion', mensaje, tag: 'mensaje');
+  (String, String) noEncontrado(String mensaje) => DialogMessages._mensajeCon('errorNoEncontrado', mensaje, tag: 'mensaje');
+  (String, String) get inesperado => DialogMessages._mensaje('errorInesperado');
 }
