@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:provider/provider.dart';
 import 'package:iventi/shared/di/ServiceLocator.dart';
 import 'package:iventi/features/auth/controllers/AuthController.dart';
 import 'package:iventi/features/config/controllers/ConfiguracionController.dart';
@@ -29,8 +28,8 @@ class _ConfigPageState extends State<ConfigPage> {
 
   Future<void> _cargar() async {
     setState(() => isLoading = true);
-    final authCtrl = context.read<AuthController>();
-    final configCtrl = context.read<ConfiguracionController>();
+    final authCtrl = ServiceLocator.authController;
+    final configCtrl = ServiceLocator.configuracionController;
     try {
       final usuario = await authCtrl.obtenerUsuarioRegistrado();
       _nombreController.text = usuario.nombre;
@@ -44,8 +43,8 @@ class _ConfigPageState extends State<ConfigPage> {
   }
 
   Future<void> _guardar() async {
-    final authCtrl = context.read<AuthController>();
-    final configCtrl = context.read<ConfiguracionController>();
+    final authCtrl = ServiceLocator.authController;
+    final configCtrl = ServiceLocator.configuracionController;
     final idUsuario = ServiceLocator.usuarioActualId ?? 1;
     if (_nombreController.text.trim().isNotEmpty) {
       await authCtrl.actualizarPerfil(idUsuario, nombre: _nombreController.text.trim());
@@ -110,3 +109,4 @@ class _ConfigPageState extends State<ConfigPage> {
     );
   }
 }
+

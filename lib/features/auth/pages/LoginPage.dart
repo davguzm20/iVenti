@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:iventi/features/auth/controllers/AuthController.dart';
-import 'package:provider/provider.dart';
 import 'package:iventi/shared/di/ServiceLocator.dart';
 import 'package:iventi/shared/exceptions/AppException.dart';
 import 'package:iventi/shared/theme/AppColors.dart';
@@ -22,7 +21,7 @@ class _LoginPageState extends State<LoginPage> {
   String userPIN = '';
   bool isLoading = false;
 
-  AuthController get _authController => context.read<AuthController>();
+  AuthController get _authController => ServiceLocator.authController;
 
   bool _emailCargado = false;
 

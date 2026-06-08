@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:iventi/shared/di/ServiceLocator.dart';
 import 'package:iventi/shared/theme/AppColors.dart';
 import 'package:iventi/shared/theme/ButtonStyles.dart';
-import 'package:provider/provider.dart';
 import 'package:iventi/features/reports/controllers/ReportController.dart';
 import 'package:iventi/features/reports/dtos/requests/ReporteProximosVencerRequest.dart';
 
@@ -20,7 +20,7 @@ class _ReportFechaVencimientoPageState extends State<ReportFechaVencimientoPage>
   @override
   void initState() {
     super.initState();
-    _controller = context.read<ReportController>();
+    _controller = ServiceLocator.reportController;
   }
 
   @override
@@ -86,3 +86,5 @@ class _ReportFechaVencimientoPageState extends State<ReportFechaVencimientoPage>
     );
   }
 }
+
+

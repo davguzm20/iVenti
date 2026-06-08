@@ -1,11 +1,11 @@
 import 'dart:async';
+import 'package:iventi/shared/di/ServiceLocator.dart';
 
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:iventi/features/inventory/controllers/ProductoController.dart';
 import 'package:iventi/features/inventory/entities/ProductoEntity.dart';
-import 'package:provider/provider.dart';
 import 'package:iventi/features/inventory/widgets/ProductCard.dart';
 
 class InventoryPage extends StatefulWidget {
@@ -38,7 +38,7 @@ class _InventoryPageState extends State<InventoryPage> {
   }
 
   ProductoController get _productoController =>
-      context.read<ProductoController>();
+      ServiceLocator.productoController;
 
   void _detectarScrollFinal() {
     if (_scrollController.position.pixels >=
@@ -266,3 +266,5 @@ class _InventoryPageState extends State<InventoryPage> {
     );
   }
 }
+
+

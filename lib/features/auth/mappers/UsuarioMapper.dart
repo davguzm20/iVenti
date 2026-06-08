@@ -8,11 +8,11 @@ class UsuarioMapper {
     return UsuarioEntity(
       idUsuario: map['id_usuario'] as int,
       rol: _parseRol(PgHelper.string(map['rol'])),
-      nombre: map['nombre'] as String,
-      email: map['email'] as String,
-      pin: map['pin'] as String,
-      esActivo: map['es_activo'] as bool,
-      creadoEn: map['creado_en'] as DateTime,
+      nombre: (map['nombre'] as String?) ?? '',
+      email: (map['email'] as String?) ?? '',
+      pin: (map['pin'] as String?) ?? '',
+      esActivo: (map['es_activo'] as bool?) ?? true,
+      creadoEn: (map['creado_en'] as DateTime?) ?? DateTime.now(),
       actualizadoEn: map['actualizado_en'] as DateTime?,
     );
   }

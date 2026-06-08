@@ -1,11 +1,11 @@
 import 'dart:async';
+import 'package:iventi/shared/di/ServiceLocator.dart';
 
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:iventi/features/sales/controllers/VentaController.dart';
 import 'package:iventi/features/sales/entities/VentaEntity.dart';
-import 'package:provider/provider.dart';
 import 'package:iventi/features/sales/widgets/SaleCard.dart';
 
 class SalesPage extends StatefulWidget {
@@ -29,7 +29,7 @@ class _SalesPageState extends State<SalesPage> {
   bool isSearching = false;
   bool isLoading = false;
 
-  VentaController get _ventaController => context.read<VentaController>();
+  VentaController get _ventaController => ServiceLocator.ventaController;
 
   @override
   void initState() {
@@ -227,3 +227,5 @@ class _SalesPageState extends State<SalesPage> {
     );
   }
 }
+
+

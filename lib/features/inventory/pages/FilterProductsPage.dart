@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:iventi/shared/di/ServiceLocator.dart';
 import 'package:go_router/go_router.dart';
-import 'package:provider/provider.dart';
 import 'package:iventi/features/inventory/controllers/CategoriaController.dart';
 import 'package:iventi/shared/theme/AppColors.dart';
 import 'package:iventi/features/inventory/entities/CategoriaEntity.dart';
@@ -36,7 +36,7 @@ class _FilterProductsPageState extends State<FilterProductsPage> {
   }
 
   Future<void> _obtenerCategorias() async {
-    final cats = await context.read<CategoriaController>().obtenerTodas();
+    final cats = await ServiceLocator.categoriaController.obtenerTodas();
     setState(() => categoriasObtenidas = cats);
   }
 
@@ -220,3 +220,5 @@ class _FilterProductsPageState extends State<FilterProductsPage> {
     );
   }
 }
+
+

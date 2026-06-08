@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:iventi/shared/di/ServiceLocator.dart';
 import 'package:iventi/shared/theme/AppColors.dart';
 import 'package:iventi/shared/theme/ButtonStyles.dart';
-import 'package:provider/provider.dart';
 import 'package:iventi/features/reports/controllers/ReportController.dart';
 import 'package:iventi/features/reports/dtos/requests/ReporteInventarioGeneralRequest.dart';
 
@@ -20,7 +20,7 @@ class _ReportGeneralInventarioPageState extends State<ReportGeneralInventarioPag
   @override
   void initState() {
     super.initState();
-    _controller = context.read<ReportController>();
+    _controller = ServiceLocator.reportController;
   }
 
   Future<void> _generar() async {
@@ -80,3 +80,5 @@ class _ReportGeneralInventarioPageState extends State<ReportGeneralInventarioPag
     );
   }
 }
+
+

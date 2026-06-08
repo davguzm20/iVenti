@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:iventi/shared/di/ServiceLocator.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:iventi/features/inventory/entities/LoteEntity.dart';
 import 'package:iventi/features/inventory/entities/ProductoEntity.dart';
-import 'package:provider/provider.dart';
 import 'package:iventi/features/inventory/controllers/ProductoController.dart';
 import 'package:iventi/features/inventory/controllers/LoteController.dart';
 import 'package:iventi/shared/utils/DialogMessages.dart';
@@ -47,7 +47,7 @@ class _CreateSalePageState extends State<CreateSalePage> {
                       if (v.isEmpty) {
                         setDialogState(() => productosFiltrados = []);
                       } else {
-                        final r = await context.read<ProductoController>().buscarPorNombre(v);
+                        final r = await ServiceLocator.productoController.buscarPorNombre(v);
                         setDialogState(() => productosFiltrados = r);
                       }
                     },
@@ -62,7 +62,7 @@ class _CreateSalePageState extends State<CreateSalePage> {
                           title: Text(p.nombre),
                           subtitle: Text('S/ ${p.precio.toStringAsFixed(2)}'),
                           onTap: () async {
-                            final lotes = await context.read<LoteController>().obtenerLotesDeProducto(p.idProducto!);
+                            final lotes = await ServiceLocator.loteController.obtenerLotesDeProducto(p.idProducto!);
                             setDialogState(() {
                               loteSeleccionado = lotes.isNotEmpty ? lotes.first : null;
                             });
@@ -152,3 +152,5 @@ class _CreateSalePageState extends State<CreateSalePage> {
     );
   }
 }
+
+

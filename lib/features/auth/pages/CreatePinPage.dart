@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+// ignore: unused_import
 import 'package:go_router/go_router.dart';
 
 import 'package:iventi/features/auth/controllers/AuthController.dart';
-import 'package:provider/provider.dart';
+import 'package:iventi/shared/di/ServiceLocator.dart';
 import 'package:iventi/shared/exceptions/AppException.dart';
 import 'package:iventi/shared/theme/AppColors.dart';
 import 'package:iventi/shared/theme/ButtonStyles.dart';
@@ -25,7 +26,7 @@ class _CreatePinPageState extends State<CreatePinPage> {
   String confirmPin = "";
   String email = "";
 
-  AuthController get _authController => context.read<AuthController>();
+  AuthController get _authController => ServiceLocator.authController;
 
   @override
   void didChangeDependencies() {
@@ -37,7 +38,7 @@ class _CreatePinPageState extends State<CreatePinPage> {
       if (extra is String) {
         email = extra;
 
-      } else if (!widget.isRecovery) {
+      } else {
         _obtenerEmail();
       }
     }
