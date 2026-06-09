@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iventi/shared/di/ServiceLocator.dart';
-import 'package:iventi/features/auth/controllers/AuthController.dart';
-import 'package:iventi/features/config/controllers/ConfiguracionController.dart';
+import 'package:iventi/shared/exceptions/AppException.dart';
 import 'package:iventi/shared/theme/AppColors.dart';
 import 'package:iventi/shared/theme/ButtonStyles.dart';
 import 'package:iventi/shared/utils/DialogMessages.dart';
+import 'package:iventi/shared/widgets/ConfirmDialog.dart';
 import 'package:iventi/shared/widgets/ErrorDialog.dart';
+import 'package:iventi/shared/widgets/SuccessDialog.dart';
 import 'package:iventi/features/config/dtos/requests/CrearConfiguracionRequest.dart';
 
 class ConfigPage extends StatefulWidget {
@@ -77,17 +78,51 @@ class _ConfigPageState extends State<ConfigPage> {
       return;
     }
 
-    final authCtrl = ServiceLocator.authController;
-    final configCtrl = ServiceLocator.configuracionController;
-    final idUsuario = ServiceLocator.usuarioActualId ?? 1;
-    await authCtrl.actualizarPerfil(idUsuario, nombre: _nombreController.text.trim());
-    await configCtrl.guardarConfiguracion(
-      CrearConfiguracionRequest(idUsuario: idUsuario, clave: 'dias_vencimiento', valor: diasText),
-    );
-    await configCtrl.guardarConfiguracion(
-      CrearConfiguracionRequest(idUsuario: idUsuario, clave: 'stock_minimo_alerta', valor: stockText),
-    );
-    if (mounted) ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Configuración guardada")));
+    if (mounted) {
+      ConfirmDialog(
+        context: context,
+        title: 'Guardar configuración',
+        message: '¿Estás seguro de guardar los cambios?',
+        btnOkOnPress: () async {
+          final authCtrl = ServiceLocator.authController;
+          final configCtrl = ServiceLocator.configuracionController;
+          final idUsuario = ServiceLocator.usuarioActualId ?? 1;
+          try {
+            await authCtrl.actualizarPerfil(idUsuario, nombre: _nombreController.text.trim());
+            await configCtrl.guardarConfiguracion(
+              CrearConfiguracionRequest(idUsuario: idUsuario, clave: 'dias_vencimiento', valor: diasText),
+            );
+            await configCtrl.guardarConfiguracion(
+              CrearConfiguracionRequest(idUsuario: idUsuario, clave: 'stock_minimo_alerta', valor: stockText),
+            );
+            if (mounted) {
+              SuccessDialog(
+                context: context,
+                title: 'Configuración guardada',
+                description: 'Los cambios se guardaron correctamente.',
+                btnOkOnPress: () {},
+              );
+            }
+          } on AppException catch (e) {
+            if (mounted) {
+              ErrorDialog(
+                context: context,
+                title: e.mensaje,
+                description: e.descripcion ?? 'No pudimos guardar la configuración, intenta de nuevo',
+              );
+            }
+          } catch (e) {
+            if (mounted) {
+              ErrorDialog(
+                context: context,
+                title: 'Error inesperado',
+                description: 'Ocurrió un error al guardar la configuración, intenta de nuevo',
+              );
+            }
+          }
+        },
+      );
+    }
   }
 
   @override

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-// ignore: unused_import
 import 'package:go_router/go_router.dart';
 
 import 'package:iventi/features/auth/controllers/AuthController.dart';
@@ -9,7 +8,9 @@ import 'package:iventi/shared/theme/AppColors.dart';
 import 'package:iventi/shared/theme/ButtonStyles.dart';
 import 'package:iventi/shared/utils/DialogMessages.dart';
 import 'package:iventi/shared/widgets/BackButton.dart';
+import 'package:iventi/shared/widgets/ConfirmDialog.dart';
 import 'package:iventi/shared/widgets/ErrorDialog.dart';
+import 'package:iventi/shared/widgets/SuccessDialog.dart';
 import 'package:iventi/features/auth/widgets/PinInput.dart';
 
 class CreatePinPage extends StatefulWidget {
@@ -85,8 +86,16 @@ class _CreatePinPageState extends State<CreatePinPage> {
     }
 
     if (widget.isRecovery) {
-      // Recuperación: actualizar PIN directamente
-      _recuperarPin();
+      if (mounted) {
+        ConfirmDialog(
+          context: context,
+          title: 'Actualizar PIN',
+          message: '¿Estás seguro de actualizar tu PIN?',
+          btnOkOnPress: () async {
+            await _recuperarPin();
+          },
+        );
+      }
     } else {
       // Usuario nuevo: ir a página de configuración
       context.push('/login/setup', extra: {'email': email, 'pin': pin});
@@ -99,7 +108,14 @@ class _CreatePinPageState extends State<CreatePinPage> {
 
       await _authController.recuperarPin(usuario.idUsuario!, pin);
 
-      if (mounted) context.go('/login');
+      if (mounted) {
+        SuccessDialog(
+          context: context,
+          title: 'PIN actualizado',
+          description: 'Tu PIN se actualizó correctamente.',
+          btnOkOnPress: () => context.go('/login'),
+        );
+      }
 
     } on AppException catch (e) {
       if (mounted) {
