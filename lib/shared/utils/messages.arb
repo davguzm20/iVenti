@@ -32,6 +32,12 @@
   "authStockMinimoRequeridoTitulo": "Campo incompleto",
   "authStockMinimoRequeridoDescripcion": "Ingresa el stock mínimo para recibir alertas de inventario",
 
+  "authDiasVencimientoInvalidoTitulo": "Valor inválido",
+  "authDiasVencimientoInvalidoDescripcion": "Los días de vencimiento deben ser mayor a cero",
+
+  "authStockMinimoInvalidoTitulo": "Valor inválido",
+  "authStockMinimoInvalidoDescripcion": "El stock mínimo debe ser mayor a cero",
+
   "ventasMontoInsuficienteTitulo": "Monto insuficiente",
   "ventasMontoInsuficienteDescripcion": "El monto recibido no cubre el total de la venta",
 

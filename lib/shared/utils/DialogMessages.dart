@@ -42,6 +42,8 @@ class _AuthMessages {
   (String, String) get correoNoDisponible => DialogMessages._mensaje('authCorreoNoDisponible');
   (String, String) get diasVencimientoRequerido => DialogMessages._mensaje('authDiasVencimientoRequerido');
   (String, String) get stockMinimoRequerido => DialogMessages._mensaje('authStockMinimoRequerido');
+  (String, String) get diasVencimientoInvalido => DialogMessages._mensaje('authDiasVencimientoInvalido');
+  (String, String) get stockMinimoInvalido => DialogMessages._mensaje('authStockMinimoInvalido');
 }
 
 class _VentasMessages {

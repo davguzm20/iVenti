@@ -76,6 +76,20 @@ class _SetupConfigPageState extends State<SetupConfigPage> {
       return;
     }
 
+    final diasValor = int.tryParse(diasVencimientoController.text.trim());
+    if (diasValor == null || diasValor <= 0) {
+      final (title, desc) = DialogMessages.auth.diasVencimientoInvalido;
+      ErrorDialog(context: context, title: title, description: desc);
+      return;
+    }
+
+    final stockValor = int.tryParse(stockMinimoController.text.trim());
+    if (stockValor == null || stockValor <= 0) {
+      final (title, desc) = DialogMessages.auth.stockMinimoInvalido;
+      ErrorDialog(context: context, title: title, description: desc);
+      return;
+    }
+
     setState(() => isLoading = true);
 
     try {

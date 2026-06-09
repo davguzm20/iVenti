@@ -5,6 +5,8 @@ import 'package:iventi/features/auth/controllers/AuthController.dart';
 import 'package:iventi/features/config/controllers/ConfiguracionController.dart';
 import 'package:iventi/shared/theme/AppColors.dart';
 import 'package:iventi/shared/theme/ButtonStyles.dart';
+import 'package:iventi/shared/utils/DialogMessages.dart';
+import 'package:iventi/shared/widgets/ErrorDialog.dart';
 import 'package:iventi/features/config/dtos/requests/CrearConfiguracionRequest.dart';
 
 class ConfigPage extends StatefulWidget {
@@ -43,22 +45,48 @@ class _ConfigPageState extends State<ConfigPage> {
   }
 
   Future<void> _guardar() async {
+    if (_nombreController.text.trim().isEmpty) {
+      final (title, desc) = DialogMessages.auth.nombreRequerido;
+      if (mounted) ErrorDialog(context: context, title: title, description: desc);
+      return;
+    }
+
+    final diasText = _diasVencimientoController.text.trim();
+    if (diasText.isEmpty) {
+      final (title, desc) = DialogMessages.auth.diasVencimientoRequerido;
+      if (mounted) ErrorDialog(context: context, title: title, description: desc);
+      return;
+    }
+    final diasValor = int.tryParse(diasText);
+    if (diasValor == null || diasValor <= 0) {
+      final (title, desc) = DialogMessages.auth.diasVencimientoInvalido;
+      if (mounted) ErrorDialog(context: context, title: title, description: desc);
+      return;
+    }
+
+    final stockText = _stockMinimoController.text.trim();
+    if (stockText.isEmpty) {
+      final (title, desc) = DialogMessages.auth.stockMinimoRequerido;
+      if (mounted) ErrorDialog(context: context, title: title, description: desc);
+      return;
+    }
+    final stockValor = int.tryParse(stockText);
+    if (stockValor == null || stockValor <= 0) {
+      final (title, desc) = DialogMessages.auth.stockMinimoInvalido;
+      if (mounted) ErrorDialog(context: context, title: title, description: desc);
+      return;
+    }
+
     final authCtrl = ServiceLocator.authController;
     final configCtrl = ServiceLocator.configuracionController;
     final idUsuario = ServiceLocator.usuarioActualId ?? 1;
-    if (_nombreController.text.trim().isNotEmpty) {
-      await authCtrl.actualizarPerfil(idUsuario, nombre: _nombreController.text.trim());
-    }
-    if (_diasVencimientoController.text.isNotEmpty) {
-      await configCtrl.guardarConfiguracion(
-        CrearConfiguracionRequest(idUsuario: idUsuario, clave: 'dias_vencimiento', valor: _diasVencimientoController.text),
-      );
-    }
-    if (_stockMinimoController.text.isNotEmpty) {
-      await configCtrl.guardarConfiguracion(
-        CrearConfiguracionRequest(idUsuario: idUsuario, clave: 'stock_minimo_alerta', valor: _stockMinimoController.text),
-      );
-    }
+    await authCtrl.actualizarPerfil(idUsuario, nombre: _nombreController.text.trim());
+    await configCtrl.guardarConfiguracion(
+      CrearConfiguracionRequest(idUsuario: idUsuario, clave: 'dias_vencimiento', valor: diasText),
+    );
+    await configCtrl.guardarConfiguracion(
+      CrearConfiguracionRequest(idUsuario: idUsuario, clave: 'stock_minimo_alerta', valor: stockText),
+    );
     if (mounted) ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Configuración guardada")));
   }
 
