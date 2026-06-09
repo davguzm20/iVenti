@@ -66,6 +66,18 @@ Cada reporte de feature sigue la estructura definida en la plantilla y se guarda
 |---|-------|-------------|------|
 | 1 | [flujo] | [descripcion] | [tipo] |
 
+### 2.2. Desglose de Casos por Flujo
+
+Cada flujo de prueba contiene casos individuales que verifican comportamientos especificos de la aplicacion. Los casos se clasifican en Happy Path (flujo valido) y Error Path (escenarios de error esperados).
+
+Los resultados se reportan por cada flujo de la siguiente forma:
+
+#### [Nombre del flujo]
+
+| Caso | Descripcion | Tipo | Estado |
+|------|-------------|------|--------|
+| [nombre del caso] | [descripcion del escenario y comportamiento esperado] | [Happy Path / Error Path] | [OK / FALLIDO] |
+
 ## 3. Flujos Evaluados
 
 | Flujo | Autenticacion | Navegacion | CRUD | Cleanup |
@@ -84,39 +96,37 @@ Cada reporte de feature sigue la estructura definida en la plantilla y se guarda
 ## 3. Pruebas Generadas
 
 Los reportes se generan en `docs/summary/test/e2e-test/` siguiendo la convencion `[feature]-tests.md`.
-Los archivos de prueba se ubican en `integration_test/[feature]/`.
+Los archivos de prueba se ubican en `test/e2e-test/[feature]/`.
+
+> **Nota:** Los tests con muchos `runAsync` (register, config, recover) usan timeout de 240s.
 
 ## 4. Convenciones de Nomenclatura
 
 ### 4.1. Archivos de Test
 
-- **Formato:** `[feature]_e2e_test.dart`
-- **Ubicacion:** `integration_test/[feature]/`
-- **Ejemplo:** `integration_test/auth/login_e2e_test.dart`
+- **Formato:** `<feature>_test.dart`
+- **Ubicacion:** `test/e2e-test/[feature]/`
+- **Ejemplo:** `test/e2e-test/[feature]/[feature]_test.dart`
 
-### 4.2. Grupos de Tests
+### 4.2. Estructura del Test
 
-- **Formato:** `group('[Feature] E2E', () { ... })`
-- **Subgrupos:** `group('flujo completo', () { ... })`, `group('autenticacion', () { ... })`, `group('CRUD', () { ... })`
+- **Sin grupos:** cada archivo contiene un unico `testWidgets` con el flujo completo
+- **Excepcion:** si un feature requiere multiples flujos independientes, se usa `group()` opcionalmente
 
 ### 4.3. Titulos de Tests
 
-- **Flujo Completo:** `testWidgets('debe completar el flujo de [accion] desde [origen] hasta [destino]', (tester) async { ... })`
-- **Autenticacion:** `testWidgets('debe iniciar sesion con credenciales validas', (tester) async { ... })`
-- **CRUD:** `testWidgets('debe crear [recurso] y mostrarlo en el listado', (tester) async { ... })`
+- **Formato:** `'[Feature] - flujo completo con todos los casos [tipo]'`
+- **Ejemplo:** `'[Feature] - flujo completo con todos los casos [tipo]'`
 
 ## 5. Ejecucion
 
 ```bash
-# Ejecutar todos los tests E2E
-flutter test integration_test/
+# JDK 17 requerido
+set "JAVA_HOME=<ruta-al-jdk-17>"
 
-# Ejecutar tests de una feature especifica
-flutter test integration_test/[feature]/
+# Arranque optimizado del emulador
+<emulator-path> -avd <avd-name> -gpu host -no-boot-anim -no-audio -no-snapshot
 
-# Ejecutar un archivo especifico
-flutter test integration_test/[feature]/[feature]_e2e_test.dart
-
-# Ejecutar con reportero expandido
-flutter test integration_test/ --reporter=expanded
+# Ejecutar un test especifico
+flutter drive --driver=test/e2e-test/driver.dart --target=test/e2e-test/[feature]/[feature]_test.dart -d <device>
 ```

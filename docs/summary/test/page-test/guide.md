@@ -62,11 +62,17 @@ Cada reporte de feature sigue la estructura definida en la plantilla y se guarda
 
 ## 2. Tests Ejecutados
 
-### 2.1. [Page Name] ([n] tests)
+### 2.1. [Page 1 Name] ([n] tests)
 
-| # | Metodo | Descripcion | Tipo |
-|---|--------|-------------|------|
-| 1 | [metodo] | [descripcion] | [tipo] |
+| # | Descripcion | Tipo |
+|---|-------------|------|
+| 1 | [descripcion] | [tipo] |
+
+### 2.2. [Page 2 Name] ([n] tests)
+
+| # | Descripcion | Tipo |
+|---|-------------|------|
+| 1 | [descripcion] | [tipo] |
 
 ## 3. Metodos Evaluados
 
@@ -123,4 +129,40 @@ flutter test test/page-test/[feature]/[feature]_page_test.dart
 
 # Ejecutar con reportero expandido
 flutter test test/page-test/ --reporter=expanded
+```
+
+## 6. Pruebas E2E
+
+### 6.1. Ubicacion
+
+Los archivos de prueba E2E se ubican en `test/e2e-test/[feature]/`.
+
+### 6.2. Convencion de Nombres
+
+- **Formato:** `<feature>_test.dart`
+- **Ejemplo:** `test/e2e-test/auth/register_test.dart`
+- **Excepcion:** `config/config_test.dart` (no `config_page_test.dart`)
+
+### 6.3. Helpers Compartidos
+
+Los flujos comunes de autenticacion estan extraidos en `helpers/auth_flows.dart`:
+
+| Helper | Descripcion |
+|--------|-------------|
+| `typeInField` | Escribe texto en un campo EditableText por indice |
+| `tapButton` | Tapa un boton de texto (sin pump) |
+| `tapButtonAndWait` | Tapa un boton y espera operacion asincronica |
+| `pumpFrames` | Avanza fotogramas con delay |
+| `waitForAsync` | Espera operaciones asincronicas y avanza fotogramas |
+| `dismissError` | Cierra un dialogo de error (tapa Ok + espera) |
+| `testCodeEntry` | Prueba codigo: vacio, incorrecto y correcto |
+
+### 6.4. Ejecucion
+
+```bash
+# Ejecutar todos los E2E tests
+flutter drive --driver=test/e2e-test/driver.dart --target=test/e2e-test/[feature]/<test>.dart -d emulator-5554
+
+# Ejemplo: register
+flutter drive --driver=test/e2e-test/driver.dart --target=test/e2e-test/auth/register_test.dart -d emulator-5554
 ```

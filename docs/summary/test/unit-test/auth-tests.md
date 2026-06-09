@@ -25,7 +25,7 @@
 
 ## 2. Tests Ejecutados
 
-### AuthService (21 tests)
+### 2.1. AuthService (21 tests)
 
 | # | Método | Descripción | Tipo |
 |---|--------|-------------|------|
