@@ -32,13 +32,13 @@ import 'package:iventi/features/reports/pages/ReportLotesPage.dart';
 import 'package:iventi/features/reports/pages/ReportFechaVencimientoPage.dart';
 import 'package:iventi/shared/pages/HomePage.dart';
 
-final GlobalKey<NavigatorState> _rootNavigatorKey = GlobalKey<NavigatorState>();
+final GlobalKey<NavigatorState> rootNavigatorKey = GlobalKey<NavigatorState>();
 
 class AppRoutes {
   static final GoRouter router = GoRouter(
     initialLocation: '/welcome',
     debugLogDiagnostics: true,
-    navigatorKey: _rootNavigatorKey,
+    navigatorKey: rootNavigatorKey,
     redirect: (context, state) async {
       final path = state.matchedLocation;
 
@@ -133,12 +133,12 @@ class AppRoutes {
                 routes: [
                   GoRoute(
                     path: 'create-product',
-                    parentNavigatorKey: _rootNavigatorKey,
+                    parentNavigatorKey: rootNavigatorKey,
                     builder: (context, state) => const CreateProductPage(),
                   ),
                   GoRoute(
                     path: 'filter-products',
-                    parentNavigatorKey: _rootNavigatorKey,
+                    parentNavigatorKey: rootNavigatorKey,
                     builder: (context, state) => FilterProductsPage(
                       filtrosIniciales: state.extra as Map<String, dynamic>?,
                     ),
@@ -177,7 +177,7 @@ class AppRoutes {
                   ),
                   GoRoute(
                     path: 'filter-sales',
-                    parentNavigatorKey: _rootNavigatorKey,
+                    parentNavigatorKey: rootNavigatorKey,
                     builder: (context, state) {
                       final f = state.extra as Map<String, dynamic>?;
                       return FilterSalesPage(
@@ -206,7 +206,7 @@ class AppRoutes {
                 routes: [
                   GoRoute(
                     path: 'filter-clients',
-                    parentNavigatorKey: _rootNavigatorKey,
+                    parentNavigatorKey: rootNavigatorKey,
                     builder: (context, state) {
                       return FilterClientsPage(
                         esDeudorInicial: state.extra as bool?,

@@ -42,11 +42,13 @@ dev_dependencies:
     sdk: flutter
   mockito: ^5.4.2
   build_runner: ^2.4.6
+  patrol: ^4.6.1
 
 flutter:
   uses-material-design: true
   assets: 
     - ".env"
+    - ".env.test"
     - "lib/assets/imagenes/"
     - "lib/assets/iconos/"
     - "lib/shared/utils/messages.arb"
