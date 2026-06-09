@@ -5,7 +5,7 @@
 ### 1.1. Salida de Consola
 
 ```
-config/config_test.dart:   03:24 +3: All tests passed!
+config/config_test.dart:   03:05 +3: All tests passed!
 ```
 
 ### 1.2. Resumen de Resultados
