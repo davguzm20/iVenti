@@ -4,6 +4,7 @@ class VentaEntity {
   final int? idVenta;
   final int? idCliente;
   final int idUsuario;
+  final String? codigoBoleta;
   final DateTime vendidoEn;
   final double montoTotal;
   final double montoCancelado;
@@ -15,6 +16,7 @@ class VentaEntity {
   VentaEntity({
     this.idVenta,
     this.idCliente,
+    this.codigoBoleta,
     required this.idUsuario,
     required this.vendidoEn,
     required this.montoTotal,

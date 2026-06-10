@@ -4,6 +4,7 @@ class VentaResponse {
   final int idVenta;
   final int? idCliente;
   final int idUsuario;
+  final String? codigoBoleta;
   final DateTime vendidoEn;
   final double montoTotal;
   final double montoCancelado;
@@ -16,6 +17,7 @@ class VentaResponse {
     required this.idVenta,
     this.idCliente,
     required this.idUsuario,
+    this.codigoBoleta,
     required this.vendidoEn,
     required this.montoTotal,
     required this.montoCancelado,

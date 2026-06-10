@@ -10,6 +10,7 @@ import 'package:iventi/shared/widgets/CustomTextField.dart';
 import 'package:iventi/shared/theme/AppColors.dart';
 import 'package:iventi/shared/theme/ButtonStyles.dart';
 import 'package:iventi/shared/utils/DialogMessages.dart';
+import 'package:iventi/shared/services/PrintService.dart';
 
 class DetailsSalePage extends StatefulWidget {
   final int idVenta;
@@ -195,6 +196,67 @@ class _DetailsSalePageState extends State<DetailsSalePage> {
     );
   }
 
+  Future<void> _generarBoleta() async {
+    if (venta == null) return;
+    try {
+      final path = await PrintService.generarBoletaPDF(
+        venta: venta!,
+        detalles: detalles,
+        clienteNombre: null,
+        clienteDni: null,
+      );
+      if (mounted) {
+        await context.push('/pdf-viewer', extra: path);
+      }
+    } catch (e) {
+      if (mounted) {
+        ErrorDialog(
+          context: context,
+          title: 'Error',
+          description: 'No se pudo generar la boleta: $e',
+        );
+      }
+    }
+  }
+
+  Future<void> _anularVenta() async {
+    if (venta == null) return;
+    final confirm = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('Anular venta'),
+        content: const Text('Esta accion no se puede deshacer. Deseas anular esta venta?'),
+        actions: [
+          TextButton(onPressed: () => ctx.pop(false), child: const Text('Cancelar')),
+          TextButton(
+            onPressed: () => ctx.pop(true),
+            child: const Text('Anular', style: TextStyle(color: Colors.red)),
+          ),
+        ],
+      ),
+    );
+    if (confirm != true) return;
+    try {
+      await _ventaController.anularVenta(widget.idVenta);
+      if (mounted) {
+        SuccessDialog(
+          context: context,
+          title: 'Venta anulada',
+          description: 'La venta se anulo correctamente',
+          btnOkOnPress: () => context.pop(),
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        ErrorDialog(
+          context: context,
+          title: 'Error',
+          description: 'No se pudo anular la venta: $e',
+        );
+      }
+    }
+  }
+
   Widget _buildInfoRow(String label, String value, {Color? color}) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4.0),
@@ -226,10 +288,6 @@ class _DetailsSalePageState extends State<DetailsSalePage> {
         actions: [
           if (venta != null) ...[
             IconButton(
-              icon: const Icon(Icons.print, color: Colors.black),
-              onPressed: () {},
-            ),
-            IconButton(
               icon: Icon(
                 Icons.attach_money,
                 color: !venta!.esCredito &&
@@ -241,6 +299,14 @@ class _DetailsSalePageState extends State<DetailsSalePage> {
                       venta!.montoCancelado < venta!.montoTotal
                   ? () => actualizarMontoCanceladoDialog()
                   : null,
+            ),
+            IconButton(
+              icon: const Icon(Icons.print, color: Colors.black),
+              onPressed: () => _generarBoleta(),
+            ),
+            IconButton(
+              icon: const Icon(Icons.block, color: Colors.red),
+              onPressed: () => _anularVenta(),
             ),
           ],
         ],

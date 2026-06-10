@@ -125,7 +125,22 @@ class _SalesPageState extends State<SalesPage> {
                     filled: true,
                     fillColor: Colors.white.withValues(alpha: 0.2),
                   ),
-                  onChanged: (value) {},
+                  onChanged: (value) {
+                    _searchTimer?.cancel();
+                    _searchTimer = Timer(const Duration(milliseconds: 300), () {
+                      if (value.isEmpty) {
+                        _cargarVentas(reiniciar: true);
+                        return;
+                      }
+                      setState(() {
+                        ventas = ventas.where((v) =>
+                          '${v.idVenta}'.contains(value) ||
+                          v.montoTotal.toString().contains(value) ||
+                          (v.esCredito ? 'credito' : 'contado').contains(value.toLowerCase())
+                        ).toList();
+                      });
+                    });
+                  },
                 )
               : const Text(
                   "Mis ventas",

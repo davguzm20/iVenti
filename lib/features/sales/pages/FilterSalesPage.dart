@@ -4,6 +4,8 @@ import 'package:iventi/shared/theme/AppColors.dart';
 import 'package:iventi/shared/theme/ButtonStyles.dart';
 
 class FilterSalesPage extends StatefulWidget {
+  static DateTime? testFechaFija;
+
   final bool? esAlContado;
   final DateTime? fechaInicio;
   final DateTime? fechaFinal;
@@ -45,7 +47,7 @@ class _FilterSalesState extends State<FilterSalesPage> {
       "${fecha.day.toString().padLeft(2, '0')}/${fecha.month.toString().padLeft(2, '0')}/${fecha.year}";
 
   Future<void> seleccionarFecha(bool esInicio) async {
-    final picked = await showDatePicker(context: context, initialDate: DateTime.now(), firstDate: DateTime(2000), lastDate: DateTime(2100));
+    final picked = FilterSalesPage.testFechaFija ?? await showDatePicker(context: context, initialDate: DateTime.now(), firstDate: DateTime(2000), lastDate: DateTime(2100));
     if (picked != null) {
       setState(() {
         if (esInicio) { fechaInicio = picked; fechaInicioController.text = formatoFecha(picked); }

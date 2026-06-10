@@ -375,7 +375,7 @@ class _PaymentPageState extends State<PaymentPage> {
                       (d) => DetalleVentaRequest(
                         idProducto: d['idProducto'] as int,
                         idLote: d['idLote'] as int,
-                        cantidad: d['cantidadProducto'] as int,
+                        cantidad: d['cantidad'] as int,
                         precioUnitario: d['precioUnidadProducto'] as double,
                         subtotal: d['subtotalProducto'] as double,
                         ganancia: d['gananciaProducto'] as double,
@@ -397,7 +397,9 @@ class _PaymentPageState extends State<PaymentPage> {
 
               } catch (e) {
                 if (!mounted) return;
-                final (title, desc) = DialogMessages.ventas.noSePudoRegistrarVenta;
+                final (title, desc) = e.toString().contains('Stock insuficiente')
+                    ? ('Stock insuficiente', e.toString().split(': ').last)
+                    : DialogMessages.ventas.noSePudoRegistrarVenta;
                 ErrorDialog(
                   context: context,
                   title: title,

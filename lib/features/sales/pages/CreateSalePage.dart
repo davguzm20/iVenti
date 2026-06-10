@@ -21,6 +21,7 @@ class _CreateSalePageState extends State<CreateSalePage> {
 
   void _showAddProductDialog() {
     LoteEntity? loteSeleccionado;
+    ProductoEntity? productoSeleccionado;
     int cantidadValue = 1;
     double descuentoValue = 0;
 
@@ -62,6 +63,7 @@ class _CreateSalePageState extends State<CreateSalePage> {
                           onTap: () async {
                             final lotes = await ServiceLocator.loteController.obtenerLotesDeProducto(p.idProducto!);
                             setDialogState(() {
+                              productoSeleccionado = p;
                               loteSeleccionado = lotes.isNotEmpty ? lotes.first : null;
                             });
                           },
@@ -96,8 +98,8 @@ class _CreateSalePageState extends State<CreateSalePage> {
               TextButton(onPressed: () => context.pop(), child: const Text('Cancelar')),
               TextButton(
                 onPressed: () {
-                  if (productosFiltrados.isNotEmpty && loteSeleccionado != null) {
-                    final p = productosFiltrados.first;
+                  if (productoSeleccionado != null && loteSeleccionado != null) {
+                    final p = productoSeleccionado!;
                     setState(() {
                       productosVenta.add({
                         'idProducto': p.idProducto,

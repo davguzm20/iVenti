@@ -11,6 +11,7 @@ class VentaMapper {
       idVenta: map['id_venta'] as int,
       idCliente: map['id_cliente'] as int?,
       idUsuario: map['id_usuario'] as int,
+      codigoBoleta: map['codigo_boleta'] as String?,
       vendidoEn: map['vendido_en'] as DateTime,
       montoTotal: double.parse(map['monto_total'].toString()),
       montoCancelado: double.parse(map['monto_cancelado'].toString()),
@@ -25,6 +26,7 @@ class VentaMapper {
     return {
       'id_cliente': entity.idCliente,
       'id_usuario': entity.idUsuario,
+      'codigo_boleta': entity.codigoBoleta,
       'vendido_en': entity.vendidoEn,
       'monto_total': entity.montoTotal,
       'monto_cancelado': entity.montoCancelado,
@@ -38,6 +40,7 @@ class VentaMapper {
       idVenta: entity.idVenta!,
       idCliente: entity.idCliente,
       idUsuario: entity.idUsuario,
+      codigoBoleta: entity.codigoBoleta,
       vendidoEn: entity.vendidoEn,
       montoTotal: entity.montoTotal,
       montoCancelado: entity.montoCancelado,
