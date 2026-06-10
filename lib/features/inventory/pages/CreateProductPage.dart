@@ -19,6 +19,7 @@ import 'package:iventi/features/inventory/controllers/CategoriaController.dart';
 import 'package:iventi/features/inventory/controllers/UnidadController.dart';
 import 'package:iventi/features/inventory/entities/CategoriaEntity.dart';
 import 'package:iventi/features/inventory/entities/UnidadEntity.dart';
+import 'package:iventi/shared/services/CloudinaryService.dart';
 
 class CreateProductPage extends StatefulWidget {
   const CreateProductPage({super.key});
@@ -508,6 +509,15 @@ class _CreateProductPageState extends State<CreateProductPage> {
       title: 'Confirmación',
       desc: '¿Está seguro de que desea crear el producto?',
       btnOkOnPress: () async {
+        String? imagenUrl = rutaImagen;
+        if (imagenUrl != null && !imagenUrl.startsWith('http')) {
+          try {
+            imagenUrl = await CloudinaryService().uploadImage(imagenUrl, DateTime.now().millisecondsSinceEpoch);
+          } catch (e) {
+            if (mounted) { ErrorDialog(context: context, title: 'Error', description: 'No se pudo subir la imagen: $e'); }
+            return;
+          }
+        }
         final request = CrearProductoRequest(
           idUnidad: unidadSeleccionada!.idUnidad!,
           codigo: productCodeController.text != "-" * 13
@@ -516,7 +526,7 @@ class _CreateProductPageState extends State<CreateProductPage> {
           nombre: productNameController.text,
           precio: precio,
           stockMinimo: stockMin.round(),
-          rutaImagen: rutaImagen,
+          rutaImagen: imagenUrl,
         );
 
         try {

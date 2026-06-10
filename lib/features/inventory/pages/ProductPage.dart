@@ -99,7 +99,9 @@ class _ProductPageState extends State<ProductPage> {
                   width: 80, height: 80,
                   child: nuevaRuta == null
                       ? Image.asset('lib/assets/iconos/iconoImagen.png', fit: BoxFit.cover)
-                      : Image.file(File(nuevaRuta!), fit: BoxFit.cover),
+                      : nuevaRuta!.startsWith('http')
+                          ? Image.network(nuevaRuta!, fit: BoxFit.cover)
+                          : Image.file(File(nuevaRuta!), fit: BoxFit.cover),
                 ),
               ),
               TextField(controller: codigoCtrl, decoration: const InputDecoration(labelText: 'Código')),
@@ -273,10 +275,12 @@ class _ProductPageState extends State<ProductPage> {
                                   image: AssetImage('lib/assets/iconos/iconoImagen.png'),
                                   fit: BoxFit.contain,
                                 )
-                              : Image.file(
-                                  File(producto!.rutaImagen!),
-                                  fit: BoxFit.cover,
-                                ),
+                              : producto!.rutaImagen!.startsWith('http')
+                                  ? Image.network(producto!.rutaImagen!, fit: BoxFit.cover)
+                                  : Image.file(
+                                      File(producto!.rutaImagen!),
+                                      fit: BoxFit.cover,
+                                    ),
                         ),
                       ),
 

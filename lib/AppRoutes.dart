@@ -33,6 +33,7 @@ import 'package:iventi/features/reports/pages/ReportGeneralInventarioPage.dart';
 import 'package:iventi/features/reports/pages/ReportLotesPage.dart';
 import 'package:iventi/features/reports/pages/ReportFechaVencimientoPage.dart';
 import 'package:iventi/shared/pages/HomePage.dart';
+import 'package:iventi/shared/pages/PDFViewerPage.dart';
 
 final GlobalKey<NavigatorState> rootNavigatorKey = GlobalKey<NavigatorState>();
 
@@ -266,6 +267,11 @@ class AppRoutes {
         path: '/barcode-scanner',
         parentNavigatorKey: rootNavigatorKey,
         builder: (context, state) => const BarcodeScannerPage(),
+      ),
+      GoRoute(
+        path: '/pdf-viewer',
+        parentNavigatorKey: rootNavigatorKey,
+        builder: (context, state) => PDFViewerPage(filePath: state.extra as String),
       ),
     ],
   );
