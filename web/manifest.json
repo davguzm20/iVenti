@@ -1,6 +1,6 @@
 {
-    "name": "multiinventario",
-    "short_name": "multiinventario",
+    "name": "iVenti",
+    "short_name": "iVenti",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
