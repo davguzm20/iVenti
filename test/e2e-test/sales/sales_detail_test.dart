@@ -13,7 +13,6 @@ void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
   setUpAll(() async {
-    suppressOverflowErrors();
     await dotenv.load(fileName: ".env.test");
     await PostgresDatasource().connection;
   });
@@ -23,12 +22,6 @@ void main() {
   });
 
   testWidgets('Sales Detail - flujo completo de detalle, pago y anular', (tester) async {
-    final originalHandler = FlutterError.onError;
-    FlutterError.onError = (details) {
-      if (details.exceptionAsString().contains('RenderFlex')) return;
-      originalHandler!(details);
-    };
-    addTearDown(() => FlutterError.onError = originalHandler);
     await cleanTestData();
 
     final conn = await PostgresDatasource().connection;

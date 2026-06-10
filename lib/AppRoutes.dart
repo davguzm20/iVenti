@@ -193,6 +193,7 @@ class AppRoutes {
                   ),
                   GoRoute(
                     path: 'details-sale/:idVenta',
+                    parentNavigatorKey: rootNavigatorKey,
                     builder: (context, state) {
                       final id = int.parse(state.pathParameters['idVenta']!);
                       return DetailsSalePage(idVenta: id);

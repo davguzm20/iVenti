@@ -55,10 +55,11 @@ void main() {
     });
     // Cliente existente para Buscar Cliente
     await conn.execute(Sql.named(
-      "INSERT INTO clientes (nombres, apellidos, dni, correo, creado_en, actualizado_en) "
-      "VALUES (@nombres, @apellidos, @dni, @correo, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)",
+      "INSERT INTO clientes (nombres, apellidos, dni, email, telefono, es_deudor) "
+      "VALUES (@nombres, @apellidos, @dni, @email, @telefono, @esDeudor)",
     ), parameters: {
-      'nombres': 'e2e_nombre', 'apellidos': 'e2e_apellido', 'dni': '12345678', 'correo': 'e2e_cliente@test.com',
+      'nombres': 'e2e_nombre', 'apellidos': 'e2e_apellido', 'dni': '12345678',
+      'email': 'e2e_cliente@test.com', 'telefono': '999333333', 'esDeudor': false,
     });
 
     await app.main(envFile: ".env.test");

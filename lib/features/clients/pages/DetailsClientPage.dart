@@ -187,7 +187,7 @@ class _DetailsClientPageState extends State<DetailsClientPage> {
                       await _ventaController.registrarPagoCliente(
                         widget.idCliente,
                         monto,
-                        1,
+                        ServiceLocator.usuarioActualId!,
                       );
 
                       if (context.mounted) {

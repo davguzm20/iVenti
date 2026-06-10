@@ -170,7 +170,7 @@ class _DetailsSalePageState extends State<DetailsSalePage> {
                       await _ventaController.registrarPago(
                         widget.idVenta,
                         monto,
-                        1,
+                        ServiceLocator.usuarioActualId!,
                       );
 
                       if (context.mounted) {
@@ -300,13 +300,11 @@ class _DetailsSalePageState extends State<DetailsSalePage> {
             IconButton(
               icon: Icon(
                 Icons.attach_money,
-                color: !venta!.esCredito &&
-                        venta!.montoCancelado < venta!.montoTotal
+                color: venta!.montoCancelado < venta!.montoTotal
                     ? Colors.black
                     : Colors.grey,
               ),
-              onPressed: !venta!.esCredito &&
-                      venta!.montoCancelado < venta!.montoTotal
+              onPressed: venta!.montoCancelado < venta!.montoTotal
                   ? () => actualizarMontoCanceladoDialog()
                   : null,
             ),
