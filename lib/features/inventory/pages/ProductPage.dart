@@ -478,6 +478,7 @@ class _ProductPageState extends State<ProductPage> {
 
   Future<void> _eliminarCategoriaDeProducto(CategoriaEntity cat) async {
     setState(() => editandoCategorias = false);
+    await _categoriaController.eliminarDeProducto(producto!.idProducto!, cat.idCategoria!);
     _recargarCategorias();
   }
 
@@ -505,7 +506,8 @@ class _ProductPageState extends State<ProductPage> {
             TextButton(
               onPressed: () async {
                 if (seleccionada != null) {
-                  context.pop();
+                  await _categoriaController.asignarAProducto(producto!.idProducto!, seleccionada!.idCategoria!);
+                  if (mounted) context.pop();
                   _recargarCategorias();
                 }
               },

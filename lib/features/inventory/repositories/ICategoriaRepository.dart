@@ -9,6 +9,7 @@ abstract class ICategoriaRepository {
   Future<void> eliminarCategoria(int idCategoria);
   Future<List<CategoriaEntity>> obtenerCategorias();
   Future<void> asignarRelacion(int idProducto, int idCategoria);
+  Future<void> eliminarRelacion(int idProducto, int idCategoria);
   Future<List<CategoriaEntity>> obtenerCategoriasDeProducto(int idProducto);
   Future<void> actualizarCategoriasProducto(int idProducto, List<int> idCategorias);
 }

@@ -27,4 +27,12 @@ class CategoriaController {
   Future<List<CategoriaEntity>> obtenerDeProducto(int idProducto) {
     return _categoriaService.obtenerDeProducto(idProducto);
   }
+
+  Future<void> asignarAProducto(int idProducto, int idCategoria) {
+    return _categoriaService.asignarAProducto(idProducto, idCategoria);
+  }
+
+  Future<void> eliminarDeProducto(int idProducto, int idCategoria) {
+    return _categoriaService.eliminarDeProducto(idProducto, idCategoria);
+  }
 }

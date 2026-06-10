@@ -106,6 +106,20 @@ class CategoriaRepository implements ICategoriaRepository {
   }
 
   @override
+  Future<void> eliminarRelacion(int idProducto, int idCategoria) async {
+    final conexion = await _conexion;
+
+    try {
+      await conexion.execute(
+        Sql.named('DELETE FROM categorias_productos WHERE id_producto = @id_producto AND id_categoria = @id_categoria'),
+        parameters: {'id_producto': idProducto, 'id_categoria': idCategoria},
+      );
+    } catch (e) {
+      throw DatabaseException('Error al eliminar relacion categoria-producto: $e');
+    }
+  }
+
+  @override
   Future<List<CategoriaEntity>> obtenerCategoriasDeProducto(int idProducto) async {
     final conexion = await _conexion;
 

@@ -50,6 +50,22 @@ class CategoriaService {
     }
   }
 
+  Future<void> asignarAProducto(int idProducto, int idCategoria) async {
+    try {
+      await _categoriaRepository.asignarRelacion(idProducto, idCategoria);
+    } on DatabaseException catch (e) {
+      throw BusinessException('Error al asignar categoria al producto: ${e.mensaje}');
+    }
+  }
+
+  Future<void> eliminarDeProducto(int idProducto, int idCategoria) async {
+    try {
+      await _categoriaRepository.eliminarRelacion(idProducto, idCategoria);
+    } on DatabaseException catch (e) {
+      throw BusinessException('Error al eliminar categoria del producto: ${e.mensaje}');
+    }
+  }
+
   Future<List<CategoriaEntity>> obtenerDeProducto(int idProducto) async {
     try {
       return await _categoriaRepository.obtenerCategoriasDeProducto(idProducto);
