@@ -1,0 +1,189 @@
+import 'package:postgres/postgres.dart';
+import 'package:iventi/shared/utils/PostgresDatasource.dart';
+import 'package:iventi/shared/exceptions/BusinessException.dart';
+import 'package:iventi/shared/exceptions/DatabaseException.dart';
+import 'package:iventi/features/sales/entities/VentaEntity.dart';
+import 'package:iventi/features/sales/entities/DetalleVentaEntity.dart';
+import 'package:iventi/features/sales/dtos/requests/CrearVentaRequest.dart';
+import 'package:iventi/features/sales/enums/EstadoVenta.dart';
+import 'package:iventi/features/sales/repositories/IVentaRepository.dart';
+import 'package:iventi/features/inventory/repositories/IProductoRepository.dart';
+import 'package:iventi/features/inventory/repositories/ILoteRepository.dart';
+import 'package:iventi/features/clients/repositories/IClienteRepository.dart';
+
+class VentaService {
+  final PostgresDatasource _datasource;
+  final IVentaRepository _ventaRepository;
+  final IProductoRepository _productoRepository;
+  final ILoteRepository _loteRepository;
+  final IClienteRepository _clienteRepository;
+
+  VentaService(
+    this._datasource,
+    this._ventaRepository,
+    this._productoRepository,
+    this._loteRepository,
+    this._clienteRepository,
+  );
+
+  Future<VentaEntity> crearVenta(CrearVentaRequest request) async {
+    for (final detalle in request.detalles) {
+      final lote = await _loteRepository.obtenerLotePorId(detalle.idProducto, detalle.idLote);
+
+      if (lote == null) {
+        throw BusinessException('Lote ${detalle.idLote} no encontrado');
+      }
+
+      if (lote.cantidadActual < detalle.cantidad) {
+        throw BusinessException(
+          'Stock insuficiente en lote ${detalle.idLote}: '
+          'disponible ${lote.cantidadActual}, requerido ${detalle.cantidad}',
+        );
+      }
+    }
+
+    try {
+      final venta = await _ventaRepository.crearVenta(request);
+
+      if (request.idCliente != null) {
+        await _clienteRepository.actualizarEstadoDeudor(request.idCliente!);
+      }
+
+      return venta;
+
+    } on DatabaseException catch (e) {
+      throw BusinessException('Error al crear venta: ${e.mensaje}');
+    }
+  }
+
+  Future<VentaEntity?> obtenerVentaPorId(int idVenta) async {
+    try {
+      return await _ventaRepository.obtenerVentaPorId(idVenta);
+
+    } on DatabaseException catch (e) {
+      throw BusinessException('Error al obtener venta: ${e.mensaje}');
+    }
+  }
+
+  Future<List<VentaEntity>> obtenerVentasFiltradas({
+    required int limite,
+    required int offset,
+    bool? esAlContado,
+    DateTime? fechaInicio,
+    DateTime? fechaFinal,
+  }) async {
+    try {
+      return await _ventaRepository.obtenerVentasPorFiltros(
+        limite: limite,
+        offset: offset,
+        esAlContado: esAlContado,
+        fechaInicio: fechaInicio,
+        fechaFinal: fechaFinal,
+      );
+
+    } on DatabaseException catch (e) {
+      throw BusinessException('Error al filtrar ventas: ${e.mensaje}');
+    }
+  }
+
+  Future<List<VentaEntity>> obtenerVentasDeCliente(int idCliente) async {
+    try {
+      return await _ventaRepository.obtenerVentasDeCliente(idCliente);
+
+    } on DatabaseException catch (e) {
+      throw BusinessException('Error al obtener ventas del cliente: ${e.mensaje}');
+    }
+  }
+
+  Future<List<VentaEntity>> obtenerVentasPorFechas(DateTime fechaInicio, DateTime fechaFinal) async {
+    try {
+      return await _ventaRepository.obtenerVentasPorFechas(fechaInicio, fechaFinal);
+
+    } on DatabaseException catch (e) {
+      throw BusinessException('Error al obtener ventas por fechas: ${e.mensaje}');
+    }
+  }
+
+  Future<List<DetalleVentaEntity>> obtenerDetallesDeVenta(int idVenta) async {
+    try {
+      return await _ventaRepository.obtenerDetallesPorVenta(idVenta);
+
+    } on DatabaseException catch (e) {
+      throw BusinessException('Error al obtener detalles de venta: ${e.mensaje}');
+    }
+  }
+
+  Future<void> anularVenta(int idVenta) async {
+    try {
+      final ventaExistente = await _ventaRepository.obtenerVentaPorId(idVenta);
+
+      if (ventaExistente == null) {
+        throw BusinessException('Venta no encontrada');
+      }
+
+      if (ventaExistente.estado == EstadoVenta.ANULADA) {
+        throw BusinessException('La venta ya esta anulada');
+      }
+
+      final conexion = await _datasource.connection;
+
+      try {
+        await conexion.execute('BEGIN');
+
+        final detalles = await _ventaRepository.obtenerDetallesPorVenta(idVenta);
+
+        for (final detalle in detalles) {
+          await conexion.execute(
+            Sql.named(
+              'UPDATE lotes SET cantidad_actual = cantidad_actual + @cantidad, '
+              'actualizado_en = CURRENT_TIMESTAMP WHERE id_lote = @id_lote',
+            ),
+            parameters: {'cantidad': detalle.cantidad, 'id_lote': detalle.idLote},
+          );
+
+          final loteData = await conexion.execute(
+            Sql.named('SELECT id_producto FROM lotes WHERE id_lote = @id_lote'),
+            parameters: {'id_lote': detalle.idLote},
+          );
+
+          final idProducto = loteData.first.toColumnMap()['id_producto'] as int;
+          await _productoRepository.actualizarStockActual(idProducto);
+        }
+
+        await conexion.execute(
+          Sql.named(
+            '''UPDATE ventas SET estado = @estado, actualizado_en = CURRENT_TIMESTAMP WHERE id_venta = @id''',
+          ),
+          parameters: {'estado': EstadoVenta.ANULADA.name, 'id': idVenta},
+        );
+
+        await conexion.execute('COMMIT');
+
+      } catch (e) {
+        await conexion.execute('ROLLBACK');
+
+        if (e is BusinessException) {
+          rethrow;
+        }
+
+        throw DatabaseException('Error al anular venta: $e');
+      }
+
+      if (ventaExistente.idCliente != null) {
+        await _clienteRepository.actualizarEstadoDeudor(ventaExistente.idCliente!);
+      }
+
+    } on DatabaseException catch (e) {
+      throw BusinessException('Error al anular venta: ${e.mensaje}');
+    }
+  }
+
+  Future<int> obtenerCantidadVendidaPorLote(int idLote) async {
+    try {
+      return await _ventaRepository.obtenerCantidadVendidaPorLote(idLote);
+
+    } on DatabaseException catch (e) {
+      throw BusinessException('Error al obtener cantidad vendida: ${e.mensaje}');
+    }
+  }
+}

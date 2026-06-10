@@ -1,1 +1,7 @@
 include: package:flutter_lints/flutter.yaml
+
+linter:
+  rules:
+    file_names: false
+    constant_identifier_names: false
+    camel_case_types: false
