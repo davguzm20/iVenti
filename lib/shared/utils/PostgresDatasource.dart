@@ -11,7 +11,11 @@ class PostgresDatasource {
   int? _ultimoIdUsuario;
 
   Future<Connection> get connection async {
-    if (_connection == null) {
+    if (_connection == null || !await _conexionActiva()) {
+      if (_connection != null) {
+        await _connection!.close();
+        _connection = null;
+      }
       await _initConnection();
     }
     final idUsuario = ServiceLocator.usuarioActualId;
@@ -20,6 +24,15 @@ class PostgresDatasource {
       _ultimoIdUsuario = idUsuario;
     }
     return _connection!;
+  }
+
+  Future<bool> _conexionActiva() async {
+    try {
+      await _connection!.execute('SELECT 1');
+      return true;
+    } catch (_) {
+      return false;
+    }
   }
 
   Future<void> _initConnection() async {
