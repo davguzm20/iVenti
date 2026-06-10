@@ -43,12 +43,20 @@ dev_dependencies:
   mockito: ^5.4.2
   build_runner: ^2.4.6
   patrol: ^4.6.1
+  flutter_launcher_icons: ^0.14.2
 
 flutter:
   uses-material-design: true
   assets: 
     - ".env"
     - ".env.test"
-    - "lib/assets/imagenes/"
     - "lib/assets/iconos/"
     - "lib/shared/utils/messages.arb"
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "lib/assets/iconos/iconoApp.png"
+  adaptive_icon_background: "#FFFFFF"
+  adaptive_icon_foreground: "lib/assets/iconos/iconoApp.png"
+  remove_alpha_ios: true

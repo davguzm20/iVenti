@@ -107,7 +107,7 @@ class _CodeEmailPageState extends State<CodeEmailPage> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Image.asset(
-                    'lib/assets/imagenes/logoTienda.png',
+                    'lib/assets/iconos/iconoApp.png',
                     height: 150,
                     width: 150,
                   ),

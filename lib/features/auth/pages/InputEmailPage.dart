@@ -122,7 +122,7 @@ class _InputEmailBodyState extends State<InputEmailBody> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Image.asset('lib/assets/imagenes/logoTienda.png', height: 130),
+          Image.asset('lib/assets/iconos/iconoApp.png', height: 130),
 
           const SizedBox(height: 20),
 

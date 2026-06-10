@@ -155,7 +155,7 @@ class _CreatePinPageState extends State<CreatePinPage> {
                   SizedBox(
                     height: 150,
                     child: Image.asset(
-                      'lib/assets/imagenes/logoTienda.png',
+                      'lib/assets/iconos/iconoApp.png',
                       fit: BoxFit.contain,
                     ),
                   ),

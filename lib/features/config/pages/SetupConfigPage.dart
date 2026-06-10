@@ -169,7 +169,7 @@ class _SetupConfigPageState extends State<SetupConfigPage> {
               const SizedBox(height: 50),
 
               Image.asset(
-                'lib/assets/imagenes/logoTienda.png',
+                'lib/assets/iconos/iconoApp.png',
                 height: 150,
                 fit: BoxFit.contain,
               ),

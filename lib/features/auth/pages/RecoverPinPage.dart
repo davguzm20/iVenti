@@ -126,7 +126,7 @@ class _RecoverPinPageState extends State<RecoverPinPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Image.asset('lib/assets/imagenes/logoTienda.png',
+                  Image.asset('lib/assets/iconos/iconoApp.png',
                       height: 150, width: 150),
 
                   const SizedBox(height: 30),

@@ -18,7 +18,7 @@ class WelcomePage extends StatelessWidget {
             children: [
               const SizedBox(height: 80),
 
-              Image.asset('lib/assets/imagenes/logoTienda.png', height: 180),
+              Image.asset('lib/assets/iconos/iconoApp.png', height: 180),
 
               const SizedBox(height: 40),
 
