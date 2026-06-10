@@ -102,58 +102,54 @@ class _SalesPageState extends State<SalesPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: AnimatedContainer(
-          duration: const Duration(milliseconds: 150),
-          width: isSearching ? MediaQuery.of(context).size.width - 32 : 150,
-          child: isSearching
-              ? TextField(
-                  controller: _searchController,
-                  autofocus: true,
-                  decoration: InputDecoration(
-                    hintText: "Buscar venta...",
-                    prefixIcon: const Icon(Icons.search),
-                    suffixIcon: IconButton(
-                      icon: const Icon(Icons.close),
-                      onPressed: () {
-                        _searchController.clear();
-                        setState(() { isSearching = false; });
-                        _cargarVentas(reiniciar: true);
-                      },
-                    ),
-                    contentPadding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                      borderSide: BorderSide.none,
-                    ),
-                    filled: true,
-                    fillColor: Colors.white.withValues(alpha: 0.2),
+        title: isSearching
+            ? TextField(
+                controller: _searchController,
+                autofocus: true,
+                decoration: InputDecoration(
+                  hintText: "Buscar venta...",
+                  prefixIcon: const Icon(Icons.search),
+                  suffixIcon: IconButton(
+                    icon: const Icon(Icons.close),
+                    onPressed: () {
+                      _searchController.clear();
+                      setState(() { isSearching = false; });
+                      _cargarVentas(reiniciar: true);
+                    },
                   ),
-                  onChanged: (value) {
-                    _searchTimer?.cancel();
-                    _searchTimer = Timer(const Duration(milliseconds: 300), () {
-                      if (value.isEmpty) {
-                        _cargarVentas(reiniciar: true);
-                        return;
-                      }
-                      setState(() {
-                        ventas = ventas.where((v) =>
-                          '${v.idVenta}'.contains(value) ||
-                          v.montoTotal.toString().contains(value) ||
-                          (v.esCredito ? 'credito' : 'contado').contains(value.toLowerCase())
-                        ).toList();
-                      });
-                    });
-                  },
-                )
-              : FittedBox(
-                  fit: BoxFit.scaleDown,
-                  alignment: Alignment.centerLeft,
-                  child: const Text(
-                    "Mis ventas",
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  contentPadding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: BorderSide.none,
                   ),
+                  filled: true,
+                  fillColor: Colors.white.withValues(alpha: 0.2),
                 ),
-        ),
+                onChanged: (value) {
+                  _searchTimer?.cancel();
+                  _searchTimer = Timer(const Duration(milliseconds: 300), () {
+                    if (value.isEmpty) {
+                      _cargarVentas(reiniciar: true);
+                      return;
+                    }
+                    setState(() {
+                      ventas = ventas.where((v) =>
+                        '${v.idVenta}'.contains(value) ||
+                        v.montoTotal.toString().contains(value) ||
+                        (v.esCredito ? 'credito' : 'contado').contains(value.toLowerCase())
+                      ).toList();
+                    });
+                  });
+                },
+              )
+            : const FittedBox(
+                fit: BoxFit.scaleDown,
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  "Mis ventas",
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+              ),
         actions: [
           AnimatedContainer(
             duration: const Duration(milliseconds: 200),
