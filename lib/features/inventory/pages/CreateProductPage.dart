@@ -62,6 +62,9 @@ class _CreateProductPageState extends State<CreateProductPage> {
       setState(() {
         categoriasDisponibles = cats;
         unidadesDisponibles = unis;
+        if (unidadSeleccionada == null && unis.isNotEmpty) {
+          unidadSeleccionada = unis.first;
+        }
       });
     }
   }

@@ -14,6 +14,8 @@ import 'package:iventi/features/inventory/pages/InventoryPage.dart';
 import 'package:iventi/features/inventory/pages/CreateProductPage.dart';
 import 'package:iventi/features/inventory/pages/FilterProductsPage.dart';
 import 'package:iventi/features/inventory/pages/ProductPage.dart';
+import 'package:iventi/features/inventory/pages/ImagePickerPage.dart';
+import 'package:iventi/features/inventory/pages/BarcodeScannerPage.dart';
 import 'package:iventi/features/sales/pages/SalesPage.dart';
 import 'package:iventi/features/sales/pages/CreateSalePage.dart';
 import 'package:iventi/features/sales/pages/FilterSalesPage.dart';
@@ -254,6 +256,16 @@ class AppRoutes {
             ],
           ),
         ],
+      ),
+      GoRoute(
+        path: '/image-picker',
+        parentNavigatorKey: rootNavigatorKey,
+        builder: (context, state) => const ImagePickerPage(),
+      ),
+      GoRoute(
+        path: '/barcode-scanner',
+        parentNavigatorKey: rootNavigatorKey,
+        builder: (context, state) => const BarcodeScannerPage(),
       ),
     ],
   );
