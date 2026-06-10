@@ -12,7 +12,7 @@ void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
   setUpAll(() async {
-    await dotenv.load(fileName: '.env.test');
+    await dotenv.load(fileName: ".env.test");
     await PostgresDatasource().connection;
   });
 
@@ -83,13 +83,12 @@ void main() {
       },
     );
 
-    await app.main(envFile: '.env.test');
+    await app.main(envFile: ".env.test");
     await tester.pump();
     await tester.runAsync(() => Future.delayed(const Duration(seconds: 3)));
     await tester.pump();
 
-    // ===== LOGIN =====
-    expect(find.text('Iniciar sesion'), findsOneWidget);
+    expect(find.text('Iniciar sesi\u00f3n'), findsOneWidget);
 
     final pinField = find.byType(EditableText).first;
     final pinState = tester.state<EditableTextState>(pinField);
@@ -110,10 +109,8 @@ void main() {
       await tester.pump(const Duration(milliseconds: 200));
     }
 
-    // ===== INVENTORY PAGE =====
     expect(find.text('Mis productos'), findsOneWidget);
 
-    // Navigate to Config tab
     await tester.tap(find.text('Configuraciones'));
     await tester.pump();
     await tester.runAsync(() => Future.delayed(const Duration(seconds: 3)));
@@ -121,7 +118,6 @@ void main() {
       await tester.pump(const Duration(milliseconds: 200));
     }
 
-    // Tap bell icon to go to notifications
     await tester.tap(find.byIcon(Icons.notifications_active_outlined));
     await tester.pump();
     await tester.runAsync(() => Future.delayed(const Duration(seconds: 3)));
@@ -129,21 +125,17 @@ void main() {
       await tester.pump(const Duration(milliseconds: 200));
     }
 
-    // ===== NOTIFICATIONS PAGE =====
     expect(find.text('Notificaciones'), findsOneWidget);
 
-    // Wait for notificaciones to load
     await tester.runAsync(() => Future.delayed(const Duration(seconds: 3)));
     for (int i = 0; i < 10; i++) {
       await tester.pump(const Duration(milliseconds: 200));
     }
 
-    // Verify notifications are loaded
     expect(find.text('E2E Stock bajo'), findsOneWidget);
     expect(find.text('E2E Proximo a vencer'), findsOneWidget);
     expect(find.text('E2E Producto agotado'), findsOneWidget);
 
-    // Delete one notification (tap delete icon on first notification)
     await tester.tap(find.byIcon(Icons.delete).first);
     await tester.pump();
     await tester.runAsync(() => Future.delayed(const Duration(seconds: 2)));
@@ -151,10 +143,16 @@ void main() {
       await tester.pump(const Duration(milliseconds: 200));
     }
 
-    // Deleted notification should be gone (the first one was "E2E Stock bajo")
     expect(find.text('E2E Stock bajo'), findsNothing);
 
-    // Mark all as read
+    await tester.tap(find.byIcon(Icons.done).first);
+    await tester.pump();
+    await tester.runAsync(() => Future.delayed(const Duration(seconds: 2)));
+    for (int i = 0; i < 10; i++) {
+      await tester.pump(const Duration(milliseconds: 200));
+    }
+    expect(find.byIcon(Icons.done), findsNothing);
+
     await tester.tap(find.byIcon(Icons.checklist));
     await tester.pump();
     await tester.runAsync(() => Future.delayed(const Duration(seconds: 2)));
@@ -162,10 +160,8 @@ void main() {
       await tester.pump(const Duration(milliseconds: 200));
     }
 
-    // No "done" icons should be visible (all read)
     expect(find.byIcon(Icons.done), findsNothing);
 
-    // Clear all history
     await tester.tap(find.byIcon(Icons.delete_forever));
     await tester.pump();
     await tester.runAsync(() => Future.delayed(const Duration(seconds: 2)));
@@ -173,10 +169,8 @@ void main() {
       await tester.pump(const Duration(milliseconds: 200));
     }
 
-    // Empty state
     expect(find.text('No hay notificaciones'), findsOneWidget);
 
-    // Back to ConfigPage
     await tester.tap(find.byIcon(Icons.arrow_back));
     await tester.pump();
     await tester.runAsync(() => Future.delayed(const Duration(seconds: 2)));
@@ -184,6 +178,6 @@ void main() {
       await tester.pump(const Duration(milliseconds: 200));
     }
 
-    expect(find.text('Configuracion'), findsOneWidget);
+    expect(find.text('Configuraci\u00f3n'), findsOneWidget);
   }, timeout: const Timeout(Duration(seconds: 180)));
 }

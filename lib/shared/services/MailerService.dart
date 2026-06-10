@@ -14,6 +14,7 @@ class MailerResult {
 class MailerService {
   String _addressSendEmail = '';
   String _passwordSendEmail = '';
+  static String? testCodigoFijo;
 
   MailerService() {
     _addressSendEmail = dotenv.env['SMTP_EMAIL'] ?? '';
@@ -24,12 +25,21 @@ class MailerService {
       _addressSendEmail.isNotEmpty && _passwordSendEmail.isNotEmpty;
 
   String generarCodigoVerificacion() {
+    if (testCodigoFijo != null) return testCodigoFijo!;
     final random = Random();
     return (random.nextInt(900000) + 100000).toString();
   }
 
   Future<MailerResult> enviarCodigo(String destinatario) async {
     final codigo = generarCodigoVerificacion();
+
+    if (testCodigoFijo != null) {
+      return MailerResult(
+        enviado: true,
+        codigo: codigo,
+        error: null,
+      );
+    }
 
     if (!tieneCredenciales) {
       return MailerResult(

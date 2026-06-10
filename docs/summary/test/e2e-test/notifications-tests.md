@@ -5,7 +5,7 @@
 ### 1.1. Salida de Consola
 
 ```
-notifications/notifications_test.dart:   01:29 +3: All tests passed!
+notifications/notifications_test.dart:   01:48 +3: All tests passed!
 ```
 
 ### 1.2. Resumen de Resultados
@@ -43,6 +43,7 @@ Cada flujo de prueba contiene casos individuales que verifican comportamientos e
 | Navegar a notificaciones | Se accede a notificaciones mediante el icono de campana | Happy Path | OK |
 | Listar notificaciones | Se muestran las 3 notificaciones de prueba insertadas | Happy Path | OK |
 | Eliminar notificacion | Se elimina una notificacion individual. La notificacion desaparece de la lista | Happy Path | OK |
+| Marcar notificacion individual como leida | Se toca el icono de leida en una notificacion no leida. La notificacion se marca como leida | Happy Path | OK |
 | Marcar todo como leido | Se marcan todas las notificaciones como leidas. Los iconos de no leidas desaparecen | Happy Path | OK |
 | Limpiar historial | Se eliminan todas las notificaciones. Se muestra "No hay notificaciones" | Happy Path | OK |
 | Retroceder a configuracion | Se regresa a configuracion mediante el boton de retroceso | Happy Path | OK |
@@ -55,7 +56,7 @@ Cada flujo de prueba contiene casos individuales que verifican comportamientos e
 
 ## 4. Interpretacion
 
-Se cubre el flujo completo de notificaciones: login, navegacion, listado, eliminacion individual, marcado como leido, limpieza total y retorno a configuracion. Se insertaron 3 notificaciones de prueba (STOCK_BAJO, PROXIMO_VENCER, STOCK_AGOTADO) con diferentes estados de leida para verificar el comportamiento correcto.
+Se cubre el flujo completo de notificaciones: login, navegacion, listado, eliminacion individual, marcado como leido individual, marcado global como leido, limpieza total y retorno a configuracion. Se insertaron 3 notificaciones de prueba (STOCK_BAJO, PROXIMO_VENCER, STOCK_AGOTADO) con diferentes estados de leida para verificar el comportamiento correcto.
 
 ## 5. Conclusiones
 
