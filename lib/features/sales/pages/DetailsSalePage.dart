@@ -35,26 +35,36 @@ class _DetailsSalePageState extends State<DetailsSalePage> {
   }
 
   Future<void> _obtenerDatos() async {
-    final v = await _ventaController.obtenerVentaPorId(widget.idVenta);
+    try {
+      final v = await _ventaController.obtenerVentaPorId(widget.idVenta);
 
-    if (v != null) {
-      final d = await _ventaController.obtenerDetallesDeVenta(widget.idVenta);
+      if (v != null) {
+        final d = await _ventaController.obtenerDetallesDeVenta(widget.idVenta);
 
-      if (mounted) {
-        setState(() {
-          venta = v;
-          detalles = d;
-        });
+        if (mounted) {
+          setState(() {
+            venta = v;
+            detalles = d;
+          });
+        }
+
+      } else {
+        if (!mounted) return;
+        final (title, desc) = DialogMessages.ventas.ventaNoEncontrada;
+        ErrorDialog(
+          context: context,
+          title: title,
+          description: desc,
+        );
       }
-
-    } else {
-      if (!mounted) return;
-      final (title, desc) = DialogMessages.ventas.ventaNoEncontrada;
-      ErrorDialog(
-        context: context,
-        title: title,
-        description: desc,
-      );
+    } catch (e) {
+      if (mounted) {
+        ErrorDialog(
+          context: context,
+          title: 'Error',
+          description: 'No se pudieron obtener los datos de la venta',
+        );
+      }
     }
   }
 

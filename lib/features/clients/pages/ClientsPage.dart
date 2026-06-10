@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:iventi/features/clients/entities/ClienteEntity.dart';
 import 'package:iventi/features/clients/controllers/ClienteController.dart';
 import 'package:iventi/features/clients/widgets/ClientCard.dart';
+import 'package:iventi/shared/widgets/ErrorDialog.dart';
 
 class ClientsPage extends StatefulWidget {
   const ClientsPage({super.key});
@@ -54,26 +55,33 @@ class _ClientsPageState extends State<ClientsPage> {
 
     setState(() => isLoading = true);
 
-    final nuevos = await _clienteController.obtenerFiltrados(
-      limite: 50,
-      offset: cantidadCargas * 50,
-      esDeudor: esDeudor,
-    );
+    try {
+      final nuevos = await _clienteController.obtenerFiltrados(
+        limite: 50,
+        offset: cantidadCargas * 50,
+        esDeudor: esDeudor,
+      );
 
-    if (mounted) {
-      setState(() {
-        if (reiniciar) {
-          clientes = nuevos;
-        } else {
-          clientes.addAll(nuevos);
-        }
-        if (nuevos.isNotEmpty) {
-          cantidadCargas++;
-        } else {
-          hayMasCargas = false;
-        }
-        isLoading = false;
-      });
+      if (mounted) {
+        setState(() {
+          if (reiniciar) {
+            clientes = nuevos;
+          } else {
+            clientes.addAll(nuevos);
+          }
+          if (nuevos.isNotEmpty) {
+            cantidadCargas++;
+          } else {
+            hayMasCargas = false;
+          }
+          isLoading = false;
+        });
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() => isLoading = false);
+        ErrorDialog(context: context, title: 'Error', description: 'No se pudieron cargar los clientes');
+      }
     }
   }
 
@@ -81,8 +89,12 @@ class _ClientsPageState extends State<ClientsPage> {
     if (_searchTimer?.isActive ?? false) _searchTimer!.cancel();
     _searchTimer = Timer(const Duration(milliseconds: 300), () async {
       if (nombre.isEmpty) { _cargarClientes(reiniciar: true); return; }
-      final filtrados = await _clienteController.buscarPorNombre(nombre);
-      setState(() => clientes = filtrados);
+      try {
+        final filtrados = await _clienteController.buscarPorNombre(nombre);
+        if (mounted) setState(() => clientes = filtrados);
+      } catch (e) {
+        if (mounted) ErrorDialog(context: context, title: 'Error', description: 'No se pudieron buscar los clientes');
+      }
     });
   }
 

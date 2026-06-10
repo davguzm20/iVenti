@@ -7,6 +7,7 @@ import 'package:go_router/go_router.dart';
 import 'package:iventi/features/sales/controllers/VentaController.dart';
 import 'package:iventi/features/sales/entities/VentaEntity.dart';
 import 'package:iventi/features/sales/widgets/SaleCard.dart';
+import 'package:iventi/shared/widgets/ErrorDialog.dart';
 
 class SalesPage extends StatefulWidget {
   const SalesPage({super.key});
@@ -56,28 +57,35 @@ class _SalesPageState extends State<SalesPage> {
 
     setState(() => isLoading = true);
 
-    final nuevas = await _ventaController.obtenerVentasFiltradas(
-      limite: 50,
-      offset: cantidadCargas * 50,
-      esAlContado: esAlContado,
-      fechaInicio: fechaInicio,
-      fechaFinal: fechaFinal,
-    );
+    try {
+      final nuevas = await _ventaController.obtenerVentasFiltradas(
+        limite: 50,
+        offset: cantidadCargas * 50,
+        esAlContado: esAlContado,
+        fechaInicio: fechaInicio,
+        fechaFinal: fechaFinal,
+      );
 
-    if (mounted) {
-      setState(() {
-        if (reiniciar) {
-          ventas = nuevas;
-        } else {
-          ventas.addAll(nuevas);
-        }
-        if (nuevas.isNotEmpty) {
-          cantidadCargas++;
-        } else {
-          hayMasCargas = false;
-        }
-        isLoading = false;
-      });
+      if (mounted) {
+        setState(() {
+          if (reiniciar) {
+            ventas = nuevas;
+          } else {
+            ventas.addAll(nuevas);
+          }
+          if (nuevas.isNotEmpty) {
+            cantidadCargas++;
+          } else {
+            hayMasCargas = false;
+          }
+          isLoading = false;
+        });
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() => isLoading = false);
+        ErrorDialog(context: context, title: 'Error', description: 'No se pudieron cargar las ventas');
+      }
     }
   }
 
@@ -108,16 +116,11 @@ class _SalesPageState extends State<SalesPage> {
                       icon: const Icon(Icons.close),
                       onPressed: () {
                         _searchController.clear();
-
-                        setState(() {
-                          isSearching = false;
-                        });
-
+                        setState(() { isSearching = false; });
                         _cargarVentas(reiniciar: true);
                       },
                     ),
-                    contentPadding:
-                        const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+                    contentPadding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8),
                       borderSide: BorderSide.none,
@@ -142,9 +145,13 @@ class _SalesPageState extends State<SalesPage> {
                     });
                   },
                 )
-              : const Text(
-                  "Mis ventas",
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              : FittedBox(
+                  fit: BoxFit.scaleDown,
+                  alignment: Alignment.centerLeft,
+                  child: const Text(
+                    "Mis ventas",
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
                 ),
         ),
         actions: [

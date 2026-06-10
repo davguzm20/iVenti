@@ -37,14 +37,24 @@ class _DetailsClientPageState extends State<DetailsClientPage> {
   }
 
   Future<void> _cargarDatos() async {
-    final c = await _clienteController.obtenerClientePorId(widget.idCliente);
-    final v = await _ventaController.obtenerVentasDeCliente(widget.idCliente);
+    try {
+      final c = await _clienteController.obtenerClientePorId(widget.idCliente);
+      final v = await _ventaController.obtenerVentasDeCliente(widget.idCliente);
 
-    if (mounted) {
-      setState(() {
-        cliente = c;
-        ventasCliente = v;
-      });
+      if (mounted) {
+        setState(() {
+          cliente = c;
+          ventasCliente = v;
+        });
+      }
+    } catch (e) {
+      if (mounted) {
+        ErrorDialog(
+          context: context,
+          title: 'Error',
+          description: 'No se pudieron cargar los datos del cliente',
+        );
+      }
     }
   }
 
@@ -217,6 +227,7 @@ class _DetailsClientPageState extends State<DetailsClientPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: const BackButton(),
         title: Text(
           cliente?.nombres ?? "---",
           style: const TextStyle(color: Colors.black),
