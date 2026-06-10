@@ -9,7 +9,7 @@ abstract class IVentaRepository {
     required int limite, required int offset,
     bool? esAlContado, DateTime? fechaInicio, DateTime? fechaFinal,
   });
-  Future<List<VentaEntity>> obtenerVentasDeCliente(int idCliente, {bool esAlContado = false});
+  Future<List<VentaEntity>> obtenerVentasDeCliente(int idCliente, {bool? esAlContado});
   Future<List<VentaEntity>> obtenerVentasPorFechas(DateTime fechaInicio, DateTime fechaFinal);
   Future<List<DetalleVentaEntity>> obtenerDetallesPorVenta(int idVenta);
   Future<void> anularVenta(int idVenta);

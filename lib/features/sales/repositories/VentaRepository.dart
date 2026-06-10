@@ -171,13 +171,22 @@ class VentaRepository implements IVentaRepository {
   }
 
   @override
-  Future<List<VentaEntity>> obtenerVentasDeCliente(int idCliente, {bool esAlContado = false}) async {
+  Future<List<VentaEntity>> obtenerVentasDeCliente(int idCliente, {bool? esAlContado}) async {
     final conexion = await _conexion;
 
     try {
+      String query = 'SELECT * FROM ventas WHERE id_cliente = @id_cliente';
+      final params = <String, dynamic>{'id_cliente': idCliente};
+
+      if (esAlContado != null) {
+        query += ' AND es_credito = @es_credito';
+        params['es_credito'] = esAlContado;
+      }
+      query += ' ORDER BY vendido_en ASC';
+
       final ventasEncontradas = await conexion.execute(
-        Sql.named('SELECT * FROM ventas WHERE id_cliente = @id_cliente AND es_credito = @es_credito ORDER BY vendido_en ASC'),
-        parameters: {'id_cliente': idCliente, 'es_credito': esAlContado},
+        Sql.named(query),
+        parameters: params,
       );
 
       return ventasEncontradas
@@ -243,7 +252,7 @@ class VentaRepository implements IVentaRepository {
     try {
       await conexion.execute('BEGIN');
 
-      final ventasPendientes = await obtenerVentasDeCliente(idCliente, esAlContado: true);
+      final ventasPendientes = await obtenerVentasDeCliente(idCliente);
 
       if (ventasPendientes.isEmpty) {
         await conexion.execute('ROLLBACK');

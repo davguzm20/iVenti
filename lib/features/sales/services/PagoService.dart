@@ -84,7 +84,7 @@ class PagoService {
       try {
         await conexion.execute('BEGIN');
 
-        final ventas = await _ventaRepository.obtenerVentasDeCliente(idCliente, esAlContado: true);
+        final ventas = await _ventaRepository.obtenerVentasDeCliente(idCliente);
 
         if (ventas.isEmpty) {
           await conexion.execute('ROLLBACK');

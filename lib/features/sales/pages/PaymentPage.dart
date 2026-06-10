@@ -366,7 +366,7 @@ class _PaymentPageState extends State<PaymentPage> {
                 await _ventaController.crearVenta(
                   CrearVentaRequest(
                     idCliente: idCliente,
-                    idUsuario: 1,
+                    idUsuario: ServiceLocator.usuarioActualId!,
                     montoTotal: _calcularTotalVenta(),
                     montoCancelado:
                         esAlContado ? _calcularTotalVenta() : cantidadRecibida,
