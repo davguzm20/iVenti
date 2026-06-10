@@ -31,43 +31,32 @@ class ProductCard extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              ClipRRect(
+                borderRadius: BorderRadius.circular(8),
+                child: SizedBox(
+                  width: double.infinity,
+                  height: 180,
+                  child: (imagen != null && imagen.isNotEmpty)
+                      ? Image.network(imagen, fit: BoxFit.contain, errorBuilder: (_, __, ___) => Image.asset('lib/assets/iconos/iconoImagen.png', fit: BoxFit.contain))
+                      : Image.asset('lib/assets/iconos/iconoImagen.png', fit: BoxFit.contain),
+                ),
+              ),
+              const SizedBox(height: 12),
+              Text(
+                product.nombre,
+                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+              const SizedBox(height: 4),
               Row(
                 children: [
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(8),
-                      child: SizedBox(
-                      width: 60,
-                      height: 60,
-                      child: (imagen != null && imagen.isNotEmpty)
-                          ? Image.network(imagen, fit: BoxFit.contain, errorBuilder: (_, __, ___) => Image.asset('lib/assets/iconos/iconoImagen.png', fit: BoxFit.contain))
-                          : Image.asset('lib/assets/iconos/iconoImagen.png', fit: BoxFit.contain),
-                    ),
+                  Text('S/ ${product.precio.toStringAsFixed(2)}',
+                    style: const TextStyle(fontSize: 14, color: Colors.green, fontWeight: FontWeight.bold),
                   ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          product.nombre,
-                          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        const SizedBox(height: 4),
-                        Row(
-                          children: [
-                            Text('S/ ${product.precio.toStringAsFixed(2)}',
-                              style: const TextStyle(fontSize: 14, color: Colors.green, fontWeight: FontWeight.bold),
-                            ),
-                            const Spacer(),
-                            Text('Stock: ${product.stockActual}',
-                              style: TextStyle(fontSize: 12, color: hasLowStock ? Colors.red : Colors.grey.shade600),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
+                  const Spacer(),
+                  Text('Stock: ${product.stockActual}',
+                    style: TextStyle(fontSize: 12, color: hasLowStock ? Colors.red : Colors.grey.shade600),
                   ),
                   if (hasLowStock)
                     Container(
@@ -81,23 +70,6 @@ class ProductCard extends StatelessWidget {
                         style: TextStyle(color: Colors.red.shade900, fontSize: 12, fontWeight: FontWeight.bold),
                       ),
                     ),
-                ],
-              ),
-              if (product.codigo != null && product.codigo!.isNotEmpty)
-                Padding(
-                  padding: const EdgeInsets.only(top: 8),
-                  child: Text('Codigo: ${product.codigo}',
-                    style: TextStyle(color: Colors.grey.shade600, fontSize: 14),
-                  ),
-                ),
-              const SizedBox(height: 8),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  if (onEdit != null)
-                    IconButton(icon: const Icon(Icons.edit, size: 20), onPressed: onEdit, tooltip: 'Editar'),
-                  if (onDelete != null)
-                    IconButton(icon: const Icon(Icons.delete, size: 20, color: Colors.red), onPressed: onDelete, tooltip: 'Eliminar'),
                 ],
               ),
             ],
