@@ -35,12 +35,12 @@ class ProductCard extends StatelessWidget {
                 children: [
                   ClipRRect(
                     borderRadius: BorderRadius.circular(8),
-                    child: SizedBox(
+                      child: SizedBox(
                       width: 60,
                       height: 60,
-                      child: imagen != null
-                          ? Image.network(imagen, fit: BoxFit.cover, errorBuilder: (_, __, ___) => Image.asset('lib/assets/iconos/iconoImagen.png', fit: BoxFit.cover))
-                          : Image.asset('lib/assets/iconos/iconoImagen.png', fit: BoxFit.cover),
+                      child: (imagen != null && imagen.isNotEmpty)
+                          ? Image.network(imagen, fit: BoxFit.contain, errorBuilder: (_, __, ___) => Image.asset('lib/assets/iconos/iconoImagen.png', fit: BoxFit.contain))
+                          : Image.asset('lib/assets/iconos/iconoImagen.png', fit: BoxFit.contain),
                     ),
                   ),
                   const SizedBox(width: 12),

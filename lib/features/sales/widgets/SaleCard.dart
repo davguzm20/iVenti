@@ -96,9 +96,12 @@ class SaleCard extends StatelessWidget {
               ),
               const SizedBox(width: 12),
               if (onDetails != null)
-                ElevatedButton(
-                  onPressed: onDetails,
-                  child: const Text("Detalles"),
+                Flexible(
+                  fit: FlexFit.loose,
+                  child: ElevatedButton(
+                    onPressed: onDetails,
+                    child: const Text("Detalles"),
+                  ),
                 ),
             ],
           ),

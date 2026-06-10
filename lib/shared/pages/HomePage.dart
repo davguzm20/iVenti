@@ -34,60 +34,37 @@ class _HomePageState extends State<HomePage> {
       },
       child: Scaffold(
         body: widget.navigationShell,
-        bottomNavigationBar: SizedBox(
-          height: 100,
-          child: BottomNavigationBar(
-            showUnselectedLabels: true,
-            selectedLabelStyle: const TextStyle(color: Colors.black),
-            unselectedLabelStyle: const TextStyle(color: Colors.black),
-            unselectedItemColor: Colors.black,
-            selectedItemColor: Colors.black,
-            backgroundColor: AppColors.primary,
-            currentIndex: widget.navigationShell.currentIndex,
-            onTap: _goBranch,
-            items: [
-              BottomNavigationBarItem(
-                icon: Image.asset(
-                  "lib/assets/iconos/iconoInventario.png",
-                  width: 30,
-                  height: 30,
-                ),
-                label: "Inventario",
-              ),
-              BottomNavigationBarItem(
-                icon: Image.asset(
-                  "lib/assets/iconos/iconoVentas.png",
-                  width: 30,
-                  height: 30,
-                ),
-                label: "Ventas",
-              ),
-              BottomNavigationBarItem(
-                icon: Image.asset(
-                  "lib/assets/iconos/iconoClientes.png",
-                  width: 30,
-                  height: 30,
-                ),
-                label: "Clientes",
-              ),
-              BottomNavigationBarItem(
-                icon: Image.asset(
-                  "lib/assets/iconos/iconoReportes.png",
-                  width: 30,
-                  height: 30,
-                ),
-                label: "Reportes",
-              ),
-              BottomNavigationBarItem(
-                icon: Image.asset(
-                  "lib/assets/iconos/iconoConfiguraciones.png",
-                  width: 30,
-                  height: 30,
-                ),
-                label: "Configuraciones",
-              ),
-            ],
-          ),
+        bottomNavigationBar: BottomNavigationBar(
+          showUnselectedLabels: true,
+          selectedLabelStyle: const TextStyle(color: Colors.black, overflow: TextOverflow.ellipsis),
+          unselectedLabelStyle: const TextStyle(color: Colors.black, overflow: TextOverflow.ellipsis),
+          unselectedItemColor: Colors.black,
+          selectedItemColor: Colors.black,
+          backgroundColor: AppColors.primary,
+          currentIndex: widget.navigationShell.currentIndex,
+          onTap: _goBranch,
+          items: [
+            BottomNavigationBarItem(
+              icon: const Icon(Icons.inventory_2),
+              label: "Inventario",
+            ),
+            BottomNavigationBarItem(
+              icon: const Icon(Icons.point_of_sale),
+              label: "Ventas",
+            ),
+            BottomNavigationBarItem(
+              icon: const Icon(Icons.people),
+              label: "Clientes",
+            ),
+            BottomNavigationBarItem(
+              icon: const Icon(Icons.assessment),
+              label: "Reportes",
+            ),
+            BottomNavigationBarItem(
+              icon: const Icon(Icons.settings),
+              label: "Configuraciones",
+            ),
+          ],
         ),
       ),
     );
