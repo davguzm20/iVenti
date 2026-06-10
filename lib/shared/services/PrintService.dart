@@ -315,9 +315,46 @@ class PrintService {
     return file.path;
   }
 
-  static Future<void> sharePDF(BuildContext context, String path) async {
+  static Future<String> generarReportePDF({
+    required String titulo,
+    required List<String> headers,
+    required List<List<String>> data,
+  }) async {
+    final pdf = pw.Document();
+    pdf.addPage(
+      pw.MultiPage(
+        pageFormat: PdfPageFormat.a4,
+        build: (context) => [
+          pw.Header(
+            level: 0,
+            child: pw.Text('Multiservicios Golden',
+                style: pw.TextStyle(fontSize: 18, fontWeight: pw.FontWeight.bold)),
+          ),
+          pw.SizedBox(height: 8),
+          pw.Text(titulo,
+              style: pw.TextStyle(fontSize: 14, fontWeight: pw.FontWeight.bold)),
+          pw.SizedBox(height: 4),
+          pw.Text('Generado: ${DateTime.now().toString().split('.')[0]}',
+              style: const pw.TextStyle(fontSize: 10)),
+          pw.SizedBox(height: 12),
+          pw.TableHelper.fromTextArray(
+            border: pw.TableBorder.all(),
+            headerStyle: pw.TextStyle(fontWeight: pw.FontWeight.bold),
+            headers: headers,
+            data: data,
+          ),
+        ],
+      ),
+    );
+    final dir = await getTemporaryDirectory();
+    final file = File('${dir.path}/reporte_${DateTime.now().millisecondsSinceEpoch}.pdf');
+    await file.writeAsBytes(await pdf.save());
+    return file.path;
+  }
+
+  static Future<void> sharePDF(BuildContext context, String path, {String mensaje = 'Aqui tienes el PDF'}) async {
     try {
-      final mensaje = 'Aqui tienes la boleta de venta';
+      await Share.shareXFiles([XFile(path)], text: mensaje);
       await Share.shareXFiles([XFile(path)], text: mensaje);
     } catch (e) {
       if (context.mounted) {

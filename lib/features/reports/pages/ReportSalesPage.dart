@@ -5,6 +5,7 @@ import 'package:iventi/shared/theme/ButtonStyles.dart';
 import 'package:iventi/features/reports/controllers/ReportController.dart';
 import 'package:iventi/features/reports/dtos/requests/ReporteVentasRequest.dart';
 import 'package:iventi/features/reports/widgets/DateRangePicker.dart';
+import 'package:go_router/go_router.dart';
 
 class ReportSalesPage extends StatefulWidget {
   const ReportSalesPage({super.key});
@@ -37,9 +38,19 @@ class _ReportSalesPageState extends State<ReportSalesPage> {
       );
       final data = await _controller.generarVentas(request);
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Reporte generado: ${data.length} ventas encontradas")),
-      );
+      if (!context.mounted) return;
+      context.push('/report-results', extra: {
+        'titulo': 'Reporte Detallado de Ventas',
+        'headers': ['Codigo', 'Cliente', 'Fecha', 'Monto Total', 'Cancelado', 'Tipo'],
+        'data': data.map((v) => [
+          v.codigoBoleta,
+          v.cliente,
+          v.fecha.toIso8601String().split('T')[0],
+          v.montoTotal.toStringAsFixed(2),
+          v.montoCancelado.toStringAsFixed(2),
+          v.tipo,
+        ]).toList(),
+      });
     } catch (e) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(

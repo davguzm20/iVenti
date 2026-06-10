@@ -4,6 +4,7 @@ import 'package:iventi/shared/theme/AppColors.dart';
 import 'package:iventi/shared/theme/ButtonStyles.dart';
 import 'package:iventi/features/reports/controllers/ReportController.dart';
 import 'package:iventi/features/reports/dtos/requests/ReporteLotesRequest.dart';
+import 'package:go_router/go_router.dart';
 
 class ReportLotesPage extends StatefulWidget {
   const ReportLotesPage({super.key});
@@ -36,9 +37,17 @@ class _ReportLotesPageState extends State<ReportLotesPage> {
       );
       final data = await _controller.generarLotes(request);
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Reporte generado: ${data.length} lotes encontrados")),
-      );
+      if (!context.mounted) return;
+      context.push('/report-results', extra: {
+        'titulo': 'Reporte de Lotes',
+        'headers': ['Producto', 'Cant. Actual', 'Cant. Comprada', 'Vencimiento'],
+        'data': data.map((l) => [
+          l.producto,
+          '${l.cantidadActual}',
+          '${l.cantidadComprada}',
+          l.fechaVencimiento?.toIso8601String().split('T')[0] ?? '---',
+        ]).toList(),
+      });
     } catch (e) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(

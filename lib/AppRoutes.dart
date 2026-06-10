@@ -34,6 +34,7 @@ import 'package:iventi/features/reports/pages/ReportLotesPage.dart';
 import 'package:iventi/features/reports/pages/ReportFechaVencimientoPage.dart';
 import 'package:iventi/shared/pages/HomePage.dart';
 import 'package:iventi/shared/pages/PDFViewerPage.dart';
+import 'package:iventi/shared/pages/ReportResultsPage.dart';
 
 final GlobalKey<NavigatorState> rootNavigatorKey = GlobalKey<NavigatorState>();
 
@@ -272,6 +273,18 @@ class AppRoutes {
         path: '/pdf-viewer',
         parentNavigatorKey: rootNavigatorKey,
         builder: (context, state) => PDFViewerPage(filePath: state.extra as String),
+      ),
+      GoRoute(
+        path: '/report-results',
+        parentNavigatorKey: rootNavigatorKey,
+        builder: (context, state) {
+          final extra = state.extra as Map<String, dynamic>;
+          return ReportResultsPage(
+            titulo: extra['titulo'] as String,
+            headers: List<String>.from(extra['headers'] as List),
+            data: List<List<String>>.from((extra['data'] as List).map((e) => List<String>.from(e as List))),
+          );
+        },
       ),
     ],
   );
