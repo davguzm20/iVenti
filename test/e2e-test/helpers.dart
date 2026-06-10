@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:integration_test/integration_test.dart';
 
@@ -7,18 +6,6 @@ import 'package:iventi/shared/utils/PostgresDatasource.dart';
 Future<void> bootstrapE2E() async {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
   await dotenv.load(fileName: ".env.test");
-}
-
-/// Suprime errores de overflow en flujos donde el framework Flutter
-/// genera constraints angostas (e.g. ~76px) durante transiciones GoRouter
-/// con parentNavigatorKey.
-void suppressOverflowErrors() {
-  FlutterError.onError = (details) {
-    if (details.exceptionAsString().contains('RenderFlex')) {
-      return;
-    }
-    FlutterError.presentError(details);
-  };
 }
 
 Future<void> cleanTestData() async {

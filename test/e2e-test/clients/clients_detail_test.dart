@@ -13,7 +13,6 @@ void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
   setUpAll(() async {
-    suppressOverflowErrors();
     await dotenv.load(fileName: ".env.test");
     await PostgresDatasource().connection;
   });

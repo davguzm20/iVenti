@@ -23,12 +23,6 @@ void main() {
   });
 
   testWidgets('Sales List - flujo completo de listado y filtros', (tester) async {
-    final originalHandler = FlutterError.onError;
-    FlutterError.onError = (details) {
-      if (details.exceptionAsString().contains('RenderFlex')) return;
-      originalHandler!(details);
-    };
-    addTearDown(() => FlutterError.onError = originalHandler);
     await cleanTestData();
 
     final conn = await PostgresDatasource().connection;
