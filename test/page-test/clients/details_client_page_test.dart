@@ -21,7 +21,7 @@ void main() {
     mockVentaController = MockVentaController();
   });
 
-  Widget _buildTestApp() {
+  Widget buildTestApp() {
     final router = GoRouter(
       initialLocation: '/clients/details/1',
       routes: [
@@ -45,7 +45,7 @@ void main() {
       when(mockVentaController.obtenerVentasDeCliente(1))
           .thenAnswer((_) async => []);
 
-      await tester.pumpWidget(_buildTestApp());
+      await tester.pumpWidget(buildTestApp());
       await tester.pump();
       await tester.pump();
 
@@ -58,7 +58,7 @@ void main() {
       when(mockVentaController.obtenerVentasDeCliente(1))
           .thenAnswer((_) async => []);
 
-      await tester.pumpWidget(_buildTestApp());
+      await tester.pumpWidget(buildTestApp());
       await tester.pump();
       await tester.pump();
 
@@ -78,7 +78,7 @@ void main() {
             VentaEntity(idVenta: 1, idUsuario: 1, vendidoEn: DateTime(2025, 5, 1), montoTotal: 100.0, montoCancelado: 50.0, estado: EstadoVenta.PENDIENTE, esCredito: true, creadoEn: DateTime(2025, 5, 1)),
           ]);
 
-      await tester.pumpWidget(_buildTestApp());
+      await tester.pumpWidget(buildTestApp());
       await tester.pump();
       await tester.pump();
 

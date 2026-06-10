@@ -28,7 +28,7 @@ void main() {
     mockUnidadController = MockUnidadController();
   });
 
-  Widget _buildTestApp() {
+  Widget buildTestApp() {
     final router = GoRouter(
       initialLocation: '/inventory/product/1',
       routes: [
@@ -52,7 +52,7 @@ void main() {
       when(mockProductoController.obtenerProductoPorId(1))
           .thenAnswer((_) async => null);
 
-      await tester.pumpWidget(_buildTestApp());
+      await tester.pumpWidget(buildTestApp());
 
       expect(find.byType(CircularProgressIndicator), findsOneWidget);
     });
@@ -78,7 +78,7 @@ void main() {
       when(mockLoteController.obtenerLotesDeProducto(1))
           .thenAnswer((_) async => []);
 
-      await tester.pumpWidget(_buildTestApp());
+      await tester.pumpWidget(buildTestApp());
       await tester.pump();
       await tester.pump();
 
@@ -121,7 +121,7 @@ void main() {
       when(mockLoteController.obtenerLotesDeProducto(1))
           .thenAnswer((_) async => [lote]);
 
-      await tester.pumpWidget(_buildTestApp());
+      await tester.pumpWidget(buildTestApp());
       await tester.pump();
       await tester.pump();
 

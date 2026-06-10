@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:iventi/features/reports/pages/ReportsPage.dart';
 
 void main() {
-  Widget _buildTestApp() {
+  Widget buildTestApp() {
     final router = GoRouter(
       initialLocation: '/reports',
       routes: [
@@ -21,7 +21,7 @@ void main() {
 
   group('ReportsPage', () {
     testWidgets('debe mostrar titulo y todos los reportes', (tester) async {
-      await tester.pumpWidget(_buildTestApp());
+      await tester.pumpWidget(buildTestApp());
 
       expect(find.text('Mis Reportes'), findsOneWidget);
       expect(find.text('Reporte Detallado de Ventas'), findsOneWidget);

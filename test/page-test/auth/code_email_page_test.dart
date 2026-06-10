@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
-import 'package:mockito/mockito.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iventi/features/auth/pages/CodeEmailPage.dart';
 import 'package:iventi/features/auth/controllers/AuthController.dart';
@@ -15,7 +14,7 @@ void main() {
     mockAuthController = MockAuthController();
   });
 
-  Widget _buildTestApp() {
+  Widget buildTestApp() {
     final router = GoRouter(
       initialLocation: '/code-email',
       routes: [
@@ -33,7 +32,7 @@ void main() {
 
   group('CodeEmailPage', () {
     testWidgets('debe mostrar el titulo y campo de codigo', (tester) async {
-      await tester.pumpWidget(_buildTestApp());
+      await tester.pumpWidget(buildTestApp());
 
       expect(find.text('Ingresa el código que enviamos a tu correo'), findsOneWidget);
       expect(find.text('Confirmar'), findsOneWidget);

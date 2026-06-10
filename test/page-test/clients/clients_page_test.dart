@@ -16,7 +16,7 @@ void main() {
     mockController = MockClienteController();
   });
 
-  Widget _buildTestApp() {
+  Widget buildTestApp() {
     final router = GoRouter(
       initialLocation: '/clients',
       routes: [
@@ -38,7 +38,7 @@ void main() {
       when(mockController.obtenerFiltrados(limite: 50, offset: 0, esDeudor: anyNamed('esDeudor')))
           .thenAnswer((_) async => []);
 
-      await tester.pumpWidget(_buildTestApp());
+      await tester.pumpWidget(buildTestApp());
 
       expect(find.byType(CircularProgressIndicator), findsOneWidget);
     });
@@ -47,7 +47,7 @@ void main() {
       when(mockController.obtenerFiltrados(limite: 50, offset: 0, esDeudor: anyNamed('esDeudor')))
           .thenAnswer((_) async => []);
 
-      await tester.pumpWidget(_buildTestApp());
+      await tester.pumpWidget(buildTestApp());
       await tester.pump();
       await tester.pump();
 
@@ -66,7 +66,7 @@ void main() {
       when(mockController.obtenerFiltrados(limite: 50, offset: 0, esDeudor: anyNamed('esDeudor')))
           .thenAnswer((_) async => [cliente]);
 
-      await tester.pumpWidget(_buildTestApp());
+      await tester.pumpWidget(buildTestApp());
       await tester.pump();
       await tester.pump();
 

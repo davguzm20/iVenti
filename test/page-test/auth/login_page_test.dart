@@ -17,7 +17,7 @@ void main() {
     mockAuthController = MockAuthController();
   });
 
-  Widget _buildTestApp({String? extraEmail}) {
+  Widget buildTestApp({String? extraEmail}) {
     final router = GoRouter(
       initialLocation: '/login',
       routes: [
@@ -42,14 +42,14 @@ void main() {
       when(mockAuthController.obtenerUsuarioRegistrado())
           .thenAnswer((_) async => UsuarioEntity(idUsuario: 1, email: 'test@test.com', nombre: 'Test', pin: '123456', rol: TipoRol.ADMINISTRADOR, creadoEn: DateTime(2025, 5, 1)));
 
-      await tester.pumpWidget(_buildTestApp());
+      await tester.pumpWidget(buildTestApp());
       await tester.pump();
 
       expect(find.text('Iniciar sesión'), findsOneWidget);
     });
 
     testWidgets('debe mostrar email del GoRouter extra', (tester) async {
-      await tester.pumpWidget(_buildTestApp(extraEmail: 'extra@email.com'));
+      await tester.pumpWidget(buildTestApp(extraEmail: 'extra@email.com'));
       await tester.pump();
       await tester.pump();
 
@@ -60,7 +60,7 @@ void main() {
       when(mockAuthController.obtenerUsuarioRegistrado())
           .thenAnswer((_) async => UsuarioEntity(idUsuario: 1, email: 'test@test.com', nombre: 'Test', pin: '123456', rol: TipoRol.ADMINISTRADOR, creadoEn: DateTime(2025, 5, 1)));
 
-      await tester.pumpWidget(_buildTestApp());
+      await tester.pumpWidget(buildTestApp());
       await tester.pump();
       await tester.pump();
 

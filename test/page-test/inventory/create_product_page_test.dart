@@ -23,7 +23,7 @@ void main() {
     mockUnidadController = MockUnidadController();
   });
 
-  Widget _buildTestApp() {
+  Widget buildTestApp() {
     final router = GoRouter(
       initialLocation: '/inventory/create-product',
       routes: [
@@ -47,7 +47,7 @@ void main() {
       when(mockCategoriaController.obtenerTodas()).thenAnswer((_) async => []);
       when(mockUnidadController.obtenerTodas()).thenAnswer((_) async => []);
 
-      await tester.pumpWidget(_buildTestApp());
+      await tester.pumpWidget(buildTestApp());
       await tester.pump();
       await tester.pump();
 
@@ -65,7 +65,7 @@ void main() {
         UnidadEntity(idUnidad: 1, nombre: 'Kilogramo', abreviatura: 'kg', creadoEn: DateTime(2025, 5, 1)),
       ]);
 
-      await tester.pumpWidget(_buildTestApp());
+      await tester.pumpWidget(buildTestApp());
       await tester.pump();
       await tester.pump();
 

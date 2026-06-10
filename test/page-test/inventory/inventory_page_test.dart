@@ -16,7 +16,7 @@ void main() {
     mockController = MockProductoController();
   });
 
-  Widget _buildTestApp() {
+  Widget buildTestApp() {
     final router = GoRouter(
       initialLocation: '/inventory',
       routes: [
@@ -38,7 +38,7 @@ void main() {
     testWidgets('debe mostrar loading inicial', (tester) async {
       when(mockController.obtenerTodos()).thenAnswer((_) async => []);
 
-      await tester.pumpWidget(_buildTestApp());
+      await tester.pumpWidget(buildTestApp());
 
       expect(find.byType(CircularProgressIndicator), findsOneWidget);
     });
@@ -46,7 +46,7 @@ void main() {
     testWidgets('debe mostrar empty state cuando no hay productos', (tester) async {
       when(mockController.obtenerTodos()).thenAnswer((_) async => []);
 
-      await tester.pumpWidget(_buildTestApp());
+      await tester.pumpWidget(buildTestApp());
       await tester.pump();
       await tester.pump();
 
@@ -66,7 +66,7 @@ void main() {
 
       when(mockController.obtenerTodos()).thenAnswer((_) async => [producto]);
 
-      await tester.pumpWidget(_buildTestApp());
+      await tester.pumpWidget(buildTestApp());
       await tester.pump();
       await tester.pump();
 

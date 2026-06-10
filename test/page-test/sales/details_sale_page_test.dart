@@ -18,7 +18,7 @@ void main() {
     mockController = MockVentaController();
   });
 
-  Widget _buildTestApp() {
+  Widget buildTestApp() {
     final router = GoRouter(
       initialLocation: '/sales/details/1',
       routes: [
@@ -38,7 +38,7 @@ void main() {
       when(mockController.obtenerVentaPorId(1))
           .thenAnswer((_) async => null);
 
-      await tester.pumpWidget(_buildTestApp());
+      await tester.pumpWidget(buildTestApp());
 
       expect(find.byType(CircularProgressIndicator), findsOneWidget);
     });
@@ -70,7 +70,7 @@ void main() {
       when(mockController.obtenerDetallesDeVenta(1))
           .thenAnswer((_) async => [detalle]);
 
-      await tester.pumpWidget(_buildTestApp());
+      await tester.pumpWidget(buildTestApp());
       await tester.pump();
       await tester.pump();
 

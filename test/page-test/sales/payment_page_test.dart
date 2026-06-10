@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
-import 'package:mockito/mockito.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iventi/features/sales/pages/PaymentPage.dart';
 import 'package:iventi/features/sales/controllers/VentaController.dart';
@@ -18,7 +17,7 @@ void main() {
     mockClienteController = MockClienteController();
   });
 
-  Widget _buildTestApp() {
+  Widget buildTestApp() {
     final router = GoRouter(
       initialLocation: '/sales/payment',
       routes: [
@@ -39,7 +38,7 @@ void main() {
 
   group('PaymentPage', () {
     testWidgets('debe mostrar formulario de pago', (tester) async {
-      await tester.pumpWidget(_buildTestApp());
+      await tester.pumpWidget(buildTestApp());
 
       expect(find.text('Pago'), findsOneWidget);
       expect(find.text('Crear Cliente'), findsOneWidget);

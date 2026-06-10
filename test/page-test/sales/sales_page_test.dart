@@ -17,7 +17,7 @@ void main() {
     mockController = MockVentaController();
   });
 
-  Widget _buildTestApp() {
+  Widget buildTestApp() {
     final router = GoRouter(
       initialLocation: '/sales',
       routes: [
@@ -44,7 +44,7 @@ void main() {
         fechaFinal: anyNamed('fechaFinal'),
       )).thenAnswer((_) async => []);
 
-      await tester.pumpWidget(_buildTestApp());
+      await tester.pumpWidget(buildTestApp());
 
       expect(find.byType(CircularProgressIndicator), findsOneWidget);
     });
@@ -57,7 +57,7 @@ void main() {
         fechaFinal: anyNamed('fechaFinal'),
       )).thenAnswer((_) async => []);
 
-      await tester.pumpWidget(_buildTestApp());
+      await tester.pumpWidget(buildTestApp());
       await tester.pump();
       await tester.pump();
 
@@ -83,7 +83,7 @@ void main() {
         fechaFinal: anyNamed('fechaFinal'),
       )).thenAnswer((_) async => [venta]);
 
-      await tester.pumpWidget(_buildTestApp());
+      await tester.pumpWidget(buildTestApp());
       await tester.pump();
       await tester.pump();
 

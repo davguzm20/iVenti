@@ -17,7 +17,7 @@ void main() {
     mockAuthController = MockAuthController();
   });
 
-  Widget _buildTestApp({bool isRecovery = false, String? extraEmail}) {
+  Widget buildTestApp({bool isRecovery = false, String? extraEmail}) {
     final router = GoRouter(
       initialLocation: '/create-pin',
       routes: [
@@ -39,7 +39,7 @@ void main() {
 
   group('CreatePinPage', () {
     testWidgets('debe mostrar titulo y campo de PIN', (tester) async {
-      await tester.pumpWidget(_buildTestApp(extraEmail: 'user@test.com'));
+      await tester.pumpWidget(buildTestApp(extraEmail: 'user@test.com'));
       await tester.pump();
       await tester.pump();
 
@@ -49,7 +49,7 @@ void main() {
     });
 
     testWidgets('debe mostrar email del extra', (tester) async {
-      await tester.pumpWidget(_buildTestApp(extraEmail: 'user@test.com'));
+      await tester.pumpWidget(buildTestApp(extraEmail: 'user@test.com'));
       await tester.pump();
       await tester.pump();
 
@@ -60,7 +60,7 @@ void main() {
       when(mockAuthController.obtenerUsuarioRegistrado())
           .thenAnswer((_) async => UsuarioEntity(idUsuario: 1, email: 'loaded@test.com', nombre: 'Test', pin: '123456', rol: TipoRol.ADMINISTRADOR, creadoEn: DateTime(2025, 5, 1)));
 
-      await tester.pumpWidget(_buildTestApp());
+      await tester.pumpWidget(buildTestApp());
       await tester.pump();
       await tester.pump();
 

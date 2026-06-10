@@ -4,8 +4,6 @@ import 'package:go_router/go_router.dart';
 
 import 'package:iventi/features/inventory/entities/LoteEntity.dart';
 import 'package:iventi/features/inventory/entities/ProductoEntity.dart';
-import 'package:iventi/features/inventory/controllers/ProductoController.dart';
-import 'package:iventi/features/inventory/controllers/LoteController.dart';
 import 'package:iventi/shared/utils/DialogMessages.dart';
 import 'package:iventi/shared/widgets/ErrorDialog.dart';
 import 'package:iventi/features/sales/widgets/CartWidget.dart';
