@@ -55,3 +55,6 @@ patrol_test/
 .env
 !.env.example
 .env.*
+
+# Context
+CONTEXT.md
