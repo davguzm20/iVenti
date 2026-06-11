@@ -44,7 +44,6 @@ void main() {
     final request = CrearClienteRequest(
       dni: dni ?? dniUnico(),
       nombres: 'Juan',
-      apellidos: 'Perez',
       email: emailUnico(),
       telefono: '999888777',
     );
@@ -60,7 +59,6 @@ void main() {
       final request = CrearClienteRequest(
         dni: dni,
         nombres: 'Maria',
-        apellidos: 'Garcia',
         email: email,
         telefono: '999000111',
       );
@@ -69,7 +67,6 @@ void main() {
 
       expect(cliente.idCliente, isNotNull);
       expect(cliente.nombres, 'Maria');
-      expect(cliente.apellidos, 'Garcia');
       expect(cliente.email, email);
       expect(cliente.dni, dni);
       expect(cliente.telefono, '999000111');
@@ -82,14 +79,12 @@ void main() {
         () async {
       final request = CrearClienteRequest(
         nombres: 'Pedro',
-        apellidos: 'Lopez',
       );
 
       final cliente = await clienteService.crearCliente(request);
 
       expect(cliente.idCliente, isNotNull);
       expect(cliente.nombres, 'Pedro');
-      expect(cliente.apellidos, 'Lopez');
       expect(cliente.dni, isNull);
       expect(cliente.email, isNull);
       expect(cliente.telefono, isNull);
@@ -129,7 +124,7 @@ void main() {
 
       expect(resultados.length, greaterThanOrEqualTo(2));
       expect(resultados.every((c) =>
-          c.nombres.contains('Juan') || c.apellidos.contains('Juan')),
+          c.nombres.contains('Juan')),
           isTrue);
     });
 
@@ -182,14 +177,12 @@ void main() {
           idCliente: creado.idCliente!,
           dni: nuevoDni,
           nombres: 'Juan Carlos',
-          apellidos: 'Perez Garcia',
           email: creado.email,
           telefono: '111222333',
         ),
       );
 
       expect(actualizado.nombres, 'Juan Carlos');
-      expect(actualizado.apellidos, 'Perez Garcia');
       expect(actualizado.dni, nuevoDni);
       expect(actualizado.telefono, '111222333');
     });
@@ -202,7 +195,6 @@ void main() {
           ActualizarClienteRequest(
             idCliente: -1,
             nombres: 'Sin',
-            apellidos: 'Cliente',
           ),
         ),
         throwsA(isA<BusinessException>()),

@@ -57,7 +57,6 @@ CREATE TABLE clientes (
   id_cliente SERIAL PRIMARY KEY,
   dni VARCHAR(12),
   nombres VARCHAR(100) NOT NULL,
-  apellidos VARCHAR(75),
   email VARCHAR(120),
   telefono VARCHAR(20),
   es_deudor BOOLEAN DEFAULT FALSE,
@@ -73,7 +72,7 @@ CREATE TABLE usuarios (
   rol tipo_rol DEFAULT 'OPERATIVO' NOT NULL,
   nombre VARCHAR(50) NOT NULL,
   email VARCHAR(120),
-  pin VARCHAR(6),
+  pin VARCHAR(64),
   es_activo BOOLEAN DEFAULT TRUE,
   creado_en TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   actualizado_en TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -145,6 +144,7 @@ CREATE TABLE ventas (
   monto_cancelado NUMERIC(10, 2) DEFAULT 0 NOT NULL,
   estado estado_venta DEFAULT 'PENDIENTE' NOT NULL,
   es_credito BOOLEAN DEFAULT FALSE,
+  codigo_boleta VARCHAR(20),
   creado_en TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   actualizado_en TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   CONSTRAINT fk_ventas_cliente FOREIGN KEY (id_cliente) REFERENCES clientes(id_cliente),
@@ -201,6 +201,5 @@ CREATE INDEX idx_auditoria_usuario ON auditoria (id_usuario);
 CREATE INDEX idx_auditoria_registro ON auditoria (registro_id);
 CREATE INDEX idx_auditoria_tabla_fecha ON auditoria (tabla, fecha_auditoria);
 CREATE INDEX idx_productos_nombre ON productos (nombre);
-CREATE INDEX idx_clientes_apellidos ON clientes (apellidos, nombres);
 CREATE INDEX idx_ventas_vendido_en ON ventas (vendido_en DESC);
 CREATE INDEX idx_lotes_fecha_vencimiento ON lotes (fecha_vencimiento);

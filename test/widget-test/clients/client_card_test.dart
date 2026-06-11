@@ -9,7 +9,6 @@ void main() {
       idCliente: 1,
       dni: '12345678',
       nombres: 'John',
-      apellidos: 'Doe',
       email: 'john@example.com',
       telefono: '123456789',
       esDeudor: false,
@@ -30,7 +29,7 @@ void main() {
         );
 
         expect(find.byType(ClientCard), findsOneWidget);
-        expect(find.text('John Doe'), findsOneWidget);
+        expect(find.text('John'), findsOneWidget);
         expect(find.text('DNI: 12345678'), findsOneWidget);
         expect(find.text('Tel: 123456789'), findsOneWidget);
         expect(find.text('john@example.com'), findsOneWidget);
@@ -41,7 +40,6 @@ void main() {
           idCliente: 1,
           dni: '12345678',
           nombres: 'John',
-          apellidos: 'Doe',
           email: 'john@example.com',
           telefono: '123456789',
           esDeudor: true,
@@ -67,7 +65,6 @@ void main() {
           idCliente: 1,
           dni: null,
           nombres: 'John',
-          apellidos: 'Doe',
           email: 'john@example.com',
           telefono: '123456789',
           esDeudor: false,
@@ -93,7 +90,6 @@ void main() {
           idCliente: 1,
           dni: '12345678',
           nombres: 'John',
-          apellidos: 'Doe',
           email: 'john@example.com',
           telefono: '',
           esDeudor: false,
@@ -119,7 +115,6 @@ void main() {
           idCliente: 1,
           dni: '12345678',
           nombres: 'John',
-          apellidos: 'Doe',
           email: null,
           telefono: '123456789',
           esDeudor: false,

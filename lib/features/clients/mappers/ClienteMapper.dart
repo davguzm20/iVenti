@@ -7,7 +7,6 @@ class ClienteMapper {
       idCliente: map['id_cliente'] as int,
       dni: map['dni'] as String?,
       nombres: map['nombres'] as String,
-      apellidos: map['apellidos'] as String,
       email: map['email'] as String?,
       telefono: map['telefono'] as String?,
       esDeudor: map['es_deudor'] as bool,
@@ -21,7 +20,6 @@ class ClienteMapper {
     return {
       'dni': entity.dni,
       'nombres': entity.nombres,
-      'apellidos': entity.apellidos,
       'email': entity.email,
       'telefono': entity.telefono,
       'es_deudor': entity.esDeudor,
@@ -33,7 +31,6 @@ class ClienteMapper {
       idCliente: entity.idCliente!,
       dni: entity.dni,
       nombres: entity.nombres,
-      apellidos: entity.apellidos,
       email: entity.email,
       telefono: entity.telefono,
       esDeudor: entity.esDeudor,

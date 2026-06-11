@@ -54,7 +54,7 @@ void main() {
 
     testWidgets('debe mostrar datos del cliente y ventas vacias', (tester) async {
       when(mockClienteController.obtenerClientePorId(1))
-          .thenAnswer((_) async => ClienteEntity(idCliente: 1, nombres: 'Juan', apellidos: 'Pérez', dni: '12345678', email: 'juan@test.com', telefono: '999888777', esDeudor: false, creadoEn: DateTime(2025, 5, 1)));
+          .thenAnswer((_) async => ClienteEntity(idCliente: 1, nombres: 'Juan', dni: '12345678', email: 'juan@test.com', telefono: '999888777', esDeudor: false, creadoEn: DateTime(2025, 5, 1)));
       when(mockVentaController.obtenerVentasDeCliente(1))
           .thenAnswer((_) async => []);
 
@@ -72,7 +72,7 @@ void main() {
 
     testWidgets('debe mostrar ventas del cliente', (tester) async {
       when(mockClienteController.obtenerClientePorId(1))
-          .thenAnswer((_) async => ClienteEntity(idCliente: 1, nombres: 'Juan', apellidos: 'Pérez', esDeudor: true, creadoEn: DateTime(2025, 5, 1)));
+          .thenAnswer((_) async => ClienteEntity(idCliente: 1, nombres: 'Juan', esDeudor: true, creadoEn: DateTime(2025, 5, 1)));
       when(mockVentaController.obtenerVentasDeCliente(1))
           .thenAnswer((_) async => [
             VentaEntity(idVenta: 1, idUsuario: 1, vendidoEn: DateTime(2025, 5, 1), montoTotal: 100.0, montoCancelado: 50.0, estado: EstadoVenta.PENDIENTE, esCredito: true, creadoEn: DateTime(2025, 5, 1)),

@@ -142,7 +142,6 @@ void main() {
       ));
       sharedCliente = await clienteService.crearCliente(CrearClienteRequest(
         nombres: 'Cliente',
-        apellidos: 'Venta Test',
         dni: codigoUnico(),
       ));
     });
@@ -363,7 +362,6 @@ void main() {
       ));
       sharedCliente = await clienteService.crearCliente(CrearClienteRequest(
         nombres: 'Cliente',
-        apellidos: 'Pago Test',
         dni: codigoUnico(),
       ));
     });

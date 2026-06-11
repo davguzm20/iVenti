@@ -22,11 +22,10 @@ class ClienteRepository implements IClienteRepository {
 
     try {
       final clienteCreado = await conexion.execute(
-        Sql.named('INSERT INTO clientes (dni, nombres, apellidos, email, telefono, creado_en, actualizado_en) VALUES (@dni, @nombres, @apellidos, @email, @telefono, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP) RETURNING *'),
+        Sql.named('INSERT INTO clientes (dni, nombres, email, telefono, creado_en, actualizado_en) VALUES (@dni, @nombres, @email, @telefono, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP) RETURNING *'),
         parameters: {
           'dni': request.dni,
           'nombres': request.nombres.trim(),
-          'apellidos': request.apellidos.trim(),
           'email': request.email,
           'telefono': request.telefono,
         },
@@ -64,7 +63,7 @@ class ClienteRepository implements IClienteRepository {
       final clientesEncontrados = await conexion.execute(
         Sql.named('''
           SELECT * FROM clientes
-          WHERE (nombres ILIKE '%' || @nombre || '%' OR apellidos ILIKE '%' || @nombre || '%')
+          WHERE (nombres ILIKE '%' || @nombre || '%')
           AND es_activo = TRUE
         '''),
         parameters: {'nombre': nombre},
@@ -92,7 +91,7 @@ class ClienteRepository implements IClienteRepository {
         sql += ' AND es_deudor = FALSE';
       }
 
-      sql += ' ORDER BY apellidos, nombres LIMIT @limite OFFSET @offset';
+      sql += ' ORDER BY nombres LIMIT @limite OFFSET @offset';
 
       final clientesEncontrados = await conexion.execute(Sql.named(sql), parameters: parametros);
 
@@ -110,12 +109,11 @@ class ClienteRepository implements IClienteRepository {
 
     try {
       final clienteActualizado = await conexion.execute(
-        Sql.named('UPDATE clientes SET dni = @dni, nombres = @nombres, apellidos = @apellidos, email = @email, telefono = @telefono, actualizado_en = CURRENT_TIMESTAMP WHERE id_cliente = @id AND es_activo = TRUE RETURNING *'),
+        Sql.named('UPDATE clientes SET dni = @dni, nombres = @nombres, email = @email, telefono = @telefono, actualizado_en = CURRENT_TIMESTAMP WHERE id_cliente = @id AND es_activo = TRUE RETURNING *'),
         parameters: {
           'id': request.idCliente,
           'dni': request.dni,
           'nombres': request.nombres.trim(),
-          'apellidos': request.apellidos.trim(),
           'email': request.email,
           'telefono': request.telefono,
         },

@@ -7,8 +7,24 @@
 -- =============================================================================
 
 -- =============================================================================
+-- SEQUENCES
+-- =============================================================================
+
+CREATE SEQUENCE IF NOT EXISTS boleta_seq START 1;
+
+-- =============================================================================
 -- FUNCTIONS
 -- =============================================================================
+
+CREATE OR REPLACE FUNCTION generar_codigo_boleta()
+RETURNS VARCHAR(20) AS $$
+DECLARE
+  next_val INTEGER;
+BEGIN
+  next_val := nextval('boleta_seq');
+  RETURN 'B' || LPAD(next_val::TEXT, 6, '0');
+END;
+$$ LANGUAGE plpgsql;
 
 CREATE OR REPLACE FUNCTION auditar_general()
 RETURNS TRIGGER AS $$
@@ -16,7 +32,11 @@ DECLARE
   _id_usuario INTEGER;
   _registro_id INTEGER;
 BEGIN
-  _id_usuario := COALESCE(NULLIF(current_setting('app.id_usuario', true), ''), '1')::INTEGER;
+  BEGIN
+    _id_usuario := NULLIF(current_setting('app.id_usuario', true), '')::INTEGER;
+  EXCEPTION WHEN OTHERS THEN
+    _id_usuario := NULL;
+  END;
 
   IF TG_TABLE_NAME = 'usuarios' THEN
     IF TG_OP = 'DELETE' THEN _registro_id := OLD.id_usuario;

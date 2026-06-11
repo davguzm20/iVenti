@@ -58,7 +58,6 @@ void main() {
       final cliente = ClienteEntity(
         idCliente: 1,
         nombres: 'Juan',
-        apellidos: 'Pérez',
         esDeudor: false,
         creadoEn: DateTime(2025, 5, 1),
       );
@@ -70,7 +69,7 @@ void main() {
       await tester.pump();
       await tester.pump();
 
-      expect(find.text('Juan Pérez'), findsOneWidget);
+      expect(find.text('Juan'), findsOneWidget);
     });
   });
 }

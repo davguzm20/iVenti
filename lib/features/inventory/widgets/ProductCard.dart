@@ -35,7 +35,7 @@ class ProductCard extends StatelessWidget {
                 borderRadius: BorderRadius.circular(8),
                 child: SizedBox(
                   width: double.infinity,
-                  height: 180,
+                  height: 120,
                   child: (imagen != null && imagen.isNotEmpty)
                       ? Image.network(imagen, fit: BoxFit.contain, errorBuilder: (_, __, ___) => Image.asset('lib/assets/iconos/iconoImagen.png', fit: BoxFit.contain))
                       : Image.asset('lib/assets/iconos/iconoImagen.png', fit: BoxFit.contain),
