@@ -1,5 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
+import 'package:postgres/postgres.dart';
 import 'package:iventi/shared/exceptions/BusinessException.dart';
 import 'package:iventi/shared/exceptions/DatabaseException.dart';
 import 'package:iventi/features/sales/services/PagoService.dart';
@@ -9,10 +10,56 @@ import 'package:iventi/features/sales/enums/EstadoVenta.dart';
 
 import '../../../mocks_mocks.dart';
 
+class _FakeConnection implements Connection {
+  final List<String> executed = [];
+  bool throwOnExecute = false;
+
+  @override
+  Future<Result> execute(Object query,
+      {Object? parameters,
+      bool ignoreRows = false,
+      QueryMode? queryMode,
+      Duration? timeout}) async {
+    executed.add(query.toString());
+    if (throwOnExecute) throw DatabaseException('Simulated DB error');
+    return Result(rows: [], affectedRows: 0, schema: ResultSchema([]));
+  }
+
+  @override
+  Future<Statement> prepare(Object query) =>
+      throw UnimplementedError();
+
+  @override
+  Future<R> run<R>(Future<R> Function(Session session) fn,
+          {SessionSettings? settings}) =>
+      throw UnimplementedError();
+
+  @override
+  Future<R> runTx<R>(Future<R> Function(TxSession session) fn,
+          {TransactionSettings? settings}) =>
+      throw UnimplementedError();
+
+  @override
+  Future<void> close({bool force = false}) => Future.value();
+
+  @override
+  bool get isOpen => true;
+
+  @override
+  Future<void> get closed => Future.value();
+
+  @override
+  ConnectionInfo get info => throw UnimplementedError();
+
+  @override
+  Channels get channels => throw UnimplementedError();
+}
+
 final mockDatasource = MockPostgresDatasource();
 final mockVentaRepository = MockIVentaRepository();
 final mockReciboRepository = MockIReciboRepository();
 final mockClienteRepository = MockIClienteRepository();
+final fakeConnection = _FakeConnection();
 
 PagoService buildService() => PagoService(
   mockDatasource,
@@ -27,6 +74,10 @@ void main() {
     reset(mockVentaRepository);
     reset(mockReciboRepository);
     reset(mockClienteRepository);
+    fakeConnection.throwOnExecute = false;
+    fakeConnection.executed.clear();
+
+    when(mockDatasource.connection).thenAnswer((_) async => fakeConnection);
   });
 
   group('PagoService.registrarPago', () {
@@ -105,6 +156,26 @@ void main() {
         () => buildService().registrarPago(1, 50, 1),
         throwsA(isA<BusinessException>().having((e) => e.mensaje, 'mensaje', contains('Error al registrar pago'))),
       );
+    });
+
+    test('debe hacer ROLLBACK y no COMMIT cuando crear recibo falla', () async {
+      final venta = VentaEntity(
+        idVenta: 1, idUsuario: 1, montoTotal: 100, montoCancelado: 0,
+        estado: EstadoVenta.PENDIENTE, esCredito: true, vendidoEn: DateTime.now(), creadoEn: DateTime.now(),
+      );
+      when(mockVentaRepository.obtenerVentaPorId(1)).thenAnswer((_) async => venta);
+      when(mockVentaRepository.actualizarMontoCanceladoVenta(1, 50.0)).thenAnswer((_) async {});
+      when(mockReciboRepository.crearReciboConRequest(any))
+          .thenThrow(DatabaseException('Error al crear recibo'));
+
+      await expectLater(
+        () => buildService().registrarPago(1, 50, 1),
+        throwsA(isA<BusinessException>()),
+      );
+
+      expect(fakeConnection.executed, contains('BEGIN'));
+      expect(fakeConnection.executed, contains('ROLLBACK'));
+      expect(fakeConnection.executed, isNot(contains('COMMIT')));
     });
   });
 
