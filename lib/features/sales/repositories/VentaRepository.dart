@@ -35,7 +35,7 @@ class VentaRepository implements IVentaRepository {
       final ventaInsertada = await conexion.execute(
         Sql.named('''
           INSERT INTO ventas (id_cliente, id_usuario, monto_total, monto_cancelado, estado, es_credito, codigo_boleta, creado_en, actualizado_en)
-          VALUES (@id_cliente, @id_usuario, @monto_total, @monto_cancelado, @estado, @es_credito, CASE WHEN @monto_total > 5 THEN generar_codigo_boleta() ELSE NULL END, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
+          VALUES (@id_cliente, @id_usuario, @monto_total, @monto_cancelado, @estado, @es_credito, CASE WHEN @monto_total::numeric > 5 THEN generar_codigo_boleta() ELSE NULL END, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
           RETURNING id_venta, vendido_en, creado_en, codigo_boleta
         '''),
         parameters: {
