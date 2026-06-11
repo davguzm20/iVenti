@@ -44,7 +44,7 @@ void main() {
       'C${DateTime.now().millisecondsSinceEpoch.toString().substring(7)}${contador++}';
 
   setUpAll(() async {
-    await dotenv.load(fileName: '.env');
+    await dotenv.load(fileName: '.env.test');
     datasource = PostgresDatasource();
     final conn = await datasource.connection;
 

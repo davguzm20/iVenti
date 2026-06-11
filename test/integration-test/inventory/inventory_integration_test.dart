@@ -29,7 +29,7 @@ void main() {
   late ProductoRepository productoRepository;
 
   setUpAll(() async {
-    await dotenv.load(fileName: '.env');
+    await dotenv.load(fileName: '.env.test');
     datasource = PostgresDatasource();
 
     final unidadRepository = UnidadRepository(datasource);
