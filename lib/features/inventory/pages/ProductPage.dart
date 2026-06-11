@@ -276,11 +276,14 @@ class _ProductPageState extends State<ProductPage> {
                                   fit: BoxFit.contain,
                                 )
                               : producto!.rutaImagen!.startsWith('http')
-                                  ? Image.network(producto!.rutaImagen!, fit: BoxFit.cover)
-                                  : Image.file(
-                                      File(producto!.rutaImagen!),
-                                      fit: BoxFit.cover,
-                                    ),
+                                  ? Image.network(producto!.rutaImagen!, fit: BoxFit.cover, errorBuilder: (_, __, ___) => const Icon(Icons.image, size: 48, color: Colors.grey))
+                                  : (() {
+                                      try {
+                                        return Image.file(File(producto!.rutaImagen!), fit: BoxFit.cover, errorBuilder: (_, __, ___) => const Icon(Icons.image, size: 48, color: Colors.grey));
+                                      } catch (_) {
+                                        return const Icon(Icons.image, size: 48, color: Colors.grey);
+                                      }
+                                    })(),
                         ),
                       ),
 

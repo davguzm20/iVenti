@@ -145,12 +145,12 @@ class _DetailsClientPageState extends State<DetailsClientPage> {
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 16,
-                        color: AppColors.danger,
+                        color: Colors.black87,
                       ),
                     ),
                     Text(
                       'S/ ${montoFaltante.toStringAsFixed(2)}',
-                      style: const TextStyle(fontSize: 16, color: AppColors.danger),
+                      style: const TextStyle(fontSize: 16, color: Colors.black87),
                     ),
                   ],
                 ),
@@ -278,13 +278,18 @@ class _DetailsClientPageState extends State<DetailsClientPage> {
                     Text('DNI: ${cliente?.dni ?? '---'}'),
                     Text('Email: ${cliente?.email ?? '---'}'),
                     Text('Teléfono: ${cliente?.telefono ?? '---'}'),
-
+                    const SizedBox(height: 4),
                     Text(
-                      "Estado: ${cliente?.esDeudor == true ? "Deudor" : "Regular"}",
+                      "${cliente?.esDeudor == true ? "DEUDOR" : "REGULAR"}",
                       style: TextStyle(
-                        color: cliente?.esDeudor == true ? AppColors.danger : AppColors.success,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                        color: cliente?.esDeudor == true
+                            ? AppColors.primary
+                            : AppColors.success,
                       ),
                     ),
+                    Text('Ventas registradas: ${ventasCliente.length}'),
                   ],
                 ),
               ),
@@ -355,10 +360,15 @@ class _DetailsClientPageState extends State<DetailsClientPage> {
                                       Text(
                                         "Tipo: ${venta.esCredito ? "Crédito" : "Al contado"}",
                                         style: TextStyle(
-                                          color: venta.esCredito &&
-                                                  venta.montoCancelado <
-                                                      venta.montoTotal
-                                              ? Colors.red
+                                          color: Colors.black87,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      Text(
+                                        "Estado: ${venta.estado.name}",
+                                        style: TextStyle(
+                                          color: venta.estado.name == 'PENDIENTE'
+                                              ? Colors.orange.shade800
                                               : AppColors.success,
                                           fontWeight: FontWeight.bold,
                                         ),

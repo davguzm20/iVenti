@@ -137,6 +137,7 @@ class _SalesPageState extends State<SalesPage> {
                       ventas = ventas.where((v) =>
                         '${v.idVenta}'.contains(value) ||
                         v.montoTotal.toString().contains(value) ||
+                        (v.codigoBoleta ?? '').contains(value) ||
                         (v.esCredito ? 'credito' : 'contado').contains(value.toLowerCase())
                       ).toList();
                     });

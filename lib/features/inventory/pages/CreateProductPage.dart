@@ -179,6 +179,10 @@ class _CreateProductPageState extends State<CreateProductPage> {
                       : Image.file(
                           File(rutaImagen!),
                           fit: BoxFit.cover,
+                          errorBuilder: (_, __, ___) => Image.asset(
+                            'lib/assets/iconos/iconoImagen.png',
+                            fit: BoxFit.cover,
+                          ),
                         ),
                 ),
               ),
