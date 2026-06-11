@@ -46,7 +46,8 @@ class _CodeEmailPageState extends State<CodeEmailPage> {
 
         try {
           await authController.obtenerUsuarioPorEmail(widget.emailUser);
-        } catch (_) {
+        } catch (e) {
+          debugPrint('Error al verificar usuario por email: $e');
           final (titulo, desc) = DialogMessages.auth.cuentaNoEncontrada;
           if (!mounted) return;
         ErrorDialog(

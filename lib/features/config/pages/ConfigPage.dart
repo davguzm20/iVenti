@@ -41,7 +41,9 @@ class _ConfigPageState extends State<ConfigPage> {
         if (c.clave == 'dias_vencimiento') _diasVencimientoController.text = c.valor;
         if (c.clave == 'stock_minimo_alerta') _stockMinimoController.text = c.valor;
       }
-    } catch (_) {}
+    } catch (e) {
+      debugPrint('Error al cargar configuracion: $e');
+    }
     if (mounted) setState(() => isLoading = false);
   }
 
@@ -112,11 +114,12 @@ class _ConfigPageState extends State<ConfigPage> {
               );
             }
           } catch (e) {
+            debugPrint('Error al guardar configuracion: $e');
             if (mounted) {
               ErrorDialog(
                 context: context,
                 title: 'Error inesperado',
-                description: 'Ocurrió un error al guardar la configuración, intenta de nuevo',
+                description: e.toString(),
               );
             }
           }

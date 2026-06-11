@@ -48,6 +48,7 @@ class _DetailsClientPageState extends State<DetailsClientPage> {
         });
       }
     } catch (e) {
+      debugPrint('Error al cargar datos del cliente: $e');
       if (mounted) {
         ErrorDialog(
           context: context,
@@ -204,6 +205,7 @@ class _DetailsClientPageState extends State<DetailsClientPage> {
                       }
 
                     } catch (e) {
+                      debugPrint('Error al registrar pago de cliente: $e');
                       if (!context.mounted) return;
                       final (title, desc) = DialogMessages.clientes.noSePudoRegistrarPago;
                       ErrorDialog(

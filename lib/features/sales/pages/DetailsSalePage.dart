@@ -58,6 +58,7 @@ class _DetailsSalePageState extends State<DetailsSalePage> {
         );
       }
     } catch (e) {
+      debugPrint('Error al obtener datos de venta: $e');
       if (mounted) {
         ErrorDialog(
           context: context,
@@ -187,6 +188,7 @@ class _DetailsSalePageState extends State<DetailsSalePage> {
                       }
 
                     } catch (e) {
+                      debugPrint('Error al registrar pago: $e');
                       if (!context.mounted) return;
                       final (title, desc) = DialogMessages.ventas.noSePudoRegistrarPago;
                       ErrorDialog(

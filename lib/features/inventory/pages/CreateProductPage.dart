@@ -509,10 +509,11 @@ class _CreateProductPageState extends State<CreateProductPage> {
       title: 'Confirmación',
       desc: '¿Está seguro de que desea crear el producto?',
       btnOkOnPress: () async {
-        String? imagenUrl = rutaImagen;
+          String? imagenUrl = rutaImagen;
         if (imagenUrl != null && !imagenUrl.startsWith('http')) {
           try {
-            imagenUrl = await CloudinaryService().uploadImage(imagenUrl, DateTime.now().millisecondsSinceEpoch);
+            final tempId = DateTime.now().millisecondsSinceEpoch;
+            imagenUrl = await CloudinaryService().uploadImage(imagenUrl, tempId);
           } catch (e) {
             if (mounted) { ErrorDialog(context: context, title: 'Error', description: 'No se pudo subir la imagen: $e'); }
             return;
@@ -550,12 +551,12 @@ class _CreateProductPageState extends State<CreateProductPage> {
           }
 
         } catch (e) {
+          debugPrint('Error al crear producto: $e');
           if (!mounted) return;
-          final (title, desc) = DialogMessages.inventario.noSePudoRegistrarProducto;
           ErrorDialog(
             context: context,
-            title: title,
-            description: desc,
+            title: 'No se pudo registrar el producto',
+            description: e.toString(),
           );
         }
       },
