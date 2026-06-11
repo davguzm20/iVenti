@@ -20,3 +20,7 @@ Con esta herramienta, podrá **optimizar su tiempo, reducir errores y mejorar la
 - **Lenguaje:** Flutter
 - **Base de datos:** SQLite (cambiando a Postgresql en la nube)
 - **Plataforma:** Android
+
+## 📦 Release
+
+Descarga la ultima version del APK desde [GitHub Releases](https://github.com/davguzm20/iVenti/releases/tag/latest).
