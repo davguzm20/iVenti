@@ -316,7 +316,7 @@ class _PaymentPageState extends State<PaymentPage> {
 
               if (crearCliente) {
                 if (_nombreController.text.isEmpty) {
-                  final (title, desc) = DialogMessages.ventas.camposIncompletos;
+                  final (title, desc) = DialogMessages.ventas.nombreClienteRequerido;
                   ErrorDialog(
                     context: context,
                     title: title,
@@ -326,12 +326,21 @@ class _PaymentPageState extends State<PaymentPage> {
                 }
 
                 final dni = _dniController.text.trim();
-                if (dni.isEmpty || dni.length != 8) {
-                  if (!mounted) return;
+                if (dni.isEmpty) {
+                  final (title, desc) = DialogMessages.ventas.dniRequerido;
                   ErrorDialog(
                     context: context,
-                    title: 'DNI inválido',
-                    description: 'El DNI debe tener exactamente 8 dígitos numéricos.',
+                    title: title,
+                    description: desc,
+                  );
+                  return;
+                }
+                if (dni.length != 8) {
+                  final (title, desc) = DialogMessages.ventas.dniInvalido;
+                  ErrorDialog(
+                    context: context,
+                    title: title,
+                    description: desc,
                   );
                   return;
                 }

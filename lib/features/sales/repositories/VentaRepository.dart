@@ -53,33 +53,60 @@ class VentaRepository implements IVentaRepository {
       final creadoEn = ventaInsertada.first.toColumnMap()['creado_en'] as DateTime;
       final codigoBoleta = ventaInsertada.first.toColumnMap()['codigo_boleta'] as String?;
 
-      for (final detalleReq in request.detalles) {
-        await conexion.execute(
-          Sql.named('''
-            INSERT INTO detalle_ventas (id_venta, id_lote, cantidad, precio_unitario, subtotal, descuento, creado_en)
-            VALUES (@id_venta, @id_lote, @cantidad, @precio_unitario, @subtotal, @descuento, CURRENT_TIMESTAMP)
-          '''),
-          parameters: {
-            'id_venta': idVenta,
-            'id_lote': detalleReq.idLote,
-            'cantidad': detalleReq.cantidad,
-            'precio_unitario': detalleReq.precioUnitario,
-            'subtotal': detalleReq.subtotal,
-            'descuento': detalleReq.descuento,
-          },
-        );
+      final detalles = request.detalles;
 
-        final loteActual = await _loteRepository.obtenerLotePorId(detalleReq.idProducto, detalleReq.idLote);
-
-        if (loteActual != null) {
-          await conexion.execute(
-            Sql.named('UPDATE lotes SET cantidad_actual = cantidad_actual - @cantidad, actualizado_en = CURRENT_TIMESTAMP WHERE id_lote = @id_lote'),
-            parameters: {'cantidad': detalleReq.cantidad, 'id_lote': detalleReq.idLote},
-          );
-        }
-
-        await _productoRepository.actualizarStockActual(detalleReq.idProducto);
+      final detalleValues = <String>[];
+      final detalleParams = <String, dynamic>{'id_venta': idVenta};
+      for (var i = 0; i < detalles.length; i++) {
+        final d = detalles[i];
+        detalleValues.add('(@id_venta, @lote_$i, @cant_$i, @precio_$i, @sub_$i, @desc_$i, CURRENT_TIMESTAMP)');
+        detalleParams['lote_$i'] = d.idLote;
+        detalleParams['cant_$i'] = d.cantidad;
+        detalleParams['precio_$i'] = d.precioUnitario;
+        detalleParams['sub_$i'] = d.subtotal;
+        detalleParams['desc_$i'] = d.descuento;
       }
+      await conexion.execute(
+        Sql.named('INSERT INTO detalle_ventas (id_venta, id_lote, cantidad, precio_unitario, subtotal, descuento, creado_en) VALUES ${detalleValues.join(', ')}'),
+        parameters: detalleParams,
+      );
+
+      final loteCases = <String>[];
+      final loteInClauses = <String>[];
+      final loteParams = <String, dynamic>{};
+      for (var i = 0; i < detalles.length; i++) {
+        final d = detalles[i];
+        loteCases.add('WHEN @l_$i THEN cantidad_actual - @c_$i');
+        loteInClauses.add('@l_$i');
+        loteParams['l_$i'] = d.idLote;
+        loteParams['c_$i'] = d.cantidad;
+      }
+      await conexion.execute(
+        Sql.named('UPDATE lotes SET cantidad_actual = CASE id_lote ${loteCases.join(' ')} END, actualizado_en = CURRENT_TIMESTAMP WHERE id_lote IN (${loteInClauses.join(', ')})'),
+        parameters: loteParams,
+      );
+
+      final idsProducto = detalles.map((d) => d.idProducto).toSet().toList();
+      final stockInClauses = idsProducto.asMap().entries.map((e) => '@p${e.key}').join(', ');
+      final stockParams = <String, dynamic>{};
+      for (var i = 0; i < idsProducto.length; i++) {
+        stockParams['p$i'] = idsProducto[i];
+      }
+      await conexion.execute(
+        Sql.named('''
+          WITH stock_totals AS (
+            SELECT id_producto, COALESCE(SUM(cantidad_actual), 0) AS stock_total
+            FROM lotes
+            WHERE id_producto IN ($stockInClauses) AND es_activo = TRUE
+            GROUP BY id_producto
+          )
+          UPDATE productos p
+          SET stock_actual = COALESCE(st.stock_total, 0), actualizado_en = CURRENT_TIMESTAMP
+          FROM stock_totals st
+          WHERE p.id_producto = st.id_producto
+        '''),
+        parameters: stockParams,
+      );
 
       if (request.montoCancelado > 0) {
         final reciboRepo = ReciboRepository(_datasource);

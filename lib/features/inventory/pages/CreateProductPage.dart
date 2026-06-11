@@ -467,17 +467,24 @@ class _CreateProductPageState extends State<CreateProductPage> {
   }
 
   void _confirmarProducto() {
-    if (productNameController.text.isEmpty ||
-        minStockController.text.isEmpty ||
-        priceController.text.isEmpty ||
-        unidadSeleccionada == null) {
-      final (title, desc) = DialogMessages.inventario.camposIncompletos;
-      ErrorDialog(
-        context: context,
-        title: title,
-        description: desc,
-      );
-
+    if (productNameController.text.isEmpty) {
+      final (title, desc) = DialogMessages.inventario.nombreRequerido;
+      ErrorDialog(context: context, title: title, description: desc);
+      return;
+    }
+    if (unidadSeleccionada == null) {
+      final (title, desc) = DialogMessages.inventario.unidadRequerida;
+      ErrorDialog(context: context, title: title, description: desc);
+      return;
+    }
+    if (priceController.text.isEmpty) {
+      final (title, desc) = DialogMessages.inventario.precioRequerido;
+      ErrorDialog(context: context, title: title, description: desc);
+      return;
+    }
+    if (minStockController.text.isEmpty) {
+      final (title, desc) = DialogMessages.inventario.stockMinimoInvalido;
+      ErrorDialog(context: context, title: title, description: desc);
       return;
     }
 

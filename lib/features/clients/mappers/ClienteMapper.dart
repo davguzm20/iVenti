@@ -1,11 +1,13 @@
 import 'package:iventi/features/clients/entities/ClienteEntity.dart';
 import 'package:iventi/features/clients/dtos/responses/ClienteResponse.dart';
+import 'package:iventi/shared/utils/DniEncryptor.dart';
 
 class ClienteMapper {
   static ClienteEntity fromMap(Map<String, dynamic> map) {
+    final rawDni = map['dni'] as String?;
     return ClienteEntity(
       idCliente: map['id_cliente'] as int,
-      dni: map['dni'] as String?,
+      dni: rawDni != null ? DniEncryptor.decryptAES(rawDni) : null,
       nombres: map['nombres'] as String,
       email: map['email'] as String?,
       telefono: map['telefono'] as String?,
@@ -18,7 +20,7 @@ class ClienteMapper {
 
   static Map<String, dynamic> toMap(ClienteEntity entity) {
     return {
-      'dni': entity.dni,
+      'dni': entity.dni != null ? DniEncryptor.encryptAES(entity.dni!) : null,
       'nombres': entity.nombres,
       'email': entity.email,
       'telefono': entity.telefono,

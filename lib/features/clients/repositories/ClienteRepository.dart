@@ -1,5 +1,6 @@
 import 'package:postgres/postgres.dart';
 import 'package:iventi/shared/utils/PostgresDatasource.dart';
+import 'package:iventi/shared/utils/DniEncryptor.dart';
 import 'package:iventi/shared/exceptions/DatabaseException.dart';
 import 'package:iventi/shared/exceptions/NotFoundException.dart';
 import 'package:iventi/features/sales/enums/EstadoVenta.dart';
@@ -24,7 +25,7 @@ class ClienteRepository implements IClienteRepository {
       final clienteCreado = await conexion.execute(
         Sql.named('INSERT INTO clientes (dni, nombres, email, telefono, creado_en, actualizado_en) VALUES (@dni, @nombres, @email, @telefono, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP) RETURNING *'),
         parameters: {
-          'dni': request.dni,
+          'dni': request.dni != null && request.dni!.trim().isNotEmpty ? DniEncryptor.encryptAES(request.dni!.trim()) : null,
           'nombres': request.nombres.trim(),
           'email': request.email,
           'telefono': request.telefono,
@@ -112,7 +113,7 @@ class ClienteRepository implements IClienteRepository {
         Sql.named('UPDATE clientes SET dni = @dni, nombres = @nombres, email = @email, telefono = @telefono, actualizado_en = CURRENT_TIMESTAMP WHERE id_cliente = @id AND es_activo = TRUE RETURNING *'),
         parameters: {
           'id': request.idCliente,
-          'dni': request.dni,
+          'dni': request.dni != null && request.dni!.trim().isNotEmpty ? DniEncryptor.encryptAES(request.dni!.trim()) : null,
           'nombres': request.nombres.trim(),
           'email': request.email,
           'telefono': request.telefono,

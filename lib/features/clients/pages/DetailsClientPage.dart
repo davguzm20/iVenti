@@ -280,7 +280,7 @@ class _DetailsClientPageState extends State<DetailsClientPage> {
                     Text('Teléfono: ${cliente?.telefono ?? '---'}'),
                     const SizedBox(height: 4),
                     Text(
-                      "${cliente?.esDeudor == true ? "DEUDOR" : "REGULAR"}",
+                      cliente?.esDeudor == true ? "DEUDOR" : "REGULAR",
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 16,
