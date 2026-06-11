@@ -29,7 +29,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
   Future<void> _cargar() async {
     setState(() => isLoading = true);
 
-    final data = await _controller.obtenerNotificaciones(ServiceLocator.usuarioActualId!);
+    final data = await _controller.obtenerNotificaciones(ServiceLocator.requireUsuarioActualId);
 
     if (mounted) {
       setState(() {
@@ -50,12 +50,12 @@ class _NotificationsPageState extends State<NotificationsPage> {
           IconButton(
             icon: const Icon(Icons.checklist),
             tooltip: "Marcar todas como leídas",
-            onPressed: () async { await _controller.marcarTodasComoLeidas(ServiceLocator.usuarioActualId!); _cargar(); },
+            onPressed: () async { await _controller.marcarTodasComoLeidas(ServiceLocator.requireUsuarioActualId); _cargar(); },
           ),
           IconButton(
             icon: const Icon(Icons.delete_forever, color: Colors.red),
             tooltip: "Limpiar historial",
-            onPressed: () async { await _controller.limpiarHistorial(ServiceLocator.usuarioActualId!); _cargar(); },
+            onPressed: () async { await _controller.limpiarHistorial(ServiceLocator.requireUsuarioActualId); _cargar(); },
           ),
         ],
       ),

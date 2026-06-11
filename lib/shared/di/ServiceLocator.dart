@@ -119,6 +119,11 @@ class ServiceLocator {
 
   static int? usuarioActualId;
 
+  static int get requireUsuarioActualId {
+    if (usuarioActualId == null) throw StateError('Usuario no autenticado');
+    return usuarioActualId!;
+  }
+
   static Future<void> setUsuarioActual(int idUsuario) async {
     usuarioActualId = idUsuario;
     await datasource.connection;

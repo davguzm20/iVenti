@@ -96,9 +96,11 @@ class _InventoryPageState extends State<InventoryPage> {
       final productosFiltrados =
           await _productoController.buscarPorNombre(nombre);
 
-      setState(() {
-        productos = productosFiltrados;
-      });
+      if (mounted) {
+        setState(() {
+          productos = productosFiltrados;
+        });
+      }
     });
   }
 
