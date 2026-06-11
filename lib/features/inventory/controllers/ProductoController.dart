@@ -49,4 +49,8 @@ class ProductoController {
       stockBajo: stockBajo,
     );
   }
+
+  Future<List<ProductoEntity>> obtenerProductosRecientes(int limite) {
+    return _productoService.obtenerProductosRecientes(limite);
+  }
 }

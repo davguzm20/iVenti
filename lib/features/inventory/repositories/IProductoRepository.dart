@@ -15,4 +15,5 @@ abstract class IProductoRepository {
     required int limite, required int offset,
     List<int>? idCategorias, bool? stockBajo,
   });
+  Future<List<ProductoEntity>> obtenerProductosRecientes(int limite);
 }
