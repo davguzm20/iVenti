@@ -46,21 +46,32 @@ class PagoService {
     }
 
     try {
-      await _ventaRepository.actualizarMontoCanceladoVenta(idVenta, monto);
+      final conexion = await _datasource.connection;
+      try {
+        await conexion.execute('BEGIN');
 
-      final request = CrearReciboRequest(
-        idVenta: idVenta,
-        idUsuario: idUsuario,
-        montoCancelado: monto,
-      );
+        await _ventaRepository.actualizarMontoCanceladoVenta(idVenta, monto);
 
-      final recibo = await _reciboRepository.crearReciboConRequest(request);
+        final request = CrearReciboRequest(
+          idVenta: idVenta,
+          idUsuario: idUsuario,
+          montoCancelado: monto,
+        );
 
-      if (ventaExistente.idCliente != null) {
-        await _clienteRepository.actualizarEstadoDeudor(ventaExistente.idCliente!);
+        final recibo = await _reciboRepository.crearReciboConRequest(request);
+
+        await conexion.execute('COMMIT');
+
+        if (ventaExistente.idCliente != null) {
+          await _clienteRepository.actualizarEstadoDeudor(ventaExistente.idCliente!);
+        }
+
+        return recibo;
+
+      } catch (e) {
+        await conexion.execute('ROLLBACK');
+        rethrow;
       }
-
-      return recibo;
 
     } on DatabaseException catch (e) {
       throw BusinessException('Error al registrar pago: ${e.mensaje}');

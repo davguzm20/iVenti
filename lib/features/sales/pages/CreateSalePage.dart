@@ -53,6 +53,7 @@ class _CreateSalePageState extends State<CreateSalePage> {
                         setDialogState(() => productosFiltrados = []);
                       } else {
                         final r = await ServiceLocator.productoController.buscarPorNombre(v);
+                        if (!ctx.mounted) return;
                         setDialogState(() => productosFiltrados = r);
                       }
                     },

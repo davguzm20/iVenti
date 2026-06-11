@@ -11,15 +11,27 @@ class PostgresDatasource {
   Connection? _connection;
   int? _ultimoIdUsuario;
   Timer? _heartbeatTimer;
+  Completer<void>? _initLock;
 
   Future<Connection> get connection async {
+    if (_initLock != null) {
+      try { await _initLock!.future; } catch (_) {}
+    }
+
     if (_connection == null || !await _conexionActiva()) {
-      if (_connection != null) {
-        try { await _connection!.close(); } catch (_) {}
-        _connection = null;
+      final completer = Completer<void>();
+      _initLock = completer;
+      try {
+        if (_connection != null) {
+          try { await _connection!.close(); } catch (_) {}
+          _connection = null;
+        }
+        await _initWithRetry();
+        _startHeartbeat();
+      } finally {
+        _initLock = null;
+        completer.complete();
       }
-      await _initWithRetry();
-      _startHeartbeat();
     }
     final idUsuario = ServiceLocator.usuarioActualId;
     if (idUsuario != null && idUsuario != _ultimoIdUsuario) {

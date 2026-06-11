@@ -51,7 +51,7 @@ class _PaymentPageState extends State<PaymentPage> {
 
     final clientes = await _clienteController.buscarPorNombre(nombre);
 
-    setState(() => clientesFiltrados = clientes);
+    if (mounted) setState(() => clientesFiltrados = clientes);
   }
 
   @override
@@ -385,7 +385,7 @@ class _PaymentPageState extends State<PaymentPage> {
                 await _ventaController.crearVenta(
                   CrearVentaRequest(
                     idCliente: idCliente,
-                    idUsuario: ServiceLocator.usuarioActualId!,
+                    idUsuario: ServiceLocator.requireUsuarioActualId,
                     montoTotal: _calcularTotalVenta(),
                     montoCancelado:
                         esAlContado ? _calcularTotalVenta() : cantidadRecibida,

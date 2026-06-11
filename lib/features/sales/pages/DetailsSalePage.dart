@@ -171,7 +171,7 @@ class _DetailsSalePageState extends State<DetailsSalePage> {
                       await _ventaController.registrarPago(
                         widget.idVenta,
                         monto,
-                        ServiceLocator.usuarioActualId!,
+                        ServiceLocator.requireUsuarioActualId,
                       );
 
                       if (context.mounted) {
