@@ -310,7 +310,11 @@ class PrintService {
     );
 
     final dir = await getTemporaryDirectory();
-    final file = File('${dir.path}/boleta_$codigoBoleta.pdf');
+    final timestamp = DateTime.now().millisecondsSinceEpoch;
+    final fileName = codigoBoleta != '---'
+        ? 'boleta_$codigoBoleta.pdf'
+        : 'boleta_$timestamp.pdf';
+    final file = File('${dir.path}/$fileName');
     await file.writeAsBytes(await pdf.save());
     return file.path;
   }
@@ -354,7 +358,6 @@ class PrintService {
 
   static Future<void> sharePDF(BuildContext context, String path, {String mensaje = 'Aqui tienes el PDF'}) async {
     try {
-      await Share.shareXFiles([XFile(path)], text: mensaje);
       await Share.shareXFiles([XFile(path)], text: mensaje);
     } catch (e) {
       if (context.mounted) {

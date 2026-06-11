@@ -10,6 +10,6 @@ class CrearUsuarioRequest {
   CrearUsuarioRequest({this.rol = TipoRol.ADMINISTRADOR, required this.nombre, required this.email, required this.pin}) {
     if (nombre.trim().isEmpty) throw ValidationException('El nombre es obligatorio');
     if (email.trim().isEmpty) throw ValidationException('El email es obligatorio');
-    if (pin.trim().isEmpty || pin.length != 6) throw ValidationException('El PIN debe tener 6 digitos');
+    if (pin.trim().isEmpty) throw ValidationException('El PIN es obligatorio');
   }
 }

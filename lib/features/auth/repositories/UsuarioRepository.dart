@@ -94,10 +94,6 @@ class UsuarioRepository implements IUsuarioRepository {
     final conexion = await _conexion;
 
     try {
-      if (nuevoPIN.length != 6) {
-        throw ValidationException('El PIN debe tener 6 dígitos.');
-      }
-
       final pinActualizado = await conexion.execute(
         Sql.named('UPDATE usuarios SET pin = @pin, actualizado_en = CURRENT_TIMESTAMP WHERE id_usuario = @id AND es_activo = TRUE'),
         parameters: {'pin': nuevoPIN, 'id': idUsuario},

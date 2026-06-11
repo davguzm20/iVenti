@@ -143,11 +143,12 @@ class _SetupConfigPageState extends State<SetupConfigPage> {
       }
 
     } catch (e) {
+      debugPrint('Error en setup de configuracion: $e');
       if (mounted) {
         ErrorDialog(
           context: context,
           title: 'Error inesperado',
-          description: 'Ocurrió un error al guardar la configuración, intenta de nuevo',
+          description: e.toString(),
         );
       }
     }

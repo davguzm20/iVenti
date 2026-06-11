@@ -1,5 +1,6 @@
 import 'package:postgres/postgres.dart';
 import 'package:iventi/shared/utils/PostgresDatasource.dart';
+import 'package:iventi/shared/utils/DniEncryptor.dart';
 import 'package:iventi/shared/exceptions/DatabaseException.dart';
 import 'package:iventi/shared/exceptions/NotFoundException.dart';
 import 'package:iventi/features/sales/enums/EstadoVenta.dart';
@@ -22,11 +23,10 @@ class ClienteRepository implements IClienteRepository {
 
     try {
       final clienteCreado = await conexion.execute(
-        Sql.named('INSERT INTO clientes (dni, nombres, apellidos, email, telefono, creado_en, actualizado_en) VALUES (@dni, @nombres, @apellidos, @email, @telefono, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP) RETURNING *'),
+        Sql.named('INSERT INTO clientes (dni, nombres, email, telefono, creado_en, actualizado_en) VALUES (@dni, @nombres, @email, @telefono, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP) RETURNING *'),
         parameters: {
-          'dni': request.dni,
+          'dni': request.dni != null && request.dni!.trim().isNotEmpty ? DniEncryptor.encryptAES(request.dni!.trim()) : null,
           'nombres': request.nombres.trim(),
-          'apellidos': request.apellidos.trim(),
           'email': request.email,
           'telefono': request.telefono,
         },
@@ -64,7 +64,7 @@ class ClienteRepository implements IClienteRepository {
       final clientesEncontrados = await conexion.execute(
         Sql.named('''
           SELECT * FROM clientes
-          WHERE (nombres ILIKE '%' || @nombre || '%' OR apellidos ILIKE '%' || @nombre || '%')
+          WHERE (nombres ILIKE '%' || @nombre || '%')
           AND es_activo = TRUE
         '''),
         parameters: {'nombre': nombre},
@@ -92,7 +92,7 @@ class ClienteRepository implements IClienteRepository {
         sql += ' AND es_deudor = FALSE';
       }
 
-      sql += ' ORDER BY apellidos, nombres LIMIT @limite OFFSET @offset';
+      sql += ' ORDER BY nombres LIMIT @limite OFFSET @offset';
 
       final clientesEncontrados = await conexion.execute(Sql.named(sql), parameters: parametros);
 
@@ -110,12 +110,11 @@ class ClienteRepository implements IClienteRepository {
 
     try {
       final clienteActualizado = await conexion.execute(
-        Sql.named('UPDATE clientes SET dni = @dni, nombres = @nombres, apellidos = @apellidos, email = @email, telefono = @telefono, actualizado_en = CURRENT_TIMESTAMP WHERE id_cliente = @id AND es_activo = TRUE RETURNING *'),
+        Sql.named('UPDATE clientes SET dni = @dni, nombres = @nombres, email = @email, telefono = @telefono, actualizado_en = CURRENT_TIMESTAMP WHERE id_cliente = @id AND es_activo = TRUE RETURNING *'),
         parameters: {
           'id': request.idCliente,
-          'dni': request.dni,
+          'dni': request.dni != null && request.dni!.trim().isNotEmpty ? DniEncryptor.encryptAES(request.dni!.trim()) : null,
           'nombres': request.nombres.trim(),
-          'apellidos': request.apellidos.trim(),
           'email': request.email,
           'telefono': request.telefono,
         },

@@ -66,7 +66,7 @@ void main() {
     loteRepository = LoteRepository(datasource, productoRepository);
     categoriaRepository = CategoriaRepository(datasource);
     clienteRepository = ClienteRepository(datasource);
-    ventaRepository = VentaRepository(datasource, loteRepository, productoRepository);
+    ventaRepository = VentaRepository(datasource);
     reciboRepository = ReciboRepository(datasource);
 
     productoService = ProductoService(productoRepository, categoriaRepository);
@@ -142,7 +142,6 @@ void main() {
       ));
       sharedCliente = await clienteService.crearCliente(CrearClienteRequest(
         nombres: 'Cliente',
-        apellidos: 'Venta Test',
         dni: codigoUnico(),
       ));
     });
@@ -363,7 +362,6 @@ void main() {
       ));
       sharedCliente = await clienteService.crearCliente(CrearClienteRequest(
         nombres: 'Cliente',
-        apellidos: 'Pago Test',
         dni: codigoUnico(),
       ));
     });

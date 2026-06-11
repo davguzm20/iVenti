@@ -115,6 +115,7 @@ class _PaymentPageState extends State<PaymentPage> {
                   label: "DNI",
                   controller: _dniController,
                   keyboardType: TextInputType.number,
+                  isRequired: true,
                 ),
                 CustomTextField(
                   label: "Correo Electrónico",
@@ -161,14 +162,14 @@ class _PaymentPageState extends State<PaymentPage> {
 
                                   return ListTile(
                                     title: Text(
-                                        '${c.nombres} ${c.apellidos}'),
+                                        c.nombres),
                                     subtitle:
                                         Text("DNI: ${c.dni ?? '-------'}"),
                                     onTap: () {
                                       FocusScope.of(context).unfocus();
                                       setState(() {
                                         _searchController.text =
-                                            '${c.nombres} ${c.apellidos}';
+                                            c.nombres;
                                         clienteSeleccionado = c;
                                       });
                                     },
@@ -183,7 +184,7 @@ class _PaymentPageState extends State<PaymentPage> {
                 const SizedBox(height: 15),
 
                 Text(
-                  "Cliente: ${clienteSeleccionado != null ? '${clienteSeleccionado!.nombres} ${clienteSeleccionado!.apellidos}' : "---"}",
+                  "Cliente: ${clienteSeleccionado != null ? clienteSeleccionado!.nombres : "---"}",
                 ),
               ],
 
@@ -315,7 +316,27 @@ class _PaymentPageState extends State<PaymentPage> {
 
               if (crearCliente) {
                 if (_nombreController.text.isEmpty) {
-                  final (title, desc) = DialogMessages.ventas.camposIncompletos;
+                  final (title, desc) = DialogMessages.ventas.nombreClienteRequerido;
+                  ErrorDialog(
+                    context: context,
+                    title: title,
+                    description: desc,
+                  );
+                  return;
+                }
+
+                final dni = _dniController.text.trim();
+                if (dni.isEmpty) {
+                  final (title, desc) = DialogMessages.ventas.dniRequerido;
+                  ErrorDialog(
+                    context: context,
+                    title: title,
+                    description: desc,
+                  );
+                  return;
+                }
+                if (dni.length != 8) {
+                  final (title, desc) = DialogMessages.ventas.dniInvalido;
                   ErrorDialog(
                     context: context,
                     title: title,
@@ -328,7 +349,6 @@ class _PaymentPageState extends State<PaymentPage> {
                   final nuevo = await _clienteController.crearCliente(
                     CrearClienteRequest(
                       nombres: _nombreController.text,
-                      apellidos: '',
                       dni: _dniController.text,
                       email: _correoController.text,
                     ),
@@ -338,11 +358,10 @@ class _PaymentPageState extends State<PaymentPage> {
 
                 } catch (e) {
                   if (!mounted) return;
-                  final (title, desc) = DialogMessages.ventas.noSePudoRegistrarCliente;
                   ErrorDialog(
                     context: context,
-                    title: title,
-                    description: desc,
+                    title: 'No se pudo registrar el cliente',
+                    description: e.toString(),
                   );
                   return;
                 }
@@ -397,9 +416,10 @@ class _PaymentPageState extends State<PaymentPage> {
 
               } catch (e) {
                 if (!mounted) return;
+                debugPrint('Error al crear venta: $e');
                 final (title, desc) = e.toString().contains('Stock insuficiente')
                     ? ('Stock insuficiente', e.toString().split(': ').last)
-                    : DialogMessages.ventas.noSePudoRegistrarVenta;
+                    : ('No se pudo registrar la venta', e.toString());
                 ErrorDialog(
                   context: context,
                   title: title,

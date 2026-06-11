@@ -47,6 +47,15 @@
   "ventasCamposIncompletosTitulo": "Campos incompletos",
   "ventasCamposIncompletosDescripcion": "Completa los campos obligatorios",
 
+  "ventasDniRequeridoTitulo": "DNI requerido",
+  "ventasDniRequeridoDescripcion": "Ingresa el DNI del cliente",
+
+  "ventasDniInvalidoTitulo": "DNI inválido",
+  "ventasDniInvalidoDescripcion": "El DNI debe tener exactamente 8 dígitos numéricos",
+
+  "ventasNombreClienteRequeridoTitulo": "Nombre requerido",
+  "ventasNombreClienteRequeridoDescripcion": "Ingresa el nombre del cliente para continuar",
+
   "ventasNoSePudoRegistrarClienteTitulo": "No se pudo registrar el cliente",
   "ventasNoSePudoRegistrarClienteDescripcion": "No pudimos guardar la información del cliente",
 
@@ -79,6 +88,15 @@
 
   "inventarioCamposIncompletosTitulo": "Campos incompletos",
   "inventarioCamposIncompletosDescripcion": "Completa los campos obligatorios",
+
+  "inventarioNombreRequeridoTitulo": "Nombre requerido",
+  "inventarioNombreRequeridoDescripcion": "Ingresa el nombre del producto",
+
+  "inventarioPrecioRequeridoTitulo": "Precio requerido",
+  "inventarioPrecioRequeridoDescripcion": "Ingresa el precio del producto",
+
+  "inventarioUnidadRequeridaTitulo": "Unidad requerida",
+  "inventarioUnidadRequeridaDescripcion": "Selecciona una unidad de medida",
 
   "inventarioStockMinimoInvalidoTitulo": "Stock mínimo inválido",
   "inventarioStockMinimoInvalidoDescripcion": "El stock mínimo debe ser mayor a cero",

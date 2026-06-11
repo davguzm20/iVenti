@@ -22,7 +22,7 @@ class SalesModule {
     LoteRepository loteRepository,
     ProductoRepository productoRepository,
   ) {
-    ventaRepository = VentaRepository(datasource, loteRepository, productoRepository);
+    ventaRepository = VentaRepository(datasource);
     reciboRepository = ReciboRepository(datasource);
   }
 

@@ -27,6 +27,7 @@ jobs:
           echo "SMTP_EMAIL=${{ secrets.SMTP_EMAIL }}" >> .env
           echo "SMTP_PASSWORD=${{ secrets.SMTP_PASSWORD }}" >> .env
           echo "CLOUDINARY_URL=${{ secrets.CLOUDINARY_URL }}" >> .env
+          echo "ENCRYPTION_KEY=${{ secrets.ENCRYPTION_KEY }}" >> .env
 
       - uses: actions/setup-java@v4
         with:

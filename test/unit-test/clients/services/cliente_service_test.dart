@@ -16,7 +16,6 @@ void main() {
   final clienteValido = ClienteEntity(
     idCliente: 1,
     nombres: 'Juan',
-    apellidos: 'Perez',
     creadoEn: DateTime(2024),
   );
 
@@ -29,7 +28,7 @@ void main() {
     test('debe crear cliente correctamente', () async {
       when(mockRepo.crearCliente(any)).thenAnswer((_) async => clienteValido);
 
-      final request = CrearClienteRequest(nombres: 'Juan', apellidos: 'Perez');
+      final request = CrearClienteRequest(nombres: 'Juan');
       final result = await service.crearCliente(request);
 
       expect(result, clienteValido);
@@ -39,7 +38,7 @@ void main() {
     test('debe lanzar BusinessException cuando hay DatabaseException', () async {
       when(mockRepo.crearCliente(any)).thenThrow(DatabaseException('Error BD'));
 
-      final request = CrearClienteRequest(nombres: 'Juan', apellidos: 'Perez');
+      final request = CrearClienteRequest(nombres: 'Juan');
 
       expect(
         () => service.crearCliente(request),
@@ -53,7 +52,7 @@ void main() {
       when(mockRepo.obtenerClientePorId(1)).thenAnswer((_) async => clienteValido);
       when(mockRepo.actualizarCliente(any)).thenAnswer((_) async => clienteValido);
 
-      final request = ActualizarClienteRequest(idCliente: 1, nombres: 'Juan', apellidos: 'Perez');
+      final request = ActualizarClienteRequest(idCliente: 1, nombres: 'Juan');
       final result = await service.actualizarCliente(request);
 
       expect(result, clienteValido);
@@ -62,7 +61,7 @@ void main() {
     test('debe lanzar BusinessException cuando cliente no existe', () async {
       when(mockRepo.obtenerClientePorId(999)).thenAnswer((_) async => null);
 
-      final request = ActualizarClienteRequest(idCliente: 999, nombres: 'Juan', apellidos: 'Perez');
+      final request = ActualizarClienteRequest(idCliente: 999, nombres: 'Juan');
 
       expect(
         () => service.actualizarCliente(request),
@@ -74,7 +73,7 @@ void main() {
       when(mockRepo.obtenerClientePorId(any)).thenAnswer((_) async => clienteValido);
       when(mockRepo.actualizarCliente(any)).thenThrow(DatabaseException('Error BD'));
 
-      final request = ActualizarClienteRequest(idCliente: 1, nombres: 'Juan', apellidos: 'Perez');
+      final request = ActualizarClienteRequest(idCliente: 1, nombres: 'Juan');
 
       expect(
         () => service.actualizarCliente(request),

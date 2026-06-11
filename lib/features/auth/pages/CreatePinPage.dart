@@ -126,11 +126,12 @@ class _CreatePinPageState extends State<CreatePinPage> {
         );
       }
     } catch (e) {
+      debugPrint('Error en recuperacion de PIN: $e');
       if (mounted) {
         ErrorDialog(
           context: context,
           title: 'Error inesperado',
-          description: 'Ocurrió un error inesperado, intenta de nuevo',
+          description: e.toString(),
         );
       }
     }

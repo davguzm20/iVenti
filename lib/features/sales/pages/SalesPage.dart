@@ -82,9 +82,10 @@ class _SalesPageState extends State<SalesPage> {
         });
       }
     } catch (e) {
+      debugPrint('Error al cargar ventas: $e');
       if (mounted) {
         setState(() => isLoading = false);
-        ErrorDialog(context: context, title: 'Error', description: 'No se pudieron cargar las ventas');
+        ErrorDialog(context: context, title: 'Error', description: 'No se pudieron cargar las ventas\n\n$e');
       }
     }
   }
@@ -136,6 +137,7 @@ class _SalesPageState extends State<SalesPage> {
                       ventas = ventas.where((v) =>
                         '${v.idVenta}'.contains(value) ||
                         v.montoTotal.toString().contains(value) ||
+                        (v.codigoBoleta ?? '').contains(value) ||
                         (v.esCredito ? 'credito' : 'contado').contains(value.toLowerCase())
                       ).toList();
                     });

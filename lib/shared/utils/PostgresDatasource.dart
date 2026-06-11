@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:postgres/postgres.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:iventi/shared/di/ServiceLocator.dart';
@@ -9,6 +10,7 @@ class PostgresDatasource {
 
   Connection? _connection;
   int? _ultimoIdUsuario;
+  Timer? _heartbeatTimer;
 
   Future<Connection> get connection async {
     if (_connection == null || !await _conexionActiva()) {
@@ -17,6 +19,7 @@ class PostgresDatasource {
         _connection = null;
       }
       await _initConnection();
+      _startHeartbeat();
     }
     final idUsuario = ServiceLocator.usuarioActualId;
     if (idUsuario != null && idUsuario != _ultimoIdUsuario) {
@@ -24,6 +27,15 @@ class PostgresDatasource {
       _ultimoIdUsuario = idUsuario;
     }
     return _connection!;
+  }
+
+  void _startHeartbeat() {
+    _heartbeatTimer?.cancel();
+    _heartbeatTimer = Timer.periodic(const Duration(seconds: 60), (_) async {
+      try {
+        await _connection?.execute('SELECT 1');
+      } catch (_) {}
+    });
   }
 
   Future<bool> _conexionActiva() async {
@@ -55,6 +67,8 @@ class PostgresDatasource {
   }
 
   Future<void> close() async {
+    _heartbeatTimer?.cancel();
+    _heartbeatTimer = null;
     await _connection?.close();
     _connection = null;
   }

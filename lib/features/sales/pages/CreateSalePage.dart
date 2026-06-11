@@ -29,11 +29,17 @@ class _CreateSalePageState extends State<CreateSalePage> {
       context: context,
       builder: (ctx) => StatefulBuilder(
         builder: (ctx, setDialogState) {
+          List<ProductoEntity> productosRecientes = [];
+
+          Future.microtask(() async {
+            final r = await ServiceLocator.productoController.obtenerProductosRecientes(3);
+            if (ctx.mounted) setDialogState(() => productosRecientes = r);
+          });
+
           return AlertDialog(
+            scrollable: true,
             title: const Text('Agregar producto'),
-            content: SizedBox(
-              width: double.maxFinite,
-              child: Column(
+            content: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   TextField(
@@ -55,12 +61,16 @@ class _CreateSalePageState extends State<CreateSalePage> {
                   SizedBox(
                     height: 150,
                     child: ListView(
-                      children: productosFiltrados.map((p) {
+                      children: (productosFiltrados.isNotEmpty
+                              ? productosFiltrados
+                              : productosRecientes)
+                          .map((p) {
                         return ListTile(
                           dense: true,
                           title: Text(p.nombre),
                           subtitle: Text('S/ ${p.precio.toStringAsFixed(2)}'),
                           onTap: () async {
+                            FocusScope.of(ctx).unfocus();
                             final lotes = await ServiceLocator.loteController.obtenerLotesDeProducto(p.idProducto!);
                             setDialogState(() {
                               productoSeleccionado = p;
@@ -93,7 +103,6 @@ class _CreateSalePageState extends State<CreateSalePage> {
                   ],
                 ],
               ),
-            ),
             actions: [
               TextButton(onPressed: () => context.pop(), child: const Text('Cancelar')),
               TextButton(

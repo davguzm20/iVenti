@@ -179,6 +179,10 @@ class _CreateProductPageState extends State<CreateProductPage> {
                       : Image.file(
                           File(rutaImagen!),
                           fit: BoxFit.cover,
+                          errorBuilder: (_, __, ___) => Image.asset(
+                            'lib/assets/iconos/iconoImagen.png',
+                            fit: BoxFit.cover,
+                          ),
                         ),
                 ),
               ),
@@ -463,17 +467,24 @@ class _CreateProductPageState extends State<CreateProductPage> {
   }
 
   void _confirmarProducto() {
-    if (productNameController.text.isEmpty ||
-        minStockController.text.isEmpty ||
-        priceController.text.isEmpty ||
-        unidadSeleccionada == null) {
-      final (title, desc) = DialogMessages.inventario.camposIncompletos;
-      ErrorDialog(
-        context: context,
-        title: title,
-        description: desc,
-      );
-
+    if (productNameController.text.isEmpty) {
+      final (title, desc) = DialogMessages.inventario.nombreRequerido;
+      ErrorDialog(context: context, title: title, description: desc);
+      return;
+    }
+    if (unidadSeleccionada == null) {
+      final (title, desc) = DialogMessages.inventario.unidadRequerida;
+      ErrorDialog(context: context, title: title, description: desc);
+      return;
+    }
+    if (priceController.text.isEmpty) {
+      final (title, desc) = DialogMessages.inventario.precioRequerido;
+      ErrorDialog(context: context, title: title, description: desc);
+      return;
+    }
+    if (minStockController.text.isEmpty) {
+      final (title, desc) = DialogMessages.inventario.stockMinimoInvalido;
+      ErrorDialog(context: context, title: title, description: desc);
       return;
     }
 
@@ -509,10 +520,11 @@ class _CreateProductPageState extends State<CreateProductPage> {
       title: 'Confirmación',
       desc: '¿Está seguro de que desea crear el producto?',
       btnOkOnPress: () async {
-        String? imagenUrl = rutaImagen;
+          String? imagenUrl = rutaImagen;
         if (imagenUrl != null && !imagenUrl.startsWith('http')) {
           try {
-            imagenUrl = await CloudinaryService().uploadImage(imagenUrl, DateTime.now().millisecondsSinceEpoch);
+            final tempId = DateTime.now().millisecondsSinceEpoch;
+            imagenUrl = await CloudinaryService().uploadImage(imagenUrl, tempId);
           } catch (e) {
             if (mounted) { ErrorDialog(context: context, title: 'Error', description: 'No se pudo subir la imagen: $e'); }
             return;
@@ -550,12 +562,12 @@ class _CreateProductPageState extends State<CreateProductPage> {
           }
 
         } catch (e) {
+          debugPrint('Error al crear producto: $e');
           if (!mounted) return;
-          final (title, desc) = DialogMessages.inventario.noSePudoRegistrarProducto;
           ErrorDialog(
             context: context,
-            title: title,
-            description: desc,
+            title: 'No se pudo registrar el producto',
+            description: e.toString(),
           );
         }
       },

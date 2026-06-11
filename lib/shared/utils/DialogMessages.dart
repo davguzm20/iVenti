@@ -50,6 +50,9 @@ class _VentasMessages {
   (String, String) get montoInsuficiente => DialogMessages._mensaje('ventasMontoInsuficiente');
   (String, String) get clienteRequerido => DialogMessages._mensaje('ventasClienteRequerido');
   (String, String) get camposIncompletos => DialogMessages._mensaje('ventasCamposIncompletos');
+  (String, String) get dniRequerido => DialogMessages._mensaje('ventasDniRequerido');
+  (String, String) get dniInvalido => DialogMessages._mensaje('ventasDniInvalido');
+  (String, String) get nombreClienteRequerido => DialogMessages._mensaje('ventasNombreClienteRequerido');
   (String, String) get noSePudoRegistrarCliente => DialogMessages._mensaje('ventasNoSePudoRegistrarCliente');
   (String, String) get clienteNoEncontrado => DialogMessages._mensaje('ventasClienteNoEncontrado');
   (String, String) get ventaRegistrada => DialogMessages._mensaje('ventasVentaRegistrada');
@@ -64,6 +67,9 @@ class _VentasMessages {
 
 class _InventarioMessages {
   (String, String) get camposIncompletos => DialogMessages._mensaje('inventarioCamposIncompletos');
+  (String, String) get nombreRequerido => DialogMessages._mensaje('inventarioNombreRequerido');
+  (String, String) get precioRequerido => DialogMessages._mensaje('inventarioPrecioRequerido');
+  (String, String) get unidadRequerida => DialogMessages._mensaje('inventarioUnidadRequerida');
   (String, String) get stockMinimoInvalido => DialogMessages._mensaje('inventarioStockMinimoInvalido');
   (String, String) get precioInvalido => DialogMessages._mensaje('inventarioPrecioInvalido');
   (String, String) get productoregistrado => DialogMessages._mensaje('inventarioProductoRegistrado');

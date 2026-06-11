@@ -78,9 +78,10 @@ class _ClientsPageState extends State<ClientsPage> {
         });
       }
     } catch (e) {
+      debugPrint('Error al cargar clientes: $e');
       if (mounted) {
         setState(() => isLoading = false);
-        ErrorDialog(context: context, title: 'Error', description: 'No se pudieron cargar los clientes');
+        ErrorDialog(context: context, title: 'Error', description: 'No se pudieron cargar los clientes\n\n$e');
       }
     }
   }
@@ -111,48 +112,48 @@ class _ClientsPageState extends State<ClientsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: AnimatedContainer(
-          duration: const Duration(milliseconds: 150),
-          width: isSearching ? MediaQuery.of(context).size.width - 32 : 150,
-          child: isSearching
-              ? TextField(
-                  controller: _searchController,
-                  autofocus: true,
-                  decoration: InputDecoration(
-                    hintText: "Buscar cliente...",
-                    prefixIcon: const Icon(Icons.search),
-                    suffixIcon: IconButton(
-                      icon: const Icon(Icons.close),
-                      onPressed: () {
-                        _searchController.clear();
+        title: isSearching
+            ? TextField(
+                controller: _searchController,
+                autofocus: true,
+                decoration: InputDecoration(
+                  hintText: "Buscar cliente...",
+                  prefixIcon: const Icon(Icons.search),
+                  suffixIcon: IconButton(
+                    icon: const Icon(Icons.close),
+                    onPressed: () {
+                      _searchController.clear();
 
-                        setState(() {
-                          isSearching = false;
-                          nombreBuscado = "";
-                        });
+                      setState(() {
+                        isSearching = false;
+                        nombreBuscado = "";
+                      });
 
-                        _cargarClientes(reiniciar: true);
-                      },
-                    ),
-                    contentPadding:
-                        const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                      borderSide: BorderSide.none,
-                    ),
-                    filled: true,
-                    fillColor: Colors.white.withValues(alpha: 0.2),
+                      _cargarClientes(reiniciar: true);
+                    },
                   ),
-                  onChanged: (value) {
-                    setState(() => nombreBuscado = value);
-                    _buscarClientesPorNombre(value);
-                  },
-                )
-              : const Text(
+                  contentPadding:
+                      const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: BorderSide.none,
+                  ),
+                  filled: true,
+                  fillColor: Colors.white.withValues(alpha: 0.2),
+                ),
+                onChanged: (value) {
+                  setState(() => nombreBuscado = value);
+                  _buscarClientesPorNombre(value);
+                },
+              )
+            : const FittedBox(
+                fit: BoxFit.scaleDown,
+                alignment: Alignment.centerLeft,
+                child: Text(
                   "Mis clientes",
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
-        ),
+              ),
         actions: [
           AnimatedContainer(
             duration: const Duration(milliseconds: 200),

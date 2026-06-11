@@ -58,6 +58,7 @@ class _DetailsSalePageState extends State<DetailsSalePage> {
         );
       }
     } catch (e) {
+      debugPrint('Error al obtener datos de venta: $e');
       if (mounted) {
         ErrorDialog(
           context: context,
@@ -134,7 +135,7 @@ class _DetailsSalePageState extends State<DetailsSalePage> {
                 _buildInfoRow(
                   'Monto faltante:',
                   'S/ ${montoFaltante.toStringAsFixed(2)}',
-                  color: AppColors.danger,
+                  color: Colors.black87,
                 ),
               ],
             ),
@@ -187,6 +188,7 @@ class _DetailsSalePageState extends State<DetailsSalePage> {
                       }
 
                     } catch (e) {
+                      debugPrint('Error al registrar pago: $e');
                       if (!context.mounted) return;
                       final (title, desc) = DialogMessages.ventas.noSePudoRegistrarPago;
                       ErrorDialog(
@@ -313,7 +315,7 @@ class _DetailsSalePageState extends State<DetailsSalePage> {
               onPressed: () => _generarBoleta(),
             ),
             IconButton(
-              icon: const Icon(Icons.block, color: Colors.red),
+              icon: const Icon(Icons.block, color: Colors.black),
               onPressed: () => _anularVenta(),
             ),
           ],
@@ -338,6 +340,15 @@ class _DetailsSalePageState extends State<DetailsSalePage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
+              'Código: ${venta!.codigoBoleta ?? 'Sin código'}',
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: AppColors.primary,
+                              fontSize: 18,
+                            ),
+                          ),
+
+            Text(
               'Fecha: ${venta!.creadoEn.toIso8601String().split('T')[0]}',
                             style: const TextStyle(
                               fontWeight: FontWeight.bold,
@@ -356,7 +367,7 @@ class _DetailsSalePageState extends State<DetailsSalePage> {
                           ),
 
                           Text(
-                            'Monto total: ${venta!.montoTotal.toStringAsFixed(2)}',
+                            'Monto total: S/ ${venta!.montoTotal.toStringAsFixed(2)}',
                             style: const TextStyle(
                               fontWeight: FontWeight.bold,
                               color: AppColors.primary,
@@ -365,7 +376,7 @@ class _DetailsSalePageState extends State<DetailsSalePage> {
                           ),
 
                           Text(
-                            'Monto cancelado: ${venta!.montoCancelado.toStringAsFixed(2)}',
+                            'Monto cancelado: S/ ${venta!.montoCancelado.toStringAsFixed(2)}',
                             style: const TextStyle(
                               fontWeight: FontWeight.bold,
                               color: AppColors.primary,
@@ -375,6 +386,15 @@ class _DetailsSalePageState extends State<DetailsSalePage> {
 
                           Text(
                             'Tipo: ${venta!.esCredito ? "Crédito" : "Al contado"}',
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: AppColors.primary,
+                              fontSize: 18,
+                            ),
+                          ),
+
+                          Text(
+                            'Estado: ${venta!.estado.name}',
                             style: const TextStyle(
                               fontWeight: FontWeight.bold,
                               color: AppColors.primary,

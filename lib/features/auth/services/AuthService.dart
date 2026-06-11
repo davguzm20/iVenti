@@ -1,3 +1,4 @@
+import 'package:iventi/shared/utils/PinEncryptor.dart';
 import 'package:iventi/shared/exceptions/BusinessException.dart';
 import 'package:iventi/shared/exceptions/DatabaseException.dart';
 import 'package:iventi/shared/exceptions/ValidationException.dart';
@@ -13,7 +14,7 @@ class AuthService {
 
   Future<UsuarioEntity> iniciarSesion(String email, String pin) async {
     try {
-      final request = LoginRequest(email: email, pin: pin);
+      final request = LoginRequest(email: email, pin: PinEncryptor.hash(pin));
       return await _usuarioRepository.validarCredenciales(request);
 
     } on DatabaseException {
@@ -35,7 +36,13 @@ class AuthService {
     }
 
     try {
-      return await _usuarioRepository.crearUsuario(request);
+      final hashedRequest = CrearUsuarioRequest(
+        nombre: request.nombre,
+        email: request.email,
+        pin: PinEncryptor.hash(request.pin),
+        rol: request.rol,
+      );
+      return await _usuarioRepository.crearUsuario(hashedRequest);
 
     } on DatabaseException {
       throw BusinessException(
@@ -97,7 +104,7 @@ class AuthService {
 
     final usuario = await obtenerUsuarioPorId(idUsuario);
 
-    if (usuario.pin != pinActual) {
+    if (usuario.pin != PinEncryptor.hash(pinActual)) {
       throw BusinessException(
         'PIN incorrecto',
         descripcion: 'El PIN actual que ingresaste no coincide. Verifica e intenta de nuevo.',
@@ -105,7 +112,7 @@ class AuthService {
     }
 
     try {
-      await _usuarioRepository.actualizarPIN(idUsuario, pinNuevo);
+      await _usuarioRepository.actualizarPIN(idUsuario, PinEncryptor.hash(pinNuevo));
 
     } on DatabaseException {
       throw BusinessException(
@@ -132,7 +139,7 @@ class AuthService {
     }
 
     try {
-      await _usuarioRepository.actualizarPIN(idUsuario, pinNuevo);
+      await _usuarioRepository.actualizarPIN(idUsuario, PinEncryptor.hash(pinNuevo));
 
     } on DatabaseException {
       throw BusinessException(

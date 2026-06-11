@@ -2,7 +2,6 @@ class ClienteEntity {
   final int? idCliente;
   final String? dni;
   final String nombres;
-  final String apellidos;
   final String? email;
   final String? telefono;
   final bool esDeudor;
@@ -14,7 +13,6 @@ class ClienteEntity {
     this.idCliente,
     this.dni,
     required this.nombres,
-    required this.apellidos,
     this.email,
     this.telefono,
     this.esDeudor = false,

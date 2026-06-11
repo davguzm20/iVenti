@@ -125,4 +125,13 @@ class ProductoService {
       throw BusinessException('Error al filtrar productos: ${e.mensaje}');
     }
   }
+
+  Future<List<ProductoEntity>> obtenerProductosRecientes(int limite) async {
+    try {
+      return await _productoRepository.obtenerProductosRecientes(limite);
+
+    } on DatabaseException catch (e) {
+      throw BusinessException('Error al obtener productos recientes: ${e.mensaje}');
+    }
+  }
 }

@@ -131,6 +131,29 @@ class ProductoRepository implements IProductoRepository {
   }
 
   @override
+  Future<List<ProductoEntity>> obtenerProductosRecientes(int limite) async {
+    final conexion = await _conexion;
+
+    try {
+      final productosEncontrados = await conexion.execute(
+        Sql.named('''
+          SELECT * FROM productos
+          WHERE es_activo = TRUE
+          ORDER BY actualizado_en DESC
+          LIMIT @limite
+        '''),
+        parameters: {'limite': limite},
+      );
+
+      return productosEncontrados
+          .map((fila) => ProductoMapper.fromMap(fila.toColumnMap()))
+          .toList();
+    } catch (e) {
+      throw DatabaseException('Error al obtener productos recientes: $e');
+    }
+  }
+
+  @override
   Future<ProductoEntity> actualizarProducto(ActualizarProductoRequest request) async {
     final conexion = await _conexion;
 

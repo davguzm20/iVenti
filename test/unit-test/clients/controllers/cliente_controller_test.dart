@@ -14,7 +14,6 @@ void main() {
   final cliente = ClienteEntity(
     idCliente: 1,
     nombres: 'Juan',
-    apellidos: 'Perez',
     creadoEn: DateTime(2024),
   );
 
@@ -26,7 +25,7 @@ void main() {
   test('crearCliente delega a ClienteService', () async {
     when(mockService.crearCliente(any)).thenAnswer((_) async => cliente);
     
-    final request = CrearClienteRequest(nombres: 'Juan', apellidos: 'Perez');
+    final request = CrearClienteRequest(nombres: 'Juan');
     final result = await controller.crearCliente(request);
     
     expect(result, cliente);
@@ -36,7 +35,7 @@ void main() {
   test('actualizarCliente delega a ClienteService', () async {
     when(mockService.actualizarCliente(any)).thenAnswer((_) async => cliente);
     
-    final request = ActualizarClienteRequest(idCliente: 1, nombres: 'Juan', apellidos: 'Perez');
+    final request = ActualizarClienteRequest(idCliente: 1, nombres: 'Juan');
     final result = await controller.actualizarCliente(request);
     
     expect(result, cliente);

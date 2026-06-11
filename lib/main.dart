@@ -8,6 +8,16 @@ import 'package:iventi/AppRoutes.dart';
 
 Future<void> main({String envFile = ".env"}) async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  FlutterError.onError = (details) {
+    debugPrint('FlutterError: ${details.exception}');
+    FlutterError.presentError(details);
+  };
+
+  ErrorWidget.builder = (details) => const Center(
+        child: Text('Ha ocurrido un error inesperado'),
+      );
+
   await dotenv.load(fileName: envFile);
 
   await ServiceLocator.initialize();

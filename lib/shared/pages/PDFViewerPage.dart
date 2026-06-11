@@ -15,26 +15,32 @@ class PDFViewerPage extends StatelessWidget {
         title: const Text('Visor de PDF'),
         actions: [
           IconButton(
-            icon: const Icon(Icons.share),
+            icon: const Icon(Icons.print, color: Colors.black),
+            onPressed: () => Printing.layoutPdf(
+              onLayout: (_) => File(filePath).readAsBytesSync(),
+            ),
+          ),
+          IconButton(
+            icon: const Icon(Icons.share, color: Colors.black),
             onPressed: () => PrintService.sharePDF(context, filePath),
           ),
           IconButton(
-            icon: const Icon(Icons.download),
+            icon: const Icon(Icons.download, color: Colors.black),
             onPressed: () => PrintService.downloadPDF(context, filePath),
           ),
         ],
       ),
       body: FutureBuilder<Uint8List>(
-        future: File(filePath).readAsBytes().then((v) => Uint8List.fromList(v)),
+        future: File(filePath).readAsBytes(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             return PdfPreview(
               build: (format) => snapshot.data!,
-              allowPrinting: true,
+              allowPrinting: false,
               allowSharing: false,
               canChangePageFormat: false,
               canChangeOrientation: false,
-              maxPageWidth: MediaQuery.of(context).size.width * 0.9,
+              maxPageWidth: MediaQuery.of(context).size.width,
             );
           }
           if (snapshot.hasError) {
