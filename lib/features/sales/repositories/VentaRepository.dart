@@ -7,17 +7,13 @@ import 'package:iventi/features/sales/entities/DetalleVentaEntity.dart';
 import 'package:iventi/features/sales/dtos/requests/CrearVentaRequest.dart';
 import 'package:iventi/features/sales/mappers/VentaMapper.dart';
 import 'package:iventi/features/sales/enums/EstadoVenta.dart';
-import 'package:iventi/features/inventory/repositories/LoteRepository.dart';
-import 'package:iventi/features/inventory/repositories/ProductoRepository.dart';
 import 'package:iventi/features/sales/repositories/ReciboRepository.dart';
 import 'package:iventi/features/sales/repositories/IVentaRepository.dart';
 
 class VentaRepository implements IVentaRepository {
   final PostgresDatasource _datasource;
-  final LoteRepository _loteRepository;
-  final ProductoRepository _productoRepository;
 
-  VentaRepository(this._datasource, this._loteRepository, this._productoRepository);
+  VentaRepository(this._datasource);
 
   Future<Connection> get _conexion => _datasource.connection;
 

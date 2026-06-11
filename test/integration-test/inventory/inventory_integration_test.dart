@@ -40,7 +40,7 @@ void main() {
 
     productoRepository = ProductoRepository(datasource);
     final loteRepository = LoteRepository(datasource, productoRepository);
-    final ventaRepository = VentaRepository(datasource, loteRepository, productoRepository);
+    final ventaRepository = VentaRepository(datasource);
 
     productoService = ProductoService(productoRepository, categoriaRepository);
     loteService = LoteService(loteRepository, productoRepository, ventaRepository);
