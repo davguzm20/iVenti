@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:provider/provider.dart';
 import 'package:mockito/mockito.dart';
 import 'package:iventi/features/config/pages/ConfigPage.dart';
-import 'package:iventi/features/auth/controllers/AuthController.dart';
-import 'package:iventi/features/config/controllers/ConfiguracionController.dart';
 import 'package:iventi/features/auth/entities/UsuarioEntity.dart';
 import 'package:iventi/features/auth/enums/TipoRol.dart';
 import 'package:iventi/features/config/entities/ConfiguracionEntity.dart';
+import 'package:iventi/shared/di/modules/auth_module.dart';
+import 'package:iventi/shared/di/modules/config_module.dart';
 
 import '../../mocks_mocks.dart';
 import '../helpers.dart';
@@ -16,9 +15,16 @@ void main() {
   late MockAuthController mockAuthController;
   late MockConfiguracionController mockConfigController;
 
-  setUp(() {
+  setUpAll(() {
     mockAuthController = MockAuthController();
     mockConfigController = MockConfiguracionController();
+    AuthModule.authController = mockAuthController;
+    ConfigModule.configuracionController = mockConfigController;
+  });
+
+  setUp(() {
+    reset(mockAuthController);
+    reset(mockConfigController);
   });
 
   group('ConfigPage', () {
@@ -31,10 +37,7 @@ void main() {
         tester,
         location: '/config',
         page: const ConfigPage(),
-        providers: [
-          Provider<AuthController>.value(value: mockAuthController),
-          Provider<ConfiguracionController>.value(value: mockConfigController),
-        ],
+        providers: [],
       );
 
       expect(find.byType(CircularProgressIndicator), findsOneWidget);
@@ -52,10 +55,7 @@ void main() {
         tester,
         location: '/config',
         page: const ConfigPage(),
-        providers: [
-          Provider<AuthController>.value(value: mockAuthController),
-          Provider<ConfiguracionController>.value(value: mockConfigController),
-        ],
+        providers: [],
       );
 
       await tester.pump();

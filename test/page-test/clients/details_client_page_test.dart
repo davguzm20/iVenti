@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:provider/provider.dart';
 import 'package:mockito/mockito.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iventi/features/clients/pages/DetailsClientPage.dart';
-import 'package:iventi/features/clients/controllers/ClienteController.dart';
 import 'package:iventi/features/clients/entities/ClienteEntity.dart';
-import 'package:iventi/features/sales/controllers/VentaController.dart';
 import 'package:iventi/features/sales/entities/VentaEntity.dart';
 import 'package:iventi/features/sales/enums/EstadoVenta.dart';
+import 'package:iventi/shared/di/modules/clients_module.dart';
+import 'package:iventi/shared/di/modules/sales_module.dart';
 
 import '../../mocks_mocks.dart';
 
@@ -16,9 +15,16 @@ void main() {
   late MockClienteController mockClienteController;
   late MockVentaController mockVentaController;
 
-  setUp(() {
+  setUpAll(() {
     mockClienteController = MockClienteController();
     mockVentaController = MockVentaController();
+    ClienteModule.clienteController = mockClienteController;
+    SalesModule.ventaController = mockVentaController;
+  });
+
+  setUp(() {
+    reset(mockClienteController);
+    reset(mockVentaController);
   });
 
   Widget buildTestApp() {
@@ -29,13 +35,7 @@ void main() {
         GoRoute(path: '/sales/details-sale/:id', builder: (_, __) => const SizedBox()),
       ],
     );
-    return MultiProvider(
-      providers: [
-        Provider<ClienteController>.value(value: mockClienteController),
-        Provider<VentaController>.value(value: mockVentaController),
-      ],
-      child: MaterialApp.router(routerConfig: router),
-    );
+    return MaterialApp.router(routerConfig: router);
   }
 
   group('DetailsClientPage', () {
@@ -66,7 +66,7 @@ void main() {
       expect(find.text('DNI: 12345678'), findsOneWidget);
       expect(find.text('Email: juan@test.com'), findsOneWidget);
       expect(find.text('Teléfono: 999888777'), findsOneWidget);
-      expect(find.text('Estado: Regular'), findsOneWidget);
+      expect(find.text('REGULAR'), findsOneWidget);
       expect(find.text('No se encontraron ventas'), findsOneWidget);
     });
 

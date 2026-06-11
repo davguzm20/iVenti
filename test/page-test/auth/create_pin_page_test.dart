@@ -1,20 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:provider/provider.dart';
 import 'package:mockito/mockito.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iventi/features/auth/pages/CreatePinPage.dart';
-import 'package:iventi/features/auth/controllers/AuthController.dart';
 import 'package:iventi/features/auth/entities/UsuarioEntity.dart';
 import 'package:iventi/features/auth/enums/TipoRol.dart';
+import 'package:iventi/shared/di/modules/auth_module.dart';
 
 import '../../mocks_mocks.dart';
 
 void main() {
   late MockAuthController mockAuthController;
 
-  setUp(() {
+  setUpAll(() {
     mockAuthController = MockAuthController();
+    AuthModule.authController = mockAuthController;
+  });
+
+  setUp(() {
+    reset(mockAuthController);
   });
 
   Widget buildTestApp({bool isRecovery = false, String? extraEmail}) {
@@ -29,12 +33,7 @@ void main() {
     if (extraEmail != null) {
       router.go('/create-pin', extra: extraEmail);
     }
-    return MultiProvider(
-      providers: [
-        Provider<AuthController>.value(value: mockAuthController),
-      ],
-      child: MaterialApp.router(routerConfig: router),
-    );
+    return MaterialApp.router(routerConfig: router);
   }
 
   group('CreatePinPage', () {

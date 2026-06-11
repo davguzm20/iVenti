@@ -1,20 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:provider/provider.dart';
 import 'package:mockito/mockito.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iventi/features/sales/pages/SalesPage.dart';
-import 'package:iventi/features/sales/controllers/VentaController.dart';
 import 'package:iventi/features/sales/entities/VentaEntity.dart';
 import 'package:iventi/features/sales/enums/EstadoVenta.dart';
+import 'package:iventi/shared/di/modules/sales_module.dart';
 
 import '../../mocks_mocks.dart';
 
 void main() {
   late MockVentaController mockController;
 
-  setUp(() {
+  setUpAll(() {
     mockController = MockVentaController();
+    SalesModule.ventaController = mockController;
+  });
+
+  setUp(() {
+    reset(mockController);
   });
 
   Widget buildTestApp() {
@@ -27,12 +31,7 @@ void main() {
         GoRoute(path: '/sales/filter-sales', builder: (_, __) => const SizedBox()),
       ],
     );
-    return MultiProvider(
-      providers: [
-        Provider<VentaController>.value(value: mockController),
-      ],
-      child: MaterialApp.router(routerConfig: router),
-    );
+    return MaterialApp.router(routerConfig: router);
   }
 
   group('SalesPage', () {

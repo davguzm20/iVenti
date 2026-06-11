@@ -6,6 +6,8 @@ import 'package:postgres/postgres.dart';
 
 import 'package:iventi/main.dart' as app;
 import 'package:iventi/shared/utils/PostgresDatasource.dart';
+import 'package:iventi/shared/utils/PinEncryptor.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../helpers.dart';
 import '../helpers/auth_flows.dart';
 
@@ -25,17 +27,18 @@ void main() {
     await cleanTestData();
 
     final conn = await PostgresDatasource().connection;
+    await conn.execute("SET app.id_usuario = 1");
     await conn.execute(Sql.named(
       "INSERT INTO usuarios (id_usuario, nombre, email, pin, rol, es_activo) VALUES (1, @nombre, @email, @pin, 'OPERATIVO', TRUE) "
       "ON CONFLICT (id_usuario) DO UPDATE SET email = @email, pin = @pin",
     ), parameters: {
-      'nombre': 'e2e_clients_detail', 'email': 'e2e_clients_detail@test.com', 'pin': '123456',
+      'nombre': 'e2e_clients_detail', 'email': 'e2e_clients_detail@test.com', 'pin': PinEncryptor.hash('123456'),
     });
     final idCliente = (await conn.execute(Sql.named(
-      "INSERT INTO clientes (nombres, apellidos, dni, email, telefono, es_deudor) "
-      "VALUES (@nombres, @apellidos, @dni, @email, @telefono, @esDeudor) RETURNING id_cliente",
+      "INSERT INTO clientes (nombres, dni, email, telefono, es_deudor) "
+      "VALUES (@nombres, @dni, @email, @telefono, @esDeudor) RETURNING id_cliente",
     ), parameters: {
-      'nombres': 'e2e_cliente', 'apellidos': 'detail', 'dni': '33333333',
+      'nombres': 'e2e_cliente', 'dni': '33333333',
       'email': 'cliente@test.com', 'telefono': '999333333', 'esDeudor': true,
     })).first[0] as int;
     await conn.execute(Sql.named(
@@ -74,6 +77,9 @@ void main() {
       'idCliente': idCliente, 'idLote': idLote, 'cantidad': 5, 'precio': 20.00, 'subtotal': 100.00,
     });
 
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('device_registered', true);
+
     await app.main(envFile: ".env.test");
     await tester.pump();
     await tester.runAsync(() => Future.delayed(const Duration(seconds: 3)));
@@ -103,10 +109,10 @@ void main() {
     }
 
     // 1. Ver cliente en listado
-    expect(find.text('e2e_cliente detail'), findsOneWidget);
+    expect(find.text('e2e_cliente'), findsOneWidget);
 
     // 2. Navegar a detalle (usando icono visibility del ClientCard)
-    await tester.tap(find.byIcon(Icons.visibility));
+    await tester.tap(find.byIcon(Icons.visibility).first);
     await tester.pump();
     await tester.runAsync(() => Future.delayed(const Duration(seconds: 3)));
     for (int i = 0; i < 10; i++) {
@@ -180,7 +186,7 @@ void main() {
     }
 
     // 9. Volver a lista de clientes
-    expect(find.text('e2e_cliente detail'), findsOneWidget);
+    expect(find.text('e2e_cliente'), findsOneWidget);
 
   }, timeout: const Timeout(Duration(seconds: 240)));
 }

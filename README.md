@@ -107,12 +107,9 @@ flutter build apk --release
 # Output: build/app/outputs/flutter-apk/app-release.apk
 ```
 
-### APK de release vía CI (GitHub Actions)
+## 📦 Release
 
-Cada push a `main` ejecuta automáticamente el workflow `Release APK`:
-1. Ir a https://github.com/davguzm20/iVenti/actions
-2. Seleccionar workflow "Release APK"
-3. Descargar el APK desde la release "Latest"
+Descarga la ultima version del APK desde [GitHub Releases](https://github.com/davguzm20/iVenti/releases/tag/latest).
 
 ## 📲 Ejecutar en emulador
 
