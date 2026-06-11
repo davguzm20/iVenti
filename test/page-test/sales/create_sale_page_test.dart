@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:provider/provider.dart';
+import 'package:mockito/mockito.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iventi/features/sales/pages/CreateSalePage.dart';
-import 'package:iventi/features/inventory/controllers/ProductoController.dart';
-import 'package:iventi/features/inventory/controllers/LoteController.dart';
+import 'package:iventi/shared/di/modules/inventory_module.dart';
 
 import '../../mocks_mocks.dart';
 
@@ -12,9 +11,16 @@ void main() {
   late MockProductoController mockProductoController;
   late MockLoteController mockLoteController;
 
-  setUp(() {
+  setUpAll(() {
     mockProductoController = MockProductoController();
     mockLoteController = MockLoteController();
+    InventoryModule.productoController = mockProductoController;
+    InventoryModule.loteController = mockLoteController;
+  });
+
+  setUp(() {
+    reset(mockProductoController);
+    reset(mockLoteController);
   });
 
   Widget buildTestApp() {
@@ -25,13 +31,7 @@ void main() {
         GoRoute(path: '/sales/create-sale/payment', builder: (_, __) => const SizedBox()),
       ],
     );
-    return MultiProvider(
-      providers: [
-        Provider<ProductoController>.value(value: mockProductoController),
-        Provider<LoteController>.value(value: mockLoteController),
-      ],
-      child: MaterialApp.router(routerConfig: router),
-    );
+    return MaterialApp.router(routerConfig: router);
   }
 
   group('CreateSalePage', () {

@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:provider/provider.dart';
+import 'package:mockito/mockito.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iventi/features/sales/pages/PaymentPage.dart';
-import 'package:iventi/features/sales/controllers/VentaController.dart';
-import 'package:iventi/features/clients/controllers/ClienteController.dart';
+import 'package:iventi/shared/di/modules/sales_module.dart';
+import 'package:iventi/shared/di/modules/clients_module.dart';
+import 'package:iventi/shared/di/ServiceLocator.dart';
 
 import '../../mocks_mocks.dart';
 
@@ -12,9 +13,17 @@ void main() {
   late MockVentaController mockVentaController;
   late MockClienteController mockClienteController;
 
-  setUp(() {
+  setUpAll(() {
     mockVentaController = MockVentaController();
     mockClienteController = MockClienteController();
+    SalesModule.ventaController = mockVentaController;
+    ClienteModule.clienteController = mockClienteController;
+    ServiceLocator.usuarioActualId = 1;
+  });
+
+  setUp(() {
+    reset(mockVentaController);
+    reset(mockClienteController);
   });
 
   Widget buildTestApp() {
@@ -27,13 +36,7 @@ void main() {
         GoRoute(path: '/sales', builder: (_, __) => const SizedBox()),
       ],
     );
-    return MultiProvider(
-      providers: [
-        Provider<VentaController>.value(value: mockVentaController),
-        Provider<ClienteController>.value(value: mockClienteController),
-      ],
-      child: MaterialApp.router(routerConfig: router),
-    );
+    return MaterialApp.router(routerConfig: router);
   }
 
   group('PaymentPage', () {

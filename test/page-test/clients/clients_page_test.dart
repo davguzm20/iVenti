@@ -1,19 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:provider/provider.dart';
 import 'package:mockito/mockito.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iventi/features/clients/pages/ClientsPage.dart';
-import 'package:iventi/features/clients/controllers/ClienteController.dart';
 import 'package:iventi/features/clients/entities/ClienteEntity.dart';
+import 'package:iventi/shared/di/modules/clients_module.dart';
 
 import '../../mocks_mocks.dart';
 
 void main() {
   late MockClienteController mockController;
 
-  setUp(() {
+  setUpAll(() {
     mockController = MockClienteController();
+    ClienteModule.clienteController = mockController;
+  });
+
+  setUp(() {
+    reset(mockController);
   });
 
   Widget buildTestApp() {
@@ -25,12 +29,7 @@ void main() {
         GoRoute(path: '/clients/filter-clients', builder: (_, __) => const SizedBox()),
       ],
     );
-    return MultiProvider(
-      providers: [
-        Provider<ClienteController>.value(value: mockController),
-      ],
-      child: MaterialApp.router(routerConfig: router),
-    );
+    return MaterialApp.router(routerConfig: router);
   }
 
   group('ClientsPage', () {
