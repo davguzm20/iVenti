@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:iventi/shared/exceptions/AppException.dart';
 import 'package:iventi/shared/widgets/ErrorDialog.dart';
@@ -121,9 +122,11 @@ class _SetupConfigPageState extends State<SetupConfigPage> {
         );
       }
 
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setBool('device_registered', true);
+
       if (mounted) {
         final timestamp = DateTime.now().millisecondsSinceEpoch;
-
         final (title, desc) = DialogMessages.auth.configuracionCompletada;
         SuccessDialog(
           context: context,

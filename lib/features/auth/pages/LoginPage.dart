@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:iventi/features/auth/controllers/AuthController.dart';
 import 'package:iventi/shared/di/ServiceLocator.dart';
@@ -70,6 +71,8 @@ class _LoginPageState extends State<LoginPage> {
     try {
       final usuario = await _authController.iniciarSesion(userEmail, userPIN);
       await ServiceLocator.setUsuarioActual(usuario.idUsuario!);
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setBool('device_registered', true);
 
       if (mounted) context.go('/inventory');
 
