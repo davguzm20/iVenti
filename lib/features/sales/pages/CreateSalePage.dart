@@ -36,10 +36,6 @@ class _CreateSalePageState extends State<CreateSalePage> {
             if (ctx.mounted) setDialogState(() => productosRecientes = r);
           });
 
-          List<ProductoEntity> listaActual = productosFiltrados.isNotEmpty
-              ? productosFiltrados
-              : productosRecientes;
-
           return AlertDialog(
             scrollable: true,
             title: const Text('Agregar producto'),

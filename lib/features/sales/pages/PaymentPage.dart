@@ -162,14 +162,14 @@ class _PaymentPageState extends State<PaymentPage> {
 
                                   return ListTile(
                                     title: Text(
-                                        '${c.nombres}'),
+                                        c.nombres),
                                     subtitle:
                                         Text("DNI: ${c.dni ?? '-------'}"),
                                     onTap: () {
                                       FocusScope.of(context).unfocus();
                                       setState(() {
                                         _searchController.text =
-                                            '${c.nombres}';
+                                            c.nombres;
                                         clienteSeleccionado = c;
                                       });
                                     },
@@ -184,7 +184,7 @@ class _PaymentPageState extends State<PaymentPage> {
                 const SizedBox(height: 15),
 
                 Text(
-                  "Cliente: ${clienteSeleccionado != null ? '${clienteSeleccionado!.nombres}' : "---"}",
+                  "Cliente: ${clienteSeleccionado != null ? clienteSeleccionado!.nombres : "---"}",
                 ),
               ],
 
