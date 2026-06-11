@@ -9,9 +9,4 @@ class PinEncryptor {
     final bytes = utf8.encode(pin);
     return hmac.convert(bytes).toString();
   }
-
-  static String hashLegacy(String pin) {
-    final bytes = utf8.encode(pin);
-    return sha256.convert(bytes).toString();
-  }
 }
