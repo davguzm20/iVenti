@@ -39,7 +39,7 @@ Future<void> cleanTestData() async {
     "DELETE FROM configuraciones WHERE id_usuario IN (SELECT id_usuario FROM usuarios WHERE email LIKE 'e2e_%')",
   );
   await conn.execute(
-    "DELETE FROM clientes WHERE nombres LIKE 'e2e_%' OR apellidos LIKE 'e2e_%'",
+    "DELETE FROM clientes WHERE nombres LIKE 'e2e_%'",
   );
   await conn.execute(
     "DELETE FROM auditoria WHERE id_usuario IN (SELECT id_usuario FROM usuarios WHERE email LIKE 'e2e_%')",

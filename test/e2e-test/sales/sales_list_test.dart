@@ -7,6 +7,8 @@ import 'package:postgres/postgres.dart';
 import 'package:iventi/main.dart' as app;
 import 'package:iventi/features/sales/pages/FilterSalesPage.dart';
 import 'package:iventi/shared/utils/PostgresDatasource.dart';
+import 'package:iventi/shared/utils/PinEncryptor.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../helpers.dart';
 
 void main() {
@@ -26,11 +28,12 @@ void main() {
     await cleanTestData();
 
     final conn = await PostgresDatasource().connection;
+    await conn.execute("SET app.id_usuario = 1");
     await conn.execute(Sql.named(
       "INSERT INTO usuarios (nombre, email, pin, rol, es_activo) VALUES (@nombre, @email, @pin, 'OPERATIVO', TRUE) "
       "ON CONFLICT (email) DO UPDATE SET pin = @pin",
     ), parameters: {
-      'nombre': 'E2E Sales List', 'email': 'e2e_sales_list@test.com', 'pin': '123456',
+      'nombre': 'E2E Sales List', 'email': 'e2e_sales_list@test.com', 'pin': PinEncryptor.hash('123456'),
     });
     final idUser = (await conn.execute(
       Sql.named("SELECT id_usuario FROM usuarios WHERE email = @email"),
@@ -64,8 +67,8 @@ void main() {
     )).first[0] as int;
     // Seed venta
     final idCliente = (await conn.execute(Sql.named(
-      "INSERT INTO clientes (nombres, apellidos, dni, creado_en) "
-      "VALUES ('e2e_contado', 'e2e_sales_list', 'e2e_00000000', CURRENT_TIMESTAMP) RETURNING id_cliente",
+      "INSERT INTO clientes (nombres, dni, creado_en) "
+      "VALUES ('e2e_contado', 'e2e_00000000', CURRENT_TIMESTAMP) RETURNING id_cliente",
     ))).first[0] as int;
     final idVenta = (await conn.execute(Sql.named(
       "INSERT INTO ventas (id_cliente, id_usuario, monto_total, monto_cancelado, estado, es_credito, creado_en, actualizado_en) "
@@ -80,6 +83,9 @@ void main() {
     ), parameters: {
       'idVenta': idVenta, 'idLote': idLote, 'cantidad': 2, 'precio': 20.00, 'subtotal': 40.00,
     });
+
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('device_registered', true);
 
     await app.main(envFile: ".env.test");
     await tester.pump();
