@@ -253,7 +253,7 @@ class _DetailsClientPageState extends State<DetailsClientPage> {
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Card(
               elevation: 0,
