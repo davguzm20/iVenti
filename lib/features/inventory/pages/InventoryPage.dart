@@ -115,51 +115,51 @@ class _InventoryPageState extends State<InventoryPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: AnimatedContainer(
-          duration: const Duration(milliseconds: 150),
-          width: isSearching ? MediaQuery.of(context).size.width - 32 : 150,
-          child: isSearching
-              ? TextField(
-                  controller: _searchController,
-                  autofocus: true,
-                  decoration: InputDecoration(
-                    hintText: "Buscar producto...",
-                    prefixIcon: const Icon(Icons.search),
-                    suffixIcon: IconButton(
-                      icon: const Icon(Icons.close),
-                      onPressed: () {
-                        _searchController.clear();
+        title: isSearching
+            ? TextField(
+                controller: _searchController,
+                autofocus: true,
+                decoration: InputDecoration(
+                  hintText: "Buscar producto...",
+                  prefixIcon: const Icon(Icons.search),
+                  suffixIcon: IconButton(
+                    icon: const Icon(Icons.close),
+                    onPressed: () {
+                      _searchController.clear();
 
-                        setState(() {
-                          isSearching = false;
-                          nombreProductoBuscado = "";
-                        });
+                      setState(() {
+                        isSearching = false;
+                        nombreProductoBuscado = "";
+                      });
 
-                        _cargarProductos(reiniciar: true);
-                      },
-                    ),
-                    contentPadding:
-                        const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                      borderSide: BorderSide.none,
-                    ),
-                    filled: true,
-                    fillColor: Colors.white.withValues(alpha: 0.2),
+                      _cargarProductos(reiniciar: true);
+                    },
                   ),
-                  onChanged: (value) {
-                    setState(() {
-                      nombreProductoBuscado = value;
-                    });
+                  contentPadding:
+                      const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: BorderSide.none,
+                  ),
+                  filled: true,
+                  fillColor: Colors.white.withValues(alpha: 0.2),
+                ),
+                onChanged: (value) {
+                  setState(() {
+                    nombreProductoBuscado = value;
+                  });
 
-                    _buscarProductosPorNombre(value);
-                  },
-                )
-              : const Text(
+                  _buscarProductosPorNombre(value);
+                },
+              )
+            : const FittedBox(
+                fit: BoxFit.scaleDown,
+                alignment: Alignment.centerLeft,
+                child: Text(
                   "Mis productos",
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
-        ),
+              ),
         actions: [
           AnimatedContainer(
             duration: const Duration(milliseconds: 200),
