@@ -15,10 +15,10 @@ class PostgresDatasource {
   Future<Connection> get connection async {
     if (_connection == null || !await _conexionActiva()) {
       if (_connection != null) {
-        await _connection!.close();
+        try { await _connection!.close(); } catch (_) {}
         _connection = null;
       }
-      await _initConnection();
+      await _initWithRetry();
       _startHeartbeat();
     }
     final idUsuario = ServiceLocator.usuarioActualId;
@@ -31,7 +31,7 @@ class PostgresDatasource {
 
   void _startHeartbeat() {
     _heartbeatTimer?.cancel();
-    _heartbeatTimer = Timer.periodic(const Duration(seconds: 60), (_) async {
+    _heartbeatTimer = Timer.periodic(const Duration(seconds: 30), (_) async {
       try {
         await _connection?.execute('SELECT 1');
       } catch (_) {}
@@ -45,6 +45,18 @@ class PostgresDatasource {
     } catch (_) {
       return false;
     }
+  }
+
+  Future<void> _initWithRetry() async {
+    for (var i = 0; i < 3; i++) {
+      try {
+        await _initConnection();
+        return;
+      } catch (_) {
+        if (i < 2) await Future.delayed(const Duration(seconds: 1));
+      }
+    }
+    await _initConnection();
   }
 
   Future<void> _initConnection() async {
@@ -69,7 +81,7 @@ class PostgresDatasource {
   Future<void> close() async {
     _heartbeatTimer?.cancel();
     _heartbeatTimer = null;
-    await _connection?.close();
+    try { await _connection?.close(); } catch (_) {}
     _connection = null;
   }
 }
