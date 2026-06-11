@@ -1,19 +1,19 @@
 # Auth - Pruebas Unitarias
 
-## 1. Resultados de Ejecución
+## 1. Resultados de Ejecucion
 
 ### 1.1. Salida de Consola
 
 ```
-00:00 +30: All tests passed!
+00:00 +36: All tests passed!
 ```
 
 ### 1.2. Resumen de Resultados
 
 | Concepto | Cantidad |
 |----------|----------|
-| Total | 30 |
-| Exitosas | 30 |
+| Total | 36 |
+| Exitosas | 36 |
 | Fallidas | 0 |
 
 ### 1.3. Desglose por Tipo
@@ -22,12 +22,14 @@
 |------|-------|----------|
 | AuthService | 21 | 21 |
 | AuthController | 9 | 9 |
+| AuthService (HMAC) | 3 | 3 |
+| DniEncryptor | 3 | 3 |
 
 ## 2. Tests Ejecutados
 
 ### 2.1. AuthService (21 tests)
 
-| # | Método | Descripción | Tipo |
+| # | Metodo | Descripcion | Tipo |
 |---|--------|-------------|------|
 | 1 | iniciarSesion | debe retornar usuario cuando credenciales son validas | Happy Path |
 | 2 | iniciarSesion | debe lanzar BusinessException cuando hay DatabaseException | Error Path |
@@ -40,11 +42,11 @@
 | 9 | obtenerUsuarioPorEmail | debe retornar usuario cuando existe | Happy Path |
 | 10 | obtenerUsuarioPorEmail | debe lanzar BusinessException cuando email no existe | Error Path |
 | 11 | cambiarPin | debe actualizar PIN cuando los datos son correctos | Happy Path |
-| 12 | cambiarPin | debe lanzar ValidationException cuando PIN nuevo no tiene 6 digitos | Validación |
+| 12 | cambiarPin | debe lanzar ValidationException cuando PIN nuevo no tiene 6 digitos | Validacion |
 | 13 | cambiarPin | debe lanzar BusinessException cuando PIN actual es incorrecto | Error Path |
 | 14 | obtenerUsuarioRegistrado | debe retornar el usuario registrado | Happy Path |
 | 15 | recuperarPin | debe actualizar PIN cuando el nuevo PIN es valido | Happy Path |
-| 16 | recuperarPin | debe lanzar ValidationException cuando PIN no tiene 6 digitos | Validación |
+| 16 | recuperarPin | debe lanzar ValidationException cuando PIN no tiene 6 digitos | Validacion |
 | 17 | recuperarPin | debe lanzar BusinessException cuando hay DatabaseException | Error Path |
 | 18 | actualizarPerfil | debe actualizar el perfil correctamente | Happy Path |
 | 19 | actualizarPerfil | debe lanzar BusinessException cuando hay DatabaseException | Error Path |
@@ -53,40 +55,55 @@
 
 ### 2.2. AuthController (9 tests)
 
-| # | Método | Descripción | Tipo |
+| # | Metodo | Descripcion | Tipo |
 |---|--------|-------------|------|
-| 1 | iniciarSesion | delega al servicio | Delegación |
-| 2 | registrar | delega al servicio | Delegación |
-| 3 | obtenerUsuarioPorEmail | delega al servicio | Delegación |
-| 4 | obtenerUsuarioPorId | delega al servicio | Delegación |
-| 5 | obtenerUsuarioRegistrado | delega al servicio | Delegación |
-| 6 | cambiarPin | delega al servicio | Delegación |
-| 7 | recuperarPin | delega al servicio | Delegación |
-| 8 | actualizarPerfil | delega al servicio | Delegación |
-| 9 | desactivarUsuario | delega al servicio | Delegación |
+| 1 | iniciarSesion | delega al servicio | Delegacion |
+| 2 | registrar | delega al servicio | Delegacion |
+| 3 | obtenerUsuarioPorEmail | delega al servicio | Delegacion |
+| 4 | obtenerUsuarioPorId | delega al servicio | Delegacion |
+| 5 | obtenerUsuarioRegistrado | delega al servicio | Delegacion |
+| 6 | cambiarPin | delega al servicio | Delegacion |
+| 7 | recuperarPin | delega al servicio | Delegacion |
+| 8 | actualizarPerfil | delega al servicio | Delegacion |
+| 9 | desactivarUsuario | delega al servicio | Delegacion |
 
-## 3. Métodos Evaluados
+### 2.3. AuthService HMAC-SHA256 PIN (3 tests) — NUEVO
 
-| Método | Happy Path | Error Path | Validaciones |
+| # | Metodo | Descripcion | Tipo |
+|---|--------|-------------|------|
+| 1 | iniciarSesion | login usa PinEncryptor.hash para comparar PIN | Happy Path |
+| 2 | iniciarSesion | login con PIN incorrecto lanza BusinessException | Error Path |
+| 3 | PinEncryptor | mismo PIN produce consistentemente el mismo hash | Validacion |
+
+### 2.4. DniEncryptor (3 tests) — NUEVO
+
+| # | Metodo | Descripcion | Tipo |
+|---|--------|-------------|------|
+| 1 | encryptAES/decryptAES | ciclo completo | Happy Path |
+| 2 | decryptAES | plaintext legacy retorna tal cual | Validacion |
+| 3 | PinEncryptor | hash tiene 64 caracteres | Validacion |
+
+## 3. Metodos Evaluados
+
+| Metodo | Happy Path | Error Path | Validaciones |
 |---|---|---|---|
-| iniciarSesion | sí | sí | vacío |
-| registrar | sí | sí | vacío |
-| obtenerUsuarioPorId | sí | sí | vacío |
-| obtenerUsuarioPorEmail | sí | sí | vacío |
-| cambiarPin | sí | sí | sí |
-| obtenerUsuarioRegistrado | sí | vacío | vacío |
-| recuperarPin | sí | sí | sí |
-| actualizarPerfil | sí | sí | vacío |
-| desactivarUsuario | sí | sí | vacío |
+| iniciarSesion | si | si | si (HMAC-SHA256) |
+| registrar | si | si | vacio |
+| obtenerUsuarioPorId | si | si | vacio |
+| obtenerUsuarioPorEmail | si | si | vacio |
+| cambiarPin | si | si | si |
+| obtenerUsuarioRegistrado | si | vacio | vacio |
+| recuperarPin | si | si | si |
+| actualizarPerfil | si | si | vacio |
+| desactivarUsuario | si | si | vacio |
 
-## 4. Interpretación
+## 4. Cambios Aplicados (Sesion 11/jun/2026)
 
-1. **Cobertura:** 9 métodos del servicio + 9 métodos del controller evaluados
-2. **Patrones verificados:**
-   - DatabaseException se traduce a BusinessException
-   - Validación de PIN de 6 dígitos
-3. **Controllers:** delegan correctamente a los servicios
+1. **PinEncryptor**: HMAC-SHA256 con `ENCRYPTION_KEY` reemplaza SHA-256 legacy. Sin fallback.
+2. **DniEncryptor**: AES-256-CBC para DNI en BD. `decryptAES` tiene fallback para plaintext legacy (sin `:`).
+3. **UsuarioRepository**: removida validacion de longitud de PIN en repositorio.
+4. **Nuevo**: `auth_service_test.dart` (6 tests) — HMAC PIN login y ciclo DNI AES.
 
 ## 5. Conclusiones
 
-AuthService y AuthController están completamente probados. Todos los métodos manejan correctamente happy path, error path y validaciones de negocio.
+AuthService y AuthController estan completamente probados con 36 tests. Se agrego cobertura de HMAC-SHA256 para PIN y AES-256-CBC para DNI. El nuevo flujo de autenticacion usa hashing determinista con clave secreta.

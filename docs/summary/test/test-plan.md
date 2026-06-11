@@ -5,6 +5,7 @@
 | Versión | Fecha | Autor |
 |---------|-------|-------|
 | 1.0 | 2026-05-22 | Manuel David Guzman Chavez |
+| 1.1 | 2026-06-11 | Manuel David Guzman Chavez |
 
 ---
 

@@ -5,15 +5,15 @@
 ### 1.1. Salida de Consola
 
 ```
-00:03 +72: All tests passed!
+00:03 +76: All tests passed!
 ```
 
 ### 1.2. Resumen de Resultados
 
 | Concepto | Cantidad |
 |----------|----------|
-| Total | 72 |
-| Exitosas | 72 |
+| Total | 76 |
+| Exitosas | 76 |
 | Fallidas | 0 |
 
 ### 1.3. Desglose por Tipo
@@ -22,6 +22,7 @@
 |------|-------|----------|
 | ProductoService | 17 | 17 |
 | ProductoController | 8 | 8 |
+| ProductoEntity | 4 | 4 |
 | CategoriaService | 10 | 10 |
 | CategoriaController | 5 | 5 |
 | UnidadService | 5 | 5 |
@@ -66,7 +67,16 @@
 | 7 | obtenerTodos | delega a ProductoService | Delegacion |
 | 8 | obtenerFiltrados | delega a ProductoService | Delegacion |
 
-### 2.3. CategoriaService (10 tests)
+### 2.3. ProductoEntity (4 tests) — NUEVO
+
+| # | Metodo | Descripcion | Tipo |
+|---|--------|-------------|------|
+| 1 | constructor | crear producto con nombre vacio deberia crearse | Happy Path |
+| 2 | constructor | stockMinimo default es 0 | Validacion |
+| 3 | constructor | producto con todos los campos opcionales null | Happy Path |
+| 4 | constructor | producto con codigo unico | Happy Path |
+
+### 2.4. CategoriaService (10 tests)
 
 | # | Metodo | Descripcion | Tipo |
 |---|--------|-------------|------|
@@ -81,7 +91,7 @@
 | 9 | obtenerDeProducto | debe retornar categorias de un producto | Happy Path |
 | 10 | obtenerDeProducto | debe lanzar BusinessException cuando hay DatabaseException | Error Path |
 
-### 2.4. CategoriaController (5 tests)
+### 2.5. CategoriaController (5 tests)
 
 | # | Metodo | Descripcion | Tipo |
 |---|--------|-------------|------|
@@ -91,7 +101,7 @@
 | 4 | obtenerTodas | delega a CategoriaService | Delegacion |
 | 5 | obtenerDeProducto | delega a CategoriaService | Delegacion |
 
-### 2.5. UnidadService (5 tests)
+### 2.6. UnidadService (5 tests)
 
 | # | Metodo | Descripcion | Tipo |
 |---|--------|-------------|------|
@@ -101,14 +111,14 @@
 | 4 | obtenerPorId | debe retornar null cuando no existe | Happy Path |
 | 5 | obtenerPorId | debe lanzar BusinessException cuando hay DatabaseException | Error Path |
 
-### 2.6. UnidadController (2 tests)
+### 2.7. UnidadController (2 tests)
 
 | # | Metodo | Descripcion | Tipo |
 |---|--------|-------------|------|
 | 1 | obtenerTodas | delega a UnidadService | Delegacion |
 | 2 | obtenerPorId | delega a UnidadService | Delegacion |
 
-### 2.7. LoteService (18 tests)
+### 2.8. LoteService (18 tests)
 
 | # | Metodo | Descripcion | Tipo |
 |---|--------|-------------|------|
@@ -131,7 +141,7 @@
 | 17 | obtenerLotesProximosAVencer | debe retornar lista de lotes proximos a vencer | Happy Path |
 | 18 | obtenerLotesProximosAVencer | debe lanzar BusinessException cuando hay DatabaseException | Error Path |
 
-### 2.8. LoteController (7 tests)
+### 2.9. LoteController (7 tests)
 
 | # | Metodo | Descripcion | Tipo |
 |---|--------|-------------|------|
@@ -187,12 +197,11 @@
 | obtenerLotesPorFechas | si | si | no |
 | obtenerLotesProximosAVencer | si | si | no |
 
-## 4. Interpretacion
+## 4. Cambios Aplicados (Sesion 11/jun/2026)
 
-1. **Cobertura:** 4 servicios y 4 controllers evaluados, 72 tests aprobados
-2. **Patrones verificados:** DatabaseException se traduce a BusinessException, validaciones de cantidad y ventas registradas
-3. **Controllers:** delegan correctamente a sus servicios
+1. **ProductoRepository**: `obtenerProductosRecientes(limite)` en repositorio, servicio y controller. Batch queries en `crearVenta` (INSERT multi-row, UPDATE CASE, CTE stock).
+2. **Nuevo**: `producto_entity_test.dart` (4 tests) — valida defaults y campos opcionales de ProductoEntity.
 
 ## 5. Conclusiones
 
-Los 4 modulos de Inventory (Producto, Categoria, Unidad, Lote) estan completamente probados con 72 tests aprobados (100%).
+Los 4 modulos de Inventory (Producto, Categoria, Unidad, Lote) estan completamente probados con 76 tests aprobados (100%). Se agrego cobertura de la entidad Producto.

@@ -5,7 +5,7 @@
 ### 1.1. Salida de Consola
 
 ```
-[PENDING - to be filled after execution]
+[Parcial - fixes estructurales aplicados. Pendiente ejecucion completa en emulador]
 ```
 
 ### 1.2. Resumen de Resultados
@@ -13,14 +13,14 @@
 | Concepto | Cantidad |
 |----------|----------|
 | Total | 4 (51 casos) |
-| Exitosas | 0 |
-| Fallidas | 0 |
+| Fixes aplicados | 4 |
+| Pendientes ejecucion | 4 |
 
 ### 1.3. Desglose por Tipo
 
-| Tipo | Tests | Exitosos |
-|------|-------|----------|
-| Flujo Completo | 4 | 0 |
+| Tipo | Tests | Estado |
+|------|-------|--------|
+| Flujo Completo | 4 | Fixes OK, pendiente E2E |
 
 ## 2. Tests Ejecutados
 
@@ -120,10 +120,14 @@
 | Sales List | si (login) | si | no | si |
 | Sales Detail | si (login) | si | si | si |
 
-## 4. Interpretacion
+## 4. Cambios Aplicados (Sesion 11/jun/2026)
 
-Se cubre el flujo completo de ventas: creacion con pago contado, creacion con credito y cliente, listado con filtros, y detalle con pago parcial, anulacion y generacion de PDF. Los tests requieren seed de productos con lotes y stock suficiente. Los filtros de fecha usan FilterSalesPage.testFechaFija para evitar el date picker nativo. La generacion de PDF utiliza los paquetes pdf, printing y share_plus.
+1. **Esquema DB**: columna `apellidos` eliminada de `clientes`, `codigo_boleta` agregado en `ventas`, `pin VARCHAR(64)` para HMAC-SHA256
+2. **PIN**: todos los INSERT seed usan `PinEncryptor.hash('123456')` en vez de plaintext
+3. **Auditoria**: `SET app.id_usuario = 1` antes de INSERTs raw para evitar null en trigger `auditar_general()`
+4. **device_registered**: `SharedPreferences.setBool('device_registered', true)` para saltar Welcome en fresh install
+5. **cleanTestData**: removido `OR apellidos LIKE 'e2e_%'` del DELETE de clientes
 
 ## 5. Conclusiones
 
-[PENDING - to be filled after execution]
+Los 4 tests E2E de ventas tienen sus fixes de schema y autenticacion aplicados. Los INSERTs seed son compatibles con el nuevo esquema (sin apellidos, con codigo_boleta, PIN HMAC-SHA256). Pendiente ejecucion completa en emulador para verificar flujos de UI.
