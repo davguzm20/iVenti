@@ -1,46 +1,44 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:provider/provider.dart';
 import 'package:mockito/mockito.dart';
 import 'package:iventi/features/notifications/pages/NotificationsPage.dart';
 import 'package:iventi/features/notifications/entities/NotificacionEntity.dart';
 import 'package:iventi/features/notifications/enums/TipoNotificacion.dart';
-import 'package:iventi/features/notifications/controllers/NotificacionController.dart';
+import 'package:iventi/shared/di/ServiceLocator.dart';
 
-import '../../mocks_mocks.dart';
+import '../module_setup.dart';
 import '../helpers.dart';
 
 void main() {
-  late MockNotificacionController mockController;
+  setUpAll(() {
+    setupModuleMocks();
+    ServiceLocator.usuarioActualId = 1;
+  });
 
   setUp(() {
-    mockController = MockNotificacionController();
+    resetModuleMocks();
   });
 
   group('NotificationsPage', () {
     testWidgets('debe mostrar loading inicial', (tester) async {
-      when(mockController.obtenerNotificaciones(1)).thenAnswer((_) async => []);
+      when(mockNotificacionController.obtenerNotificaciones(1)).thenAnswer((_) async => []);
 
       await pumpPage(
         tester,
         page: const NotificationsPage(),
-        providers: [
-          Provider<NotificacionController>.value(value: mockController),
-        ],
+        providers: [],
       );
 
       expect(find.byType(CircularProgressIndicator), findsOneWidget);
     });
 
     testWidgets('debe mostrar empty state cuando no hay notificaciones', (tester) async {
-      when(mockController.obtenerNotificaciones(1)).thenAnswer((_) async => []);
+      when(mockNotificacionController.obtenerNotificaciones(1)).thenAnswer((_) async => []);
 
       await pumpPage(
         tester,
         page: const NotificationsPage(),
-        providers: [
-          Provider<NotificacionController>.value(value: mockController),
-        ],
+        providers: [],
       );
 
       await tester.pump();
@@ -60,14 +58,12 @@ void main() {
         creadoEn: DateTime(2025, 5, 1),
       );
 
-      when(mockController.obtenerNotificaciones(1)).thenAnswer((_) async => [notif]);
+      when(mockNotificacionController.obtenerNotificaciones(1)).thenAnswer((_) async => [notif]);
 
       await pumpPage(
         tester,
         page: const NotificationsPage(),
-        providers: [
-          Provider<NotificacionController>.value(value: mockController),
-        ],
+        providers: [],
       );
 
       await tester.pump();

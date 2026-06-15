@@ -1,29 +1,27 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:provider/provider.dart';
 import 'package:mockito/mockito.dart';
 import 'package:iventi/features/reports/pages/ReportSalesPage.dart';
-import 'package:iventi/features/reports/controllers/ReportController.dart';
 
-import '../../mocks_mocks.dart';
+import '../module_setup.dart';
 import '../helpers.dart';
 
 void main() {
-  late MockReportController mockController;
+  setUpAll(() {
+    setupModuleMocks();
+  });
 
   setUp(() {
-    mockController = MockReportController();
+    resetModuleMocks();
   });
 
   group('ReportSalesPage', () {
     testWidgets('debe mostrar titulo y selector de tipo', (tester) async {
-      when(mockController.generarVentas(any)).thenAnswer((_) async => []);
+      when(mockReportController.generarVentas(any)).thenAnswer((_) async => []);
 
       await pumpPage(
         tester,
         page: const ReportSalesPage(),
-        providers: [
-          Provider<ReportController>.value(value: mockController),
-        ],
+        providers: [],
       );
 
       expect(find.text('Reporte de Ventas'), findsOneWidget);
@@ -32,14 +30,12 @@ void main() {
     });
 
     testWidgets('debe mostrar boton Generar', (tester) async {
-      when(mockController.generarVentas(any)).thenAnswer((_) async => []);
+      when(mockReportController.generarVentas(any)).thenAnswer((_) async => []);
 
       await pumpPage(
         tester,
         page: const ReportSalesPage(),
-        providers: [
-          Provider<ReportController>.value(value: mockController),
-        ],
+        providers: [],
       );
 
       expect(find.text('Generar'), findsOneWidget);

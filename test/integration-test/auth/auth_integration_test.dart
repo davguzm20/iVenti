@@ -1,6 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:iventi/shared/utils/PostgresDatasource.dart';
+import 'package:iventi/shared/utils/PinEncryptor.dart';
 import 'package:iventi/shared/exceptions/BusinessException.dart';
 import 'package:iventi/shared/exceptions/AuthenticationException.dart';
 import 'package:iventi/shared/exceptions/NotFoundException.dart';
@@ -18,6 +19,8 @@ void main() {
   setUpAll(() async {
     await dotenv.load(fileName: '.env');
     datasource = PostgresDatasource();
+    final conn = await datasource.connection;
+    await conn.execute("SET app.id_usuario = '1'");
     usuarioRepository = UsuarioRepository(datasource);
     authService = AuthService(usuarioRepository);
   });
@@ -63,7 +66,7 @@ void main() {
       expect(usuario.nombre, 'Test User');
       expect(usuario.email, email);
       expect(usuario.esActivo, true);
-      expect(usuario.pin, '123456');
+      expect(usuario.pin, PinEncryptor.hash('123456'));
       expect(usuario.rol.name, 'ADMINISTRADOR');
     });
 

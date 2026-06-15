@@ -6,9 +6,11 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:postgres/postgres.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:iventi/main.dart' as app;
 import 'package:iventi/shared/utils/PostgresDatasource.dart';
+import 'package:iventi/shared/utils/PinEncryptor.dart';
 import 'package:iventi/features/inventory/pages/BarcodeScannerPage.dart';
 import 'package:iventi/features/inventory/pages/ImagePickerPage.dart';
 import '../helpers.dart';
@@ -39,11 +41,12 @@ void main() {
     await cleanTestData();
 
     final conn = await PostgresDatasource().connection;
+    await conn.execute("SET app.id_usuario = 1");
     await conn.execute(Sql.named(
       "INSERT INTO usuarios (nombre, email, pin, rol, es_activo) VALUES (@nombre, @email, @pin, 'OPERATIVO', TRUE) "
       "ON CONFLICT (email) DO UPDATE SET pin = @pin",
     ), parameters: {
-      'nombre': 'E2E Create Product', 'email': 'e2e_create_product@test.com', 'pin': '123456',
+      'nombre': 'E2E Create Product', 'email': 'e2e_create_product@test.com', 'pin': PinEncryptor.hash('123456'),
     });
     await conn.execute(Sql.named(
       "INSERT INTO unidades (nombre, abreviatura, es_activo, creado_en) "
@@ -72,6 +75,9 @@ void main() {
       Sql.named("SELECT id_categoria FROM categorias WHERE nombre = @nombre"),
       parameters: {'nombre': 'e2e_cat_delete'},
     )).first[0] as int;
+
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('device_registered', true);
 
     await app.main(envFile: ".env.test");
     await tester.pump();

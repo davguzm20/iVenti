@@ -7,6 +7,7 @@ import 'package:postgres/postgres.dart';
 import 'package:iventi/main.dart' as app;
 import 'package:iventi/shared/utils/PostgresDatasource.dart';
 import 'package:iventi/shared/utils/PinEncryptor.dart';
+import 'package:iventi/shared/utils/DniEncryptor.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../helpers.dart';
 import '../helpers/auth_flows.dart';
@@ -61,7 +62,7 @@ void main() {
       "INSERT INTO clientes (nombres, dni, email, telefono, es_deudor) "
       "VALUES (@nombres, @dni, @email, @telefono, @esDeudor)",
     ), parameters: {
-      'nombres': 'e2e_nombre', 'dni': '12345678',
+      'nombres': 'e2e_nombre', 'dni': DniEncryptor.encryptAES('12345678'),
       'email': 'e2e_cliente@test.com', 'telefono': '999333333', 'esDeudor': false,
     });
 
@@ -108,7 +109,12 @@ void main() {
     for (int i = 0; i < 5; i++) {
       await tester.pump(const Duration(milliseconds: 200));
     }
-    await typeInField(tester, index: 0, text: 'e2e_producto_credito');
+    final creditoDialogEditable = find.descendant(of: find.byType(AlertDialog), matching: find.byType(EditableText)).first;
+    final creditoDialogState = tester.state<EditableTextState>(creditoDialogEditable);
+    creditoDialogState.updateEditingValue(const TextEditingValue(text: 'e2e_producto_credito', selection: TextSelection.collapsed(offset: 19)));
+    for (int i = 0; i < 5; i++) {
+      await tester.pump(const Duration(milliseconds: 200));
+    }
     await tester.pump();
     await tester.runAsync(() => Future.delayed(const Duration(seconds: 3)));
     for (int i = 0; i < 15; i++) {

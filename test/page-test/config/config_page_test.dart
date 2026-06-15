@@ -5,26 +5,17 @@ import 'package:iventi/features/config/pages/ConfigPage.dart';
 import 'package:iventi/features/auth/entities/UsuarioEntity.dart';
 import 'package:iventi/features/auth/enums/TipoRol.dart';
 import 'package:iventi/features/config/entities/ConfiguracionEntity.dart';
-import 'package:iventi/shared/di/modules/auth_module.dart';
-import 'package:iventi/shared/di/modules/config_module.dart';
 
-import '../../mocks_mocks.dart';
+import '../module_setup.dart';
 import '../helpers.dart';
 
 void main() {
-  late MockAuthController mockAuthController;
-  late MockConfiguracionController mockConfigController;
-
   setUpAll(() {
-    mockAuthController = MockAuthController();
-    mockConfigController = MockConfiguracionController();
-    AuthModule.authController = mockAuthController;
-    ConfigModule.configuracionController = mockConfigController;
+    setupModuleMocks();
   });
 
   setUp(() {
-    reset(mockAuthController);
-    reset(mockConfigController);
+    resetModuleMocks();
   });
 
   group('ConfigPage', () {

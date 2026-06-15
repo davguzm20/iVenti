@@ -17,6 +17,8 @@ void main() {
   setUpAll(() async {
     await dotenv.load(fileName: '.env');
     datasource = PostgresDatasource();
+    final conn = await datasource.connection;
+    await conn.execute("SET app.id_usuario = '1'");
     final repository = ReportRepository(datasource);
     service = ReportService(repository);
   });

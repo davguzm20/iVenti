@@ -47,6 +47,7 @@ void main() {
     await dotenv.load(fileName: '.env.test');
     datasource = PostgresDatasource();
     final conn = await datasource.connection;
+    await conn.execute("SET app.id_usuario = '1'");
 
     final userResult = await conn.execute(
       Sql.named(
@@ -61,6 +62,7 @@ void main() {
       },
     );
     testUserId = userResult.first.toColumnMap()['id_usuario'] as int;
+    await conn.execute("SET app.id_usuario = '$testUserId'");
 
     productoRepository = ProductoRepository(datasource);
     loteRepository = LoteRepository(datasource, productoRepository);

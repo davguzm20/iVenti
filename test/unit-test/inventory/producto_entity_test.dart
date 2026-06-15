@@ -3,19 +3,18 @@ import 'package:iventi/features/inventory/entities/ProductoEntity.dart';
 
 void main() {
   group('ProductoEntity', () {
-    test('crear producto con nombre vacio deberia lanzar assertion', () {
-      expect(
-        () => ProductoEntity(
-          idUnidad: 1,
-          nombre: '',
-          precio: 10.0,
-          stockActual: 0,
-          stockMinimo: 5,
-          esActivo: true,
-          creadoEn: DateTime.now(),
-        ),
-        isA<ProductoEntity>(),
+    test('crear producto con nombre vacio no lanza error', () {
+      final producto = ProductoEntity(
+        idUnidad: 1,
+        nombre: '',
+        precio: 10.0,
+        stockActual: 0,
+        stockMinimo: 5,
+        esActivo: true,
+        creadoEn: DateTime.now(),
       );
+      expect(producto, isA<ProductoEntity>());
+      expect(producto.nombre, '');
     });
 
     test('stockMinimo default es 0', () {

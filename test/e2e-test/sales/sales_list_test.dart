@@ -8,6 +8,7 @@ import 'package:iventi/main.dart' as app;
 import 'package:iventi/features/sales/pages/FilterSalesPage.dart';
 import 'package:iventi/shared/utils/PostgresDatasource.dart';
 import 'package:iventi/shared/utils/PinEncryptor.dart';
+import 'package:iventi/shared/utils/DniEncryptor.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../helpers.dart';
 
@@ -66,10 +67,10 @@ void main() {
       parameters: {'id_producto': idProducto},
     )).first[0] as int;
     // Seed venta
-    final idCliente = (await conn.execute(Sql.named(
+    final idCliente = (await conn.execute(
       "INSERT INTO clientes (nombres, dni, creado_en) "
-      "VALUES ('e2e_contado', 'e2e_00000000', CURRENT_TIMESTAMP) RETURNING id_cliente",
-    ))).first[0] as int;
+      "VALUES ('e2e_contado', '${DniEncryptor.encryptAES('00000000')}', CURRENT_TIMESTAMP) RETURNING id_cliente",
+    )).first[0] as int;
     final idVenta = (await conn.execute(Sql.named(
       "INSERT INTO ventas (id_cliente, id_usuario, monto_total, monto_cancelado, estado, es_credito, creado_en, actualizado_en) "
       "VALUES (@idCliente, @idUsuario, @montoTotal, @montoCancelado, @estado, @esCredito, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP) RETURNING id_venta",

@@ -32,6 +32,7 @@ void main() {
       },
     );
     testUserId = userResult.first.toColumnMap()['id_usuario'] as int;
+    await conn.execute("SET app.id_usuario = '$testUserId'");
 
     final notifRepo = NotificacionRepository(datasource);
     final productoRepo = ProductoRepository(datasource);

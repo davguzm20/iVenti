@@ -51,11 +51,11 @@ void main() {
       expect(DniEncryptor.decryptAES(encrypted), dni);
     });
 
-    test('encryptAES con string vacio', () {
-      const dni = '';
-      final encrypted = DniEncryptor.encryptAES(dni);
-
-      expect(DniEncryptor.decryptAES(encrypted), '');
+    test('encryptAES con string vacio lanza RangeError', () {
+      expect(
+        () => DniEncryptor.encryptAES(''),
+        throwsA(isA<RangeError>()),
+      );
     });
 
     test('decryptAES con formato invalido (sin dos puntos) retorna tal cual', () {

@@ -62,7 +62,7 @@ void main() {
 
     await app.main(envFile: ".env.test");
     await tester.pump();
-    await tester.runAsync(() => Future.delayed(const Duration(seconds: 3)));
+    await tester.runAsync(() => Future.delayed(const Duration(seconds: 10)));
     await tester.pump();
     expect(find.text('Iniciar sesión'), findsOneWidget);
 
@@ -116,7 +116,12 @@ void main() {
     expect(find.text('Agregar producto'), findsAtLeast(1));
 
     // 3. Buscar producto
-    await typeInField(tester, index: 0, text: 'e2e_producto_venta');
+    final dialogEditable = find.descendant(of: find.byType(AlertDialog), matching: find.byType(EditableText)).first;
+    final dialogState = tester.state<EditableTextState>(dialogEditable);
+    dialogState.updateEditingValue(const TextEditingValue(text: 'e2e_producto_venta', selection: TextSelection.collapsed(offset: 18)));
+    for (int i = 0; i < 5; i++) {
+      await tester.pump(const Duration(milliseconds: 200));
+    }
     await tester.pump();
     await tester.runAsync(() => Future.delayed(const Duration(seconds: 3)));
     for (int i = 0; i < 15; i++) {
@@ -136,7 +141,12 @@ void main() {
     for (int i = 0; i < 5; i++) {
       await tester.pump(const Duration(milliseconds: 200));
     }
-    await typeInField(tester, index: 0, text: 'e2e_producto_venta');
+    final dialogEditable2 = find.descendant(of: find.byType(AlertDialog), matching: find.byType(EditableText)).first;
+    final dialogState2 = tester.state<EditableTextState>(dialogEditable2);
+    dialogState2.updateEditingValue(const TextEditingValue(text: 'e2e_producto_venta', selection: TextSelection.collapsed(offset: 18)));
+    for (int i = 0; i < 5; i++) {
+      await tester.pump(const Duration(milliseconds: 200));
+    }
     await tester.pump();
     await tester.runAsync(() => Future.delayed(const Duration(seconds: 3)));
     for (int i = 0; i < 15; i++) {
@@ -175,7 +185,12 @@ void main() {
     for (int i = 0; i < 5; i++) {
       await tester.pump(const Duration(milliseconds: 200));
     }
-    await typeInField(tester, index: 0, text: 'e2e_producto_venta');
+    final dialogEditable3 = find.descendant(of: find.byType(AlertDialog), matching: find.byType(EditableText)).first;
+    final dialogState3 = tester.state<EditableTextState>(dialogEditable3);
+    dialogState3.updateEditingValue(const TextEditingValue(text: 'e2e_producto_venta', selection: TextSelection.collapsed(offset: 18)));
+    for (int i = 0; i < 5; i++) {
+      await tester.pump(const Duration(milliseconds: 200));
+    }
     await tester.pump();
     await tester.runAsync(() => Future.delayed(const Duration(seconds: 3)));
     for (int i = 0; i < 15; i++) {

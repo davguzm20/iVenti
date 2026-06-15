@@ -11,6 +11,7 @@ Future<void> bootstrapE2E() async {
 Future<void> cleanTestData() async {
   final datasource = PostgresDatasource();
   final conn = await datasource.connection;
+  await conn.execute("SET app.id_usuario = 1");
 
   await conn.execute(
     "DELETE FROM detalle_ventas WHERE id_venta IN (SELECT id_venta FROM ventas WHERE id_usuario IN (SELECT id_usuario FROM usuarios WHERE email LIKE 'e2e_%'))",

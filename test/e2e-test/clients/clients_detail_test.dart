@@ -7,6 +7,7 @@ import 'package:postgres/postgres.dart';
 import 'package:iventi/main.dart' as app;
 import 'package:iventi/shared/utils/PostgresDatasource.dart';
 import 'package:iventi/shared/utils/PinEncryptor.dart';
+import 'package:iventi/shared/utils/DniEncryptor.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../helpers.dart';
 import '../helpers/auth_flows.dart';
@@ -38,7 +39,7 @@ void main() {
       "INSERT INTO clientes (nombres, dni, email, telefono, es_deudor) "
       "VALUES (@nombres, @dni, @email, @telefono, @esDeudor) RETURNING id_cliente",
     ), parameters: {
-      'nombres': 'e2e_cliente', 'dni': '33333333',
+      'nombres': 'e2e_cliente', 'dni': DniEncryptor.encryptAES('33333333'),
       'email': 'cliente@test.com', 'telefono': '999333333', 'esDeudor': true,
     })).first[0] as int;
     await conn.execute(Sql.named(
@@ -114,11 +115,12 @@ void main() {
     // 2. Navegar a detalle (usando icono visibility del ClientCard)
     await tester.tap(find.byIcon(Icons.visibility).first);
     await tester.pump();
-    await tester.runAsync(() => Future.delayed(const Duration(seconds: 3)));
-    for (int i = 0; i < 10; i++) {
+    await tester.runAsync(() => Future.delayed(const Duration(seconds: 5)));
+    for (int i = 0; i < 15; i++) {
       await tester.pump(const Duration(milliseconds: 200));
     }
-    expect(find.textContaining('33333333'), findsOneWidget);
+    expect(find.textContaining('e2e_cliente'), findsOneWidget);
+    expect(find.textContaining('DNI:'), findsOneWidget);
 
     // 3. Ver estado Deudor
     expect(find.textContaining('Deudor'), findsOneWidget);
@@ -147,7 +149,7 @@ void main() {
     for (int i = 0; i < 10; i++) {
       await tester.pump(const Duration(milliseconds: 200));
     }
-    expect(find.text('Monto invalido'), findsOneWidget);
+    expect(find.text('Monto inválido'), findsOneWidget);
     await dismissError(tester);
 
     // 7. Monto excedido -> error

@@ -7,6 +7,7 @@ import 'package:postgres/postgres.dart';
 import 'package:iventi/main.dart' as app;
 import 'package:iventi/shared/utils/PostgresDatasource.dart';
 import 'package:iventi/shared/utils/PinEncryptor.dart';
+import 'package:iventi/shared/utils/DniEncryptor.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../helpers.dart';
 import '../helpers/auth_flows.dart';
@@ -56,10 +57,10 @@ void main() {
     ), parameters: {
       'id_producto': idProducto,
     })).first[0] as int;
-    final idCliente = (await conn.execute(Sql.named(
+    final idCliente = (await conn.execute(
       "INSERT INTO clientes (nombres, dni, creado_en) "
-      "VALUES ('e2e_credito', 'e2e_00000001', CURRENT_TIMESTAMP) RETURNING id_cliente",
-    ))).first[0] as int;
+      "VALUES ('e2e_credito', '${DniEncryptor.encryptAES('00000001')}', CURRENT_TIMESTAMP) RETURNING id_cliente",
+    )).first[0] as int;
     final idVenta = (await conn.execute(Sql.named(
       "INSERT INTO ventas (id_cliente, id_usuario, monto_total, monto_cancelado, estado, es_credito, creado_en, actualizado_en) "
       "VALUES (@idCliente, @idUsuario, @montoTotal, @montoCancelado, @estado, @esCredito, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP) RETURNING id_venta",
@@ -151,8 +152,8 @@ void main() {
     expect(find.text('Cancelar deuda'), findsOneWidget);
 
     // 5. Monto invalido (0) -> error
-    await typeInField(tester, text: '0');
-    await tester.pump();
+    final montoEditable = find.descendant(of: find.byType(AlertDialog), matching: find.byType(EditableText)).first;
+    tester.state<EditableTextState>(montoEditable).updateEditingValue(const TextEditingValue(text: '0', selection: TextSelection.collapsed(offset: 1)));
     for (int i = 0; i < 5; i++) {
       await tester.pump(const Duration(milliseconds: 200));
     }
@@ -162,12 +163,11 @@ void main() {
     for (int i = 0; i < 10; i++) {
       await tester.pump(const Duration(milliseconds: 200));
     }
-    expect(find.text('Monto invalido'), findsOneWidget);
+    expect(find.text('Monto inválido'), findsOneWidget);
     await dismissError(tester);
 
     // 6. Monto excedido (> pendiente) -> error
-    await typeInField(tester, text: '50.00');
-    await tester.pump();
+    tester.state<EditableTextState>(montoEditable).updateEditingValue(const TextEditingValue(text: '50.00', selection: TextSelection.collapsed(offset: 5)));
     for (int i = 0; i < 5; i++) {
       await tester.pump(const Duration(milliseconds: 200));
     }
@@ -181,8 +181,10 @@ void main() {
     await dismissError(tester);
 
     // 7. Monto valido -> pago exitoso
-    await typeInField(tester, text: '30.00');
-    await tester.pump();
+    tester.state<EditableTextState>(montoEditable).updateEditingValue(const TextEditingValue(text: '30.00', selection: TextSelection.collapsed(offset: 5)));
+    for (int i = 0; i < 5; i++) {
+      await tester.pump(const Duration(milliseconds: 200));
+    }
     for (int i = 0; i < 5; i++) {
       await tester.pump(const Duration(milliseconds: 200));
     }

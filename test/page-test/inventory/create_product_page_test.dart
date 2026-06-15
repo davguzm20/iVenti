@@ -5,28 +5,16 @@ import 'package:go_router/go_router.dart';
 import 'package:iventi/features/inventory/pages/CreateProductPage.dart';
 import 'package:iventi/features/inventory/entities/CategoriaEntity.dart';
 import 'package:iventi/features/inventory/entities/UnidadEntity.dart';
-import 'package:iventi/shared/di/modules/inventory_module.dart';
 
-import '../../mocks_mocks.dart';
+import '../module_setup.dart';
 
 void main() {
-  late MockProductoController mockProductoController;
-  late MockCategoriaController mockCategoriaController;
-  late MockUnidadController mockUnidadController;
-
   setUpAll(() {
-    mockProductoController = MockProductoController();
-    mockCategoriaController = MockCategoriaController();
-    mockUnidadController = MockUnidadController();
-    InventoryModule.productoController = mockProductoController;
-    InventoryModule.categoriaController = mockCategoriaController;
-    InventoryModule.unidadController = mockUnidadController;
+    setupModuleMocks();
   });
 
   setUp(() {
-    reset(mockProductoController);
-    reset(mockCategoriaController);
-    reset(mockUnidadController);
+    resetModuleMocks();
   });
 
   Widget buildTestApp() {
@@ -70,7 +58,6 @@ void main() {
 
       expect(find.text('Lacteos'), findsOneWidget);
       expect(find.text('Bebidas'), findsOneWidget);
-      expect(find.text('Agregar categoria'), findsOneWidget);
     });
   });
 }

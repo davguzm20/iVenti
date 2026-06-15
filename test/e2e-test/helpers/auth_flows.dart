@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 Future<void> typeInField(WidgetTester tester, {int index = 0, required String text}) async {
-  final scaffold = find.byType(Scaffold).last;
-  final fields = find.descendant(of: scaffold, matching: find.byType(EditableText));
+  final fields = find.byType(EditableText);
   final field = fields.at(index);
   final state = tester.state<EditableTextState>(field);
   state.updateEditingValue(TextEditingValue(

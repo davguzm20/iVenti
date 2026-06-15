@@ -3,16 +3,18 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
+Widget _wrapProviders(Widget child, List<Provider> providers) {
+  if (providers.isEmpty) return child;
+  return MultiProvider(providers: providers, child: child);
+}
+
 Future<void> pumpPage(
   WidgetTester tester, {
   required Widget page,
   required List<Provider> providers,
 }) async {
   await tester.pumpWidget(
-    MultiProvider(
-      providers: providers,
-      child: MaterialApp(home: page),
-    ),
+    _wrapProviders(MaterialApp(home: page), providers),
   );
 }
 
@@ -29,9 +31,6 @@ Future<void> pumpPageWithRouter(
     ],
   );
   await tester.pumpWidget(
-    MultiProvider(
-      providers: providers,
-      child: MaterialApp.router(routerConfig: router),
-    ),
+    _wrapProviders(MaterialApp.router(routerConfig: router), providers),
   );
 }

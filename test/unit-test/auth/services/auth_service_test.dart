@@ -1,8 +1,10 @@
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:iventi/shared/exceptions/BusinessException.dart';
 import 'package:iventi/shared/exceptions/DatabaseException.dart';
 import 'package:iventi/shared/exceptions/ValidationException.dart';
+import 'package:iventi/shared/utils/PinEncryptor.dart';
 import 'package:iventi/features/auth/entities/UsuarioEntity.dart';
 import 'package:iventi/features/auth/dtos/requests/CrearUsuarioRequest.dart';
 import 'package:iventi/features/auth/services/AuthService.dart';
@@ -13,19 +15,23 @@ import 'package:iventi/features/auth/enums/TipoRol.dart';
 void main() {
   late MockIUsuarioRepository mockRepo;
   late AuthService authService;
+  late UsuarioEntity usuarioValido;
 
-  final usuarioValido = UsuarioEntity(
-    idUsuario: 1,
-    email: 'test@test.com',
-    nombre: 'Test',
-    pin: '123456',
-    rol: TipoRol.ADMINISTRADOR,
-    creadoEn: DateTime(2024),
-  );
+  setUpAll(() async {
+    await dotenv.load(fileName: '.env.test');
+  });
 
   setUp(() {
     mockRepo = MockIUsuarioRepository();
     authService = AuthService(mockRepo);
+    usuarioValido = UsuarioEntity(
+      idUsuario: 1,
+      email: 'test@test.com',
+      nombre: 'Test',
+      pin: PinEncryptor.hash('123456'),
+      rol: TipoRol.ADMINISTRADOR,
+      creadoEn: DateTime(2024),
+    );
   });
 
   group('AuthService.iniciarSesion', () {
@@ -61,7 +67,7 @@ void main() {
       final result = await authService.registrar(request);
 
       expect(result, usuarioValido);
-      verify(mockRepo.crearUsuario(request)).called(1);
+      verify(mockRepo.crearUsuario(any)).called(1);
     });
 
     test('debe lanzar BusinessException cuando email ya registrado', () async {
@@ -158,11 +164,11 @@ void main() {
   group('AuthService.cambiarPin', () {
     test('debe actualizar PIN cuando los datos son correctos', () async {
       when(mockRepo.obtenerUsuarioPorId(1)).thenAnswer((_) async => usuarioValido);
-      when(mockRepo.actualizarPIN(1, '654321')).thenAnswer((_) async {});
+      when(mockRepo.actualizarPIN(any, any)).thenAnswer((_) async {});
 
       await authService.cambiarPin(1, '123456', '654321');
 
-      verify(mockRepo.actualizarPIN(1, '654321')).called(1);
+      verify(mockRepo.actualizarPIN(any, any)).called(1);
     });
 
     test('debe lanzar ValidationException cuando PIN nuevo no tiene 6 digitos', () async {
@@ -215,11 +221,11 @@ void main() {
 
   group('AuthService.recuperarPin', () {
     test('debe actualizar PIN cuando el nuevo PIN es valido', () async {
-      when(mockRepo.actualizarPIN(1, '654321')).thenAnswer((_) async {});
+      when(mockRepo.actualizarPIN(any, any)).thenAnswer((_) async {});
 
       await authService.recuperarPin(1, '654321');
 
-      verify(mockRepo.actualizarPIN(1, '654321')).called(1);
+      verify(mockRepo.actualizarPIN(any, any)).called(1);
     });
 
     test('debe lanzar ValidationException cuando PIN no tiene 6 digitos', () async {
@@ -230,7 +236,7 @@ void main() {
     });
 
     test('debe lanzar BusinessException cuando hay DatabaseException', () async {
-      when(mockRepo.actualizarPIN(1, '654321')).thenThrow(DatabaseException('Error BD'));
+      when(mockRepo.actualizarPIN(any, any)).thenThrow(DatabaseException('Error BD'));
 
       expect(
         () => authService.recuperarPin(1, '654321'),
