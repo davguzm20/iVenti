@@ -10,7 +10,6 @@ import 'package:iventi/shared/utils/PinEncryptor.dart';
 import 'package:iventi/shared/utils/DniEncryptor.dart';
 import 'package:iventi/shared/utils/PostgresDatasource.dart';
 import '../helpers.dart';
-import '../helpers/auth_flows.dart';
 
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();

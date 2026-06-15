@@ -305,14 +305,13 @@ void main() {
     await typeInField(tester, index: 2, text: '3');
 
     await tapButtonAndWait(tester, 'Finalizar', seconds: 30);
-    try {
-      await tester.pumpUntil(find.text('Configuración completada'), timeout: const Duration(seconds: 60));
-    } catch (_) {
-      // If not found, check for error dialog
+    for (int i = 0; i < 60; i++) {
+      await tester.pump(const Duration(seconds: 1));
+      if (find.text('Configuración completada').evaluate().isNotEmpty) break;
       if (find.text('Error').evaluate().isNotEmpty || find.text('Error inesperado').evaluate().isNotEmpty) {
         await tester.tap(find.text('Ok'));
         await tester.pump();
-        await tester.runAsync(() => Future.delayed(const Duration(seconds: 2)));
+        break;
       }
     }
     await dismissError(tester);

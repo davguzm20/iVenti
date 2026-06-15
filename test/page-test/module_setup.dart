@@ -5,16 +5,6 @@ import 'package:iventi/shared/di/modules/inventory_module.dart';
 import 'package:iventi/shared/di/modules/notifications_module.dart';
 import 'package:iventi/shared/di/modules/reports_module.dart';
 import 'package:iventi/shared/di/modules/sales_module.dart';
-import 'package:iventi/features/auth/controllers/AuthController.dart';
-import 'package:iventi/features/clients/controllers/ClienteController.dart';
-import 'package:iventi/features/config/controllers/ConfiguracionController.dart';
-import 'package:iventi/features/inventory/controllers/ProductoController.dart';
-import 'package:iventi/features/inventory/controllers/CategoriaController.dart';
-import 'package:iventi/features/inventory/controllers/UnidadController.dart';
-import 'package:iventi/features/inventory/controllers/LoteController.dart';
-import 'package:iventi/features/notifications/controllers/NotificacionController.dart';
-import 'package:iventi/features/reports/controllers/ReportController.dart';
-import 'package:iventi/features/sales/controllers/VentaController.dart';
 import 'package:mockito/mockito.dart';
 import '../mocks_mocks.dart';
 
