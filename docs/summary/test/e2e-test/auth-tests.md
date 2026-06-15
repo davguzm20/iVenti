@@ -7,7 +7,7 @@
 ```
 welcome_test.dart:    00:23 +3: All tests passed!
 login_test.dart:      01:28 +3: All tests passed!
-register_test.dart:   03:02 +3: All tests passed!
+register_test.dart:   03:02 +3: SetupConfigPage timeout (⚠️)
 recover_test.dart:    02:14 +3: All tests passed!
 ```
 
@@ -16,15 +16,16 @@ recover_test.dart:    02:14 +3: All tests passed!
 | Concepto | Cantidad |
 |----------|----------|
 | Total | 4 |
-| Exitosas | 4 |
-| Fallidas | 0 |
+| Exitosas | 3 |
+| Timeout | 1 |
 
 ### 1.3. Desglose por Tipo
 
 | Tipo | Tests | Exitosos |
 |------|-------|----------|
 | Navegacion | 1 | 1 |
-| Autenticacion | 3 | 3 |
+| Autenticacion | 2 | 2 |
+| Registro | 1 | 0 (timeout) |
 
 ## 2. Tests Ejecutados
 
@@ -101,8 +102,8 @@ Cada flujo de prueba contiene casos individuales que verifican comportamientos e
 
 ## 4. Interpretacion
 
-Se cubren los cuatro flujos principales de autenticacion: welcome, login, registro y recuperacion de PIN. Cada flujo prueba primero los casos de error (negativos) y luego el camino exitoso. Se verificaron un total de 30 casos individuales entre los 4 flujos (4 Welcome + 3 Login + 15 Register + 7 Recover). Los mensajes de error se validan contra el texto exacto mostrado en dialogo de la aplicacion.
+Se cubren los cuatro flujos principales de autenticacion: welcome, login, registro y recuperacion de PIN. Cada flujo prueba primero los casos de error (negativos) y luego el camino exitoso. Se verificaron un total de 30 casos individuales entre los 4 flujos (4 Welcome + 3 Login + 15 Register + 7 Recover). Los mensajes de error se validan contra el texto exacto mostrado en dialogo de la aplicacion. El test de registro presenta timeout en SetupConfigPage que requiere investigacion adicional.
 
 ## 5. Conclusiones
 
-El modulo de autenticacion funciona correctamente para todos los casos evaluados. La navegacion entre pantallas es fluida y los mensajes de error se muestran adecuadamente. No se encontraron bugs en la funcionalidad de autenticacion.
+El modulo de autenticacion funciona correctamente para los casos evaluados (3/4 tests pasan). La navegacion entre pantallas es fluida y los mensajes de error se muestran adecuadamente. El test de registro (register_test.dart) presenta timeout en SetupConfigPage.

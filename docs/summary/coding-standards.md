@@ -79,3 +79,30 @@ Patrón: capturar excepción de bajo nivel, lanzar excepción de alto nivel.
 - `ServiceLocator` como singleton estático para DI
 - Controllers expuestos vía `Provider.value()`
 - Estado de UI con `setState()` en `StatefulWidget`
+
+## Encriptación
+
+| Campo | Método | Clase | DB Column |
+|-------|--------|-------|-----------|
+| `usuarios.pin` | HMAC-SHA256 (hash) | `PinEncryptor.hash()` | `VARCHAR(64)` |
+| `clientes.dni` | AES-256-CBC (cifrado reversible) | `DniEncryptor.encryptAES()` / `decryptAES()` | `VARCHAR(100)` |
+| `ventas.codigo_boleta` | Secuencia PostgreSQL | `generar_codigo_boleta()` | `VARCHAR(20)` |
+
+- `PinEncryptor.hash()` usa `ENCRYPTION_KEY` del `.env` como clave HMAC. Hash de 64 caracteres hex.
+- `DniEncryptor` usa `ENCRYPTION_KEY` decodificado de base64 como clave AES-256. Cada encriptación usa IV aleatorio de 16 bytes. Formato: `IV:ciphered` (base64).
+- `DniEncryptor.decryptAES()`: si el valor no contiene `:`, lo devuelve tal cual (compatibilidad legacy).
+
+## Auditoría
+
+- El trigger `auditar_general()` requiere `SET app.id_usuario` antes de INSERT/UPDATE/DELETE.
+- En tests: `await conn.execute("SET app.id_usuario = '1'")` o `= '$testUserId'`.
+- `cleanTestData()` en E2E incluye `SET app.id_usuario = 1` antes de los DELETE.
+- En producción: `PostgresDatasource.connection` lo setea vía `ServiceLocator.usuarioActualId`.
+
+## Tests E2E
+
+- Insertar usuarios con `pin: PinEncryptor.hash('123456')`, nunca plaintext.
+- Insertar clientes con `dni: DniEncryptor.encryptAES('XXXXXXXX')`.
+- Usar `SharedPreferences.setBool('device_registered', true)` antes de `app.main()`.
+- Usar `await conn.execute("SET app.id_usuario = 1")` después de obtener conexión.
+- Scopear `EditableText` al `AlertDialog` o `AppBar` en vez de búsqueda global con `index: 0`.

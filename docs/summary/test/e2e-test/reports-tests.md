@@ -5,7 +5,7 @@
 ### 1.1. Salida de Consola
 
 ```
-[PENDING - to be filled after execution]
+[Codigo actualizado. Pendiente ejecucion en emulador]
 ```
 
 ### 1.2. Resumen de Resultados
@@ -14,13 +14,13 @@
 |----------|----------|
 | Total | 2 |
 | Exitosas | 0 |
-| Fallidas | 0 |
+| Pendientes ejecucion | 2 |
 
 ### 1.3. Desglose por Tipo
 
 | Tipo | Tests | Exitosos |
 |------|-------|----------|
-| Flujo Completo | 2 | 0 |
+| Flujo Completo | 2 | Pendiente |
 
 ## 2. Tests Ejecutados
 
@@ -37,11 +37,11 @@
 
 | Caso | Descripcion | Tipo | Estado |
 |------|-------------|------|--------|
-| Ver los 5 reportes en menu | 5 ReportCards visibles con sus titulos | Happy Path | PENDING |
-| Navegar a Productos Vendidos | Se toca card. Se abre la pagina con boton Generar | Happy Path | PENDING |
-| Volver al menu | Arrow back. Se regresa a ReportsPage | Happy Path | PENDING |
-| Navegar a Lotes | Se toca card. Se abre la pagina | Happy Path | PENDING |
-| Navegar a Proximos a Vencer | Se toca card. Se abre la pagina | Happy Path | PENDING |
+| Ver los 5 reportes en menu | 5 ReportCards visibles con sus titulos | Happy Path | Codigo OK, pendiente ejecucion |
+| Navegar a Productos Vendidos | Se toca card. Se abre la pagina con boton Generar | Happy Path | Codigo OK, pendiente ejecucion |
+| Volver al menu | Arrow back. Se regresa a ReportsPage | Happy Path | Codigo OK, pendiente ejecucion |
+| Navegar a Lotes | Se toca card. Se abre la pagina | Happy Path | Codigo OK, pendiente ejecucion |
+| Navegar a Proximos a Vencer | Se toca card. Se abre la pagina | Happy Path | Codigo OK, pendiente ejecucion |
 
 **Total casos: 5**
 
@@ -49,10 +49,10 @@
 
 | Caso | Descripcion | Tipo | Estado |
 |------|-------------|------|--------|
-| Campo prellenado con 8 | Al abrir la pagina, el campo "Dias" tiene valor 8 | Happy Path | PENDING |
-| Generar con dato valido | Se toca Generar con 8 dias. Se abre ReportResultsPage | Happy Path | PENDING |
-| Ver tabla de resultados | La tabla muestra headers y filas de datos | Happy Path | PENDING |
-| Volver con boton Volver | Se toca Volver. Se regresa a la pagina del reporte | Happy Path | PENDING |
+| Campo prellenado con 8 | Al abrir la pagina, el campo "Dias" tiene valor 8 | Happy Path | Codigo OK, pendiente ejecucion |
+| Generar con dato valido | Se toca Generar con 8 dias. Se abre ReportResultsPage | Happy Path | Codigo OK, pendiente ejecucion |
+| Ver tabla de resultados | La tabla muestra headers y filas de datos | Happy Path | Codigo OK, pendiente ejecucion |
+| Volver con boton Volver | Se toca Volver. Se regresa a la pagina del reporte | Happy Path | Codigo OK, pendiente ejecucion |
 
 **Total casos: 4**
 
@@ -69,4 +69,4 @@ Se cubre la navegacion del menu de reportes (5 tipos) y el flujo de generacion d
 
 ## 5. Conclusiones
 
-[PENDING - to be filled after execution]
+[Codigo actualizado. Pendiente ejecucion en emulador]
