@@ -7,16 +7,20 @@ import 'package:iventi/shared/utils/DialogMessages.dart';
 import 'package:iventi/AppRoutes.dart';
 
 Future<void> main({String envFile = ".env"}) async {
-  WidgetsFlutterBinding.ensureInitialized();
+  final binding = WidgetsFlutterBinding.ensureInitialized();
+  final isTest = binding.runtimeType.toString().contains('Test');
 
+  final previousOnError = FlutterError.onError;
   FlutterError.onError = (details) {
     debugPrint('FlutterError: ${details.exception}');
-    FlutterError.presentError(details);
+    previousOnError?.call(details);
   };
 
-  ErrorWidget.builder = (details) => const Center(
-        child: Text('Ha ocurrido un error inesperado'),
-      );
+  if (!isTest) {
+    ErrorWidget.builder = (details) => const Center(
+          child: Text('Ha ocurrido un error inesperado'),
+        );
+  }
 
   await dotenv.load(fileName: envFile);
 

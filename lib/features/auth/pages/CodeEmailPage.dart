@@ -40,55 +40,65 @@ class _CodeEmailPageState extends State<CodeEmailPage> {
   Future<void> validateCode() async {
     FocusScope.of(context).unfocus();
 
-    if (inputCode == widget.correctCode) {
-      if (widget.flujo == 'verify') {
-        final authController = context.read<AuthController>();
-
-        try {
-          await authController.obtenerUsuarioPorEmail(widget.emailUser);
-        } catch (e) {
-          debugPrint('Error al verificar usuario por email: $e');
-          final (titulo, desc) = DialogMessages.auth.cuentaNoEncontrada;
-          if (!mounted) return;
-        ErrorDialog(
-            context: context,
-            title: titulo,
-            description: desc,
-            btnOkOnPress: () => context.push('/login/create-pin', extra: widget.emailUser),
-          );
-          return;
-        }
-      }
-
-      if (!mounted) return;
-      AwesomeDialog(
-        context: context,
-        dialogType: DialogType.success,
-        animType: AnimType.topSlide,
-        title: "Correcto",
-        desc: "¡El código es correcto!",
-        btnOkOnPress: () {
-          if (widget.flujo == 'verify') {
-            context.go('/login', extra: widget.emailUser);
-          } else {
-            context.push('/login/create-pin', extra: widget.emailUser);
+    try {
+      if (inputCode == widget.correctCode) {
+        if (widget.flujo == 'verify') {
+          try {
+            final authController = context.read<AuthController>();
+            await authController.obtenerUsuarioPorEmail(widget.emailUser);
+          } catch (e) {
+            debugPrint('Error al verificar usuario por email: $e');
+            final (titulo, desc) = DialogMessages.auth.cuentaNoEncontrada;
+            if (!mounted) return;
+            ErrorDialog(
+              context: context,
+              title: titulo,
+              description: desc,
+              btnOkOnPress: () => context.push('/login/create-pin', extra: widget.emailUser),
+            );
+            return;
           }
-        },
-        btnOkIcon: Icons.check_circle,
-        btnOkColor: Colors.green,
-      ).show();
+        }
 
-    } else {
-      AwesomeDialog(
-        context: context,
-        dialogType: DialogType.error,
-        animType: AnimType.topSlide,
-        title: "Error",
-        desc: "El código ingresado es incorrecto. Inténtalo nuevamente.",
-        btnOkOnPress: () {},
-        btnOkIcon: Icons.cancel,
-        btnOkColor: Colors.red,
-      ).show();
+        if (!mounted) return;
+        await AwesomeDialog(
+          context: context,
+          dialogType: DialogType.success,
+          animType: AnimType.topSlide,
+          title: "Correcto",
+          desc: "¡El código es correcto!",
+          btnOkOnPress: () {
+            if (widget.flujo == 'verify') {
+              context.go('/login', extra: widget.emailUser);
+            } else {
+              context.push('/login/create-pin', extra: widget.emailUser);
+            }
+          },
+          btnOkIcon: Icons.check_circle,
+          btnOkColor: Colors.green,
+        ).show();
+
+      } else {
+        await AwesomeDialog(
+          context: context,
+          dialogType: DialogType.error,
+          animType: AnimType.topSlide,
+          title: "Error",
+          desc: "El código ingresado es incorrecto. Inténtalo nuevamente.",
+          btnOkOnPress: () {},
+          btnOkIcon: Icons.cancel,
+          btnOkColor: Colors.red,
+        ).show();
+      }
+    } catch (e) {
+      debugPrint('Error en validateCode: $e');
+      if (mounted) {
+        ErrorDialog(
+          context: context,
+          title: 'Error inesperado',
+          description: 'Ocurrió un error al validar el código. Inténtalo de nuevo.',
+        );
+      }
     }
   }
 
