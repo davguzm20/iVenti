@@ -55,7 +55,7 @@ CREATE TABLE categorias (
 -- Table: clientes
 CREATE TABLE clientes (
   id_cliente SERIAL PRIMARY KEY,
-  dni VARCHAR(12),
+  dni VARCHAR(100),
   nombres VARCHAR(100) NOT NULL,
   email VARCHAR(120),
   telefono VARCHAR(20),
