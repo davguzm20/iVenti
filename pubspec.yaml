@@ -51,7 +51,6 @@ flutter:
   uses-material-design: true
   assets: 
     - ".env"
-    - ".env.test"
     - "lib/assets/iconos/"
     - "lib/shared/utils/messages.arb"
 
