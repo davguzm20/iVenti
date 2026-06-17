@@ -14,6 +14,7 @@ import 'package:iventi/features/auth/dtos/requests/CrearUsuarioRequest.dart';
 import 'package:iventi/features/auth/controllers/AuthController.dart';
 import 'package:iventi/features/config/controllers/ConfiguracionController.dart';
 import 'package:iventi/features/config/dtos/requests/CrearConfiguracionRequest.dart';
+import 'package:iventi/shared/di/ServiceLocator.dart';
 
 class SetupConfigPage extends StatefulWidget {
   final String email;
@@ -101,6 +102,8 @@ class _SetupConfigPageState extends State<SetupConfigPage> {
           pin: widget.pin,
         ),
       );
+
+      await ServiceLocator.setUsuarioActual(usuario.idUsuario!);
 
       if (diasVencimientoController.text.isNotEmpty) {
         await widget.configController.guardarConfiguracion(
