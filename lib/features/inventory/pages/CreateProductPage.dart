@@ -467,7 +467,7 @@ class _CreateProductPageState extends State<CreateProductPage> {
   }
 
   void _confirmarProducto() {
-    if (productNameController.text.isEmpty) {
+    if (productNameController.text.trim().isEmpty) {
       final (title, desc) = DialogMessages.inventario.nombreRequerido;
       ErrorDialog(context: context, title: title, description: desc);
       return;
@@ -532,8 +532,8 @@ class _CreateProductPageState extends State<CreateProductPage> {
         }
         final request = CrearProductoRequest(
           idUnidad: unidadSeleccionada!.idUnidad!,
-          codigo: productCodeController.text != "-" * 13
-              ? productCodeController.text
+          codigo: productCodeController.text.trim().isNotEmpty
+              ? productCodeController.text.trim()
               : null,
           nombre: productNameController.text,
           precio: precio,

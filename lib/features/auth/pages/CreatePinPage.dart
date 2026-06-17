@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import 'package:shared_preferences/shared_preferences.dart';
+
 import 'package:iventi/features/auth/controllers/AuthController.dart';
 import 'package:iventi/shared/di/ServiceLocator.dart';
 import 'package:iventi/shared/exceptions/AppException.dart';
@@ -47,6 +49,13 @@ class _CreatePinPageState extends State<CreatePinPage> {
 
   Future<void> _obtenerEmail() async {
     try {
+      final prefs = await SharedPreferences.getInstance();
+      final savedEmail = prefs.getString('last_logged_in_email');
+      if (savedEmail != null && savedEmail.isNotEmpty) {
+        if (mounted) setState(() => email = savedEmail);
+        return;
+      }
+
       final usuario = await _authController.obtenerUsuarioRegistrado();
 
       if (mounted) {

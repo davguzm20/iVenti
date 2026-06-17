@@ -132,7 +132,7 @@ class UsuarioRepository implements IUsuarioRepository {
   }
 
   @override
-  Future<UsuarioEntity> actualizarUsuario(int idUsuario, {String? nombre, String? email}) async {
+  Future<UsuarioEntity> actualizarUsuario(int idUsuario, {required String nombre, String? email}) async {
     final conexion = await _conexion;
 
     try {

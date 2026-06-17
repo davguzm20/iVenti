@@ -49,13 +49,18 @@ class _LoginPageState extends State<LoginPage> {
         return;
       }
 
+      final prefs = await SharedPreferences.getInstance();
+      final savedEmail = prefs.getString('last_logged_in_email');
+      if (savedEmail != null && savedEmail.isNotEmpty) {
+        if (mounted) setState(() => userEmail = savedEmail);
+        return;
+      }
+
       final usuario = await _authController.obtenerUsuarioRegistrado();
 
       if (mounted) setState(() => userEmail = usuario.email);
 
-    } catch (_) {
-      // No hay usuario registrado, se queda en login sin email
-    }
+    } catch (_) {}
   }
 
   Future<void> _iniciarSesion() async {
@@ -73,6 +78,7 @@ class _LoginPageState extends State<LoginPage> {
       await ServiceLocator.setUsuarioActual(usuario.idUsuario!);
       final prefs = await SharedPreferences.getInstance();
       await prefs.setBool('device_registered', true);
+      await prefs.setString('last_logged_in_email', userEmail);
 
       if (mounted) context.go('/inventory');
 

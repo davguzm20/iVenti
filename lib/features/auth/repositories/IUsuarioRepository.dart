@@ -9,6 +9,6 @@ abstract class IUsuarioRepository {
   Future<UsuarioEntity> validarCredenciales(LoginRequest request);
   Future<void> actualizarPIN(int idUsuario, String nuevoPIN);
   Future<UsuarioEntity> obtenerUsuarioRegistrado();
-  Future<UsuarioEntity> actualizarUsuario(int idUsuario, {String? nombre, String? email});
+  Future<UsuarioEntity> actualizarUsuario(int idUsuario, {required String nombre, String? email});
   Future<void> desactivarUsuario(int idUsuario);
 }

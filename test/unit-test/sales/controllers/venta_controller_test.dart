@@ -35,6 +35,7 @@ void main() {
     when(mockVentaService.crearVenta(any)).thenAnswer((_) async => venta);
 
     final request = CrearVentaRequest(
+      idCliente: 1,
       idUsuario: 1, montoTotal: 100, montoCancelado: 100, esCredito: false,
       detalles: [
         DetalleVentaRequest(idProducto: 1, idLote: 1, cantidad: 2, precioUnitario: 50, subtotal: 100, ganancia: 20, descuento: 0),

@@ -35,7 +35,7 @@ class AuthController {
     return _authService.recuperarPin(idUsuario, pinNuevo);
   }
 
-  Future<UsuarioEntity> actualizarPerfil(int idUsuario, {String? nombre, String? email}) {
+  Future<UsuarioEntity> actualizarPerfil(int idUsuario, {required String nombre, String? email}) {
     return _authService.actualizarPerfil(idUsuario, nombre: nombre, email: email);
   }
 

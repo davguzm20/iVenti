@@ -6,6 +6,7 @@ void main() {
   group('CrearVentaRequest', () {
     test('3 productos producen 3 detalles en la request', () {
       final request = CrearVentaRequest(
+        idCliente: 1,
         idUsuario: 1,
         montoTotal: 150.0,
         montoCancelado: 150.0,
@@ -33,6 +34,7 @@ void main() {
     test('detalles vacios lanza ValidationException', () {
       expect(
         () => CrearVentaRequest(
+          idCliente: 1,
           idUsuario: 1,
           montoTotal: 100.0,
           montoCancelado: 100.0,
@@ -43,26 +45,28 @@ void main() {
       );
     });
 
-    test('request sin idCliente es valida (cliente ocasional)', () {
-      final request = CrearVentaRequest(
-        idUsuario: 1,
-        montoTotal: 50.0,
-        montoCancelado: 50.0,
-        esCredito: false,
-        detalles: [
-          DetalleVentaRequest(
-            idProducto: 1, idLote: 1, cantidad: 1,
-            precioUnitario: 50.0, subtotal: 50.0, ganancia: 10.0, descuento: 0,
-          ),
-        ],
+    test('request sin idCliente lanza ValidationException', () {
+      expect(
+        () => CrearVentaRequest(
+          idUsuario: 1,
+          montoTotal: 50.0,
+          montoCancelado: 50.0,
+          esCredito: false,
+          detalles: [
+            DetalleVentaRequest(
+              idProducto: 1, idLote: 1, cantidad: 1,
+              precioUnitario: 50.0, subtotal: 50.0, ganancia: 10.0, descuento: 0,
+            ),
+          ],
+        ),
+        throwsA(isA<ValidationException>()),
       );
-
-      expect(request.idCliente, isNull);
     });
 
     test('request al contado con pago incompleto lanza ValidationException', () {
       expect(
         () => CrearVentaRequest(
+          idCliente: 1,
           idUsuario: 1,
           montoTotal: 100.0,
           montoCancelado: 50.0,
@@ -80,6 +84,7 @@ void main() {
 
     test('request a credito no necesita monto completo', () {
       final request = CrearVentaRequest(
+        idCliente: 1,
         idUsuario: 1,
         montoTotal: 100.0,
         montoCancelado: 20.0,

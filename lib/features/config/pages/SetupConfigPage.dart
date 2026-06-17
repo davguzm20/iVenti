@@ -127,15 +127,15 @@ class _SetupConfigPageState extends State<SetupConfigPage> {
 
       final prefs = await SharedPreferences.getInstance();
       await prefs.setBool('device_registered', true);
+      await prefs.setString('last_logged_in_email', widget.email);
 
       if (mounted) {
-        final timestamp = DateTime.now().millisecondsSinceEpoch;
         final (title, desc) = DialogMessages.auth.configuracionCompletada;
         SuccessDialog(
           context: context,
           title: title,
           description: desc,
-          btnOkOnPress: () => context.go('/login', extra: timestamp),
+          btnOkOnPress: () => context.go('/login', extra: widget.email),
         );
       }
 

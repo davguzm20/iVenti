@@ -40,6 +40,7 @@ class CrearVentaRequest {
     this.esCredito = false,
     required this.detalles,
   }) {
+    if (idCliente == null) throw ValidationException('El cliente es obligatorio para crear una venta');
     if (montoTotal < 0) throw ValidationException('El monto total no puede ser negativo');
     if (montoCancelado < 0) throw ValidationException('El monto cancelado no puede ser negativo');
     if (detalles.isEmpty) throw ValidationException('La venta debe tener al menos un detalle');

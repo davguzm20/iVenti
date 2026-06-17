@@ -315,7 +315,7 @@ class _PaymentPageState extends State<PaymentPage> {
               int? idCliente;
 
               if (crearCliente) {
-                if (_nombreController.text.isEmpty) {
+                if (_nombreController.text.trim().isEmpty) {
                   final (title, desc) = DialogMessages.ventas.nombreClienteRequerido;
                   ErrorDialog(
                     context: context,
@@ -348,9 +348,9 @@ class _PaymentPageState extends State<PaymentPage> {
                 try {
                   final nuevo = await _clienteController.crearCliente(
                     CrearClienteRequest(
-                      nombres: _nombreController.text,
-                      dni: _dniController.text,
-                      email: _correoController.text,
+                      nombres: _nombreController.text.trim(),
+                      dni: dni,
+                      email: _correoController.text.trim(),
                     ),
                   );
 

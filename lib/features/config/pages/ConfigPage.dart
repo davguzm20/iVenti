@@ -34,7 +34,7 @@ class _ConfigPageState extends State<ConfigPage> {
     final authCtrl = ServiceLocator.authController;
     final configCtrl = ServiceLocator.configuracionController;
     try {
-      final usuario = await authCtrl.obtenerUsuarioRegistrado();
+      final usuario = await authCtrl.obtenerUsuarioPorId(ServiceLocator.requireUsuarioActualId);
       _nombreController.text = usuario.nombre;
       final configs = await configCtrl.obtenerTodas(usuario.idUsuario!);
       for (final c in configs) {
@@ -88,7 +88,7 @@ class _ConfigPageState extends State<ConfigPage> {
         btnOkOnPress: () async {
           final authCtrl = ServiceLocator.authController;
           final configCtrl = ServiceLocator.configuracionController;
-          final idUsuario = ServiceLocator.usuarioActualId ?? 1;
+          final idUsuario = ServiceLocator.requireUsuarioActualId;
           try {
             await authCtrl.actualizarPerfil(idUsuario, nombre: _nombreController.text.trim());
             await configCtrl.guardarConfiguracion(

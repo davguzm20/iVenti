@@ -37,6 +37,7 @@ void main() {
   group('VentaService.crearVenta', () {
     test('debe crear venta correctamente', () async {
       final request = CrearVentaRequest(
+        idCliente: 1,
         idUsuario: 1,
         montoTotal: 100,
         montoCancelado: 100,
@@ -91,6 +92,7 @@ void main() {
 
     test('debe lanzar BusinessException cuando lote no existe', () async {
       final request = CrearVentaRequest(
+        idCliente: 1,
         idUsuario: 1,
         montoTotal: 100,
         montoCancelado: 100,
@@ -131,6 +133,7 @@ void main() {
       );
 
       final request = CrearVentaRequest(
+        idCliente: 1,
         idUsuario: 1,
         montoTotal: 100,
         montoCancelado: 100,
@@ -159,6 +162,7 @@ void main() {
 
     test('debe lanzar BusinessException cuando hay DatabaseException', () async {
       final request = CrearVentaRequest(
+        idCliente: 1,
         idUsuario: 1,
         montoTotal: 100,
         montoCancelado: 100,

@@ -149,7 +149,7 @@ class AuthService {
     }
   }
 
-  Future<UsuarioEntity> actualizarPerfil(int idUsuario, {String? nombre, String? email}) async {
+  Future<UsuarioEntity> actualizarPerfil(int idUsuario, {required String nombre, String? email}) async {
     try {
       return await _usuarioRepository.actualizarUsuario(idUsuario, nombre: nombre, email: email);
 
