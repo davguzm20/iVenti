@@ -1,6 +1,8 @@
 # Sistema de Inventario y Ventas iVenti
 
-Aplicación móvil para la gestión eficiente de inventarios y ventas, diseñada para optimizar la administración de una tienda de multiservicios.
+Aplicacion movil para la gestion eficiente de inventarios y ventas, disenada para optimizar la administracion de una tienda de multiservicios.
+
+Guia de instalacion completa: **[INSTALL.md](INSTALL.md)**
 
 ## ✨ Características principales
 
