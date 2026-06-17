@@ -18,9 +18,10 @@ class LoteCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final now = DateTime.now();
-    final daysToExpire = lote.fechaVencimiento.difference(now).inDays;
-    final isExpired = daysToExpire < 0;
-    final isExpiringSoon = daysToExpire >= 0 && daysToExpire <= 30;
+    final hasExpiry = lote.fechaVencimiento != null;
+    final daysToExpire = hasExpiry ? lote.fechaVencimiento!.difference(now).inDays : 0;
+    final isExpired = hasExpiry && daysToExpire < 0;
+    final isExpiringSoon = hasExpiry && daysToExpire >= 0 && daysToExpire <= 30;
 
     String expiryStatus;
     Color statusColor;
@@ -78,7 +79,9 @@ class LoteCard extends StatelessWidget {
               ),
               const SizedBox(height: 8),
               Text(
-                'Vencimiento: ${lote.fechaVencimiento.day}/${lote.fechaVencimiento.month}/${lote.fechaVencimiento.year}',
+                hasExpiry
+                    ? 'Vencimiento: ${lote.fechaVencimiento!.day}/${lote.fechaVencimiento!.month}/${lote.fechaVencimiento!.year}'
+                    : 'Sin fecha de vencimiento',
                 style: TextStyle(
                   color: isExpiringSoon || isExpired ? Colors.red.shade700 : Colors.grey.shade600,
                   fontSize: 14,

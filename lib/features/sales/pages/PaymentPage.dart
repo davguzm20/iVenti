@@ -397,7 +397,6 @@ class _PaymentPageState extends State<PaymentPage> {
                         cantidad: d['cantidad'] as int,
                         precioUnitario: d['precioUnidadProducto'] as double,
                         subtotal: d['subtotalProducto'] as double,
-                        ganancia: d['gananciaProducto'] as double,
                         descuento: d['descuentoProducto'] as double,
                       ),
                     ).toList(),

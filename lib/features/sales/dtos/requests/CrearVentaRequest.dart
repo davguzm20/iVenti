@@ -6,7 +6,6 @@ class DetalleVentaRequest {
   final int cantidad;
   final double precioUnitario;
   final double subtotal;
-  final double ganancia;
   final double descuento;
 
   DetalleVentaRequest({
@@ -15,7 +14,6 @@ class DetalleVentaRequest {
     required this.cantidad,
     required this.precioUnitario,
     required this.subtotal,
-    required this.ganancia,
     required this.descuento,
   }) {
     if (cantidad <= 0) throw ValidationException('La cantidad debe ser mayor a 0');

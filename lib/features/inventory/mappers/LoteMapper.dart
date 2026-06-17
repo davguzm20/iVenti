@@ -7,7 +7,7 @@ class LoteMapper {
       idLote: map['id_lote'] as int,
       idProducto: map['id_producto'] as int,
       fechaCompra: map['fecha_compra'] as DateTime,
-      fechaVencimiento: map['fecha_vencimiento'] as DateTime,
+      fechaVencimiento: (map['fecha_vencimiento'] as DateTime?),
       cantidadActual: map['cantidad_actual'] as int,
       cantidadComprada: map['cantidad_comprada'] as int,
       cantidadPerdida: map['cantidad_perdida'] as int,

@@ -23,8 +23,9 @@ class PostgresDatasource {
       _initLock = completer;
       try {
         if (_connection != null) {
-          try { await _connection!.close(); } catch (_) {}
+          try {           await _connection!.close(); } catch (_) {}
           _connection = null;
+          _ultimoIdUsuario = null;
         }
         await _initWithRetry();
         _startHeartbeat();
@@ -95,5 +96,6 @@ class PostgresDatasource {
     _heartbeatTimer = null;
     try { await _connection?.close(); } catch (_) {}
     _connection = null;
+    _ultimoIdUsuario = null;
   }
 }

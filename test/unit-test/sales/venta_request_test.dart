@@ -14,15 +14,15 @@ void main() {
         detalles: [
           DetalleVentaRequest(
             idProducto: 1, idLote: 1, cantidad: 1,
-            precioUnitario: 50.0, subtotal: 50.0, ganancia: 10.0, descuento: 0,
+            precioUnitario: 50.0, subtotal: 50.0, descuento: 0,
           ),
           DetalleVentaRequest(
             idProducto: 2, idLote: 2, cantidad: 2,
-            precioUnitario: 25.0, subtotal: 50.0, ganancia: 5.0, descuento: 0,
+            precioUnitario: 25.0, subtotal: 50.0, descuento: 0,
           ),
           DetalleVentaRequest(
             idProducto: 3, idLote: 3, cantidad: 1,
-            precioUnitario: 50.0, subtotal: 50.0, ganancia: 10.0, descuento: 0,
+            precioUnitario: 50.0, subtotal: 50.0, descuento: 0,
           ),
         ],
       );
@@ -55,7 +55,7 @@ void main() {
           detalles: [
             DetalleVentaRequest(
               idProducto: 1, idLote: 1, cantidad: 1,
-              precioUnitario: 50.0, subtotal: 50.0, ganancia: 10.0, descuento: 0,
+              precioUnitario: 50.0, subtotal: 50.0, descuento: 0,
             ),
           ],
         ),
@@ -74,7 +74,7 @@ void main() {
           detalles: [
             DetalleVentaRequest(
               idProducto: 1, idLote: 1, cantidad: 1,
-              precioUnitario: 100.0, subtotal: 100.0, ganancia: 20.0, descuento: 0,
+              precioUnitario: 100.0, subtotal: 100.0, descuento: 0,
             ),
           ],
         ),
@@ -92,7 +92,7 @@ void main() {
         detalles: [
           DetalleVentaRequest(
             idProducto: 1, idLote: 1, cantidad: 1,
-            precioUnitario: 100.0, subtotal: 100.0, ganancia: 30.0, descuento: 0,
+            precioUnitario: 100.0, subtotal: 100.0, descuento: 0,
           ),
         ],
       );

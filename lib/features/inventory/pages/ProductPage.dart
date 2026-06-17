@@ -415,7 +415,7 @@ class _ProductPageState extends State<ProductPage> {
                               Text("Pérdidas: ${lote.cantidadPerdida}"),
                               Text("Precio Compra: S/ ${lote.precioCompra.toStringAsFixed(2)}"),
                               Text("Fecha compra: ${lote.fechaCompra.toLocal().toString().split(' ')[0]}"),
-                              Text("Vence: ${lote.fechaVencimiento.toLocal().toString().split(' ')[0]}"),
+                              Text("Vence: ${lote.fechaVencimiento?.toLocal().toString().split(' ')[0] ?? '---'}"),
                             ],
                           ),
                           trailing: PopupMenuButton<String>(

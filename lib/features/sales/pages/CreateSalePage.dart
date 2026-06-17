@@ -120,7 +120,6 @@ class _CreateSalePageState extends State<CreateSalePage> {
                         'subtotalProducto': p.precio * cantidadValue - descuentoValue,
                         'precioUnidadProducto': p.precio,
                         'descuentoProducto': descuentoValue,
-                        'gananciaProducto': (p.precio * cantidadValue - descuentoValue) - (loteSeleccionado!.precioCompra * cantidadValue),
                       });
                     });
                     context.pop();

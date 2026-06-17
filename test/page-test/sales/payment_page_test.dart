@@ -31,7 +31,7 @@ void main() {
       initialLocation: '/sales/payment',
       routes: [
         GoRoute(path: '/sales/payment', builder: (_, __) => const PaymentPage(detallesVenta: [
-          {'subtotalProducto': 100.0, 'idProducto': 1, 'idLote': 1, 'nombre': 'Producto', 'precio': 100.0, 'cantidad': 1, 'precioUnidadProducto': 100.0, 'descuentoProducto': 0.0, 'gananciaProducto': 20.0, 'cantidadProducto': 1},
+          {'subtotalProducto': 100.0, 'idProducto': 1, 'idLote': 1, 'nombre': 'Producto', 'precio': 100.0, 'cantidad': 1, 'precioUnidadProducto': 100.0, 'descuentoProducto': 0.0, 'cantidadProducto': 1},
         ])),
         GoRoute(path: '/sales', builder: (_, __) => const SizedBox()),
       ],

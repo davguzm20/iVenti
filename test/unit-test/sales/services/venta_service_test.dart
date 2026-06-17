@@ -48,9 +48,7 @@ void main() {
             idLote: 1,
             cantidad: 2,
             precioUnitario: 50,
-            subtotal: 100,
-            ganancia: 20,
-            descuento: 0,
+            subtotal: 100,            descuento: 0,
           ),
         ],
       );
@@ -103,9 +101,7 @@ void main() {
             idLote: 1,
             cantidad: 2,
             precioUnitario: 50,
-            subtotal: 100,
-            ganancia: 20,
-            descuento: 0,
+            subtotal: 100,            descuento: 0,
           ),
         ],
       );
@@ -144,9 +140,7 @@ void main() {
             idLote: 1,
             cantidad: 5,
             precioUnitario: 50,
-            subtotal: 100,
-            ganancia: 20,
-            descuento: 0,
+            subtotal: 100,            descuento: 0,
           ),
         ],
       );
@@ -173,9 +167,7 @@ void main() {
             idLote: 1,
             cantidad: 2,
             precioUnitario: 50,
-            subtotal: 100,
-            ganancia: 20,
-            descuento: 0,
+            subtotal: 100,            descuento: 0,
           ),
         ],
       );

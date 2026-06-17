@@ -203,7 +203,7 @@ class VentaRepository implements IVentaRepository {
 
       if (esAlContado != null) {
         query += ' AND es_credito = @es_credito';
-        params['es_credito'] = esAlContado;
+        params['es_credito'] = !esAlContado;
       }
       query += ' ORDER BY vendido_en ASC';
 

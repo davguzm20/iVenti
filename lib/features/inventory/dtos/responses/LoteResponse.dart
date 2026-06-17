@@ -2,7 +2,7 @@ class LoteResponse {
   final int idLote;
   final int idProducto;
   final DateTime fechaCompra;
-  final DateTime fechaVencimiento;
+  final DateTime? fechaVencimiento;
   final int cantidadActual;
   final int cantidadComprada;
   final int cantidadPerdida;
@@ -15,7 +15,7 @@ class LoteResponse {
     required this.idLote,
     required this.idProducto,
     required this.fechaCompra,
-    required this.fechaVencimiento,
+    this.fechaVencimiento,
     required this.cantidadActual,
     required this.cantidadComprada,
     required this.cantidadPerdida,
