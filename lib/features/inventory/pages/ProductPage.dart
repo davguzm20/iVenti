@@ -121,7 +121,7 @@ class _ProductPageState extends State<ProductPage> {
                   idProducto: widget.idProducto,
                   idUnidad: producto!.idUnidad,
                   codigo: codigoCtrl.text.isNotEmpty ? codigoCtrl.text : null,
-                  nombre: nombreCtrl.text,
+                  nombre: nombreCtrl.text.trim(),
                   precio: double.tryParse(precioCtrl.text) ?? producto!.precio,
                   stockMinimo: int.tryParse(stockMinCtrl.text) ?? producto!.stockMinimo,
                   rutaImagen: nuevaRuta,
@@ -194,6 +194,8 @@ class _ProductPageState extends State<ProductPage> {
             onPressed: () async {
               final cc = int.tryParse(cantCompradaCtrl.text) ?? 0;
               if (cc <= 0) return;
+              final pc = double.tryParse(precioCompraCtrl.text) ?? 0;
+              if (pc <= 0) return;
               await _loteController.crearLote(
                 CrearLoteRequest(
                   idProducto: widget.idProducto,
@@ -201,7 +203,7 @@ class _ProductPageState extends State<ProductPage> {
                   fechaVencimiento: fechaVenc!,
                   cantidadComprada: cc,
                   cantidadPerdida: int.tryParse(cantPerdidaCtrl.text) ?? 0,
-                  precioCompra: double.tryParse(precioCompraCtrl.text) ?? 0,
+                  precioCompra: pc,
                 ),
               );
               if (!mounted) return;

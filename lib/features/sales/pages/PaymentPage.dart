@@ -350,7 +350,7 @@ class _PaymentPageState extends State<PaymentPage> {
                     CrearClienteRequest(
                       nombres: _nombreController.text.trim(),
                       dni: dni,
-                      email: _correoController.text.trim(),
+                      email: _correoController.text.trim().isEmpty ? null : _correoController.text.trim(),
                     ),
                   );
 
@@ -382,6 +382,12 @@ class _PaymentPageState extends State<PaymentPage> {
               }
 
               try {
+                if (!esAlContado && cantidadRecibida > _calcularTotalVenta()) {
+                  if (!mounted) return;
+                  ErrorDialog(context: context, title: 'Monto excedido', description: 'El monto recibido no puede ser mayor al total de la venta.');
+                  return;
+                }
+
                 await _ventaController.crearVenta(
                   CrearVentaRequest(
                     idCliente: idCliente,
@@ -392,12 +398,12 @@ class _PaymentPageState extends State<PaymentPage> {
                     esCredito: !esAlContado,
                     detalles: widget.detallesVenta.map(
                       (d) => DetalleVentaRequest(
-                        idProducto: d['idProducto'] as int,
-                        idLote: d['idLote'] as int,
-                        cantidad: d['cantidad'] as int,
-                        precioUnitario: d['precioUnidadProducto'] as double,
-                        subtotal: d['subtotalProducto'] as double,
-                        descuento: d['descuentoProducto'] as double,
+                        idProducto: d['idProducto'] as int? ?? 0,
+                        idLote: d['idLote'] as int? ?? 0,
+                        cantidad: d['cantidad'] as int? ?? 0,
+                        precioUnitario: d['precioUnidadProducto'] as double? ?? 0,
+                        subtotal: d['subtotalProducto'] as double? ?? 0,
+                        descuento: d['descuentoProducto'] as double? ?? 0,
                       ),
                     ).toList(),
                   ),

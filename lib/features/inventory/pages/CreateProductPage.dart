@@ -535,7 +535,7 @@ class _CreateProductPageState extends State<CreateProductPage> {
           codigo: productCodeController.text.trim().isNotEmpty
               ? productCodeController.text.trim()
               : null,
-          nombre: productNameController.text,
+          nombre: productNameController.text.trim(),
           precio: precio,
           stockMinimo: stockMin.round(),
           rutaImagen: imagenUrl,
