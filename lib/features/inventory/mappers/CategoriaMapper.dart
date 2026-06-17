@@ -6,8 +6,8 @@ class CategoriaMapper {
     return CategoriaEntity(
       idCategoria: map['id_categoria'] as int,
       nombre: map['nombre'] as String,
-      esActivo: map['es_activo'] as bool,
-      creadoEn: map['creado_en'] as DateTime,
+      esActivo: (map['es_activo'] as bool?) ?? true,
+      creadoEn: (map['creado_en'] as DateTime?) ?? DateTime.now(),
       actualizadoEn: map['actualizado_en'] as DateTime?,
     );
   }

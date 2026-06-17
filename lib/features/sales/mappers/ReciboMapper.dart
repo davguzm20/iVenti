@@ -9,7 +9,7 @@ class ReciboMapper {
       idUsuario: map['id_usuario'] as int? ?? 0,
       montoCancelado: double.parse(map['monto_cancelado'].toString()),
       pagadoEn: map['pagado_en'] as DateTime,
-      creadoEn: map['creado_en'] as DateTime,
+      creadoEn: (map['creado_en'] as DateTime?) ?? DateTime.now(),
     );
   }
 

@@ -13,8 +13,8 @@ class NotificacionMapper {
       tipo: _parseTipo(PgHelper.string(map['tipo'])),
       titulo: map['titulo'] as String,
       contenido: map['contenido'] as String,
-      leida: map['leida'] as bool,
-      creadoEn: map['creado_en'] as DateTime,
+      leida: (map['leida'] as bool?) ?? false,
+      creadoEn: (map['creado_en'] as DateTime?) ?? DateTime.now(),
     );
   }
 

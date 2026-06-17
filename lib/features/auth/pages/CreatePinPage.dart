@@ -115,6 +115,7 @@ class _CreatePinPageState extends State<CreatePinPage> {
     try {
       final usuario = await _authController.obtenerUsuarioPorEmail(email);
 
+      await ServiceLocator.setUsuarioActual(usuario.idUsuario!);
       await _authController.recuperarPin(usuario.idUsuario!, pin);
 
       if (mounted) {

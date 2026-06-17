@@ -9,11 +9,11 @@ class ProductoMapper {
       codigo: map['codigo'] as String?,
       nombre: map['nombre'] as String,
       precio: double.parse(map['precio'].toString()),
-      stockActual: map['stock_actual'] as int,
-      stockMinimo: map['stock_minimo'] as int,
+      stockActual: (map['stock_actual'] as int?) ?? 0,
+      stockMinimo: (map['stock_minimo'] as int?) ?? 0,
       rutaImagen: map['ruta_imagen'] as String?,
-      esActivo: map['es_activo'] as bool,
-      creadoEn: map['creado_en'] as DateTime,
+      esActivo: (map['es_activo'] as bool?) ?? true,
+      creadoEn: (map['creado_en'] as DateTime?) ?? DateTime.now(),
       actualizadoEn: map['actualizado_en'] as DateTime?,
     );
   }

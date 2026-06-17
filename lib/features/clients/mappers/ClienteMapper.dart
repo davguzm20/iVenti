@@ -11,9 +11,9 @@ class ClienteMapper {
       nombres: map['nombres'] as String,
       email: map['email'] as String?,
       telefono: map['telefono'] as String?,
-      esDeudor: map['es_deudor'] as bool,
-      esActivo: map['es_activo'] as bool,
-      creadoEn: map['creado_en'] as DateTime,
+      esDeudor: (map['es_deudor'] as bool?) ?? false,
+      esActivo: (map['es_activo'] as bool?) ?? true,
+      creadoEn: (map['creado_en'] as DateTime?) ?? DateTime.now(),
       actualizadoEn: map['actualizado_en'] as DateTime?,
     );
   }

@@ -7,8 +7,8 @@ class UnidadMapper {
       idUnidad: map['id_unidad'] as int,
       nombre: map['nombre'] as String,
       abreviatura: map['abreviatura'] as String,
-      esActivo: map['es_activo'] as bool,
-      creadoEn: map['creado_en'] as DateTime,
+      esActivo: (map['es_activo'] as bool?) ?? true,
+      creadoEn: (map['creado_en'] as DateTime?) ?? DateTime.now(),
     );
   }
 

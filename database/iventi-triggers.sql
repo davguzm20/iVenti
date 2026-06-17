@@ -33,9 +33,9 @@ DECLARE
   _registro_id INTEGER;
 BEGIN
   BEGIN
-    _id_usuario := NULLIF(current_setting('app.id_usuario', true), '')::INTEGER;
+    _id_usuario := COALESCE(NULLIF(current_setting('app.id_usuario', true), '')::INTEGER, 0);
   EXCEPTION WHEN OTHERS THEN
-    _id_usuario := NULL;
+    _id_usuario := 0;
   END;
 
   IF TG_TABLE_NAME = 'usuarios' THEN

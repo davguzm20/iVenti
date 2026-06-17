@@ -8,7 +8,7 @@ class ConfiguracionMapper {
       idUsuario: map['id_usuario'] as int,
       clave: map['clave'] as String,
       valor: map['valor'] as String,
-      creadoEn: map['creado_en'] as DateTime,
+      creadoEn: (map['creado_en'] as DateTime?) ?? DateTime.now(),
       actualizadoEn: map['actualizado_en'] as DateTime?,
     );
   }

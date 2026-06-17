@@ -25,7 +25,7 @@ CREATE TYPE tipo_notificacion AS ENUM ('STOCK_BAJO', 'STOCK_AGOTADO', 'PROXIMO_V
 -- Table: auditoria
 CREATE TABLE auditoria (
   id_auditoria SERIAL PRIMARY KEY,
-  id_usuario INTEGER NOT NULL,
+  id_usuario INTEGER,
   tabla VARCHAR(50) NOT NULL,
   registro_id INTEGER NOT NULL,
   operacion operacion_auditoria NOT NULL,
