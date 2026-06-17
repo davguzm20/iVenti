@@ -62,8 +62,7 @@ CREATE TABLE clientes (
   es_deudor BOOLEAN DEFAULT FALSE,
   es_activo BOOLEAN DEFAULT TRUE,
   creado_en TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  actualizado_en TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  CONSTRAINT clientes_dni_key UNIQUE (dni)
+  actualizado_en TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 -- Table: usuarios
@@ -75,8 +74,7 @@ CREATE TABLE usuarios (
   pin VARCHAR(64),
   es_activo BOOLEAN DEFAULT TRUE,
   creado_en TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  actualizado_en TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  CONSTRAINT uk_usuarios_email UNIQUE (email)
+  actualizado_en TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 -- Table: configuraciones
@@ -104,7 +102,6 @@ CREATE TABLE productos (
   es_activo BOOLEAN DEFAULT TRUE,
   creado_en TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   actualizado_en TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  CONSTRAINT productos_codigo_key UNIQUE (codigo),
   CONSTRAINT productos_nombre_key UNIQUE (nombre),
   CONSTRAINT fk_productos_unidad FOREIGN KEY (id_unidad) REFERENCES unidades(id_unidad)
 );
@@ -203,3 +200,7 @@ CREATE INDEX idx_auditoria_tabla_fecha ON auditoria (tabla, fecha_auditoria);
 CREATE INDEX idx_productos_nombre ON productos (nombre);
 CREATE INDEX idx_ventas_vendido_en ON ventas (vendido_en DESC);
 CREATE INDEX idx_lotes_fecha_vencimiento ON lotes (fecha_vencimiento);
+
+CREATE UNIQUE INDEX clientes_dni_key ON clientes (dni) WHERE dni IS NOT NULL AND dni != '';
+CREATE UNIQUE INDEX uk_usuarios_email ON usuarios (email) WHERE email IS NOT NULL AND email != '';
+CREATE UNIQUE INDEX productos_codigo_key ON productos (codigo) WHERE codigo IS NOT NULL AND codigo != '';
