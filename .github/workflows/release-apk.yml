@@ -28,6 +28,7 @@ jobs:
           echo "SMTP_PASSWORD=${{ secrets.SMTP_PASSWORD }}" >> .env
           echo "CLOUDINARY_URL=${{ secrets.CLOUDINARY_URL }}" >> .env
           echo "ENCRYPTION_KEY=${{ secrets.ENCRYPTION_KEY }}" >> .env
+          echo "# CI build placeholder" > .env.test
 
       - uses: actions/setup-java@v4
         with:
