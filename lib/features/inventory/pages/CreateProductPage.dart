@@ -14,6 +14,7 @@ import 'package:iventi/shared/theme/ButtonStyles.dart';
 import 'package:iventi/shared/utils/DialogMessages.dart';
 import 'package:iventi/shared/widgets/CustomTextField.dart';
 import 'package:iventi/shared/widgets/ErrorDialog.dart';
+import 'package:iventi/shared/widgets/LoadingDialog.dart';
 import 'package:iventi/shared/widgets/SuccessDialog.dart';
 import 'package:iventi/features/inventory/controllers/CategoriaController.dart';
 import 'package:iventi/features/inventory/controllers/UnidadController.dart';
@@ -35,6 +36,7 @@ class _CreateProductPageState extends State<CreateProductPage> {
   final TextEditingController maxStockController = TextEditingController();
   final TextEditingController priceController = TextEditingController();
 
+  bool _isProcessing = false;
   List<CategoriaEntity> categoriasDisponibles = [];
   List<UnidadEntity> unidadesDisponibles = [];
   List<CategoriaEntity> categoriasSeleccionadas = [];
@@ -303,8 +305,17 @@ class _CreateProductPageState extends State<CreateProductPage> {
 
                   ElevatedButton(
                     style: ButtonStyles.success(),
-                    onPressed: _confirmarProducto,
-                    child: const Text('Confirmar'),
+                    onPressed: _isProcessing ? null : _confirmarProducto,
+                    child: _isProcessing
+                        ? const SizedBox(
+                            width: 24,
+                            height: 24,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                              valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                            ),
+                          )
+                        : const Text('Confirmar'),
                   ),
                 ],
               ),
@@ -520,37 +531,37 @@ class _CreateProductPageState extends State<CreateProductPage> {
       title: 'Confirmación',
       desc: '¿Está seguro de que desea crear el producto?',
       btnOkOnPress: () async {
-          String? imagenUrl = rutaImagen;
-        if (imagenUrl != null && !imagenUrl.startsWith('http')) {
-          try {
-            final tempId = DateTime.now().millisecondsSinceEpoch;
-            imagenUrl = await CloudinaryService().uploadImage(imagenUrl, tempId);
-          } catch (e) {
-            if (mounted) { ErrorDialog(context: context, title: 'Error', description: 'No se pudo subir la imagen: $e'); }
-            return;
-          }
-        }
-        final request = CrearProductoRequest(
-          idUnidad: unidadSeleccionada!.idUnidad!,
-          codigo: productCodeController.text.trim().isNotEmpty
-              ? productCodeController.text.trim()
-              : null,
-          nombre: productNameController.text.trim(),
-          precio: precio,
-          stockMinimo: stockMin.round(),
-          rutaImagen: imagenUrl,
-        );
+        if (_isProcessing) return;
+        _isProcessing = true;
+        await Future.delayed(const Duration(milliseconds: 100));
+        if (!mounted) return;
+        LoadingDialog.show(context);
 
         try {
+          String? imagenUrl = rutaImagen;
+          if (imagenUrl != null && !imagenUrl.startsWith('http')) {
+            final tempId = DateTime.now().millisecondsSinceEpoch;
+            imagenUrl = await CloudinaryService().uploadImage(imagenUrl, tempId);
+          }
+          final request = CrearProductoRequest(
+            idUnidad: unidadSeleccionada!.idUnidad!,
+            codigo: productCodeController.text.trim().isNotEmpty
+                ? productCodeController.text.trim()
+                : null,
+            nombre: productNameController.text.trim(),
+            precio: precio,
+            stockMinimo: stockMin.round(),
+            rutaImagen: imagenUrl,
+          );
+
           final ids = categoriasSeleccionadas
               .map((c) => c.idCategoria!)
               .toList();
 
-          await _productoController.crearProducto(
-            request,
-            idCategorias: ids,
-          );
+          await _productoController.crearProducto(request, idCategorias: ids);
 
+          if (mounted) LoadingDialog.hide(context);
+          _isProcessing = false;
           if (mounted) {
             final (title, desc) = DialogMessages.inventario.productoregistrado;
             SuccessDialog(
@@ -560,8 +571,9 @@ class _CreateProductPageState extends State<CreateProductPage> {
               btnOkOnPress: () => context.pop(),
             );
           }
-
         } catch (e) {
+          if (mounted) LoadingDialog.hide(context);
+          _isProcessing = false;
           debugPrint('Error al crear producto: $e');
           if (!mounted) return;
           ErrorDialog(

@@ -3,8 +3,8 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:iventi/shared/utils/PinEncryptor.dart';
 
 void main() {
-  setUpAll(() async {
-    await dotenv.load(fileName: '.env.test');
+  setUpAll(() {
+    dotenv.testLoad(fileInput: 'ENCRYPTION_KEY=YWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWE=\n');
   });
 
   group('PinEncryptor', () {
