@@ -5,22 +5,26 @@
 ### 1.1. Salida de Consola
 
 ```
-[Codigo actualizado. Pendiente ajustar finders para ejecucion en emulador]
+# clients_detail_test.dart (11 casos)
+All tests passed!  (01:03)
+
+# clients_list_test.dart (10 casos)
+All tests passed!  (01:30)
 ```
 
 ### 1.2. Resumen de Resultados
 
 | Concepto | Cantidad |
 |----------|----------|
-| Total | 2 |
-| Codigo actualizado | 2 |
-| Pendiente finders | 2 |
+| Total | 2 (21 casos) |
+| Exitosas | 2 |
+| Fallidas | 0 |
 
 ### 1.3. Desglose por Tipo
 
 | Tipo | Tests | Estado |
 |------|-------|--------|
-| Flujo Completo | 2 | Codigo OK, pendiente finders |
+| Flujo Completo | 2 | OK |
 
 ## 2. Tests Ejecutados
 
@@ -37,16 +41,16 @@
 
 | Caso | Descripcion | Tipo | Estado |
 |------|-------------|------|--------|
-| Clientes en listado | Los clientes seed aparecen en la lista | Happy Path | Codigo OK, pendiente finders |
-| Buscar por nombre | Se escribe nombre. La lista se filtra | Happy Path | Codigo OK, pendiente finders |
-| Limpiar busqueda | Se toca X. Vuelven todos los clientes | Happy Path | Codigo OK, pendiente finders |
-| Navegar a filtros | Se toca filter_list. Se abre FilterClientsPage | Happy Path | Codigo OK, pendiente finders |
-| Activar filtro | Switch ON. Botones Deudores/Regulares aparecen | Happy Path | Codigo OK, pendiente finders |
-| Seleccionar Deudores | Se toca "Deudores". Filtro activado | Happy Path | Codigo OK, pendiente finders |
-| Aplicar filtros | Se toca "Aplicar Filtros". Se regresa a clients | Happy Path | Codigo OK, pendiente finders |
-| Navegar a detalle | Se toca cliente. Se abre DetailsClientPage | Happy Path | Codigo OK, pendiente finders |
-| Estado Deudor | El detalle muestra "Estado: Deudor" | Happy Path | Codigo OK, pendiente finders |
-| Volver a lista | Se toca back. Se regresa a ClientsPage | Happy Path | Codigo OK, pendiente finders |
+| Clientes en listado | Los clientes registrados aparecen en el listado principal | Happy Path | OK |
+| Buscar por nombre | Se ingresa un nombre en el campo de busqueda. La lista se filtra mostrando solo los clientes coincidentes | Happy Path | OK |
+| Limpiar busqueda | Se restaura el listado completo al limpiar el campo de busqueda | Happy Path | OK |
+| Navegar a filtros | Se accede a la pantalla de filtros de clientes | Happy Path | OK |
+| Activar filtro | Se activa el filtro de clientes. Aparecen las opciones "Deudores" y "Regulares" | Happy Path | OK |
+| Seleccionar Deudores | Se selecciona el filtro "Deudores". El listado se actualiza mostrando solo clientes con deuda | Happy Path | OK |
+| Aplicar filtros | Se confirma la aplicacion de los filtros seleccionados. El sistema retorna al listado filtrado | Happy Path | OK |
+| Navegar a detalle | Se selecciona un cliente del listado. El sistema abre la pantalla de detalle del cliente | Happy Path | OK |
+| Estado Deudor | La pantalla de detalle muestra la etiqueta "Estado: Deudor" para clientes con deuda pendiente | Happy Path | OK |
+| Volver a lista | Se retrocede desde el detalle. El sistema retorna al listado de clientes | Happy Path | OK |
 
 **Total casos: 10**
 
@@ -54,17 +58,17 @@
 
 | Caso | Descripcion | Tipo | Estado |
 |------|-------------|------|--------|
-| Ver cliente en listado | Cliente seed aparece en el listado | Happy Path | Codigo OK, pendiente finders |
-| Navegar a detalle | Se toca cliente. Se abre detalle | Happy Path | Codigo OK, pendiente finders |
-| Ver DNI | El DNI del cliente se muestra | Happy Path | Codigo OK, pendiente finders |
-| Ver estado Deudor | "DEUDOR" en el detalle | Happy Path | Codigo OK, pendiente finders |
-| Ver ventas | Ventas del cliente se listan | Happy Path | Codigo OK, pendiente finders |
-| Boton pagar habilitado | attach_money activo por esDeudor=true | Happy Path | Codigo OK, pendiente finders |
-| Cancelar deuda: dialogo | Se abre dialogo con monto pendiente | Happy Path | Codigo OK, pendiente finders |
-| Monto invalido (0) | Se ingresa 0. ErrorDialog | Error Path | Codigo OK, pendiente finders |
-| Monto excedido | Se ingresa > pendiente. ErrorDialog | Error Path | Codigo OK, pendiente finders |
-| Pago exitoso | Se ingresa monto valido. SuccessDialog | Happy Path | Codigo OK, pendiente finders |
-| Volver a lista | Ok en dialogo. Se regresa a lista | Happy Path | Codigo OK, pendiente finders |
+| Ver cliente en listado | El cliente registrado aparece en el listado de clientes | Happy Path | OK |
+| Navegar a detalle | Se selecciona un cliente del listado. El sistema abre la pantalla de detalle | Happy Path | OK |
+| Ver DNI | El numero de DNI del cliente se muestra en la pantalla de detalle | Happy Path | OK |
+| Ver estado Deudor | La pantalla de detalle muestra la etiqueta "DEUDOR" cuando el cliente tiene deuda pendiente | Happy Path | OK |
+| Ver ventas | Las ventas asociadas al cliente se listan en la pantalla de detalle | Happy Path | OK |
+| Boton pagar habilitado | El boton de pago se encuentra habilitado cuando el cliente es deudor | Happy Path | OK |
+| Cancelar deuda: dialogo | Se abre el dialogo de cancelacion mostrando el monto pendiente del cliente | Happy Path | OK |
+| Monto invalido (0) | Se ingresa un monto igual a cero. Aparece el mensaje de error correspondiente | Error Path | OK |
+| Monto excedido | Se ingresa un monto superior a la deuda pendiente. Aparece el mensaje de error correspondiente | Error Path | OK |
+| Pago exitoso | Se ingresa un monto valido y se confirma el pago. Aparece el dialogo de exito | Happy Path | OK |
+| Volver a lista | Se confirma el pago. El sistema retorna al listado de clientes | Happy Path | OK |
 
 **Total casos: 11**
 
@@ -86,4 +90,4 @@
 
 ## 5. Conclusiones
 
-Los 2 tests E2E de clientes tienen el codigo actualizado para el nuevo schema (sin `apellidos`, con `dni` AES, PIN HMAC-SHA256). Pendiente ajustar finders para ejecucion en emulador.
+Los 2 tests E2E de clientes (21 casos) pasan correctamente. Todos los flujos de listado, busqueda, filtros, detalle y pago de deuda estan cubiertos.
