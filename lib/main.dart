@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
@@ -27,12 +28,16 @@ Future<void> main({String envFile = ".env"}) async {
   await ServiceLocator.initialize();
   await DialogMessages.init();
 
-  runApp(
-    MultiProvider(
-      providers: ServiceLocator.providers,
-      child: const iVentiApp(),
-    ),
-  );
+  runZonedGuarded(() {
+    runApp(
+      MultiProvider(
+        providers: ServiceLocator.providers,
+        child: const iVentiApp(),
+      ),
+    );
+  }, (error, stack) {
+    debugPrint('[ZONE ERROR] $error');
+  });
 }
 
 class iVentiApp extends StatelessWidget {
