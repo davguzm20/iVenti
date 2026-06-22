@@ -48,6 +48,7 @@ class PagoService {
     try {
       final conexion = await _datasource.connection;
       try {
+        _datasource.markTransaction(true);
         await conexion.execute('BEGIN');
 
         await _ventaRepository.actualizarMontoCanceladoVenta(idVenta, monto);
@@ -61,6 +62,7 @@ class PagoService {
         final recibo = await _reciboRepository.crearReciboConRequest(request);
 
         await conexion.execute('COMMIT');
+        _datasource.markTransaction(false);
 
         if (ventaExistente.idCliente != null) {
           await _clienteRepository.actualizarEstadoDeudor(ventaExistente.idCliente!);
@@ -70,6 +72,7 @@ class PagoService {
 
       } catch (e) {
         await conexion.execute('ROLLBACK');
+        _datasource.markTransaction(false);
         rethrow;
       }
 
@@ -93,12 +96,14 @@ class PagoService {
       final conexion = await _datasource.connection;
 
       try {
+        _datasource.markTransaction(true);
         await conexion.execute('BEGIN');
 
         final ventas = await _ventaRepository.obtenerVentasDeCliente(idCliente);
 
         if (ventas.isEmpty) {
           await conexion.execute('ROLLBACK');
+          _datasource.markTransaction(false);
           throw BusinessException('El cliente no tiene ventas pendientes');
         }
 
@@ -158,9 +163,11 @@ class PagoService {
         }
 
         await conexion.execute('COMMIT');
+        _datasource.markTransaction(false);
 
       } catch (e) {
         await conexion.execute('ROLLBACK');
+        _datasource.markTransaction(false);
 
         if (e is BusinessException) {
           rethrow;
