@@ -57,7 +57,7 @@
   "ventasNombreClienteRequeridoDescripcion": "Ingresa el nombre del cliente para continuar",
 
   "ventasNoSePudoRegistrarClienteTitulo": "No se pudo registrar el cliente",
-  "ventasNoSePudoRegistrarClienteDescripcion": "No pudimos guardar la información del cliente",
+  "ventasNoSePudoRegistrarClienteDescripcion": "Verifica que el DNI no esté registrado y completa todos los datos",
 
   "ventasClienteNoEncontradoTitulo": "Cliente no encontrado",
   "ventasClienteNoEncontradoDescripcion": "No pudimos identificar al cliente seleccionado",
@@ -66,7 +66,7 @@
   "ventasVentaRegistradaDescripcion": "La venta se registró correctamente",
 
   "ventasNoSePudoRegistrarVentaTitulo": "No se pudo registrar la venta",
-  "ventasNoSePudoRegistrarVentaDescripcion": "No pudimos registrar la venta",
+  "ventasNoSePudoRegistrarVentaDescripcion": "Verifica el stock y los datos de la venta",
 
   "ventasSinProductosTitulo": "Sin productos",
   "ventasSinProductosDescripcion": "Agrega al menos un producto",
@@ -78,7 +78,7 @@
   "ventasMontoInvalidoDescripcion": "Ingresa un monto mayor a cero",
 
   "ventasMontoExcedidoTitulo": "Monto excedido",
-  "ventasMontoExcedidoDescripcion": "El monto supera el saldo pendiente",
+  "ventasMontoExcedidoDescripcion": "Ingresa un monto menor o igual al saldo pendiente",
 
   "ventasPagoRegistradoTitulo": "Pago registrado",
   "ventasPagoRegistradoDescripcion": "El pago se registró correctamente",
@@ -108,7 +108,7 @@
   "inventarioProductoRegistradoDescripcion": "El producto se registró correctamente",
 
   "inventarioNoSePudoRegistrarProductoTitulo": "No se pudo registrar el producto",
-  "inventarioNoSePudoRegistrarProductoDescripcion": "No pudimos guardar el producto",
+  "inventarioNoSePudoRegistrarProductoDescripcion": "Completa todos los campos obligatorios",
 
   "inventarioProductoNoEncontradoTitulo": "Producto no encontrado",
   "inventarioProductoNoEncontradoDescripcion": "No encontramos el producto solicitado",
@@ -120,7 +120,7 @@
   "clientesMontoInvalidoDescripcion": "Ingresa un monto mayor a cero",
 
   "clientesMontoExcedidoTitulo": "Monto excedido",
-  "clientesMontoExcedidoDescripcion": "El monto supera el saldo pendiente",
+  "clientesMontoExcedidoDescripcion": "Ingresa un monto menor o igual al saldo pendiente",
 
   "clientesPagoRegistradoTitulo": "Pago registrado",
   "clientesPagoRegistradoDescripcion": "El pago se registró correctamente",
@@ -137,5 +137,83 @@
   "errorNoEncontradoTitulo": "No encontrado",
   "errorNoEncontradoDescripcion": "{mensaje}",
   "errorInesperadoTitulo": "Error inesperado",
-  "errorInesperadoDescripcion": "{mensaje}"
+  "errorInesperadoDescripcion": "{mensaje}",
+
+  "authPinIncompletoTitulo": "PIN incompleto",
+  "authPinIncompletoDescripcion": "Ingresa un PIN de 6 dígitos para continuar",
+
+  "authErrorInicioSesionTitulo": "Error al iniciar sesión",
+  "authErrorInicioSesionDescripcion": "Verifica tu PIN y tu conexión a internet",
+
+  "authEmailRequeridoTitulo": "Correo requerido",
+  "authEmailRequeridoDescripcion": "Ingresa tu correo electrónico",
+
+  "authEmailInvalidoTitulo": "Correo inválido",
+  "authEmailInvalidoDescripcion": "Ingresa un correo con formato válido",
+
+  "authErrorEnviarCodigoTitulo": "No se pudo enviar el código",
+  "authErrorEnviarCodigoDescripcion": "Verifica tu conexión a internet",
+
+  "authCodigoIncorrectoTitulo": "Código incorrecto",
+  "authCodigoIncorrectoDescripcion": "Revisa el código enviado a tu correo e ingrésalo nuevamente",
+
+  "authErrorValidarCodigoTitulo": "Error al validar el código",
+  "authErrorValidarCodigoDescripcion": "Verifica tu conexión a internet e intenta nuevamente",
+
+  "authNoSePudoRecuperarPINTitulo": "No se pudo recuperar el PIN",
+  "authNoSePudoRecuperarPINDescripcion": "Verifica que tu correo esté registrado",
+
+  "configNoSePudoCompletarSetupTitulo": "No se pudo completar la configuración",
+  "configNoSePudoCompletarSetupDescripcion": "Verifica tu conexión a internet",
+
+  "configNoSePudoGuardarTitulo": "No se pudo guardar la configuración",
+  "configNoSePudoGuardarDescripcion": "Revisa los datos ingresados",
+
+  "ventasStockInsuficienteTitulo": "Stock insuficiente",
+  "ventasStockInsuficienteDescripcion": "Revisa el stock disponible de cada producto",
+
+  "ventasNoSePudoGenerarBoletaTitulo": "No se pudo generar la boleta",
+  "ventasNoSePudoGenerarBoletaDescripcion": "Verifica que el dispositivo tenga almacenamiento disponible",
+
+  "ventasNoSePudoAnularVentaTitulo": "No se pudo anular la venta",
+  "ventasNoSePudoAnularVentaDescripcion": "Las ventas con pagos registrados no se pueden anular",
+
+  "ventasErrorCargarListaTitulo": "Error al cargar ventas",
+  "ventasErrorCargarListaDescripcion": "Verifica tu conexión a internet",
+
+  "ventasErrorCargarDetalleTitulo": "Error al cargar venta",
+  "ventasErrorCargarDetalleDescripcion": "Verifica tu conexión a internet",
+
+  "inventarioErrorCargarProductoTitulo": "Error al cargar producto",
+  "inventarioErrorCargarProductoDescripcion": "Verifica tu conexión a internet",
+
+  "inventarioNoSePudoActualizarProductoTitulo": "No se pudo actualizar el producto",
+  "inventarioNoSePudoActualizarProductoDescripcion": "Revisa los datos ingresados",
+
+  "inventarioNoSePudoEliminarProductoTitulo": "No se pudo eliminar el producto",
+  "inventarioNoSePudoEliminarProductoDescripcion": "Los productos con ventas o lotes asociados no se pueden eliminar",
+
+  "inventarioNoSePudoAgregarLoteTitulo": "No se pudo agregar el lote",
+  "inventarioNoSePudoAgregarLoteDescripcion": "Revisa las cantidades y fechas ingresadas",
+
+  "inventarioNoSePudoEliminarLoteTitulo": "No se pudo eliminar el lote",
+  "inventarioNoSePudoEliminarLoteDescripcion": "Los lotes con movimientos registrados no se pueden eliminar",
+
+  "clientesErrorCargarListaTitulo": "Error al cargar clientes",
+  "clientesErrorCargarListaDescripcion": "Verifica tu conexión a internet",
+
+  "notificacionesErrorCargarTitulo": "Error al cargar notificaciones",
+  "notificacionesErrorCargarDescripcion": "Verifica tu conexión a internet",
+
+  "notificacionesErrorMarcarLeidasTitulo": "Error al marcar leídas",
+  "notificacionesErrorMarcarLeidasDescripcion": "Verifica tu conexión a internet",
+
+  "notificacionesErrorLimpiarTitulo": "Error al limpiar historial",
+  "notificacionesErrorLimpiarDescripcion": "Verifica tu conexión a internet",
+
+  "reportesErrorGenerarPDFTitulo": "No se pudo generar el PDF",
+  "reportesErrorGenerarPDFDescripcion": "Verifica que el dispositivo tenga almacenamiento disponible",
+
+  "reportesErrorGenerarReporteTitulo": "Error al generar reporte",
+  "reportesErrorGenerarReporteDescripcion": "Verifica tu conexión a internet"
 }

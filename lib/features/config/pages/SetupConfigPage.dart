@@ -151,11 +151,8 @@ class _SetupConfigPageState extends State<SetupConfigPage> {
     } catch (e) {
       debugPrint('Error en setup de configuracion: $e');
       if (mounted) {
-        ErrorDialog(
-          context: context,
-          title: 'Error inesperado',
-          description: e.toString(),
-        );
+        final (title, desc) = DialogMessages.config.noSePudoCompletarSetup;
+        ErrorDialog(context: context, title: title, description: desc);
       }
     }
 

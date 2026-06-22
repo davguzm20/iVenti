@@ -29,6 +29,8 @@ class DialogMessages {
   static final ventas = _VentasMessages();
   static final inventario = _InventarioMessages();
   static final clientes = _ClientesMessages();
+  static final config = _ConfigMessages();
+  static final notificaciones = _NotificacionesMessages();
   static final error = _ErrorMessages();
 }
 
@@ -44,6 +46,14 @@ class _AuthMessages {
   (String, String) get stockMinimoRequerido => DialogMessages._mensaje('authStockMinimoRequerido');
   (String, String) get diasVencimientoInvalido => DialogMessages._mensaje('authDiasVencimientoInvalido');
   (String, String) get stockMinimoInvalido => DialogMessages._mensaje('authStockMinimoInvalido');
+  (String, String) get pinIncompleto => DialogMessages._mensaje('authPinIncompleto');
+  (String, String) get errorInicioSesion => DialogMessages._mensaje('authErrorInicioSesion');
+  (String, String) get emailRequerido => DialogMessages._mensaje('authEmailRequerido');
+  (String, String) get emailInvalido => DialogMessages._mensaje('authEmailInvalido');
+  (String, String) get errorEnviarCodigo => DialogMessages._mensaje('authErrorEnviarCodigo');
+  (String, String) get codigoIncorrecto => DialogMessages._mensaje('authCodigoIncorrecto');
+  (String, String) get errorValidarCodigo => DialogMessages._mensaje('authErrorValidarCodigo');
+  (String, String) get noSePudoRecuperarPIN => DialogMessages._mensaje('authNoSePudoRecuperarPIN');
 }
 
 class _VentasMessages {
@@ -63,6 +73,11 @@ class _VentasMessages {
   (String, String) get montoExcedido => DialogMessages._mensaje('ventasMontoExcedido');
   (String, String) get pagoRegistrado => DialogMessages._mensaje('ventasPagoRegistrado');
   (String, String) get noSePudoRegistrarPago => DialogMessages._mensaje('ventasNoSePudoRegistrarPago');
+  (String, String) get stockInsuficiente => DialogMessages._mensaje('ventasStockInsuficiente');
+  (String, String) get noSePudoGenerarBoleta => DialogMessages._mensaje('ventasNoSePudoGenerarBoleta');
+  (String, String) get noSePudoAnularVenta => DialogMessages._mensaje('ventasNoSePudoAnularVenta');
+  (String, String) get errorCargarLista => DialogMessages._mensaje('ventasErrorCargarLista');
+  (String, String) get errorCargarDetalle => DialogMessages._mensaje('ventasErrorCargarDetalle');
 }
 
 class _InventarioMessages {
@@ -75,6 +90,11 @@ class _InventarioMessages {
   (String, String) get productoregistrado => DialogMessages._mensaje('inventarioProductoRegistrado');
   (String, String) get noSePudoRegistrarProducto => DialogMessages._mensaje('inventarioNoSePudoRegistrarProducto');
   (String, String) get productoNoEncontrado => DialogMessages._mensaje('inventarioProductoNoEncontrado');
+  (String, String) get errorCargarProducto => DialogMessages._mensaje('inventarioErrorCargarProducto');
+  (String, String) get noSePudoActualizarProducto => DialogMessages._mensaje('inventarioNoSePudoActualizarProducto');
+  (String, String) get noSePudoEliminarProducto => DialogMessages._mensaje('inventarioNoSePudoEliminarProducto');
+  (String, String) get noSePudoAgregarLote => DialogMessages._mensaje('inventarioNoSePudoAgregarLote');
+  (String, String) get noSePudoEliminarLote => DialogMessages._mensaje('inventarioNoSePudoEliminarLote');
 }
 
 class _ClientesMessages {
@@ -83,6 +103,7 @@ class _ClientesMessages {
   (String, String) get montoExcedido => DialogMessages._mensaje('clientesMontoExcedido');
   (String, String) get pagoRegistrado => DialogMessages._mensaje('clientesPagoRegistrado');
   (String, String) get noSePudoRegistrarPago => DialogMessages._mensaje('clientesNoSePudoRegistrarPago');
+  (String, String) get errorCargarLista => DialogMessages._mensaje('clientesErrorCargarLista');
 }
 
 class _ErrorMessages {
@@ -91,4 +112,17 @@ class _ErrorMessages {
   (String, String) conexion(String mensaje) => DialogMessages._mensajeCon('errorConexion', mensaje, tag: 'mensaje');
   (String, String) noEncontrado(String mensaje) => DialogMessages._mensajeCon('errorNoEncontrado', mensaje, tag: 'mensaje');
   (String, String) get inesperado => DialogMessages._mensaje('errorInesperado');
+  (String, String) get generarPDF => DialogMessages._mensaje('reportesErrorGenerarPDF');
+  (String, String) get generarReporte => DialogMessages._mensaje('reportesErrorGenerarReporte');
+}
+
+class _ConfigMessages {
+  (String, String) get noSePudoCompletarSetup => DialogMessages._mensaje('configNoSePudoCompletarSetup');
+  (String, String) get noSePudoGuardar => DialogMessages._mensaje('configNoSePudoGuardar');
+}
+
+class _NotificacionesMessages {
+  (String, String) get errorCargar => DialogMessages._mensaje('notificacionesErrorCargar');
+  (String, String) get errorMarcarLeidas => DialogMessages._mensaje('notificacionesErrorMarcarLeidas');
+  (String, String) get errorLimpiar => DialogMessages._mensaje('notificacionesErrorLimpiar');
 }

@@ -25,6 +25,7 @@ class DetailsSalePage extends StatefulWidget {
 class _DetailsSalePageState extends State<DetailsSalePage> {
   VentaEntity? venta;
   List<DetalleVentaEntity> detalles = [];
+  bool _isProcessing = false;
 
   VentaController get _ventaController => ServiceLocator.ventaController;
 
@@ -61,11 +62,8 @@ class _DetailsSalePageState extends State<DetailsSalePage> {
     } catch (e) {
       debugPrint('Error al obtener datos de venta: $e');
       if (mounted) {
-        ErrorDialog(
-          context: context,
-          title: 'Error',
-          description: 'No se pudieron obtener los datos de la venta',
-        );
+        final (title, desc) = DialogMessages.ventas.errorCargarDetalle;
+        ErrorDialog(context: context, title: title, description: desc);
       }
     }
   }
@@ -144,21 +142,27 @@ class _DetailsSalePageState extends State<DetailsSalePage> {
               Center(
                 child: ElevatedButton(
                   style: ButtonStyles.success(),
-                  onPressed: () async {
+                  onPressed: _isProcessing
+                      ? null
+                      : () async {
+                    _isProcessing = true;
                     final monto =
                         double.tryParse(montoACancelarController.text) ?? 0.0;
 
                     if (monto <= 0) {
+                      _isProcessing = false;
                       final (title, desc) = DialogMessages.ventas.montoInvalido;
                       ErrorDialog(
                         context: context,
                         title: title,
                         description: desc,
                       );
+                      _isProcessing = false;
                       return;
                     }
 
                     if (monto > montoPendiente) {
+                      _isProcessing = false;
                       final (title, desc) = DialogMessages.ventas.montoExcedido;
                       ErrorDialog(
                         context: context,
@@ -178,6 +182,7 @@ class _DetailsSalePageState extends State<DetailsSalePage> {
                       );
 
                       if (context.mounted) LoadingDialog.hide(context);
+                      _isProcessing = false;
                       if (context.mounted) {
                         final (title, desc) = DialogMessages.ventas.pagoRegistrado;
                         SuccessDialog(
@@ -193,6 +198,7 @@ class _DetailsSalePageState extends State<DetailsSalePage> {
 
                     } catch (e) {
                       if (context.mounted) LoadingDialog.hide(context);
+                      _isProcessing = false;
                       debugPrint('Error al registrar pago: $e');
                       if (!context.mounted) return;
                       final (title, desc) = DialogMessages.ventas.noSePudoRegistrarPago;
@@ -203,7 +209,7 @@ class _DetailsSalePageState extends State<DetailsSalePage> {
                       );
                     }
                   },
-                  child: const Text('Aceptar'),
+                  child: Text(_isProcessing ? 'Procesando...' : 'Aceptar'),
                 ),
               ),
             ],
@@ -214,7 +220,9 @@ class _DetailsSalePageState extends State<DetailsSalePage> {
   }
 
   Future<void> _generarBoleta() async {
+    if (_isProcessing) return;
     if (venta == null) return;
+    _isProcessing = true;
     try {
       final path = await PrintService.generarBoletaPDF(
         venta: venta!,
@@ -225,18 +233,18 @@ class _DetailsSalePageState extends State<DetailsSalePage> {
       if (mounted) {
         await context.push('/pdf-viewer', extra: path);
       }
+      _isProcessing = false;
     } catch (e) {
+      _isProcessing = false;
       if (mounted) {
-        ErrorDialog(
-          context: context,
-          title: 'Error',
-          description: 'No se pudo generar la boleta: $e',
-        );
+        final (title, desc) = DialogMessages.ventas.noSePudoGenerarBoleta;
+        ErrorDialog(context: context, title: title, description: desc);
       }
     }
   }
 
   Future<void> _anularVenta() async {
+    if (_isProcessing) return;
     if (venta == null) return;
     final confirm = await showDialog<bool>(
       context: context,
@@ -253,8 +261,10 @@ class _DetailsSalePageState extends State<DetailsSalePage> {
       ),
     );
     if (confirm != true) return;
+    _isProcessing = true;
     try {
       await _ventaController.anularVenta(widget.idVenta);
+      _isProcessing = false;
       if (mounted) {
         SuccessDialog(
           context: context,
@@ -264,12 +274,10 @@ class _DetailsSalePageState extends State<DetailsSalePage> {
         );
       }
     } catch (e) {
+      _isProcessing = false;
       if (mounted) {
-        ErrorDialog(
-          context: context,
-          title: 'Error',
-          description: 'No se pudo anular la venta: $e',
-        );
+        final (title, desc) = DialogMessages.ventas.noSePudoAnularVenta;
+        ErrorDialog(context: context, title: title, description: desc);
       }
     }
   }

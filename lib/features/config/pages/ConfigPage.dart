@@ -7,6 +7,7 @@ import 'package:iventi/shared/theme/ButtonStyles.dart';
 import 'package:iventi/shared/utils/DialogMessages.dart';
 import 'package:iventi/shared/widgets/ConfirmDialog.dart';
 import 'package:iventi/shared/widgets/ErrorDialog.dart';
+import 'package:iventi/shared/widgets/LoadingDialog.dart';
 import 'package:iventi/shared/widgets/SuccessDialog.dart';
 import 'package:iventi/features/config/dtos/requests/CrearConfiguracionRequest.dart';
 
@@ -22,6 +23,7 @@ class _ConfigPageState extends State<ConfigPage> {
   final TextEditingController _diasVencimientoController = TextEditingController();
   final TextEditingController _stockMinimoController = TextEditingController();
   bool isLoading = false;
+  bool _isProcessing = false;
 
   @override
   void initState() {
@@ -48,6 +50,7 @@ class _ConfigPageState extends State<ConfigPage> {
   }
 
   Future<void> _guardar() async {
+    if (_isProcessing) return;
     if (_nombreController.text.trim().isEmpty) {
       final (title, desc) = DialogMessages.auth.nombreRequerido;
       if (mounted) ErrorDialog(context: context, title: title, description: desc);
@@ -86,6 +89,8 @@ class _ConfigPageState extends State<ConfigPage> {
         title: 'Guardar configuración',
         message: '¿Estás seguro de guardar los cambios?',
         btnOkOnPress: () async {
+          _isProcessing = true;
+          LoadingDialog.show(context);
           final authCtrl = ServiceLocator.authController;
           final configCtrl = ServiceLocator.configuracionController;
           final idUsuario = ServiceLocator.requireUsuarioActualId;
@@ -97,6 +102,8 @@ class _ConfigPageState extends State<ConfigPage> {
             await configCtrl.guardarConfiguracion(
               CrearConfiguracionRequest(idUsuario: idUsuario, clave: 'stock_minimo_alerta', valor: stockText),
             );
+            if (mounted) LoadingDialog.hide(context);
+            _isProcessing = false;
             if (mounted) {
               SuccessDialog(
                 context: context,
@@ -106,6 +113,8 @@ class _ConfigPageState extends State<ConfigPage> {
               );
             }
           } on AppException catch (e) {
+            if (mounted) LoadingDialog.hide(context);
+            _isProcessing = false;
             if (mounted) {
               ErrorDialog(
                 context: context,
@@ -114,13 +123,12 @@ class _ConfigPageState extends State<ConfigPage> {
               );
             }
           } catch (e) {
+            if (mounted) LoadingDialog.hide(context);
+            _isProcessing = false;
             debugPrint('Error al guardar configuracion: $e');
             if (mounted) {
-              ErrorDialog(
-                context: context,
-                title: 'Error inesperado',
-                description: e.toString(),
-              );
+              final (title, desc) = DialogMessages.config.noSePudoGuardar;
+              ErrorDialog(context: context, title: title, description: desc);
             }
           }
         },

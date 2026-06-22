@@ -370,11 +370,8 @@ class _PaymentPageState extends State<PaymentPage> {
                 } catch (e) {
                   setState(() => _isProcessing = false);
                   if (!mounted) return;
-                  ErrorDialog(
-                    context: context,
-                    title: 'No se pudo registrar el cliente',
-                    description: e.toString(),
-                  );
+                  final (title, desc) = DialogMessages.ventas.noSePudoRegistrarCliente;
+                  ErrorDialog(context: context, title: title, description: desc);
                   return;
                 }
 
@@ -443,8 +440,8 @@ class _PaymentPageState extends State<PaymentPage> {
                 if (!mounted) return;
                 debugPrint('Error al crear venta: $e');
                 final (title, desc) = e.toString().contains('Stock insuficiente')
-                    ? ('Stock insuficiente', e.toString().split(': ').last)
-                    : ('No se pudo registrar la venta', e.toString());
+                    ? DialogMessages.ventas.stockInsuficiente
+                    : DialogMessages.ventas.noSePudoRegistrarVenta;
                 ErrorDialog(
                   context: context,
                   title: title,

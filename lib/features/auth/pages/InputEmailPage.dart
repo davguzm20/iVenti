@@ -77,40 +77,45 @@ class _InputEmailBodyState extends State<InputEmailBody> {
 
     setState(() => isSendEmail = true);
 
-    final resultado = await _mailerService.enviarCodigo(
-      emailController.text.trim(),
-    );
+    try {
+      final resultado = await _mailerService.enviarCodigo(
+        emailController.text.trim(),
+      );
 
-    if (mounted) setState(() => isSendEmail = false);
+      if (mounted) setState(() => isSendEmail = false);
 
-    if (resultado.enviado) {
-      if (mounted) {
-        final (title, desc) = DialogMessages.auth.codigoEnviado(emailController.text.trim());
-        SuccessDialog(
-          context: context,
-          title: title,
-          description: desc,
-          btnOkOnPress: () => _irACodigo(resultado.codigo),
-        );
-      }
-    } else {
-      if (mounted) {
-        final tieneCredenciales = _mailerService.tieneCredenciales;
-
-        if (tieneCredenciales) {
-          ErrorDialog(
+      if (resultado.enviado) {
+        if (mounted) {
+          final (title, desc) = DialogMessages.auth.codigoEnviado(emailController.text.trim());
+          SuccessDialog(
             context: context,
-            title: 'Error al enviar',
-            description: resultado.error!,
-          );
-        } else {
-          ErrorDialog(
-            context: context,
-            title: 'Modo desarrollo',
-            description: resultado.error!,
+            title: title,
+            description: desc,
             btnOkOnPress: () => _irACodigo(resultado.codigo),
           );
         }
+      } else {
+        if (mounted) {
+          final tieneCredenciales = _mailerService.tieneCredenciales;
+
+          final (title, desc) = DialogMessages.auth.errorEnviarCodigo;
+        if (tieneCredenciales) {
+            ErrorDialog(context: context, title: title, description: desc);
+          } else {
+            ErrorDialog(
+              context: context,
+              title: title,
+              description: desc,
+              btnOkOnPress: () => _irACodigo(resultado.codigo),
+            );
+          }
+        }
+      }
+    } catch (e) {
+      if (mounted) setState(() => isSendEmail = false);
+      if (mounted) {
+        final (title, desc) = DialogMessages.auth.errorEnviarCodigo;
+        ErrorDialog(context: context, title: title, description: desc);
       }
     }
   }
@@ -162,12 +167,12 @@ class _InputEmailBodyState extends State<InputEmailBody> {
               ),
               validator: (value) {
                 if (value == null || value.isEmpty) {
-                  return 'Por favor, ingrese su correo';
+                  return DialogMessages.auth.emailRequerido.$2;
                 }
                 final emailRegex =
                     RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$');
                 if (!emailRegex.hasMatch(value)) {
-                  return 'Ingrese un correo válido';
+                  return DialogMessages.auth.emailInvalido.$2;
                 }
                 return null;
               },
