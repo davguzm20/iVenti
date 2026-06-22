@@ -35,8 +35,12 @@ class _FilterProductsPageState extends State<FilterProductsPage> {
   }
 
   Future<void> _obtenerCategorias() async {
-    final cats = await ServiceLocator.categoriaController.obtenerTodas();
-    setState(() => categoriasObtenidas = cats);
+    try {
+      final cats = await ServiceLocator.categoriaController.obtenerTodas();
+      setState(() => categoriasObtenidas = cats);
+    } catch (e) {
+      debugPrint('Error al obtener categorías: $e');
+    }
   }
 
   void _aplicarFiltros() {

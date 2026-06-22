@@ -6,7 +6,9 @@ import 'package:iventi/shared/services/MailerService.dart';
 import 'package:iventi/shared/theme/AppColors.dart';
 import 'package:iventi/shared/theme/ButtonStyles.dart';
 import 'package:iventi/features/auth/widgets/PinInput.dart';
+import 'package:iventi/shared/utils/DialogMessages.dart';
 import 'package:iventi/shared/widgets/BackButton.dart';
+import 'package:iventi/shared/widgets/ErrorDialog.dart';
 
 class RecoverPinPage extends StatefulWidget {
   const RecoverPinPage({super.key});
@@ -19,6 +21,7 @@ class _RecoverPinPageState extends State<RecoverPinPage> {
   final MailerService _mailerService = MailerService();
   String inputCode = "";
   String codigo = "";
+  bool _isProcessing = false;
 
   @override
   void initState() {
@@ -57,53 +60,67 @@ class _RecoverPinPageState extends State<RecoverPinPage> {
       ),
     );
 
-    final resultado = await _mailerService.enviarCodigo("");
+    try {
+      final resultado = await _mailerService.enviarCodigo("");
 
-    if (mounted) Navigator.pop(context);
+      if (mounted) Navigator.pop(context);
 
-    if (resultado.enviado || !_mailerService.tieneCredenciales) {
-      codigo = resultado.codigo;
-    }
+      if (resultado.enviado || !_mailerService.tieneCredenciales) {
+        codigo = resultado.codigo;
+      }
 
-    if (mounted) {
-      final credencialesOk = _mailerService.tieneCredenciales;
+      if (mounted) {
+        final credencialesOk = _mailerService.tieneCredenciales;
 
-      AwesomeDialog(
-        context: context,
-        dialogType: credencialesOk ? DialogType.success : DialogType.error,
-        animType: AnimType.topSlide,
-        title: credencialesOk ? "Correcto" : "Aviso",
-        desc: resultado.error ?? "Código enviado correctamente!",
-        btnOkOnPress: () => FocusScope.of(context).requestFocus(FocusNode()),
-        btnOkIcon:
-            credencialesOk ? Icons.check_circle : Icons.warning_amber,
-        btnOkColor: credencialesOk ? Colors.green : Colors.orange,
-      ).show();
+        AwesomeDialog(
+          context: context,
+          dialogType: credencialesOk ? DialogType.success : DialogType.error,
+          animType: AnimType.topSlide,
+          title: credencialesOk ? "Correcto" : "Aviso",
+          desc: resultado.error ?? "Código enviado correctamente!",
+          btnOkOnPress: () => FocusScope.of(context).requestFocus(FocusNode()),
+          btnOkIcon:
+              credencialesOk ? Icons.check_circle : Icons.warning_amber,
+          btnOkColor: credencialesOk ? Colors.green : Colors.orange,
+        ).show();
+      }
+    } catch (e) {
+      if (mounted) Navigator.pop(context);
+      if (mounted) {
+        final (title, desc) = DialogMessages.auth.errorEnviarCodigo;
+        ErrorDialog(context: context, title: title, description: desc);
+      }
     }
   }
 
   Future<void> _validateCode() async {
+    if (_isProcessing) return;
+    _isProcessing = true;
     FocusScope.of(context).unfocus();
 
     if (inputCode == codigo) {
+      _isProcessing = false;
+      final (_, descOk) = DialogMessages.auth.codigoEnviado("");
       await AwesomeDialog(
         context: context,
         dialogType: DialogType.success,
         animType: AnimType.topSlide,
         title: "Correcto",
-        desc: "¡El código es correcto!",
+        desc: descOk,
         btnOkOnPress: () => context.go('/login/create-pin', extra: true),
         btnOkIcon: Icons.check_circle,
         btnOkColor: Colors.green,
       ).show();
 
     } else {
+      _isProcessing = false;
+      final (titleErr, descErr) = DialogMessages.auth.codigoIncorrecto;
       await AwesomeDialog(
         context: context,
         dialogType: DialogType.error,
         animType: AnimType.topSlide,
-        title: "Error",
-        desc: "El código ingresado es incorrecto. Inténtalo nuevamente.",
+        title: titleErr,
+        desc: descErr,
         btnOkOnPress: () {},
         btnOkIcon: Icons.cancel,
         btnOkColor: Colors.red,

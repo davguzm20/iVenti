@@ -14,6 +14,7 @@ import 'package:iventi/shared/theme/ButtonStyles.dart';
 import 'package:iventi/shared/utils/DialogMessages.dart';
 import 'package:iventi/shared/widgets/CustomTextField.dart';
 import 'package:iventi/shared/widgets/ErrorDialog.dart';
+import 'package:iventi/shared/widgets/LoadingDialog.dart';
 import 'package:iventi/shared/widgets/SuccessDialog.dart';
 import 'package:iventi/features/inventory/controllers/CategoriaController.dart';
 import 'package:iventi/features/inventory/controllers/UnidadController.dart';
@@ -35,6 +36,7 @@ class _CreateProductPageState extends State<CreateProductPage> {
   final TextEditingController maxStockController = TextEditingController();
   final TextEditingController priceController = TextEditingController();
 
+  bool _isProcessing = false;
   List<CategoriaEntity> categoriasDisponibles = [];
   List<UnidadEntity> unidadesDisponibles = [];
   List<CategoriaEntity> categoriasSeleccionadas = [];
@@ -56,17 +58,21 @@ class _CreateProductPageState extends State<CreateProductPage> {
   }
 
   Future<void> _cargarDatos() async {
-    final cats = await _categoriaController.obtenerTodas();
-    final unis = await _unidadController.obtenerTodas();
+    try {
+      final cats = await _categoriaController.obtenerTodas();
+      final unis = await _unidadController.obtenerTodas();
 
-    if (mounted) {
-      setState(() {
-        categoriasDisponibles = cats;
-        unidadesDisponibles = unis;
-        if (unidadSeleccionada == null && unis.isNotEmpty) {
-          unidadSeleccionada = unis.first;
-        }
-      });
+      if (mounted) {
+        setState(() {
+          categoriasDisponibles = cats;
+          unidadesDisponibles = unis;
+          if (unidadSeleccionada == null && unis.isNotEmpty) {
+            unidadSeleccionada = unis.first;
+          }
+        });
+      }
+    } catch (e) {
+      debugPrint('Error al cargar datos de creacion: $e');
     }
   }
 
@@ -303,8 +309,17 @@ class _CreateProductPageState extends State<CreateProductPage> {
 
                   ElevatedButton(
                     style: ButtonStyles.success(),
-                    onPressed: _confirmarProducto,
-                    child: const Text('Confirmar'),
+                    onPressed: _isProcessing ? null : _confirmarProducto,
+                    child: _isProcessing
+                        ? const SizedBox(
+                            width: 24,
+                            height: 24,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                              valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                            ),
+                          )
+                        : const Text('Confirmar'),
                   ),
                 ],
               ),
@@ -334,11 +349,15 @@ class _CreateProductPageState extends State<CreateProductPage> {
             onPressed: () async {
               final nombre = controller.text.trim();
               if (nombre.isNotEmpty) {
-                await _categoriaController.crearCategoria(
-                  CrearCategoriaRequest(nombre: nombre),
-                );
-                final cats = await _categoriaController.obtenerTodas();
-                setState(() => categoriasDisponibles = cats);
+                try {
+                  await _categoriaController.crearCategoria(
+                    CrearCategoriaRequest(nombre: nombre),
+                  );
+                  final cats = await _categoriaController.obtenerTodas();
+                  setState(() => categoriasDisponibles = cats);
+                } catch (e) {
+                  debugPrint('Error al crear categoria: $e');
+                }
               }
               if (!mounted) return;
               context.pop();
@@ -399,8 +418,9 @@ class _CreateProductPageState extends State<CreateProductPage> {
             actions: [
               TextButton(onPressed: () => context.pop(), child: const Text('Cancelar')),
               TextButton(
-                onPressed: () async {
-                  if (seleccionada != null) {
+              onPressed: () async {
+                if (seleccionada != null) {
+                  try {
                     await _categoriaController.actualizarCategoria(
                       ActualizarCategoriaRequest(
                         idCategoria: seleccionada!.idCategoria!,
@@ -409,10 +429,13 @@ class _CreateProductPageState extends State<CreateProductPage> {
                     );
                     final cats = await _categoriaController.obtenerTodas();
                     setState(() => categoriasDisponibles = cats);
+                  } catch (e) {
+                    debugPrint('Error al editar categoria: $e');
                   }
-                  if (!mounted) return;
-                  context.pop();
-                },
+                }
+                if (!mounted) return;
+                context.pop();
+              },
                 child: const Text('Guardar'),
               ),
             ],
@@ -448,15 +471,19 @@ class _CreateProductPageState extends State<CreateProductPage> {
           actions: [
             TextButton(onPressed: () => context.pop(), child: const Text('Cancelar')),
             TextButton(
-              onPressed: () async {
-                if (seleccionada != null) {
+            onPressed: () async {
+              if (seleccionada != null) {
+                try {
                   await _categoriaController.eliminarCategoria(seleccionada!.idCategoria!);
                   final cats = await _categoriaController.obtenerTodas();
                   setState(() => categoriasDisponibles = cats);
+                } catch (e) {
+                  debugPrint('Error al eliminar categoria: $e');
                 }
-                if (!mounted) return;
-                context.pop();
-              },
+              }
+              if (!mounted) return;
+              context.pop();
+            },
               style: TextButton.styleFrom(foregroundColor: AppColors.danger),
               child: const Text('Eliminar'),
             ),
@@ -520,37 +547,37 @@ class _CreateProductPageState extends State<CreateProductPage> {
       title: 'Confirmación',
       desc: '¿Está seguro de que desea crear el producto?',
       btnOkOnPress: () async {
-          String? imagenUrl = rutaImagen;
-        if (imagenUrl != null && !imagenUrl.startsWith('http')) {
-          try {
-            final tempId = DateTime.now().millisecondsSinceEpoch;
-            imagenUrl = await CloudinaryService().uploadImage(imagenUrl, tempId);
-          } catch (e) {
-            if (mounted) { ErrorDialog(context: context, title: 'Error', description: 'No se pudo subir la imagen: $e'); }
-            return;
-          }
-        }
-        final request = CrearProductoRequest(
-          idUnidad: unidadSeleccionada!.idUnidad!,
-          codigo: productCodeController.text.trim().isNotEmpty
-              ? productCodeController.text.trim()
-              : null,
-          nombre: productNameController.text.trim(),
-          precio: precio,
-          stockMinimo: stockMin.round(),
-          rutaImagen: imagenUrl,
-        );
+        if (_isProcessing) return;
+        _isProcessing = true;
+        await Future.delayed(const Duration(milliseconds: 100));
+        if (!mounted) return;
+        LoadingDialog.show(context);
 
         try {
+          String? imagenUrl = rutaImagen;
+          if (imagenUrl != null && !imagenUrl.startsWith('http')) {
+            final tempId = DateTime.now().millisecondsSinceEpoch;
+            imagenUrl = await CloudinaryService().uploadImage(imagenUrl, tempId);
+          }
+          final request = CrearProductoRequest(
+            idUnidad: unidadSeleccionada!.idUnidad!,
+            codigo: productCodeController.text.trim().isNotEmpty
+                ? productCodeController.text.trim()
+                : null,
+            nombre: productNameController.text.trim(),
+            precio: precio,
+            stockMinimo: stockMin.round(),
+            rutaImagen: imagenUrl,
+          );
+
           final ids = categoriasSeleccionadas
               .map((c) => c.idCategoria!)
               .toList();
 
-          await _productoController.crearProducto(
-            request,
-            idCategorias: ids,
-          );
+          await _productoController.crearProducto(request, idCategorias: ids);
 
+          if (mounted) LoadingDialog.hide(context);
+          _isProcessing = false;
           if (mounted) {
             final (title, desc) = DialogMessages.inventario.productoregistrado;
             SuccessDialog(
@@ -560,15 +587,13 @@ class _CreateProductPageState extends State<CreateProductPage> {
               btnOkOnPress: () => context.pop(),
             );
           }
-
         } catch (e) {
+          if (mounted) LoadingDialog.hide(context);
+          _isProcessing = false;
           debugPrint('Error al crear producto: $e');
           if (!mounted) return;
-          ErrorDialog(
-            context: context,
-            title: 'No se pudo registrar el producto',
-            description: e.toString(),
-          );
+          final (title, desc) = DialogMessages.inventario.noSePudoRegistrarProducto;
+          ErrorDialog(context: context, title: title, description: desc);
         }
       },
       btnCancelOnPress: () {},

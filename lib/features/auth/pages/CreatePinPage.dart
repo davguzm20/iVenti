@@ -12,6 +12,7 @@ import 'package:iventi/shared/utils/DialogMessages.dart';
 import 'package:iventi/shared/widgets/BackButton.dart';
 import 'package:iventi/shared/widgets/ConfirmDialog.dart';
 import 'package:iventi/shared/widgets/ErrorDialog.dart';
+import 'package:iventi/shared/widgets/LoadingDialog.dart';
 import 'package:iventi/shared/widgets/SuccessDialog.dart';
 import 'package:iventi/features/auth/widgets/PinInput.dart';
 
@@ -28,6 +29,7 @@ class _CreatePinPageState extends State<CreatePinPage> {
   String pin = "";
   String confirmPin = "";
   String email = "";
+  bool _isProcessing = false;
 
   AuthController get _authController => ServiceLocator.authController;
 
@@ -66,6 +68,7 @@ class _CreatePinPageState extends State<CreatePinPage> {
   }
 
   void _siguiente() {
+    if (_isProcessing) return;
     FocusScope.of(context).unfocus();
 
     if (pin.length != 6) {
@@ -112,12 +115,17 @@ class _CreatePinPageState extends State<CreatePinPage> {
   }
 
   Future<void> _recuperarPin() async {
+    _isProcessing = true;
+    if (!mounted) return;
+    LoadingDialog.show(context);
     try {
       final usuario = await _authController.obtenerUsuarioPorEmail(email);
 
       await ServiceLocator.setUsuarioActual(usuario.idUsuario!);
       await _authController.recuperarPin(usuario.idUsuario!, pin);
 
+      if (mounted) LoadingDialog.hide(context);
+      _isProcessing = false;
       if (mounted) {
         SuccessDialog(
           context: context,
@@ -128,6 +136,8 @@ class _CreatePinPageState extends State<CreatePinPage> {
       }
 
     } on AppException catch (e) {
+      if (mounted) LoadingDialog.hide(context);
+      _isProcessing = false;
       if (mounted) {
         ErrorDialog(
           context: context,
@@ -136,13 +146,12 @@ class _CreatePinPageState extends State<CreatePinPage> {
         );
       }
     } catch (e) {
+      if (mounted) LoadingDialog.hide(context);
+      _isProcessing = false;
       debugPrint('Error en recuperacion de PIN: $e');
       if (mounted) {
-        ErrorDialog(
-          context: context,
-          title: 'Error inesperado',
-          description: e.toString(),
-        );
+        final (title, desc) = DialogMessages.auth.noSePudoRecuperarPIN;
+        ErrorDialog(context: context, title: title, description: desc);
       }
     }
   }

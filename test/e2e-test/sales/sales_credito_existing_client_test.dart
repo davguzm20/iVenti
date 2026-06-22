@@ -3,13 +3,13 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:postgres/postgres.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:iventi/main.dart' as app;
 import 'package:iventi/shared/utils/PostgresDatasource.dart';
 import 'package:iventi/shared/utils/PinEncryptor.dart';
+import 'package:iventi/shared/utils/DniEncryptor.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../helpers.dart';
-import '../helpers/auth_flows.dart';
 
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
@@ -23,32 +23,46 @@ void main() {
     await cleanTestData();
   });
 
-  testWidgets('Inventory - flujo completo de listado, busqueda y filtros', (tester) async {
+  testWidgets('Sales Credito - con cliente existente (Buscar Cliente)', (tester) async {
     await cleanTestData();
 
     final conn = await PostgresDatasource().connection;
     await conn.execute("SET app.id_usuario = 1");
     await conn.execute(Sql.named(
       "INSERT INTO usuarios (id_usuario, nombre, email, pin, rol, es_activo) VALUES (1, @nombre, @email, @pin, 'OPERATIVO', TRUE) "
-      "ON CONFLICT (id_usuario) DO UPDATE SET pin = @pin",
+      "ON CONFLICT (id_usuario) DO UPDATE SET email = @email, pin = @pin",
     ), parameters: {
-      'nombre': 'E2E Inventory List', 'email': 'e2e_inv_list@test.com', 'pin': PinEncryptor.hash('123456'),
+      'nombre': 'E2E Credito Existing', 'email': 'e2e_credito_existing@test.com', 'pin': PinEncryptor.hash('123456'),
     });
     await conn.execute(Sql.named(
       "INSERT INTO unidades (nombre, abreviatura, es_activo, creado_en) "
       "VALUES (@nombre, @abreviatura, TRUE, CURRENT_TIMESTAMP) ON CONFLICT (nombre) DO UPDATE SET es_activo = TRUE",
     ), parameters: {
-      'nombre': 'Kilogramo', 'abreviatura': 'kg',
+      'nombre': 'Unidad', 'abreviatura': 'un',
     });
     final idUnidad = (await conn.execute(
       Sql.named("SELECT id_unidad FROM unidades WHERE nombre = @nombre"),
-      parameters: {'nombre': 'Kilogramo'},
+      parameters: {'nombre': 'Unidad'},
     )).first[0] as int;
-    await conn.execute(Sql.named(
+    final idProducto = (await conn.execute(Sql.named(
       "INSERT INTO productos (id_unidad, nombre, precio, stock_actual, stock_minimo, es_activo, creado_en, actualizado_en) "
-      "VALUES (@id_unidad, @nombre, @precio, 10, 5, TRUE, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)",
+      "VALUES (@id_unidad, @nombre, @precio, 50, 5, TRUE, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP) RETURNING id_producto",
     ), parameters: {
-      'id_unidad': idUnidad, 'nombre': 'e2e_producto_list', 'precio': 25.00,
+      'id_unidad': idUnidad, 'nombre': 'e2e_producto_credito_exist', 'precio': 25.00,
+    })).first[0] as int;
+    await conn.execute(Sql.named(
+      "INSERT INTO lotes (id_producto, fecha_compra, fecha_vencimiento, cantidad_actual, cantidad_comprada, cantidad_perdida, precio_compra, creado_en, actualizado_en) "
+      "VALUES (@id_producto, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP + INTERVAL '30 days', 100, 100, 0, 12.00, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)",
+    ), parameters: {
+      'id_producto': idProducto,
+    });
+    // Cliente existente
+    await conn.execute(Sql.named(
+      "INSERT INTO clientes (nombres, dni, email, telefono, es_deudor) "
+      "VALUES (@nombres, @dni, @email, @telefono, @esDeudor)",
+    ), parameters: {
+      'nombres': 'e2e_existing_client', 'dni': DniEncryptor.encryptAES('87654321'),
+      'email': 'existing@test.com', 'telefono': '999111222', 'esDeudor': false,
     });
 
     final prefs = await SharedPreferences.getInstance();
@@ -74,129 +88,105 @@ void main() {
     }
     expect(find.text('Mis productos'), findsOneWidget);
 
-    // 1. Producto en lista
-    expect(find.text('e2e_producto_list'), findsOneWidget);
-
-    // 2. Buscar por nombre (typeInField evita teclado)
-    await tester.tap(find.byIcon(Icons.search));
+    // Navegar a Ventas y crear venta
+    await tester.tap(find.text('Ventas'));
     await tester.pump();
     for (int i = 0; i < 5; i++) {
       await tester.pump(const Duration(milliseconds: 200));
     }
-    await typeInField(tester, text: 'e2e_producto_list');
-    await tester.runAsync(() => Future.delayed(const Duration(milliseconds: 500)));
-    for (int i = 0; i < 10; i++) {
-      await tester.pump(const Duration(milliseconds: 200));
-    }
-    expect(find.text('e2e_producto_list'), findsAtLeast(1));
-
-    // 3. Limpiar busqueda
-    await tester.tap(find.byIcon(Icons.close).first);
+    await tester.tap(find.byIcon(Icons.add));
     await tester.pump();
-    for (int i = 0; i < 5; i++) {
-      await tester.pump(const Duration(milliseconds: 200));
-    }
-
-    // 4. Navegar a filtros
-    await tester.tap(find.byIcon(Icons.filter_list));
-    await tester.pump();
-    for (int i = 0; i < 5; i++) {
-      await tester.pump(const Duration(milliseconds: 200));
-    }
     await tester.runAsync(() => Future.delayed(const Duration(seconds: 2)));
     for (int i = 0; i < 10; i++) {
       await tester.pump(const Duration(milliseconds: 200));
     }
-    expect(find.text('Filtrar productos'), findsOneWidget);
+    expect(find.text('Crear Venta'), findsOneWidget);
 
-    // 5. Filtro stock bajo + aplicar
-    await tester.tap(find.text('Filtrar por Stock'));
+    // Agregar producto
+    await tester.tap(find.text('Agregar producto'));
     await tester.pump();
-    await tester.runAsync(() => Future.delayed(const Duration(seconds: 1)));
+    for (int i = 0; i < 5; i++) {
+      await tester.pump(const Duration(milliseconds: 200));
+    }
+    final dialogEditable = find.descendant(of: find.byType(AlertDialog), matching: find.byType(EditableText)).first;
+    final dialogState = tester.state<EditableTextState>(dialogEditable);
+    dialogState.updateEditingValue(const TextEditingValue(text: 'e2e_producto_credito_exist', selection: TextSelection.collapsed(offset: 26)));
+    for (int i = 0; i < 5; i++) {
+      await tester.pump(const Duration(milliseconds: 200));
+    }
+    await tester.pump();
+    await tester.runAsync(() => Future.delayed(const Duration(seconds: 3)));
+    for (int i = 0; i < 15; i++) {
+      await tester.pump(const Duration(milliseconds: 200));
+    }
+    await tester.tap(find.text('e2e_producto_credito_exist'));
+    await tester.pump();
+    await tester.runAsync(() => Future.delayed(const Duration(seconds: 2)));
     for (int i = 0; i < 10; i++) {
       await tester.pump(const Duration(milliseconds: 200));
     }
-    await tester.tap(find.text('Aplicar Filtros'));
+    await tester.tap(find.text('Agregar').last);
+    await tester.pump();
+    for (int i = 0; i < 5; i++) {
+      await tester.pump(const Duration(milliseconds: 200));
+    }
+    expect(find.text('e2e_producto_credito_exist'), findsAtLeast(1));
+    await tester.tap(find.text('Confirmar'));
+    await tester.pump();
+    await tester.runAsync(() => Future.delayed(const Duration(seconds: 2)));
+    for (int i = 0; i < 10; i++) {
+      await tester.pump(const Duration(milliseconds: 200));
+    }
+    expect(find.text('Pago'), findsOneWidget);
+
+    // 1. Toggle a Credito
+    await tester.tap(find.text('Credito'));
+    await tester.pump();
+    for (int i = 0; i < 5; i++) {
+      await tester.pump(const Duration(milliseconds: 200));
+    }
+
+    // 2. Toggle a Buscar Cliente
+    await tester.tap(find.text('Buscar Cliente'));
+    await tester.pump();
+    for (int i = 0; i < 5; i++) {
+      await tester.pump(const Duration(milliseconds: 200));
+    }
+
+    // 3. Buscar cliente existente
+    final searchField = find.byType(TextField);
+    await tester.enterText(searchField, 'e2e_existing');
+    await tester.pump();
+    await tester.runAsync(() => Future.delayed(const Duration(seconds: 2)));
+    for (int i = 0; i < 10; i++) {
+      await tester.pump(const Duration(milliseconds: 200));
+    }
+
+    // 4. Seleccionar cliente de la lista
+    await tester.tap(find.text('e2e_existing_client'));
+    await tester.pump();
+    for (int i = 0; i < 5; i++) {
+      await tester.pump(const Duration(milliseconds: 200));
+    }
+    expect(find.textContaining('e2e_existing_client'), findsAtLeast(1));
+
+    // 5. Confirmar venta a credito con cliente existente
+    await tester.tap(find.text('Confirmar'));
+    await tester.pump();
+    await tester.runAsync(() => Future.delayed(const Duration(seconds: 5)));
+    for (int i = 0; i < 15; i++) {
+      await tester.pump(const Duration(milliseconds: 200));
+    }
+    expect(find.text('Venta registrada'), findsOneWidget);
+    await tester.tap(find.text('Ok'));
     await tester.pump();
     await tester.runAsync(() => Future.delayed(const Duration(seconds: 3)));
     for (int i = 0; i < 10; i++) {
       await tester.pump(const Duration(milliseconds: 200));
     }
-    expect(find.text('Mis productos'), findsOneWidget);
 
-    // 6. Filtro stock normal + aplicar
-    await tester.tap(find.byIcon(Icons.filter_list));
-    await tester.pump();
-    for (int i = 0; i < 5; i++) {
-      await tester.pump(const Duration(milliseconds: 200));
-    }
-    await tester.runAsync(() => Future.delayed(const Duration(seconds: 2)));
-    for (int i = 0; i < 10; i++) {
-      await tester.pump(const Duration(milliseconds: 200));
-    }
-    expect(find.text('Filtrar productos'), findsOneWidget);
-    await tester.tap(find.text('Stock Normal'));
-    await tester.pump();
-    await tester.runAsync(() => Future.delayed(const Duration(seconds: 1)));
-    for (int i = 0; i < 10; i++) {
-      await tester.pump(const Duration(milliseconds: 200));
-    }
-    await tester.tap(find.text('Aplicar Filtros'));
-    await tester.pump();
-    await tester.runAsync(() => Future.delayed(const Duration(seconds: 3)));
-    for (int i = 0; i < 10; i++) {
-      await tester.pump(const Duration(milliseconds: 200));
-    }
-    expect(find.text('Mis productos'), findsOneWidget);
+    // 6. Verificar vuelta a SalesPage
+    expect(find.text('Mis ventas'), findsOneWidget);
 
-    // 7. Filtro combo (stock bajo + categorias) + aplicar
-    await tester.tap(find.byIcon(Icons.filter_list));
-    await tester.pump();
-    for (int i = 0; i < 5; i++) {
-      await tester.pump(const Duration(milliseconds: 200));
-    }
-    await tester.runAsync(() => Future.delayed(const Duration(seconds: 2)));
-    for (int i = 0; i < 10; i++) {
-      await tester.pump(const Duration(milliseconds: 200));
-    }
-    expect(find.text('Filtrar productos'), findsOneWidget);
-    await tester.tap(find.text('Filtrar por Stock'));
-    await tester.pump();
-    await tester.runAsync(() => Future.delayed(const Duration(seconds: 1)));
-    for (int i = 0; i < 10; i++) {
-      await tester.pump(const Duration(milliseconds: 200));
-    }
-    await tester.tap(find.text('Filtrar por Categorías'));
-    await tester.pump();
-    await tester.runAsync(() => Future.delayed(const Duration(seconds: 1)));
-    for (int i = 0; i < 10; i++) {
-      await tester.pump(const Duration(milliseconds: 200));
-    }
-    await tester.tap(find.text('Aplicar Filtros'));
-    await tester.pump();
-    await tester.runAsync(() => Future.delayed(const Duration(seconds: 3)));
-    for (int i = 0; i < 10; i++) {
-      await tester.pump(const Duration(milliseconds: 200));
-    }
-    expect(find.text('Mis productos'), findsOneWidget);
-
-    // 8. Retroceder sin aplicar
-    await tester.tap(find.byIcon(Icons.filter_list));
-    await tester.pump();
-    for (int i = 0; i < 5; i++) {
-      await tester.pump(const Duration(milliseconds: 200));
-    }
-    await tester.runAsync(() => Future.delayed(const Duration(seconds: 2)));
-    for (int i = 0; i < 10; i++) {
-      await tester.pump(const Duration(milliseconds: 200));
-    }
-    expect(find.text('Filtrar productos'), findsOneWidget);
-    await tester.tap(find.byIcon(Icons.arrow_back));
-    await tester.pump();
-    await tester.runAsync(() => Future.delayed(const Duration(seconds: 2)));
-    for (int i = 0; i < 10; i++) {
-      await tester.pump(const Duration(milliseconds: 200));
-    }
-    expect(find.text('Mis productos'), findsOneWidget);
   }, timeout: const Timeout(Duration(seconds: 240)));
 }

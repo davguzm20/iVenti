@@ -8,6 +8,7 @@ import 'package:iventi/shared/theme/AppColors.dart';
 import 'package:iventi/shared/theme/ButtonStyles.dart';
 import 'package:iventi/shared/utils/DialogMessages.dart';
 import 'package:iventi/shared/widgets/ErrorDialog.dart';
+import 'package:iventi/shared/widgets/LoadingDialog.dart';
 import 'package:iventi/shared/widgets/BackButton.dart';
 
 class CodeEmailPage extends StatefulWidget {
@@ -28,6 +29,7 @@ class CodeEmailPage extends StatefulWidget {
 
 class _CodeEmailPageState extends State<CodeEmailPage> {
   String inputCode = "";
+  bool _isProcessing = false;
 
   @override
   void initState() {
@@ -38,7 +40,10 @@ class _CodeEmailPageState extends State<CodeEmailPage> {
   }
 
   Future<void> validateCode() async {
+    if (_isProcessing) return;
+    _isProcessing = true;
     FocusScope.of(context).unfocus();
+    LoadingDialog.show(context);
 
     try {
       if (inputCode == widget.correctCode) {
@@ -61,12 +66,15 @@ class _CodeEmailPageState extends State<CodeEmailPage> {
         }
 
         if (!mounted) return;
+        if (mounted) LoadingDialog.hide(context);
+        _isProcessing = false;
+        final (_, descOk) = DialogMessages.auth.codigoEnviado(widget.emailUser);
         await AwesomeDialog(
           context: context,
           dialogType: DialogType.success,
           animType: AnimType.topSlide,
           title: "Correcto",
-          desc: "¡El código es correcto!",
+          desc: descOk,
           btnOkOnPress: () {
             if (widget.flujo == 'verify') {
               context.go('/login', extra: widget.emailUser);
@@ -79,25 +87,27 @@ class _CodeEmailPageState extends State<CodeEmailPage> {
         ).show();
 
       } else {
+        if (mounted) LoadingDialog.hide(context);
+        _isProcessing = false;
+        final (titleErr, descErr) = DialogMessages.auth.codigoIncorrecto;
         await AwesomeDialog(
           context: context,
           dialogType: DialogType.error,
           animType: AnimType.topSlide,
-          title: "Error",
-          desc: "El código ingresado es incorrecto. Inténtalo nuevamente.",
+          title: titleErr,
+          desc: descErr,
           btnOkOnPress: () {},
           btnOkIcon: Icons.cancel,
           btnOkColor: Colors.red,
         ).show();
       }
     } catch (e) {
+      if (mounted) LoadingDialog.hide(context);
+      _isProcessing = false;
       debugPrint('Error en validateCode: $e');
       if (mounted) {
-        ErrorDialog(
-          context: context,
-          title: 'Error inesperado',
-          description: 'Ocurrió un error al validar el código. Inténtalo de nuevo.',
-        );
+        final (title, desc) = DialogMessages.auth.errorValidarCodigo;
+        ErrorDialog(context: context, title: title, description: desc);
       }
     }
   }

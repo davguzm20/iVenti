@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:iventi/features/clients/entities/ClienteEntity.dart';
 import 'package:iventi/features/clients/controllers/ClienteController.dart';
 import 'package:iventi/features/clients/widgets/ClientCard.dart';
+import 'package:iventi/shared/utils/DialogMessages.dart';
 import 'package:iventi/shared/widgets/ErrorDialog.dart';
 
 class ClientsPage extends StatefulWidget {
@@ -79,9 +80,10 @@ class _ClientsPageState extends State<ClientsPage> {
       }
     } catch (e) {
       debugPrint('Error al cargar clientes: $e');
-      if (mounted) {
+         if (mounted) {
         setState(() => isLoading = false);
-        ErrorDialog(context: context, title: 'Error', description: 'No se pudieron cargar los clientes\n\n$e');
+        final (title, desc) = DialogMessages.clientes.errorCargarLista;
+        ErrorDialog(context: context, title: title, description: desc);
       }
     }
   }

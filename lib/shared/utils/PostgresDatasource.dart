@@ -12,8 +12,15 @@ class PostgresDatasource {
   int? _ultimoIdUsuario;
   Timer? _heartbeatTimer;
   Completer<void>? _initLock;
+  bool _inTransaction = false;
+
+  void markTransaction(bool inTx) {
+    _inTransaction = inTx;
+  }
 
   Future<Connection> get connection async {
+    if (_inTransaction) return _connection!;
+
     if (_initLock != null) {
       try { await _initLock!.future; } catch (_) {}
     }

@@ -49,28 +49,34 @@ class ProductCard extends StatelessWidget {
                 overflow: TextOverflow.ellipsis,
               ),
               const SizedBox(height: 4),
-              Row(
-                children: [
-                  Text('S/ ${product.precio.toStringAsFixed(2)}',
-                    style: const TextStyle(fontSize: 14, color: Colors.green, fontWeight: FontWeight.bold),
-                  ),
-                  const Spacer(),
-                  Text('Stock: ${product.stockActual}',
-                    style: TextStyle(fontSize: 12, color: hasLowStock ? Colors.red : Colors.grey.shade600),
-                  ),
-                  if (hasLowStock)
-                    Container(
-                      margin: const EdgeInsets.only(left: 8),
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                      decoration: BoxDecoration(
-                        color: Colors.red.shade100,
-                        borderRadius: BorderRadius.circular(12),
+              ClipRect(
+                child: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  alignment: Alignment.centerLeft,
+                  child: Row(
+                    children: [
+                      Text('S/ ${product.precio.toStringAsFixed(2)}',
+                        style: const TextStyle(fontSize: 14, color: Colors.green, fontWeight: FontWeight.bold),
                       ),
-                      child: Text('Stock Bajo',
-                        style: TextStyle(color: Colors.red.shade900, fontSize: 12, fontWeight: FontWeight.bold),
+                      const SizedBox(width: 8),
+                      Text('Stock: ${product.stockActual}',
+                        style: TextStyle(fontSize: 12, color: hasLowStock ? Colors.red : Colors.grey.shade600),
                       ),
-                    ),
-                ],
+                      if (hasLowStock)
+                        Container(
+                          margin: const EdgeInsets.only(left: 8),
+                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                          decoration: BoxDecoration(
+                            color: Colors.red.shade100,
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Text('Stock Bajo',
+                            style: TextStyle(color: Colors.red.shade900, fontSize: 12, fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                    ],
+                  ),
+                ),
               ),
             ],
           ),

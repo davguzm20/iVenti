@@ -43,8 +43,8 @@ void main() {
     final conn = await PostgresDatasource().connection;
     await conn.execute("SET app.id_usuario = 1");
     await conn.execute(Sql.named(
-      "INSERT INTO usuarios (nombre, email, pin, rol, es_activo) VALUES (@nombre, @email, @pin, 'OPERATIVO', TRUE) "
-      "ON CONFLICT (email) DO UPDATE SET pin = @pin",
+      "INSERT INTO usuarios (id_usuario, nombre, email, pin, rol, es_activo) VALUES (1, @nombre, @email, @pin, 'OPERATIVO', TRUE) "
+      "ON CONFLICT (id_usuario) DO UPDATE SET pin = @pin",
     ), parameters: {
       'nombre': 'E2E Create Product', 'email': 'e2e_create_product@test.com', 'pin': PinEncryptor.hash('123456'),
     });
@@ -170,7 +170,7 @@ void main() {
     for (int i = 0; i < 10; i++) {
       await tester.pump(const Duration(milliseconds: 200));
     }
-    expect(find.text('Campos incompletos'), findsOneWidget);
+    expect(find.text('Nombre requerido'), findsOneWidget);
     await dismissError(tester);
 
     // 4. Validation: stock = 0

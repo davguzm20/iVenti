@@ -19,9 +19,10 @@ class VentaRepository implements IVentaRepository {
 
   @override
   Future<VentaEntity> crearVenta(CrearVentaRequest request) async {
-    final conexion = await _conexion;
-
+    Connection? conexion;
     try {
+      conexion = await _conexion;
+      _datasource.markTransaction(true);
       await conexion.execute('BEGIN');
 
       final nuevoEstado = request.montoCancelado >= request.montoTotal
@@ -72,8 +73,8 @@ class VentaRepository implements IVentaRepository {
       final loteParams = <String, dynamic>{};
       for (var i = 0; i < detalles.length; i++) {
         final d = detalles[i];
-        loteCases.add('WHEN @l_$i THEN cantidad_actual - @c_$i');
-        loteInClauses.add('@l_$i');
+        loteCases.add('WHEN @l_$i::integer THEN cantidad_actual - @c_$i::integer');
+        loteInClauses.add('@l_$i::integer');
         loteParams['l_$i'] = d.idLote;
         loteParams['c_$i'] = d.cantidad;
       }
@@ -111,6 +112,7 @@ class VentaRepository implements IVentaRepository {
       }
 
       await conexion.execute('COMMIT');
+      _datasource.markTransaction(false);
 
       return VentaEntity(
         idVenta: idVenta,
@@ -125,7 +127,8 @@ class VentaRepository implements IVentaRepository {
         creadoEn: creadoEn,
       );
     } catch (e) {
-      await conexion.execute('ROLLBACK');
+      await conexion?.execute('ROLLBACK');
+      _datasource.markTransaction(false);
 
       throw DatabaseException('Error al crear venta: $e');
     }
@@ -133,9 +136,8 @@ class VentaRepository implements IVentaRepository {
 
   @override
   Future<VentaEntity?> obtenerVentaPorId(int idVenta) async {
-    final conexion = await _conexion;
-
     try {
+      final conexion = await _conexion;
       final ventasEncontradas = await conexion.execute(
         Sql.named('SELECT * FROM ventas WHERE id_venta = @id'),
         parameters: {'id': idVenta},
@@ -157,9 +159,8 @@ class VentaRepository implements IVentaRepository {
     DateTime? fechaInicio,
     DateTime? fechaFinal,
   }) async {
-    final conexion = await _conexion;
-
     try {
+      final conexion = await _conexion;
       final parametros = <String, dynamic>{'limite': limite, 'offset': offset};
       String sql = 'SELECT * FROM ventas WHERE 1=1';
 
@@ -195,9 +196,8 @@ class VentaRepository implements IVentaRepository {
 
   @override
   Future<List<VentaEntity>> obtenerVentasDeCliente(int idCliente, {bool? esAlContado}) async {
-    final conexion = await _conexion;
-
     try {
+      final conexion = await _conexion;
       String query = 'SELECT * FROM ventas WHERE id_cliente = @id_cliente';
       final params = <String, dynamic>{'id_cliente': idCliente};
 
@@ -222,9 +222,8 @@ class VentaRepository implements IVentaRepository {
 
   @override
   Future<List<VentaEntity>> obtenerVentasPorFechas(DateTime fechaInicio, DateTime fechaFinal) async {
-    final conexion = await _conexion;
-
     try {
+      final conexion = await _conexion;
       final ventasEncontradas = await conexion.execute(
         Sql.named('SELECT * FROM ventas WHERE vendido_en BETWEEN @inicio AND @fin ORDER BY vendido_en DESC'),
         parameters: {
@@ -243,9 +242,8 @@ class VentaRepository implements IVentaRepository {
 
   @override
   Future<void> actualizarMontoCanceladoVenta(int idVenta, double montoACancelar) async {
-    final conexion = await _conexion;
-
     try {
+      final conexion = await _conexion;
       final ventaExistente = await obtenerVentaPorId(idVenta);
 
       if (ventaExistente == null) {
@@ -270,15 +268,17 @@ class VentaRepository implements IVentaRepository {
 
   @override
   Future<void> actualizarMontoCanceladoVentasCliente(int idCliente, double montoACancelar) async {
-    final conexion = await _conexion;
-
+    Connection? conexion;
     try {
+      conexion = await _conexion;
+      _datasource.markTransaction(true);
       await conexion.execute('BEGIN');
 
       final ventasPendientes = await obtenerVentasDeCliente(idCliente);
 
       if (ventasPendientes.isEmpty) {
         await conexion.execute('ROLLBACK');
+        _datasource.markTransaction(false);
         throw NotFoundException('El cliente no tiene ventas pendientes');
       }
 
@@ -312,8 +312,10 @@ class VentaRepository implements IVentaRepository {
       }
 
       await conexion.execute('COMMIT');
+      _datasource.markTransaction(false);
     } catch (e) {
-      await conexion.execute('ROLLBACK');
+      await conexion?.execute('ROLLBACK');
+      _datasource.markTransaction(false);
 
       if (e is NotFoundException) rethrow;
 
@@ -323,9 +325,8 @@ class VentaRepository implements IVentaRepository {
 
   @override
   Future<List<DetalleVentaEntity>> obtenerDetallesPorVenta(int idVenta) async {
-    final conexion = await _conexion;
-
     try {
+      final conexion = await _conexion;
       final detallesEncontrados = await conexion.execute(
         Sql.named('SELECT * FROM detalle_ventas WHERE id_venta = @id'),
         parameters: {'id': idVenta},
@@ -341,9 +342,8 @@ class VentaRepository implements IVentaRepository {
 
   @override
   Future<void> anularVenta(int idVenta) async {
-    final conexion = await _conexion;
-
     try {
+      final conexion = await _conexion;
       final ventaAnulada = await conexion.execute(
         Sql.named('''
           UPDATE ventas
@@ -365,9 +365,8 @@ class VentaRepository implements IVentaRepository {
 
   @override
   Future<int> obtenerCantidadVendidaPorLote(int idLote) async {
-    final conexion = await _conexion;
-
     try {
+      final conexion = await _conexion;
       final cantidadVendida = await conexion.execute(
         Sql.named('''
           SELECT COALESCE(SUM(dv.cantidad), 0) AS total

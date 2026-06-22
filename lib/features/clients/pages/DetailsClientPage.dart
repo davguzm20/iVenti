@@ -10,6 +10,7 @@ import 'package:iventi/shared/widgets/SuccessDialog.dart';
 import 'package:iventi/shared/widgets/CustomTextField.dart';
 import 'package:iventi/shared/theme/AppColors.dart';
 import 'package:iventi/shared/theme/ButtonStyles.dart';
+import 'package:iventi/shared/widgets/LoadingDialog.dart';
 import 'package:iventi/shared/utils/DialogMessages.dart';
 
 class DetailsClientPage extends StatefulWidget {
@@ -24,6 +25,7 @@ class DetailsClientPage extends StatefulWidget {
 class _DetailsClientPageState extends State<DetailsClientPage> {
   ClienteEntity? cliente;
   List<VentaEntity> ventasCliente = [];
+  bool _isProcessing = false;
 
   ClienteController get _clienteController =>
       ServiceLocator.clienteController;
@@ -160,21 +162,27 @@ class _DetailsClientPageState extends State<DetailsClientPage> {
               Center(
                 child: ElevatedButton(
                   style: ButtonStyles.success(),
-                  onPressed: () async {
+                  onPressed: _isProcessing
+                      ? null
+                      : () async {
+                    _isProcessing = true;
                     final monto =
                         double.tryParse(montoACancelarController.text) ?? 0.0;
 
                     if (monto <= 0) {
+                      _isProcessing = false;
                       final (title, desc) = DialogMessages.clientes.montoInvalido;
                       ErrorDialog(
                         context: context,
                         title: title,
                         description: desc,
                       );
+                      _isProcessing = false;
                       return;
                     }
 
                     if (monto > montoPendiente) {
+                      _isProcessing = false;
                       final (title, desc) = DialogMessages.clientes.montoExcedido;
                       ErrorDialog(
                         context: context,
@@ -185,12 +193,16 @@ class _DetailsClientPageState extends State<DetailsClientPage> {
                     }
 
                     try {
+                      LoadingDialog.show(context);
+
                       await _ventaController.registrarPagoCliente(
                         widget.idCliente,
                         monto,
                         ServiceLocator.requireUsuarioActualId,
                       );
 
+                      if (context.mounted) LoadingDialog.hide(context);
+                      _isProcessing = false;
                       if (context.mounted) {
                         final (title, desc) = DialogMessages.clientes.pagoRegistrado;
                         SuccessDialog(
@@ -205,6 +217,8 @@ class _DetailsClientPageState extends State<DetailsClientPage> {
                       }
 
                     } catch (e) {
+                      if (context.mounted) LoadingDialog.hide(context);
+                      _isProcessing = false;
                       debugPrint('Error al registrar pago de cliente: $e');
                       if (!context.mounted) return;
                       final (title, desc) = DialogMessages.clientes.noSePudoRegistrarPago;
@@ -215,7 +229,7 @@ class _DetailsClientPageState extends State<DetailsClientPage> {
                       );
                     }
                   },
-                  child: const Text('Aceptar'),
+                  child: Text(_isProcessing ? 'Procesando...' : 'Aceptar'),
                 ),
               ),
             ],

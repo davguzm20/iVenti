@@ -271,6 +271,13 @@ class MockPostgresDatasource extends _i1.Mock
         returnValue: _i13.Future<void>.value(),
         returnValueForMissingStub: _i13.Future<void>.value(),
       ) as _i13.Future<void>);
+
+  @override
+  void markTransaction(bool inTx) => super.noSuchMethod(
+    Invocation.method(#markTransaction, [inTx]),
+    returnValue: null,
+    returnValueForMissingStub: null,
+  );
 }
 
 /// A class which mocks [IUsuarioRepository].

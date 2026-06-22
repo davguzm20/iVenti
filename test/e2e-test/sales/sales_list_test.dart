@@ -31,15 +31,12 @@ void main() {
     final conn = await PostgresDatasource().connection;
     await conn.execute("SET app.id_usuario = 1");
     await conn.execute(Sql.named(
-      "INSERT INTO usuarios (nombre, email, pin, rol, es_activo) VALUES (@nombre, @email, @pin, 'OPERATIVO', TRUE) "
-      "ON CONFLICT (email) DO UPDATE SET pin = @pin",
+      "INSERT INTO usuarios (id_usuario, nombre, email, pin, rol, es_activo) VALUES (1, @nombre, @email, @pin, 'OPERATIVO', TRUE) "
+      "ON CONFLICT (id_usuario) DO UPDATE SET pin = @pin",
     ), parameters: {
       'nombre': 'E2E Sales List', 'email': 'e2e_sales_list@test.com', 'pin': PinEncryptor.hash('123456'),
     });
-    final idUser = (await conn.execute(
-      Sql.named("SELECT id_usuario FROM usuarios WHERE email = @email"),
-      parameters: {'email': 'e2e_sales_list@test.com'},
-    )).first[0] as int;
+    final idUser = 1;
     await conn.execute(Sql.named(
       "INSERT INTO unidades (nombre, abreviatura, es_activo, creado_en) "
       "VALUES (@nombre, @abreviatura, TRUE, CURRENT_TIMESTAMP) ON CONFLICT (nombre) DO UPDATE SET es_activo = TRUE",

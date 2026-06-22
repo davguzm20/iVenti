@@ -3,6 +3,8 @@ import 'package:go_router/go_router.dart';
 import 'package:iventi/shared/services/PrintService.dart';
 import 'package:iventi/shared/theme/AppColors.dart';
 import 'package:iventi/shared/theme/ButtonStyles.dart';
+import 'package:iventi/shared/utils/DialogMessages.dart';
+import 'package:iventi/shared/widgets/ErrorDialog.dart';
 
 class ReportResultsPage extends StatelessWidget {
   final String titulo;
@@ -28,9 +30,8 @@ class ReportResultsPage extends StatelessWidget {
       }
     } catch (e) {
       if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error al generar PDF: $e'), backgroundColor: AppColors.danger),
-        );
+        final (title, desc) = DialogMessages.error.generarPDF;
+        ErrorDialog(context: context, title: title, description: desc);
       }
     }
   }

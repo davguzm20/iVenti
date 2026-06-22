@@ -5,22 +5,26 @@
 ### 1.1. Salida de Consola
 
 ```
-[Codigo actualizado. Pendiente ejecucion en emulador]
+# reports_page_test.dart (5 casos)
+All tests passed!  (00:56)
+
+# report_vencimientos_test.dart (4 casos)
+All tests passed!  (01:00)
 ```
 
 ### 1.2. Resumen de Resultados
 
 | Concepto | Cantidad |
 |----------|----------|
-| Total | 2 |
-| Exitosas | 0 |
-| Pendientes ejecucion | 2 |
+| Total | 2 (9 casos) |
+| Exitosas | 2 |
+| Fallidas | 0 |
 
 ### 1.3. Desglose por Tipo
 
 | Tipo | Tests | Exitosos |
 |------|-------|----------|
-| Flujo Completo | 2 | Pendiente |
+| Flujo Completo | 2 | 2 |
 
 ## 2. Tests Ejecutados
 
@@ -37,11 +41,11 @@
 
 | Caso | Descripcion | Tipo | Estado |
 |------|-------------|------|--------|
-| Ver los 5 reportes en menu | 5 ReportCards visibles con sus titulos | Happy Path | Codigo OK, pendiente ejecucion |
-| Navegar a Productos Vendidos | Se toca card. Se abre la pagina con boton Generar | Happy Path | Codigo OK, pendiente ejecucion |
-| Volver al menu | Arrow back. Se regresa a ReportsPage | Happy Path | Codigo OK, pendiente ejecucion |
-| Navegar a Lotes | Se toca card. Se abre la pagina | Happy Path | Codigo OK, pendiente ejecucion |
-| Navegar a Proximos a Vencer | Se toca card. Se abre la pagina | Happy Path | Codigo OK, pendiente ejecucion |
+| Ver los 5 reportes en menu | Las 5 opciones de reporte se muestran en el menu principal con sus respectivos titulos | Happy Path | OK |
+| Navegar a Productos Vendidos | Se selecciona la opcion de Productos Vendidos. El sistema abre la pagina correspondiente con el boton Generar | Happy Path | OK |
+| Volver al menu | Se retrocede desde la pantalla de reporte. El sistema retorna al menu principal de reportes | Happy Path | OK |
+| Navegar a Lotes | Se selecciona la opcion de Lotes. El sistema abre la pagina de reporte de lotes | Happy Path | OK |
+| Navegar a Proximos a Vencer | Se selecciona la opcion de Proximos a Vencer. El sistema abre la pagina de reporte correspondiente | Happy Path | OK |
 
 **Total casos: 5**
 
@@ -49,10 +53,10 @@
 
 | Caso | Descripcion | Tipo | Estado |
 |------|-------------|------|--------|
-| Campo prellenado con 8 | Al abrir la pagina, el campo "Dias" tiene valor 8 | Happy Path | Codigo OK, pendiente ejecucion |
-| Generar con dato valido | Se toca Generar con 8 dias. Se abre ReportResultsPage | Happy Path | Codigo OK, pendiente ejecucion |
-| Ver tabla de resultados | La tabla muestra headers y filas de datos | Happy Path | Codigo OK, pendiente ejecucion |
-| Volver con boton Volver | Se toca Volver. Se regresa a la pagina del reporte | Happy Path | Codigo OK, pendiente ejecucion |
+| Campo prellenado con 8 | Al ingresar a la pagina, el campo de dias de vencimiento muestra el valor 8 por defecto | Happy Path | OK |
+| Generar con dato valido | Se genera el reporte con 8 dias de vencimiento. El sistema abre la pagina de resultados | Happy Path | OK |
+| Ver tabla de resultados | La pagina de resultados muestra una tabla con headers y filas de datos | Happy Path | OK |
+| Volver con boton Volver | Se retrocede desde la pagina de resultados. El sistema retorna a la pagina de configuracion del reporte | Happy Path | OK |
 
 **Total casos: 4**
 
@@ -69,4 +73,4 @@ Se cubre la navegacion del menu de reportes (5 tipos) y el flujo de generacion d
 
 ## 5. Conclusiones
 
-[Codigo actualizado. Pendiente ejecucion en emulador]
+Los 2 tests E2E de reportes (9 casos) pasan correctamente. La navegacion del menu de reportes y la generacion de resultados de vencimientos esta verificada. Los reportes con date picker nativo (ReportSalesPage, ReportProductosVendidosPage) no se testean en E2E por limitacion de flutter driver.

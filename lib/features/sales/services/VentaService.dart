@@ -26,33 +26,43 @@ class VentaService {
     this._clienteRepository,
   );
 
+  bool _isProcessing = false;
+
   Future<VentaEntity> crearVenta(CrearVentaRequest request) async {
-    for (final detalle in request.detalles) {
-      final lote = await _loteRepository.obtenerLotePorId(detalle.idProducto, detalle.idLote);
-
-      if (lote == null) {
-        throw BusinessException('Lote ${detalle.idLote} no encontrado');
-      }
-
-      if (lote.cantidadActual < detalle.cantidad) {
-        throw BusinessException(
-          'Stock insuficiente en lote ${detalle.idLote}: '
-          'disponible ${lote.cantidadActual}, requerido ${detalle.cantidad}',
-        );
-      }
+    if (_isProcessing) {
+      throw BusinessException('Ya se está procesando una venta');
     }
-
+    _isProcessing = true;
     try {
-      final venta = await _ventaRepository.crearVenta(request);
+      for (final detalle in request.detalles) {
+        final lote = await _loteRepository.obtenerLotePorId(detalle.idProducto, detalle.idLote);
 
-      if (request.idCliente != null) {
-        await _clienteRepository.actualizarEstadoDeudor(request.idCliente!);
+        if (lote == null) {
+          throw BusinessException('Lote ${detalle.idLote} no encontrado');
+        }
+
+        if (lote.cantidadActual < detalle.cantidad) {
+          throw BusinessException(
+            'Stock insuficiente en lote ${detalle.idLote}: '
+            'disponible ${lote.cantidadActual}, requerido ${detalle.cantidad}',
+          );
+        }
       }
 
-      return venta;
+      try {
+        final venta = await _ventaRepository.crearVenta(request);
 
-    } on DatabaseException catch (e) {
-      throw BusinessException('Error al crear venta: ${e.mensaje}');
+        if (request.idCliente != null) {
+          await _clienteRepository.actualizarEstadoDeudor(request.idCliente!);
+        }
+
+        return venta;
+
+      } on DatabaseException catch (e) {
+        throw BusinessException('Error al crear venta: ${e.mensaje}');
+      }
+    } finally {
+      _isProcessing = false;
     }
   }
 
@@ -128,6 +138,7 @@ class VentaService {
       final conexion = await _datasource.connection;
 
       try {
+        _datasource.markTransaction(true);
         await conexion.execute('BEGIN');
 
         final detalles = await _ventaRepository.obtenerDetallesPorVenta(idVenta);
@@ -158,9 +169,11 @@ class VentaService {
         );
 
         await conexion.execute('COMMIT');
+        _datasource.markTransaction(false);
 
       } catch (e) {
         await conexion.execute('ROLLBACK');
+        _datasource.markTransaction(false);
 
         if (e is BusinessException) {
           rethrow;

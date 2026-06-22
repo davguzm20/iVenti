@@ -67,7 +67,8 @@ class _LoginPageState extends State<LoginPage> {
     FocusScope.of(context).unfocus();
 
     if (userPIN.length < 6) {
-      _mostrarError('PIN incompleto', 'Ingresa tu PIN de 6 dígitos para continuar.');
+      final (title, desc) = DialogMessages.auth.pinIncompleto;
+      _mostrarError(title, desc);
       return;
     }
 
@@ -89,7 +90,10 @@ class _LoginPageState extends State<LoginPage> {
       }
 
     } catch (e) {
-      if (mounted) _mostrarError('Error inesperado', e.toString());
+      if (mounted) {
+        final (title, desc) = DialogMessages.auth.errorInicioSesion;
+        _mostrarError(title, desc);
+      }
     }
 
     if (mounted) setState(() => isLoading = false);

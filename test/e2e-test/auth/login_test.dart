@@ -29,8 +29,8 @@ void main() {
     await conn.execute("SET app.id_usuario = 1");
     await conn.execute(
       Sql.named(
-        "INSERT INTO usuarios (nombre, email, pin, es_activo) VALUES (@nombre, @email, @pin, TRUE) "
-        "ON CONFLICT (email) DO UPDATE SET pin = @pin",
+        "INSERT INTO usuarios (id_usuario, nombre, email, pin, es_activo) VALUES (1, @nombre, @email, @pin, TRUE) "
+        "ON CONFLICT (id_usuario) DO UPDATE SET pin = @pin",
       ),
       parameters: {
         'nombre': 'E2E Test',

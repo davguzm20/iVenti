@@ -7,6 +7,7 @@ import 'package:go_router/go_router.dart';
 import 'package:iventi/features/sales/controllers/VentaController.dart';
 import 'package:iventi/features/sales/entities/VentaEntity.dart';
 import 'package:iventi/features/sales/widgets/SaleCard.dart';
+import 'package:iventi/shared/utils/DialogMessages.dart';
 import 'package:iventi/shared/widgets/ErrorDialog.dart';
 
 class SalesPage extends StatefulWidget {
@@ -85,7 +86,8 @@ class _SalesPageState extends State<SalesPage> {
       debugPrint('Error al cargar ventas: $e');
       if (mounted) {
         setState(() => isLoading = false);
-        ErrorDialog(context: context, title: 'Error', description: 'No se pudieron cargar las ventas\n\n$e');
+         final (title, desc) = DialogMessages.ventas.errorCargarLista;
+         ErrorDialog(context: context, title: title, description: desc);
       }
     }
   }
