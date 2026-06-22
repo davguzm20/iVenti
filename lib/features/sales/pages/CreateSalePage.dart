@@ -43,10 +43,30 @@ class _CreateSalePageState extends State<CreateSalePage> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   TextField(
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
                       hintText: 'Buscar producto...',
-                      prefixIcon: Icon(Icons.search),
-                      border: OutlineInputBorder(),
+                      prefixIcon: const Icon(Icons.search),
+                      suffixIcon: IconButton(
+                        icon: const Icon(Icons.qr_code_scanner),
+                        onPressed: () async {
+                          final code = await context.push('/barcode-scanner');
+                          if (code != null && ctx.mounted) {
+                            final p = await ServiceLocator.productoController.obtenerProductoPorCodigo(code.toString());
+                            if (p != null && ctx.mounted) {
+                              setDialogState(() {
+                                productoSeleccionado = p;
+                              });
+                              final lotes = await ServiceLocator.loteController.obtenerLotesDeProducto(p.idProducto!);
+                              if (ctx.mounted) {
+                                setDialogState(() {
+                                  loteSeleccionado = lotes.isNotEmpty ? lotes.first : null;
+                                });
+                              }
+                            }
+                          }
+                        },
+                      ),
+                      border: const OutlineInputBorder(),
                     ),
                     onChanged: (v) async {
                       if (v.isEmpty) {
