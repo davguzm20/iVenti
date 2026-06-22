@@ -51,30 +51,46 @@ class _ProductPageState extends State<ProductPage> {
   }
 
   Future<void> _cargarDatos() async {
-    final p = await _productoController.obtenerProductoPorId(widget.idProducto);
-    if (p == null) {
-      if (!mounted) return;
-      final (t, d) = DialogMessages.inventario.productoNoEncontrado;
-      ErrorDialog(context: context, title: t, description: d);
-      return;
-    }
-    if (mounted) {
-      final cats = await _categoriaController.obtenerDeProducto(widget.idProducto);
-      final unis = await _unidadController.obtenerTodas();
-      final lotes = await _loteController.obtenerLotesDeProducto(widget.idProducto);
-      final u = unis.where((x) => x.idUnidad == p.idUnidad).firstOrNull;
-      setState(() { producto = p; categoriasProducto = cats; unidadProducto = u; lotesProducto = lotes; });
+    try {
+      final p = await _productoController.obtenerProductoPorId(widget.idProducto);
+      if (p == null) {
+        if (!mounted) return;
+        final (t, d) = DialogMessages.inventario.productoNoEncontrado;
+        ErrorDialog(context: context, title: t, description: d);
+        return;
+      }
+      if (mounted) {
+        final cats = await _categoriaController.obtenerDeProducto(widget.idProducto);
+        final unis = await _unidadController.obtenerTodas();
+        final lotes = await _loteController.obtenerLotesDeProducto(widget.idProducto);
+        final u = unis.where((x) => x.idUnidad == p.idUnidad).firstOrNull;
+        setState(() { producto = p; categoriasProducto = cats; unidadProducto = u; lotesProducto = lotes; });
+      }
+    } catch (e) {
+      debugPrint('Error al cargar datos del producto: $e');
+      if (mounted) {
+        final (title, desc) = DialogMessages.inventario.errorCargarProducto;
+        ErrorDialog(context: context, title: title, description: desc);
+      }
     }
   }
 
   Future<void> _recargarLotes() async {
-    final lotes = await _loteController.obtenerLotesDeProducto(widget.idProducto);
-    if (mounted) setState(() => lotesProducto = lotes);
+    try {
+      final lotes = await _loteController.obtenerLotesDeProducto(widget.idProducto);
+      if (mounted) setState(() => lotesProducto = lotes);
+    } catch (e) {
+      debugPrint('Error al recargar lotes: $e');
+    }
   }
 
   Future<void> _recargarCategorias() async {
-    final cats = await _categoriaController.obtenerDeProducto(widget.idProducto);
-    if (mounted) setState(() => categoriasProducto = cats);
+    try {
+      final cats = await _categoriaController.obtenerDeProducto(widget.idProducto);
+      if (mounted) setState(() => categoriasProducto = cats);
+    } catch (e) {
+      debugPrint('Error al recargar categorias: $e');
+    }
   }
 
   void _showEditProductDialog() {
@@ -143,7 +159,8 @@ class _ProductPageState extends State<ProductPage> {
                 if (mounted) LoadingDialog.hide(context);
                 _isProcessing = false;
                 if (mounted) {
-                  ErrorDialog(context: context, title: 'Error', description: 'No se pudo actualizar: $e');
+                  final (ti, de) = DialogMessages.inventario.noSePudoActualizarProducto;
+                  ErrorDialog(context: context, title: ti, description: de);
                 }
               }
             },
@@ -171,7 +188,8 @@ class _ProductPageState extends State<ProductPage> {
           if (mounted) LoadingDialog.hide(context);
           _isProcessing = false;
           if (mounted) {
-            ErrorDialog(context: context, title: 'Error', description: 'No se pudo eliminar el producto: $e');
+            final (ti2, de2) = DialogMessages.inventario.noSePudoEliminarProducto;
+            ErrorDialog(context: context, title: ti2, description: de2);
           }
         }
       },
@@ -249,7 +267,8 @@ class _ProductPageState extends State<ProductPage> {
                 if (mounted) LoadingDialog.hide(context);
                 _isProcessing = false;
                 if (mounted) {
-                  ErrorDialog(context: context, title: 'Error', description: 'No se pudo crear el lote: $e');
+                  final (ti3, de3) = DialogMessages.inventario.noSePudoAgregarLote;
+                  ErrorDialog(context: context, title: ti3, description: de3);
                 }
               }
             },
@@ -284,7 +303,8 @@ class _ProductPageState extends State<ProductPage> {
           if (mounted) LoadingDialog.hide(context);
           _isProcessing = false;
           if (mounted) {
-            ErrorDialog(context: context, title: 'Error', description: 'No se pudo eliminar el lote: $e');
+            final (ti4, de4) = DialogMessages.inventario.noSePudoEliminarLote;
+            ErrorDialog(context: context, title: ti4, description: de4);
           }
         }
       },
@@ -540,8 +560,12 @@ class _ProductPageState extends State<ProductPage> {
 
   Future<void> _eliminarCategoriaDeProducto(CategoriaEntity cat) async {
     setState(() => editandoCategorias = false);
-    await _categoriaController.eliminarDeProducto(producto!.idProducto!, cat.idCategoria!);
-    _recargarCategorias();
+    try {
+      await _categoriaController.eliminarDeProducto(producto!.idProducto!, cat.idCategoria!);
+      _recargarCategorias();
+    } catch (e) {
+      debugPrint('Error al eliminar categoria del producto: $e');
+    }
   }
 
   void _showAgregarCategoriaAProducto() {
@@ -568,9 +592,13 @@ class _ProductPageState extends State<ProductPage> {
             TextButton(
               onPressed: () async {
                 if (seleccionada != null) {
-                  await _categoriaController.asignarAProducto(producto!.idProducto!, seleccionada!.idCategoria!);
-                  if (mounted) context.pop();
-                  _recargarCategorias();
+                  try {
+                    await _categoriaController.asignarAProducto(producto!.idProducto!, seleccionada!.idCategoria!);
+                    if (mounted) context.pop();
+                    _recargarCategorias();
+                  } catch (e) {
+                    debugPrint('Error al asignar categoria: $e');
+                  }
                 }
               },
               child: const Text('Agregar'),
@@ -593,10 +621,14 @@ class _ProductPageState extends State<ProductPage> {
           TextButton(
             onPressed: () async {
               if (ctrl.text.trim().isNotEmpty) {
-                await _categoriaController.crearCategoria(CrearCategoriaRequest(nombre: ctrl.text.trim()));
-                if (!mounted) return;
-                context.pop();
-                _recargarCategorias();
+                try {
+                  await _categoriaController.crearCategoria(CrearCategoriaRequest(nombre: ctrl.text.trim()));
+                  if (!mounted) return;
+                  context.pop();
+                  _recargarCategorias();
+                } catch (e) {
+                  debugPrint('Error al crear categoria: $e');
+                }
               }
             },
             child: const Text('Crear'),

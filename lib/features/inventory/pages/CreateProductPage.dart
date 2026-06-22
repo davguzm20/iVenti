@@ -58,17 +58,21 @@ class _CreateProductPageState extends State<CreateProductPage> {
   }
 
   Future<void> _cargarDatos() async {
-    final cats = await _categoriaController.obtenerTodas();
-    final unis = await _unidadController.obtenerTodas();
+    try {
+      final cats = await _categoriaController.obtenerTodas();
+      final unis = await _unidadController.obtenerTodas();
 
-    if (mounted) {
-      setState(() {
-        categoriasDisponibles = cats;
-        unidadesDisponibles = unis;
-        if (unidadSeleccionada == null && unis.isNotEmpty) {
-          unidadSeleccionada = unis.first;
-        }
-      });
+      if (mounted) {
+        setState(() {
+          categoriasDisponibles = cats;
+          unidadesDisponibles = unis;
+          if (unidadSeleccionada == null && unis.isNotEmpty) {
+            unidadSeleccionada = unis.first;
+          }
+        });
+      }
+    } catch (e) {
+      debugPrint('Error al cargar datos de creacion: $e');
     }
   }
 
@@ -345,11 +349,15 @@ class _CreateProductPageState extends State<CreateProductPage> {
             onPressed: () async {
               final nombre = controller.text.trim();
               if (nombre.isNotEmpty) {
-                await _categoriaController.crearCategoria(
-                  CrearCategoriaRequest(nombre: nombre),
-                );
-                final cats = await _categoriaController.obtenerTodas();
-                setState(() => categoriasDisponibles = cats);
+                try {
+                  await _categoriaController.crearCategoria(
+                    CrearCategoriaRequest(nombre: nombre),
+                  );
+                  final cats = await _categoriaController.obtenerTodas();
+                  setState(() => categoriasDisponibles = cats);
+                } catch (e) {
+                  debugPrint('Error al crear categoria: $e');
+                }
               }
               if (!mounted) return;
               context.pop();
@@ -410,8 +418,9 @@ class _CreateProductPageState extends State<CreateProductPage> {
             actions: [
               TextButton(onPressed: () => context.pop(), child: const Text('Cancelar')),
               TextButton(
-                onPressed: () async {
-                  if (seleccionada != null) {
+              onPressed: () async {
+                if (seleccionada != null) {
+                  try {
                     await _categoriaController.actualizarCategoria(
                       ActualizarCategoriaRequest(
                         idCategoria: seleccionada!.idCategoria!,
@@ -420,10 +429,13 @@ class _CreateProductPageState extends State<CreateProductPage> {
                     );
                     final cats = await _categoriaController.obtenerTodas();
                     setState(() => categoriasDisponibles = cats);
+                  } catch (e) {
+                    debugPrint('Error al editar categoria: $e');
                   }
-                  if (!mounted) return;
-                  context.pop();
-                },
+                }
+                if (!mounted) return;
+                context.pop();
+              },
                 child: const Text('Guardar'),
               ),
             ],
@@ -459,15 +471,19 @@ class _CreateProductPageState extends State<CreateProductPage> {
           actions: [
             TextButton(onPressed: () => context.pop(), child: const Text('Cancelar')),
             TextButton(
-              onPressed: () async {
-                if (seleccionada != null) {
+            onPressed: () async {
+              if (seleccionada != null) {
+                try {
                   await _categoriaController.eliminarCategoria(seleccionada!.idCategoria!);
                   final cats = await _categoriaController.obtenerTodas();
                   setState(() => categoriasDisponibles = cats);
+                } catch (e) {
+                  debugPrint('Error al eliminar categoria: $e');
                 }
-                if (!mounted) return;
-                context.pop();
-              },
+              }
+              if (!mounted) return;
+              context.pop();
+            },
               style: TextButton.styleFrom(foregroundColor: AppColors.danger),
               child: const Text('Eliminar'),
             ),
@@ -576,11 +592,8 @@ class _CreateProductPageState extends State<CreateProductPage> {
           _isProcessing = false;
           debugPrint('Error al crear producto: $e');
           if (!mounted) return;
-          ErrorDialog(
-            context: context,
-            title: 'No se pudo registrar el producto',
-            description: e.toString(),
-          );
+          final (title, desc) = DialogMessages.inventario.noSePudoRegistrarProducto;
+          ErrorDialog(context: context, title: title, description: desc);
         }
       },
       btnCancelOnPress: () {},

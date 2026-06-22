@@ -63,24 +63,30 @@ class _InventoryPageState extends State<InventoryPage> {
 
     setState(() => isLoading = true);
 
-    final nuevos = await _productoController.obtenerTodos();
+    try {
+      final nuevos = await _productoController.obtenerTodos();
 
-    if (mounted) {
-      setState(() {
-        if (reiniciar) {
-          productos = nuevos;
-        } else {
-          productos.addAll(nuevos);
-        }
-        if (nuevos.isNotEmpty) {
-          cantidadCargas++;
-        } else {
-          hayMasCargas = false;
-        }
-        isLoading = false;
-      });
+      if (mounted) {
+        setState(() {
+          if (reiniciar) {
+            productos = nuevos;
+          } else {
+            productos.addAll(nuevos);
+          }
+          if (nuevos.isNotEmpty) {
+            cantidadCargas++;
+          } else {
+            hayMasCargas = false;
+          }
+          isLoading = false;
+        });
+      }
+    } catch (e) {
+      debugPrint('Error al cargar productos: $e');
+      if (mounted) setState(() => isLoading = false);
     }
   }
+
 
   void _buscarProductosPorNombre(String nombre) {
     if (_searchTimer?.isActive ?? false) {
