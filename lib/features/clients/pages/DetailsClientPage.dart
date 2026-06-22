@@ -10,6 +10,7 @@ import 'package:iventi/shared/widgets/SuccessDialog.dart';
 import 'package:iventi/shared/widgets/CustomTextField.dart';
 import 'package:iventi/shared/theme/AppColors.dart';
 import 'package:iventi/shared/theme/ButtonStyles.dart';
+import 'package:iventi/shared/widgets/LoadingDialog.dart';
 import 'package:iventi/shared/utils/DialogMessages.dart';
 
 class DetailsClientPage extends StatefulWidget {
@@ -185,12 +186,15 @@ class _DetailsClientPageState extends State<DetailsClientPage> {
                     }
 
                     try {
+                      LoadingDialog.show(context);
+
                       await _ventaController.registrarPagoCliente(
                         widget.idCliente,
                         monto,
                         ServiceLocator.requireUsuarioActualId,
                       );
 
+                      if (context.mounted) LoadingDialog.hide(context);
                       if (context.mounted) {
                         final (title, desc) = DialogMessages.clientes.pagoRegistrado;
                         SuccessDialog(
@@ -205,6 +209,7 @@ class _DetailsClientPageState extends State<DetailsClientPage> {
                       }
 
                     } catch (e) {
+                      if (context.mounted) LoadingDialog.hide(context);
                       debugPrint('Error al registrar pago de cliente: $e');
                       if (!context.mounted) return;
                       final (title, desc) = DialogMessages.clientes.noSePudoRegistrarPago;

@@ -11,6 +11,7 @@ import 'package:iventi/features/sales/dtos/requests/CrearVentaRequest.dart';
 import 'package:iventi/features/clients/dtos/requests/CrearClienteRequest.dart';
 import 'package:iventi/shared/theme/AppColors.dart';
 import 'package:iventi/shared/theme/ButtonStyles.dart';
+import 'package:iventi/shared/widgets/LoadingDialog.dart';
 import 'package:iventi/shared/utils/DialogMessages.dart';
 
 class PaymentPage extends StatefulWidget {
@@ -25,6 +26,7 @@ class PaymentPage extends StatefulWidget {
 class _PaymentPageState extends State<PaymentPage> {
   bool esAlContado = true;
   bool crearCliente = true;
+  bool _isProcessing = false;
 
   final TextEditingController _cantidadController = TextEditingController();
   final TextEditingController _nombreController = TextEditingController();
@@ -286,11 +288,16 @@ class _PaymentPageState extends State<PaymentPage> {
           width: double.infinity,
           child: ElevatedButton(
             style: ButtonStyles.success(),
-            onPressed: () async {
+            onPressed: _isProcessing
+                ? null
+                : () async {
               FocusScope.of(context).unfocus();
+              if (_isProcessing) return;
+              setState(() => _isProcessing = true);
 
               if (esAlContado &&
                   cantidadRecibida < _calcularTotalVenta()) {
+                setState(() => _isProcessing = false);
                 final (title, desc) = DialogMessages.ventas.montoInsuficiente;
                 ErrorDialog(
                   context: context,
@@ -303,6 +310,7 @@ class _PaymentPageState extends State<PaymentPage> {
               if (!esAlContado &&
                   !crearCliente &&
                   clienteSeleccionado == null) {
+                setState(() => _isProcessing = false);
                 final (title, desc) = DialogMessages.ventas.clienteRequerido;
                 ErrorDialog(
                   context: context,
@@ -316,6 +324,7 @@ class _PaymentPageState extends State<PaymentPage> {
 
               if (crearCliente) {
                 if (_nombreController.text.trim().isEmpty) {
+                  setState(() => _isProcessing = false);
                   final (title, desc) = DialogMessages.ventas.nombreClienteRequerido;
                   ErrorDialog(
                     context: context,
@@ -327,6 +336,7 @@ class _PaymentPageState extends State<PaymentPage> {
 
                 final dni = _dniController.text.trim();
                 if (dni.isEmpty) {
+                  setState(() => _isProcessing = false);
                   final (title, desc) = DialogMessages.ventas.dniRequerido;
                   ErrorDialog(
                     context: context,
@@ -336,6 +346,7 @@ class _PaymentPageState extends State<PaymentPage> {
                   return;
                 }
                 if (dni.length != 8) {
+                  setState(() => _isProcessing = false);
                   final (title, desc) = DialogMessages.ventas.dniInvalido;
                   ErrorDialog(
                     context: context,
@@ -357,6 +368,7 @@ class _PaymentPageState extends State<PaymentPage> {
                   idCliente = nuevo.idCliente;
 
                 } catch (e) {
+                  setState(() => _isProcessing = false);
                   if (!mounted) return;
                   ErrorDialog(
                     context: context,
@@ -371,6 +383,7 @@ class _PaymentPageState extends State<PaymentPage> {
               }
 
               if (idCliente == null) {
+                setState(() => _isProcessing = false);
                 if (!mounted) return;
                 final (title, desc) = DialogMessages.ventas.clienteNoEncontrado;
                 ErrorDialog(
@@ -381,13 +394,17 @@ class _PaymentPageState extends State<PaymentPage> {
                 return;
               }
 
-              try {
-                if (!esAlContado && cantidadRecibida > _calcularTotalVenta()) {
-                  if (!mounted) return;
-                  ErrorDialog(context: context, title: 'Monto excedido', description: 'El monto recibido no puede ser mayor al total de la venta.');
-                  return;
-                }
+              if (!esAlContado && cantidadRecibida > _calcularTotalVenta()) {
+                setState(() => _isProcessing = false);
+                if (!mounted) return;
+                ErrorDialog(context: context, title: 'Monto excedido', description: 'El monto recibido no puede ser mayor al total de la venta.');
+                return;
+              }
 
+              if (!mounted) return;
+              LoadingDialog.show(context);
+
+              try {
                 await _ventaController.crearVenta(
                   CrearVentaRequest(
                     idCliente: idCliente,
@@ -409,6 +426,8 @@ class _PaymentPageState extends State<PaymentPage> {
                   ),
                 );
 
+                if (mounted) LoadingDialog.hide(context);
+                setState(() => _isProcessing = false);
                 if (mounted) {
                   final (title, desc) = DialogMessages.ventas.ventaRegistrada;
                   SuccessDialog(
@@ -418,8 +437,9 @@ class _PaymentPageState extends State<PaymentPage> {
                     btnOkOnPress: () => context.replace('/sales'),
                   );
                 }
-
               } catch (e) {
+                if (mounted) LoadingDialog.hide(context);
+                setState(() => _isProcessing = false);
                 if (!mounted) return;
                 debugPrint('Error al crear venta: $e');
                 final (title, desc) = e.toString().contains('Stock insuficiente')
@@ -432,10 +452,19 @@ class _PaymentPageState extends State<PaymentPage> {
                 );
               }
             },
-            child: const Text(
-              "Confirmar",
-              style: TextStyle(fontSize: 18, color: Colors.white),
-            ),
+            child: _isProcessing
+                ? const SizedBox(
+                    width: 24,
+                    height: 24,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2,
+                      valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                    ),
+                  )
+                : const Text(
+                    "Confirmar",
+                    style: TextStyle(fontSize: 18, color: Colors.white),
+                  ),
           ),
         ),
       ],

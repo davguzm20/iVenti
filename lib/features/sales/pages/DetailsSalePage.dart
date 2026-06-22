@@ -9,6 +9,7 @@ import 'package:iventi/shared/widgets/SuccessDialog.dart';
 import 'package:iventi/shared/widgets/CustomTextField.dart';
 import 'package:iventi/shared/theme/AppColors.dart';
 import 'package:iventi/shared/theme/ButtonStyles.dart';
+import 'package:iventi/shared/widgets/LoadingDialog.dart';
 import 'package:iventi/shared/utils/DialogMessages.dart';
 import 'package:iventi/shared/services/PrintService.dart';
 
@@ -168,12 +169,15 @@ class _DetailsSalePageState extends State<DetailsSalePage> {
                     }
 
                     try {
+                      LoadingDialog.show(context);
+
                       await _ventaController.registrarPago(
                         widget.idVenta,
                         monto,
                         ServiceLocator.requireUsuarioActualId,
                       );
 
+                      if (context.mounted) LoadingDialog.hide(context);
                       if (context.mounted) {
                         final (title, desc) = DialogMessages.ventas.pagoRegistrado;
                         SuccessDialog(
@@ -188,6 +192,7 @@ class _DetailsSalePageState extends State<DetailsSalePage> {
                       }
 
                     } catch (e) {
+                      if (context.mounted) LoadingDialog.hide(context);
                       debugPrint('Error al registrar pago: $e');
                       if (!context.mounted) return;
                       final (title, desc) = DialogMessages.ventas.noSePudoRegistrarPago;

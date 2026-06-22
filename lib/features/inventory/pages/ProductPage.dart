@@ -13,6 +13,7 @@ import 'package:iventi/features/inventory/controllers/UnidadController.dart';
 import 'package:iventi/shared/widgets/ErrorDialog.dart';
 import 'package:iventi/shared/widgets/ConfirmDialog.dart';
 import 'package:iventi/shared/theme/AppColors.dart';
+import 'package:iventi/shared/widgets/LoadingDialog.dart';
 import 'package:iventi/shared/utils/DialogMessages.dart';
 import 'package:iventi/features/inventory/dtos/requests/ActualizarProductoRequest.dart';
 import 'package:iventi/features/inventory/dtos/requests/CrearLoteRequest.dart';
@@ -33,6 +34,7 @@ class _ProductPageState extends State<ProductPage> {
   List<CategoriaEntity> categoriasProducto = [];
   UnidadEntity? unidadProducto;
   bool editandoCategorias = false;
+  bool _isProcessing = false;
 
   ProductoController get _productoController =>
       ServiceLocator.productoController;
@@ -114,24 +116,38 @@ class _ProductPageState extends State<ProductPage> {
         actions: [
           TextButton(onPressed: () => context.pop(), child: const Text('Cancelar')),
           TextButton(
-            onPressed: () async {
+            onPressed: _isProcessing
+                ? null
+                : () async {
               if (nombreCtrl.text.trim().isEmpty) return;
-              await _productoController.actualizarProducto(
-                ActualizarProductoRequest(
-                  idProducto: widget.idProducto,
-                  idUnidad: producto!.idUnidad,
-                  codigo: codigoCtrl.text.isNotEmpty ? codigoCtrl.text : null,
-                  nombre: nombreCtrl.text.trim(),
-                  precio: double.tryParse(precioCtrl.text) ?? producto!.precio,
-                  stockMinimo: int.tryParse(stockMinCtrl.text) ?? producto!.stockMinimo,
-                  rutaImagen: nuevaRuta,
-                ),
-              );
-              if (!mounted) return;
-              context.pop();
-              _cargarDatos();
+              _isProcessing = true;
+              LoadingDialog.show(context);
+              try {
+                await _productoController.actualizarProducto(
+                  ActualizarProductoRequest(
+                    idProducto: widget.idProducto,
+                    idUnidad: producto!.idUnidad,
+                    codigo: codigoCtrl.text.isNotEmpty ? codigoCtrl.text : null,
+                    nombre: nombreCtrl.text.trim(),
+                    precio: double.tryParse(precioCtrl.text) ?? producto!.precio,
+                    stockMinimo: int.tryParse(stockMinCtrl.text) ?? producto!.stockMinimo,
+                    rutaImagen: nuevaRuta,
+                  ),
+                );
+                if (mounted) LoadingDialog.hide(context);
+                _isProcessing = false;
+                if (!mounted) return;
+                context.pop();
+                _cargarDatos();
+              } catch (e) {
+                if (mounted) LoadingDialog.hide(context);
+                _isProcessing = false;
+                if (mounted) {
+                  ErrorDialog(context: context, title: 'Error', description: 'No se pudo actualizar: $e');
+                }
+              }
             },
-            child: const Text('Guardar'),
+            child: Text(_isProcessing ? 'Guardando...' : 'Guardar'),
           ),
         ],
       ),
@@ -139,13 +155,25 @@ class _ProductPageState extends State<ProductPage> {
   }
 
   Future<void> _eliminarProducto() async {
+    if (_isProcessing) return;
     ConfirmDialog(
       context: context,
       title: 'Eliminar producto',
       message: '¿Estás seguro de eliminar este producto?',
       btnOkOnPress: () async {
-        await _productoController.eliminarProducto(widget.idProducto);
-        if (mounted) context.pop();
+        _isProcessing = true;
+        LoadingDialog.show(context);
+        try {
+          await _productoController.eliminarProducto(widget.idProducto);
+          if (mounted) LoadingDialog.hide(context);
+          if (mounted) context.pop();
+        } catch (e) {
+          if (mounted) LoadingDialog.hide(context);
+          _isProcessing = false;
+          if (mounted) {
+            ErrorDialog(context: context, title: 'Error', description: 'No se pudo eliminar el producto: $e');
+          }
+        }
       },
     );
   }
@@ -191,27 +219,41 @@ class _ProductPageState extends State<ProductPage> {
         actions: [
           TextButton(onPressed: () => context.pop(), child: const Text('Cancelar')),
           TextButton(
-            onPressed: () async {
+            onPressed: _isProcessing
+                ? null
+                : () async {
               final cc = int.tryParse(cantCompradaCtrl.text) ?? 0;
               if (cc <= 0) return;
               final pc = double.tryParse(precioCompraCtrl.text) ?? 0;
               if (pc <= 0) return;
-              await _loteController.crearLote(
-                CrearLoteRequest(
-                  idProducto: widget.idProducto,
-                  fechaCompra: fechaCompra!,
-                  fechaVencimiento: fechaVenc!,
-                  cantidadComprada: cc,
-                  cantidadPerdida: int.tryParse(cantPerdidaCtrl.text) ?? 0,
-                  precioCompra: pc,
-                ),
-              );
-              if (!mounted) return;
-              context.pop();
-              _recargarLotes();
-              _cargarDatos();
+              _isProcessing = true;
+              LoadingDialog.show(context);
+              try {
+                await _loteController.crearLote(
+                  CrearLoteRequest(
+                    idProducto: widget.idProducto,
+                    fechaCompra: fechaCompra!,
+                    fechaVencimiento: fechaVenc!,
+                    cantidadComprada: cc,
+                    cantidadPerdida: int.tryParse(cantPerdidaCtrl.text) ?? 0,
+                    precioCompra: pc,
+                  ),
+                );
+                if (mounted) LoadingDialog.hide(context);
+                _isProcessing = false;
+                if (!mounted) return;
+                context.pop();
+                _recargarLotes();
+                _cargarDatos();
+              } catch (e) {
+                if (mounted) LoadingDialog.hide(context);
+                _isProcessing = false;
+                if (mounted) {
+                  ErrorDialog(context: context, title: 'Error', description: 'No se pudo crear el lote: $e');
+                }
+              }
             },
-            child: const Text('Guardar'),
+            child: Text(_isProcessing ? 'Guardando...' : 'Guardar'),
           ),
         ],
       ),
@@ -229,10 +271,21 @@ class _ProductPageState extends State<ProductPage> {
       title: 'Eliminar lote',
       message: '¿Estás seguro de eliminar el lote ${lote.idLote}?',
       btnOkOnPress: () async {
-        if (lote.idLote != null) {
+        if (lote.idLote == null) return;
+        _isProcessing = true;
+        LoadingDialog.show(context);
+        try {
           await _loteController.eliminarLote(lote.idProducto, lote.idLote!);
+          if (mounted) LoadingDialog.hide(context);
+          _isProcessing = false;
           _recargarLotes();
           _cargarDatos();
+        } catch (e) {
+          if (mounted) LoadingDialog.hide(context);
+          _isProcessing = false;
+          if (mounted) {
+            ErrorDialog(context: context, title: 'Error', description: 'No se pudo eliminar el lote: $e');
+          }
         }
       },
     );
