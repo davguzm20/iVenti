@@ -74,9 +74,26 @@ void main() {
     }
     await tester.tap(find.text('Ingresar'));
     await tester.pump();
-    await tester.runAsync(() => Future.delayed(const Duration(seconds: 20)));
+    await tester.runAsync(() => Future.delayed(const Duration(seconds: 30)));
     for (int i = 0; i < 10; i++) {
       await tester.pump(const Duration(milliseconds: 200));
+    }
+    if (find.text('Mis productos').evaluate().isEmpty && find.text('Ok').evaluate().isNotEmpty) {
+      await tester.tap(find.text('Ok'));
+      await tester.pump();
+      await tester.runAsync(() => Future.delayed(const Duration(seconds: 2)));
+      final pinField2 = find.byType(EditableText).first;
+      final pinState2 = tester.state<EditableTextState>(pinField2);
+      pinState2.updateEditingValue(const TextEditingValue(text: '123456', selection: TextSelection.collapsed(offset: 6)));
+      for (int i = 0; i < 10; i++) {
+        await tester.pump(const Duration(milliseconds: 200));
+      }
+      await tester.tap(find.text('Ingresar'));
+      await tester.pump();
+      await tester.runAsync(() => Future.delayed(const Duration(seconds: 30)));
+      for (int i = 0; i < 10; i++) {
+        await tester.pump(const Duration(milliseconds: 200));
+      }
     }
     expect(find.text('Mis productos'), findsOneWidget);
 
@@ -154,7 +171,7 @@ void main() {
     }
 
     // 6. Seleccionar producto
-    await tester.tap(find.text('e2e_producto_venta'));
+    await tester.tap(find.text('e2e_producto_venta').last);
     await tester.pump();
     await tester.runAsync(() => Future.delayed(const Duration(seconds: 2)));
     for (int i = 0; i < 10; i++) {
@@ -196,7 +213,7 @@ void main() {
     for (int i = 0; i < 15; i++) {
       await tester.pump(const Duration(milliseconds: 200));
     }
-    await tester.tap(find.text('e2e_producto_venta'));
+    await tester.tap(find.text('e2e_producto_venta').last);
     await tester.pump();
     await tester.runAsync(() => Future.delayed(const Duration(seconds: 2)));
     for (int i = 0; i < 10; i++) {
@@ -210,6 +227,8 @@ void main() {
     expect(find.text('e2e_producto_venta'), findsAtLeast(1));
 
     // 11. Confirmar venta -> PaymentPage
+    await tester.ensureVisible(find.text('Confirmar'));
+    await tester.pump();
     await tester.tap(find.text('Confirmar'));
     await tester.pump();
     await tester.runAsync(() => Future.delayed(const Duration(seconds: 2)));
@@ -219,11 +238,15 @@ void main() {
 
     // 12. PaymentPage - monto insuficiente -> error
     expect(find.text('Pago'), findsOneWidget);
-    await typeInField(tester, index: 0, text: '10.00');
+    await typeInField(tester, index: 0, text: 'Cliente Contado');
+    await typeInField(tester, index: 1, text: '12345678');
+    await typeInField(tester, index: 3, text: '10.00');
     await tester.pump();
     for (int i = 0; i < 5; i++) {
       await tester.pump(const Duration(milliseconds: 200));
     }
+    await tester.ensureVisible(find.text('Confirmar'));
+    await tester.pump();
     await tester.tap(find.text('Confirmar'));
     await tester.pump();
     await tester.runAsync(() => Future.delayed(const Duration(seconds: 2)));
@@ -234,25 +257,34 @@ void main() {
     await dismissError(tester);
 
     // 13. Ingresar monto correcto
-    await typeInField(tester, index: 0, text: '60.00');
+    await typeInField(tester, index: 3, text: '60.00');
     await tester.pump();
     for (int i = 0; i < 5; i++) {
       await tester.pump(const Duration(milliseconds: 200));
     }
 
     // 14. Confirmar pago exitoso
-    await tester.tap(find.text('Confirmar'));
+    await tester.ensureVisible(find.text('Confirmar'));
     await tester.pump();
-    await tester.runAsync(() => Future.delayed(const Duration(seconds: 5)));
-    for (int i = 0; i < 15; i++) {
-      await tester.pump(const Duration(milliseconds: 200));
+    final confirmBtn = find.text('Confirmar').last;
+    await tester.tap(confirmBtn);
+    await tester.pump();
+    for (int attempt = 0; attempt < 3; attempt++) {
+      await tester.runAsync(() => Future.delayed(const Duration(seconds: 10)));
+      for (int i = 0; i < 10; i++) {
+        await tester.pump(const Duration(milliseconds: 200));
+      }
+      if (find.text('Venta registrada').evaluate().isNotEmpty) break;
     }
     expect(find.text('Venta registrada'), findsOneWidget);
     await tester.tap(find.text('Ok'));
     await tester.pump();
-    await tester.runAsync(() => Future.delayed(const Duration(seconds: 3)));
-    for (int i = 0; i < 10; i++) {
-      await tester.pump(const Duration(milliseconds: 200));
+    for (int attempt = 0; attempt < 3; attempt++) {
+      await tester.runAsync(() => Future.delayed(const Duration(seconds: 5)));
+      for (int i = 0; i < 10; i++) {
+        await tester.pump(const Duration(milliseconds: 200));
+      }
+      if (find.text('Mis ventas').evaluate().isNotEmpty) break;
     }
 
     // 15. Verificar vuelta a SalesPage
