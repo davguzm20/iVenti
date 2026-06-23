@@ -6,7 +6,7 @@
 
 ```
 # sales_create_test.dart (17 casos)
-All tests passed!  (01:26)
+All tests passed!  (02:52)
 
 # sales_credito_test.dart (8 casos)
 All tests passed!  (01:02)
@@ -168,10 +168,29 @@ All tests passed!  (01:01)
 | Sales Search Boleta | si (login) | si | no | si |
 | Sales Credito Existing | si (login) | si | si | si |
 
-## 4. Correcciones Aplicadas (Sesion 21/jun/2026)
+## 4. Correcciones Aplicadas
 
-### 4.1. Fix `sales_list_test.dart` ON CONFLICT
+### Sesion 21/jun/2026
+
+#### 4.1. Fix `sales_list_test.dart` ON CONFLICT
 INSERT de usuarios usaba `ON CONFLICT (email)` pero `email` no tiene UNIQUE constraint. Corregido a `ON CONFLICT (id_usuario)` con `id_usuario = 1`, consistente con los demas tests.
+
+### Sesion 23/jun/2026
+
+#### 4.2. Fix `CreateSalePage.dart` — Dialogo Agregar Producto
+- **Scanner**: `try/catch` + `ErrorDialog` cuando el codigo no existe
+- **Busqueda**: minimo 2 caracteres + `try/catch`
+- **Lotes**: dropdown con todos los lotes, `onChanged` habilitado
+- **Sin stock**: mensaje "Producto sin stock disponible"
+- **Refactor**: `StatefulBuilder` → `StatefulWidget` (`_AddProductDialog`)
+- **Flutter 3.44.0**: `ListView` → `Column` + `scrollable: true` (elimina errores `parentDataDirty`, `hasSize`, intrinsic dimension)
+
+#### 4.3. Fix `sales_create_test.dart` — Compatibilidad Flutter 3.44.0
+- `find.text('e2e_producto_venta').last` (TextFinder ambiguo con TextField)
+- `typeInField(index: 3)` para cantidad recibida (PaymentPage tiene 4 EditableText: Nombre, DNI, Correo, Cantidad)
+- `ensureVisible` antes de tap "Confirmar" (boton off-screen en carrito)
+- Datos de cliente (Nombre + DNI) antes de pagar
+- Login retry + payment retry + navigation retry loops
 
 ## 5. Conclusiones
 
