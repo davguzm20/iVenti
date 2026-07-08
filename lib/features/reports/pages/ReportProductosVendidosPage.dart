@@ -39,11 +39,12 @@ class _ReportProductosVendidosPageState extends State<ReportProductosVendidosPag
       context.push('/report-results', extra: {
         'titulo': 'Productos Vendidos',
         'headers': ['#', 'Producto', 'Cantidad', 'Precio Unit.', 'Subtotal'],
-        'data': data.map((p) => [
-          p.producto,
-          '${p.cantidad}',
-          p.precioUnitario.toStringAsFixed(2),
-          p.subtotal.toStringAsFixed(2),
+        'data': data.asMap().entries.map((e) => [
+          '${e.key + 1}',
+          e.value.producto,
+          '${e.value.cantidad}',
+          e.value.precioUnitario.toStringAsFixed(2),
+          e.value.subtotal.toStringAsFixed(2),
         ]).toList(),
       });
     } catch (e) {

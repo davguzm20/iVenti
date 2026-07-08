@@ -42,13 +42,14 @@ class _ReportSalesPageState extends State<ReportSalesPage> {
       context.push('/report-results', extra: {
         'titulo': 'Reporte Detallado de Ventas',
         'headers': ['#', 'Código Boleta', 'Cliente', 'Fecha', 'Monto Total', 'Pagado', 'Tipo'],
-        'data': data.map((v) => [
-          v.codigoBoleta,
-          v.cliente,
-          v.fecha.toIso8601String().split('T')[0],
-          v.montoTotal.toStringAsFixed(2),
-          v.montoCancelado.toStringAsFixed(2),
-          v.tipo,
+        'data': data.asMap().entries.map((e) => [
+          '${e.key + 1}',
+          e.value.codigoBoleta,
+          e.value.cliente,
+          e.value.fecha.toIso8601String().split('T')[0],
+          e.value.montoTotal.toStringAsFixed(2),
+          e.value.montoCancelado.toStringAsFixed(2),
+          e.value.tipo,
         ]).toList(),
       });
     } catch (e) {

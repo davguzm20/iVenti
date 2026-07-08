@@ -103,14 +103,9 @@ class ReportResultsPage extends StatelessWidget {
               child: SingleChildScrollView(
                 child: DataTable(
                   columns: headers.map((h) => DataColumn(label: Text(h, style: const TextStyle(fontWeight: FontWeight.bold, color: AppColors.primary)))).toList(),
-                  rows: data.asMap().entries.map((entry) {
-                    final idx = entry.key + 1;
-                    final row = entry.value;
-                    return DataRow(cells: [
-                      DataCell(Text('$idx')),
-                      ...row.map((cell) => DataCell(Text(cell))),
-                    ]);
-                  }).toList(),
+                  rows: data.map((row) => DataRow(
+                    cells: row.map((cell) => DataCell(Text(cell))).toList(),
+                  )).toList(),
                 ),
               ),
             ),

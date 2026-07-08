@@ -41,11 +41,12 @@ class _ReportLotesPageState extends State<ReportLotesPage> {
       context.push('/report-results', extra: {
         'titulo': 'Reporte de Lotes',
         'headers': ['#', 'Producto', 'Cant. Actual', 'Cant. Comprada', 'Vencimiento'],
-        'data': data.map((l) => [
-          l.producto,
-          '${l.cantidadActual}',
-          '${l.cantidadComprada}',
-          l.fechaVencimiento?.toIso8601String().split('T')[0] ?? '---',
+        'data': data.asMap().entries.map((e) => [
+          '${e.key + 1}',
+          e.value.producto,
+          '${e.value.cantidadActual}',
+          '${e.value.cantidadComprada}',
+          e.value.fechaVencimiento?.toIso8601String().split('T')[0] ?? '---',
         ]).toList(),
       });
     } catch (e) {
