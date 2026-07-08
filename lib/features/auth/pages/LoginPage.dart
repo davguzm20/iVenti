@@ -86,13 +86,17 @@ class _LoginPageState extends State<LoginPage> {
     } on AppException catch (e) {
       if (mounted) {
         final (title, description) = _tituloError(e);
-        ErrorDialog(context: context, title: title, description: description);
+        final errorCrudo = 'Tipo: ${e.runtimeType}\nCódigo: ${e.codigo}\nMensaje: ${e.mensaje}${e.descripcion != null ? '\nDetalle: ${e.descripcion}' : ''}';
+        ErrorDialog(context: context, title: title, description: '$description\n\n$errorCrudo');
       }
 
     } catch (e) {
       if (mounted) {
-        final (title, desc) = DialogMessages.auth.errorInicioSesion;
-        _mostrarError(title, desc);
+        ErrorDialog(
+          context: context,
+          title: 'Error inesperado',
+          description: 'Tipo: ${e.runtimeType}\n${e.toString()}',
+        );
       }
     }
 
@@ -121,62 +125,81 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 40),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const SizedBox(height: 50),
+      body: Stack(
+        children: [
+          Center(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.symmetric(horizontal: 40),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const SizedBox(height: 50),
 
-              Image.asset('lib/assets/iconos/iconoApp.png', height: 150),
+                  Image.asset('lib/assets/iconos/iconoApp.png', height: 150),
 
-              const SizedBox(height: 30),
+                  const SizedBox(height: 30),
 
-              const Text(
-                'Iniciar sesión',
-                style: TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.bold,
-                  color: AppColors.textDark,
+                  const Text(
+                    'Iniciar sesión',
+                    style: TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.textDark,
+                    ),
+                  ),
+
+                  const SizedBox(height: 10),
+
+                  Text(
+                    userEmail,
+                    style: const TextStyle(fontSize: 16, color: AppColors.textLight),
+                  ),
+
+                  const SizedBox(height: 30),
+
+                  PinInput(
+                    length: 6,
+                    obscureText: true,
+                    onChanged: (value) => userPIN = value,
+                    onCompleted: (value) => userPIN = value,
+                  ),
+
+                  const SizedBox(height: 30),
+
+                  isLoading
+                      ? const CircularProgressIndicator()
+                      : ElevatedButton(
+                          style: ButtonStyles.success(),
+                          onPressed: _iniciarSesion,
+                          child: const Text('Ingresar'),
+                        ),
+
+                  const SizedBox(height: 15),
+
+                  TextButton(
+                    style: ButtonStyles.text(),
+                    onPressed: () => context.go('/login/recover-pin', extra: userEmail),
+                    child: const Text('¿Olvidaste tu PIN?'),
+                  ),
+                ],
+              ),
+            ),
+          ),
+
+          SafeArea(
+            child: Align(
+              alignment: Alignment.topLeft,
+              child: Padding(
+                padding: const EdgeInsets.only(top: 4, left: 4),
+                child: IconButton(
+                  icon: const Icon(Icons.arrow_back, size: 28),
+                  color: Colors.black87,
+                  onPressed: () => context.go('/welcome'),
                 ),
               ),
-
-              const SizedBox(height: 10),
-
-              Text(
-                userEmail,
-                style: const TextStyle(fontSize: 16, color: AppColors.textLight),
-              ),
-
-              const SizedBox(height: 30),
-
-              PinInput(
-                length: 6,
-                onChanged: (value) => userPIN = value,
-                onCompleted: (value) => userPIN = value,
-              ),
-
-              const SizedBox(height: 30),
-
-              isLoading
-                  ? const CircularProgressIndicator()
-                  : ElevatedButton(
-                      style: ButtonStyles.success(),
-                      onPressed: _iniciarSesion,
-                      child: const Text('Ingresar'),
-                    ),
-
-              const SizedBox(height: 15),
-
-              TextButton(
-                style: ButtonStyles.text(),
-                onPressed: () => context.go('/login/recover-pin', extra: userEmail),
-                child: const Text('¿Olvidaste tu PIN?'),
-              ),
-            ],
+            ),
           ),
-        ),
+        ],
       ),
     );
   }

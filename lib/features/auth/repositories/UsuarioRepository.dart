@@ -27,7 +27,7 @@ class UsuarioRepository implements IUsuarioRepository {
         parameters: {
           'rol': request.rol.name,
           'nombre': request.nombre.trim(),
-          'email': request.email.trim(),
+          'email': request.email.toLowerCase().trim(),
           'pin': request.pin,
         },
       );
@@ -44,7 +44,7 @@ class UsuarioRepository implements IUsuarioRepository {
 
     try {
       final usuariosEncontrados = await conexion.execute(
-        Sql.named('SELECT * FROM usuarios WHERE email = @email AND es_activo = TRUE'),
+        Sql.named('SELECT * FROM usuarios WHERE LOWER(email) = LOWER(@email) AND es_activo = TRUE'),
         parameters: {'email': email.trim()},
       );
 
