@@ -151,6 +151,7 @@ class _CodeEmailPageState extends State<CodeEmailPage> {
                     width: 280,
                     child: PinInput(
                       length: 6,
+                      obscureText: true,
                       onChanged: (value) => inputCode = value,
                     ),
                   ),

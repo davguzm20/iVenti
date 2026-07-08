@@ -44,7 +44,7 @@ class _ReportFechaVencimientoPageState extends State<ReportFechaVencimientoPage>
       if (!context.mounted) return;
       context.push('/report-results', extra: {
         'titulo': 'Lotes Próximos a Vencer',
-        'headers': ['Producto', 'Cant. Actual', 'Cant. Comprada', 'Vencimiento'],
+        'headers': ['#', 'Producto', 'Cant. Actual', 'Cant. Comprada', 'Vencimiento'],
         'data': data.map((l) => [
           l.producto,
           '${l.cantidadActual}',

@@ -38,7 +38,7 @@ class _ReportProductosVendidosPageState extends State<ReportProductosVendidosPag
       if (!context.mounted) return;
       context.push('/report-results', extra: {
         'titulo': 'Productos Vendidos',
-        'headers': ['Producto', 'Cantidad', 'Precio Unit.', 'Subtotal'],
+        'headers': ['#', 'Producto', 'Cantidad', 'Precio Unit.', 'Subtotal'],
         'data': data.map((p) => [
           p.producto,
           '${p.cantidad}',

@@ -356,7 +356,6 @@ class PrintService {
   static Future<void> sharePDF(BuildContext context, String path, {String mensaje = 'Aqui tienes el PDF'}) async {
     try {
       await Share.shareXFiles([XFile(path)], text: mensaje);
-      await Share.shareXFiles([XFile(path)], text: mensaje);
     } catch (e) {
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(

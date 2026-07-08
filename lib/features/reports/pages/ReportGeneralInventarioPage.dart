@@ -33,7 +33,7 @@ class _ReportGeneralInventarioPageState extends State<ReportGeneralInventarioPag
       if (!context.mounted) return;
       context.push('/report-results', extra: {
         'titulo': 'Inventario General',
-        'headers': ['Producto', 'Cant. Actual', 'Cant. Comprada', 'Vencimiento'],
+        'headers': ['#', 'Producto', 'Cant. Actual', 'Cant. Comprada', 'Vencimiento'],
         'data': data.map((l) => [
           l.producto,
           '${l.cantidadActual}',

@@ -40,7 +40,7 @@ class _ReportLotesPageState extends State<ReportLotesPage> {
       if (!context.mounted) return;
       context.push('/report-results', extra: {
         'titulo': 'Reporte de Lotes',
-        'headers': ['Producto', 'Cant. Actual', 'Cant. Comprada', 'Vencimiento'],
+        'headers': ['#', 'Producto', 'Cant. Actual', 'Cant. Comprada', 'Vencimiento'],
         'data': data.map((l) => [
           l.producto,
           '${l.cantidadActual}',

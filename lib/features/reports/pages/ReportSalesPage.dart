@@ -41,7 +41,7 @@ class _ReportSalesPageState extends State<ReportSalesPage> {
       if (!context.mounted) return;
       context.push('/report-results', extra: {
         'titulo': 'Reporte Detallado de Ventas',
-        'headers': ['Codigo', 'Cliente', 'Fecha', 'Monto Total', 'Cancelado', 'Tipo'],
+        'headers': ['#', 'Código Boleta', 'Cliente', 'Fecha', 'Monto Total', 'Pagado', 'Tipo'],
         'data': data.map((v) => [
           v.codigoBoleta,
           v.cliente,

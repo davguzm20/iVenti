@@ -164,6 +164,7 @@ class _RecoverPinPageState extends State<RecoverPinPage> {
                     width: 280,
                     child: PinInput(
                       length: 6,
+                      obscureText: true,
                       onChanged: (value) => inputCode = value,
                     ),
                   ),
